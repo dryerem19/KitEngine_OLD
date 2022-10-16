@@ -1,0 +1,5 @@
+# Exceptions
+!3rdparty
+
+# Ignore
+cmake-build-debug/
