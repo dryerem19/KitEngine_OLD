@@ -14,6 +14,8 @@ target_include_directories(${PROJECT_NAME}
         PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/glfw/include")
 target_include_directories(${PROJECT_NAME}
         PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui")
+target_include_directories(${PROJECT_NAME}
+        PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui/backends")
 
 find_library(ASSIMP_LIBRARY NAMES libassimpd libassimpd.a)
 if (NOT ASSIMP_LIBRARY)
@@ -38,7 +40,7 @@ else()
 endif()
 
 # GLEW LINKING
-find_library(GLEW_LIBRARY glew)
+find_library(GLEW_LIBRARY NAMES glew libglew)
 if (NOT GLEW_LIBRARY)
     message("[WARNING] - Glew library not found! Compiling...")
 
@@ -77,18 +79,24 @@ else()
 endif()
 
 # IMGUI LINKING
-find_library(IMGUI_LIBRARY_FIND NAMES dfd
+find_library(IMGUI_LIBRARY_FIND NAMES libimgui
         PATHS "${PROJECT_BINARY_DIR}")
 if (NOT IMGUI_LIBRARY_FIND)
     message("[WARNING] - Imgui library not found! Compiling...")
 
     add_library(imgui STATIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui/imgui.cpp")
-    target_include_directories(${PROJECT_NAME}
-            PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui")
     target_link_directories(${PROJECT_NAME}
             PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui")
     target_link_libraries(${PROJECT_NAME} imgui)
+
 else()
     message(STATUS "Imgui library found!")
     target_link_libraries(${PROJECT_NAME} ${IMGUI_LIBRARY_FIND})
 endif()
+
+
+add_library(imgui_backend_gl STATIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui/backends/imgui_impl_glfw.cpp"
+        "${PROJECT_SOURCE_DIR}/3rdparty/imgui/backends/imgui_impl_opengl3.cpp")
+target_link_directories(${PROJECT_NAME}
+        PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui/backends")
+target_link_libraries(${PROJECT_NAME} imgui_backend_gl)

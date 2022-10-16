@@ -1,10 +1,15 @@
 #include <iostream>
+
+#include <imgui.h>
+#include <imgui_internal.h>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <assimp/Importer.hpp>
 
-#include <imgui.h>
+
+
 
 int main(void)
 {
@@ -24,6 +29,9 @@ int main(void)
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
