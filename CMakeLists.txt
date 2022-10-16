@@ -8,16 +8,22 @@ set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
 set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK "${CMAKE_COMMAND} -E time")
 
 # IMGUI SOURCE FILES
+set(3RDPARTY_PATH "${PROJECT_SOURCE_DIR}/3rdparty")
+
 set(IMGUI_PATH "${PROJECT_SOURCE_DIR}/3rdparty/imgui")
 file(GLOB IMGUI_CPP "${IMGUI_PATH}/*.cpp")
 file(GLOB IMGUI_BACKEND_CPP "${IMGUI_PATH}/backends/imgui_impl_glfw.cpp"
         "${IMGUI_PATH}/backends/imgui_impl_opengl3.cpp")
 
-add_executable(KitEngine main.cpp ${IMGUI_CPP} ${IMGUI_BACKEND_CPP}
-        ${PROJECT_SOURCE_DIR}/pch/pch.cpp
-        ${PROJECT_SOURCE_DIR}/pch/pch.h)
+file(GLOB IMGUIZMO_CPP "${3RDPARTY_PATH}/imguizmo/*.cpp")
+
+file(GLOB ALL_PROJECT_CPP "${PROJECT_SOURCE_DIR}/src/*.cpp")
+
+add_executable(KitEngine src/main.cpp ${IMGUI_CPP} ${IMGUI_BACKEND_CPP} ${IMGUIZMO_CPP} ${ALL_PROJECT_CPP}
+        src/pch/pch.cpp
+        src/pch/pch.h)
 target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${PROJECT_SOURCE_DIR}/pch/pch.h)
+        src/pch/pch.h)
 
 # Include header files
 target_include_directories(${PROJECT_NAME}
@@ -32,6 +38,10 @@ target_include_directories(${PROJECT_NAME}
         PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui")
 target_include_directories(${PROJECT_NAME}
         PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui/backends")
+
+# Include ImGuizmo headers
+target_include_directories(${PROJECT_NAME}
+        PUBLIC "${3RDPARTY_PATH}/imguizmo")
 
 find_library(ASSIMP_LIBRARY NAMES libassimpd libassimpd.a)
 if (NOT ASSIMP_LIBRARY)
