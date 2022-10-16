@@ -3,7 +3,13 @@ project(KitEngine)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(KitEngine main.cpp)
+# IMGUI SOURCE FILES
+set(IMGUI_PATH "${PROJECT_SOURCE_DIR}/3rdparty/imgui")
+file(GLOB IMGUI_CPP "${IMGUI_PATH}/*.cpp")
+file(GLOB IMGUI_BACKEND_CPP "${IMGUI_PATH}/backends/imgui_impl_glfw.cpp"
+        "${IMGUI_PATH}/backends/imgui_impl_opengl3.cpp")
+
+add_executable(KitEngine main.cpp ${IMGUI_CPP} ${IMGUI_BACKEND_CPP})
 
 # Include header files
 target_include_directories(${PROJECT_NAME}
@@ -12,8 +18,12 @@ target_include_directories(${PROJECT_NAME}
         PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/glew-2.2.0/include")
 target_include_directories(${PROJECT_NAME}
         PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/glfw/include")
+
+# Include Imgui headers
 target_include_directories(${PROJECT_NAME}
         PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui")
+target_include_directories(${PROJECT_NAME}
+        PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui/backends")
 
 find_library(ASSIMP_LIBRARY NAMES libassimpd libassimpd.a)
 if (NOT ASSIMP_LIBRARY)
@@ -74,21 +84,4 @@ if (NOT GLFW_LIBRARY)
 else()
     message(STATUS "Glfw library found!")
     target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARY})
-endif()
-
-# IMGUI LINKING
-find_library(IMGUI_LIBRARY_FIND NAMES dfd
-        PATHS "${PROJECT_BINARY_DIR}")
-if (NOT IMGUI_LIBRARY_FIND)
-    message("[WARNING] - Imgui library not found! Compiling...")
-
-    add_library(imgui STATIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui/imgui.cpp")
-    target_include_directories(${PROJECT_NAME}
-            PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui")
-    target_link_directories(${PROJECT_NAME}
-            PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/imgui")
-    target_link_libraries(${PROJECT_NAME} imgui)
-else()
-    message(STATUS "Imgui library found!")
-    target_link_libraries(${PROJECT_NAME} ${IMGUI_LIBRARY_FIND})
 endif()
