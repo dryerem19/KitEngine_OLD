@@ -3,13 +3,21 @@ project(KitEngine)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# Отоброжает время компиляции каждого юнита
+set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
+set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK "${CMAKE_COMMAND} -E time")
+
 # IMGUI SOURCE FILES
 set(IMGUI_PATH "${PROJECT_SOURCE_DIR}/3rdparty/imgui")
 file(GLOB IMGUI_CPP "${IMGUI_PATH}/*.cpp")
 file(GLOB IMGUI_BACKEND_CPP "${IMGUI_PATH}/backends/imgui_impl_glfw.cpp"
         "${IMGUI_PATH}/backends/imgui_impl_opengl3.cpp")
 
-add_executable(KitEngine main.cpp ${IMGUI_CPP} ${IMGUI_BACKEND_CPP})
+add_executable(KitEngine main.cpp ${IMGUI_CPP} ${IMGUI_BACKEND_CPP}
+        ${PROJECT_SOURCE_DIR}/pch/pch.cpp
+        ${PROJECT_SOURCE_DIR}/pch/pch.h)
+target_precompile_headers(${PROJECT_NAME} PRIVATE
+        ${PROJECT_SOURCE_DIR}/pch/pch.h)
 
 # Include header files
 target_include_directories(${PROJECT_NAME}
