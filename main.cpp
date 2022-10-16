@@ -31,7 +31,8 @@ int main(void)
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->AddFontFromFileTTF("../fonts/Roboto-Bold.ttf", 14, NULL, io.Fonts->GetGlyphRangesCyrillic());
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
@@ -51,7 +52,9 @@ int main(void)
         ImGui::NewFrame();
 
         // Show demo window
-        ImGui::ShowDemoWindow(0);
+        ImGui::Begin("Window");
+        ImGui::Text("Как дела ?");
+        ImGui::End();
 
         // Rendering
         ImGui::Render();
