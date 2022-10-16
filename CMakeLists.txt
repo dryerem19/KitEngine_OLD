@@ -26,6 +26,7 @@ target_link_directories(${PROJECT_NAME}
         PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/glfw/src")
 target_link_libraries(${PROJECT_NAME} glfw)
 
+# Assimp linking
 set(ZLIB_LIBRARIES zlibstatic)
 set(ENABLE_BOOST_WORKAROUND ON)
 set(BUILD_STATIC_LIB ON)
