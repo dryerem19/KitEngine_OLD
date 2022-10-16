@@ -1,15 +1,13 @@
 #include <iostream>
-
-#include <imgui.h>
-#include <imgui_internal.h>
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <assimp/Importer.hpp>
 
+#include <imgui.h>
 
-
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
 int main(void)
 {
@@ -30,23 +28,52 @@ int main(void)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
+    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 130");
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        /* Poll for and process events */
+        glfwPollEvents();
+
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // Show demo window
+        ImGui::ShowDemoWindow(0);
+
+        // Rendering
+        ImGui::Render();
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+
         /* Render here */
         glClearColor(1,1,1,1);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
-
-        /* Poll for and process events */
-        glfwPollEvents();
     }
+    // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 
+    glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
 }
