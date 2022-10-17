@@ -22,8 +22,8 @@ file(GLOB ALL_PROJECT_CPP "${PROJECT_SOURCE_DIR}/src/*.cpp")
 add_executable(KitEngine src/main.cpp ${IMGUI_CPP} ${IMGUI_BACKEND_CPP} ${IMGUIZMO_CPP} ${ALL_PROJECT_CPP}
         src/pch/pch.cpp
         src/pch/pch.h)
-target_precompile_headers(${PROJECT_NAME} PRIVATE
-        src/pch/pch.h)
+#target_precompile_headers(${PROJECT_NAME} PRIVATE
+#        src/pch/pch.h)
 
 # Include header files
 target_include_directories(${PROJECT_NAME}
