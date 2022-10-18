@@ -24,7 +24,7 @@ int main(void)
 
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    io.Fonts->AddFontFromFileTTF("../fonts/Roboto-Bold.ttf", 14, NULL, io.Fonts->GetGlyphRangesCyrillic());
+    //io.Fonts->AddFontFromFileTTF("../fonts/Roboto-Bold.ttf", 14, NULL, io.Fonts->GetGlyphRangesCyrillic());
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 

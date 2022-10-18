@@ -3,3 +3,4 @@
 
 # Ignore
 cmake-build-debug/
+build/
