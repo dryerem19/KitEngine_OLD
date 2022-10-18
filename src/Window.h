@@ -2,9 +2,10 @@
 // Created by dryerem19 on 16.10.22.
 //
 
-#ifndef KITENGINE_WINDOW_H
-#define KITENGINE_WINDOW_H
-#include "GLFW/glfw3.h"
+#pragma once
+#include "KitEnginePch.h"
+
+#include <string>
 
 namespace KitEngine
 {
@@ -39,5 +40,3 @@ namespace KitEngine
         GLFWwindow* GetWindowPointer() const { return m_pWindow; }
     };
 }
-
-#endif //KITENGINE_WINDOW_H

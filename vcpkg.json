@@ -1,0 +1,13 @@
+{
+  "name": "kitengine",
+  "version-string": "0.0.1",
+  "description": "Game Engine",
+  "dependencies": [
+    "glfw3",
+    "glew",
+    {
+      "name": "imgui",
+      "features": ["docking-experimental", "glfw-binding", "opengl3-binding"]
+    }
+  ]
+}

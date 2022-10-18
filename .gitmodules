@@ -1,18 +1,6 @@
-[submodule "3rdparty/glfw"]
-	path = 3rdparty/glfw
-	url = https://github.com/glfw/glfw.git
-[submodule "3rdparty/assimp"]
-	path = 3rdparty/assimp
-	url = https://github.com/assimp/assimp.git
 [submodule "3rdparty/imgui"]
 	path = 3rdparty/imgui
 	url = https://github.com/ocornut/imgui.git
-[submodule "3rdparty/imguizmo"]
-	path = 3rdparty/imguizmo
-	url = https://github.com/CedricGuillemet/ImGuizmo.git
-[submodule "3rdparty/entt"]
-	path = 3rdparty/entt
-	url = https://github.com/skypjack/entt.git
-[submodule "3rdparty/bullet"]
-	path = 3rdparty/bullet
-	url = https://github.com/bulletphysics/bullet3.git
+[submodule "vcpkg"]
+	path = vcpkg
+	url = https://github.com/microsoft/vcpkg

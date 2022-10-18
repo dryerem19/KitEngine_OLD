@@ -8,5 +8,6 @@
     <mapping directory="$PROJECT_DIR$/3rdparty/glfw" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/3rdparty/imgui" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/3rdparty/imguizmo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/vcpkg" vcs="Git" />
   </component>
 </project>
