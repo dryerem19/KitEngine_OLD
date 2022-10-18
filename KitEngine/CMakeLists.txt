@@ -5,6 +5,8 @@ project(KitEngine)
 file(GLOB_RECURSE KIT_ENGINE_HEADERS "include/*.h")
 file(GLOB_RECURSE KIT_ENGINE_SOURCE  "src/*.cpp")
 
+set ( CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON )
+
 add_library(${PROJECT_NAME} SHARED)
 target_sources(${PROJECT_NAME}
         PRIVATE ${KIT_ENGINE_SOURCE})
