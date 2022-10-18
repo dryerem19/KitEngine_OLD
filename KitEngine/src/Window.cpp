@@ -1,7 +1,7 @@
 //
 // Created by dryerem19 on 16.10.22.
 //
-#include "Window.h"
+#include "../include/Window.h"
 
 KitEngine::WindowProps::WindowProps(const std::string &title, const std::string& wndClass, int width, int height)
  : Title(title), WindowClass(wndClass), Width(width), Height(height) {
