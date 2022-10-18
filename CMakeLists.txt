@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.24)
-set(VCPKG_TARGET_TRIPLET x64-windows)
+
+if (WIN32)
+    set(VCPKG_TARGET_TRIPLET x64-windows)
+elseif(UNIX)
+    set(VCPKG_TARGET_TRIPLET x64-linux)
+endif(WIN32)
+
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
         CACHE STRING "Vcpkg toolchain file")
 project(KitEngine)
@@ -37,12 +43,13 @@ if (glfw3_FOUND)
 endif()
 
 #list(APPEND CMAKE_PREFIX_PATH "vcpkg/packages/imgui_x64-windows")
-#find_package(imgui CONFIG REQUIRED)
-#if (imgui_FOUND)
-#    include_directories(${imgui_INCLUDE_DIRS})
-#    target_link_libraries(${PROJECT_NAME} PRIVATE ${imgui_LIBS})
-#    message(STATUS "imgui library found!")
-#endif()
+find_package(imgui CONFIG REQUIRED)
+if (imgui_FOUND)
+    #include_directories(${imgui_INCLUDE_DIRS})
+    #target_link_libraries(${PROJECT_NAME} PRIVATE ${imgui_LIBS})
+    target_link_libraries(${PROJECT_NAME} PRIVATE imgui::imgui)
+    message(STATUS "imgui library found!")
+endif()
 
 #find_library(imgui_lib imgui)
 #include_directories(${imgui_lib_INCLUDE_DIRS})
