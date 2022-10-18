@@ -6,28 +6,20 @@ elseif(UNIX)
     set(VCPKG_TARGET_TRIPLET x64-linux)
 endif(WIN32)
 
-set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+set(CMAKE_TOOLCHAIN_FILE "${CMAKE_HOME_DIRECTORY}/vcpkg/scripts/buildsystems/vcpkg.cmake"
         CACHE STRING "Vcpkg toolchain file")
-project(KitEngine)
-
 set(CMAKE_CXX_STANDARD 20)
 
-file(GLOB_RECURSE KIT_ENGINE_HEADERS "src/*.h")
-file(GLOB_RECURSE KIT_ENGINE_SOURCE  "src/*.cpp")
+project(LevelEditor)
 
-add_executable(${PROJECT_NAME} "src/main.cpp" "src/Window.cpp" "src/Window.h")
+file(GLOB_RECURSE LEVEL_EDITOR_HEADERS "LevelEditor/src/*.h")
+file(GLOB_RECURSE LEVEL_EDITOR_SOURCE  "LevelEditor/src/*.cpp")
 
-find_package(GLEW CONFIG REQUIRED)
-if (GLEW_FOUND)
-    message(STATUS "Glew library found!")
-    target_link_libraries( ${PROJECT_NAME} PRIVATE GLEW::GLEW)
-endif()
+add_executable(${PROJECT_NAME} ${LEVEL_EDITOR_HEADERS} ${LEVEL_EDITOR_SOURCE})
 
-find_package(glfw3 CONFIG REQUIRED)
-if (glfw3_FOUND)
-    message(STATUS "Glf3 library found!")
-    target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
-endif()
+# Подлкючаем библиотеку KitEngine
+target_include_directories(${PROJECT_NAME} PUBLIC KitEngine/include)
+target_link_libraries(${PROJECT_NAME} PRIVATE KitEngine)
 
 find_package(imgui CONFIG REQUIRED)
 if (imgui_FOUND)
@@ -41,20 +33,10 @@ if (imguizmo_FOUND)
     target_link_libraries(${PROJECT_NAME} PRIVATE imguizmo::imguizmo)
 endif()
 
-find_package(EnTT CONFIG REQUIRED)
-if (EnTT_FOUND)
-    message(STATUS "EnTT library found!")
-    target_link_libraries(${PROJECT_NAME} PRIVATE EnTT::EnTT)
-endif()
+add_subdirectory(KitEngine)
 
-find_package(Bullet CONFIG REQUIRED)
-if (Bullet_FOUND)
-    message(STATUS "Bullet library found!")
-    target_link_libraries(${PROJECT_NAME} PRIVATE LinearMath Bullet3Common BulletDynamics BulletSoftBody)
-endif()
-
-find_package(assimp CONFIG REQUIRED)
-if (assimp_FOUND)
-    message(STATUS "Assimp library found!")
-    target_link_libraries(${PROJECT_NAME} PRIVATE assimp::assimp)
+if(WIN32)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${PROJECT_SOURCE_DIR}/build/Windows-x64/Debug/KitEngine/Debug"
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif()

@@ -1,10 +1,8 @@
-////#include "pch/pch.h"
-//
+#include <Window.h>
 
-#include "Window.h"
-#include "KitEnginePch.h"
-
-#include <iostream>
+#include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
 
 int main(void)
 {

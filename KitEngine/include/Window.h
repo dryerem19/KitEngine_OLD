@@ -5,8 +5,6 @@
 #pragma once
 #include "KitEnginePch.h"
 
-#include <string>
-
 namespace KitEngine
 {
     class WindowProps
