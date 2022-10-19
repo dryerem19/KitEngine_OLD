@@ -22,14 +22,18 @@ bool KitEngine::Window::Initialize() {
                                      mProps.Title.c_str(),
                                      nullptr, nullptr);
 
-        if (!m_pWindow)
-        {
+        if (!m_pWindow) {
             glfwTerminate();
             return false;
         }
 
         /* Make the window's context current */
         glfwMakeContextCurrent(m_pWindow);
+
+        /* Initialize glew */
+        if (glewInit() != GLEW_OK) {
+            return false;
+        }
 
         return true;
     }

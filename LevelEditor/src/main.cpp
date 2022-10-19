@@ -30,6 +30,12 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(window.GetWindowPointer(), true);
     ImGui_ImplOpenGL3_Init("#version 130");
 
+    float pos[6] = {
+            -0.5f, -0.5f,
+            0.0f, 0.5f,
+            0.5f, -0.5f
+    };
+
     while (window.Exec()) {
         window.Update();
 
