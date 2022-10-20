@@ -35,6 +35,12 @@ endif()
 
 add_subdirectory(KitEngine)
 
+# Custom commands
+
+add_custom_command(TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+        ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:${PROJECT_NAME}>/res)
+
 if(WIN32)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${PROJECT_SOURCE_DIR}/build/Windows-x64/Debug/KitEngine/Debug"
