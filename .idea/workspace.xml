@@ -24,6 +24,7 @@
   <component name="ChangeListManager">
     <list default="true" id="813cfe8c-f04f-4325-882c-b7d791529569" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KitEngine/res/shaders/glsl/basic.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/KitEngine/res/shaders/glsl/basic.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LevelEditor/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LevelEditor/src/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -97,7 +98,7 @@
       <updated>1666104679720</updated>
       <workItem from="1666104681341" duration="6619000" />
       <workItem from="1666131834765" duration="3669000" />
-      <workItem from="1666197404751" duration="10639000" />
+      <workItem from="1666197404751" duration="18591000" />
     </task>
     <servers />
   </component>

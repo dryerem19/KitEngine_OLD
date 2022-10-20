@@ -5,6 +5,8 @@
 #include <sstream>
 #include <filesystem>
 
+#include <cassert>
+
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
@@ -171,8 +173,17 @@ int main(void)
     // Use shader
     glUseProgram(shaderId);
 
+    int location = glGetUniformLocation(shaderId, "uColor");
+    assert(location >= 0);
+    glUniform4f(location, 0.3, 0.8, 0.8f, 1.0f);
 
     // Game loop
+
+    float r = 0.0f;
+    float increment = 0.05f;
+
+    glfwSwapInterval(1);
+
     while (window.Exec()) {
         window.Update();
 
@@ -183,8 +194,18 @@ int main(void)
         // Draw only vertices
         //glDrawArrays(GL_TRIANGLES, 0, 6);
 
+        // Send r-value color to uniform variable in shader
+        glUniform4f(location, r, 0.8, 0.8f, 1.0f);
+
         // Draw indexed primitive
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+        if (r > 1.0f)
+            increment = -0.05f;
+        else if (r < 0.0f)
+            increment = 0.05f;
+
+        r += increment;
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
