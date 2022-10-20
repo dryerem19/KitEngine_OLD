@@ -130,30 +130,49 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(window.GetWindowPointer(), true);
     ImGui_ImplOpenGL3_Init("#version 130");
 
-    float pos[6] = {
+    // Vertices
+    float vertices[] = {
             -0.5f, -0.5f,
-            0.0f, 0.5f,
-            0.5f, -0.5f
+            0.5f, -0.5f,
+            0.5f, 0.5f,
+            -0.5f, 0.5f,
     };
 
+    // Indices
+    unsigned int indices[] = {
+            0, 1, 2,
+            2, 3, 0
+    };
+
+    // Vertex buffer object
     unsigned int buffer = 0;
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), pos, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), vertices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
+    // Index buffer object
+    unsigned int ibo;
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+
     //std::string working_directory = std::filesystem::current_path();
 
+    // Parse shader file
     ShaderProgramSource source = ParseShader("/home/dryerem19/CLionProjects/"
                                              "KitEngine/KitEngine/res/shaders/glsl/basic.glsl");
 
+    // Load and compile shader file
     unsigned int shaderId = CreateShader(source.VertexSource,
                                          source.FragmentSource);
+    // Use shader
     glUseProgram(shaderId);
 
 
+    // Game loop
     while (window.Exec()) {
         window.Update();
 
@@ -161,7 +180,11 @@ int main(void)
         //glClearColor(1,1,1,1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        // Draw only vertices
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        // Draw indexed primitive
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
