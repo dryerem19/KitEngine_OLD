@@ -24,6 +24,14 @@
   <component name="ChangeListManager">
     <list default="true" id="813cfe8c-f04f-4325-882c-b7d791529569" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
+=======
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KitEngine/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/KitEngine/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KitEngine/res/shaders/glsl/basic.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/res/shaders/glsl/basic.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LevelEditor/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LevelEditor/src/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/Roboto-Bold.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/res/fonts/Roboto-Bold.ttf" afterDir="false" />
+>>>>>>> f1b7238e353adebaf4885014bb3ae8cd83a0d38a
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,19 +60,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/fsociety/CLionProjects/KitEngine/build/Linux-x64/Debug&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;CMakeSettings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "C:/Users/fsociety/CLionProjects/KitEngine/build/Linux-x64/Debug",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "CMakeSettings",
+    "structure.view.defaults.are.configured": "true"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/res" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
   <component name="RunManager" selected="CMake Application.LevelEditor">
     <configuration name="KitEngine" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="LevelEditor" TARGET_NAME="KitEngine" CONFIG_NAME="Linux-x64-Debug" RUN_TARGET_PROJECT_NAME="LevelEditor" RUN_TARGET_NAME="KitEngine">
       <method v="2">

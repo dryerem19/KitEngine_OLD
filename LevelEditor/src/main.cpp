@@ -124,7 +124,7 @@ int main(void)
 
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    //io.Fonts->AddFontFromFileTTF("../fonts/Roboto-Bold.ttf", 14, NULL, io.Fonts->GetGlyphRangesCyrillic());
+    io.Fonts->AddFontFromFileTTF("res/fonts/Roboto-Bold.ttf", 14, NULL, io.Fonts->GetGlyphRangesCyrillic());
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
@@ -161,11 +161,10 @@ int main(void)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
-    //std::string working_directory = std::filesystem::current_path();
+    std::string working_directory = std::filesystem::current_path();
 
     // Parse shader file
-    ShaderProgramSource source = ParseShader("/home/dryerem19/CLionProjects/"
-                                             "KitEngine/KitEngine/res/shaders/glsl/basic.glsl");
+    ShaderProgramSource source = ParseShader("res/shaders/glsl/basic.glsl");
 
     // Load and compile shader file
     unsigned int shaderId = CreateShader(source.VertexSource,
@@ -180,7 +179,11 @@ int main(void)
     // Game loop
 
     float r = 0.0f;
-    float increment = 0.05f;
+    float g = 0.0f;
+    float b = 0.0f;
+    float incrementR = 0.09f;
+    float incrementG = 0.07f;
+    float incrementB = 0.02f;
 
     glfwSwapInterval(1);
 
@@ -195,17 +198,35 @@ int main(void)
         //glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // Send r-value color to uniform variable in shader
-        glUniform4f(location, r, 0.8, 0.8f, 1.0f);
+        glUniform4f(location, r, g, b, 1.0f);
 
         // Draw indexed primitive
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-        if (r > 1.0f)
-            increment = -0.05f;
-        else if (r < 0.0f)
-            increment = 0.05f;
+        if (r > 1.0f) {
+            incrementR = -0.02f;
+        }
+        else if (r < 0.0f){
+            incrementR = 0.06f;
+        }
+        if (g > 1.0f) {
+            incrementG = -0.05f;
+        }
+        else if (g < 0.0f){
+            incrementG = 0.02f;
+        }
+        if (b > 1.0f) {
+            incrementB = -0.05f;
+        }
+        else if (b < 0.0f){
+            incrementB = 0.05f;
+        }
 
-        r += increment;
+
+        r += incrementR;
+        g += incrementG;
+        b += incrementB;
+
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
