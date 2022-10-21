@@ -58,3 +58,6 @@ if (assimp_FOUND)
 else()
     message(FATAL_ERROR "Assimp library not found!")
 endif()
+
+
+# Custom commands

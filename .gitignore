@@ -4,3 +4,4 @@
 # Ignore
 cmake-build-debug/
 build/
+.idea/
