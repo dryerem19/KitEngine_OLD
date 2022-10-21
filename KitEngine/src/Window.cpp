@@ -16,6 +16,11 @@ bool KitEngine::Window::Initialize() {
     /* Initialize glfw */
     if (glfwInit()) {
 
+        // Setup context
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
         /* Create the window */
         m_pWindow = glfwCreateWindow(mProps.Width,
                                      mProps.Height,
