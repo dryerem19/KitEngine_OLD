@@ -11,6 +11,9 @@
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
 
+#include <Graphics/VertexBuffer.h>
+#include <Graphics/IndexBuffer.h>
+
 struct ShaderProgramSource
 {
     std::string VertexSource;
@@ -150,20 +153,12 @@ int main(void)
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    // Vertex buffer object
-    unsigned int vbo = 0;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), vertices, GL_STATIC_DRAW);
+    KitEngine::Graphics::VertexBuffer vertexBuffer{vertices, 8 * sizeof(float)};
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-    // Index buffer object
-    unsigned int ibo;
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+    KitEngine::Graphics::IndexBuffer indexBuffer{indices, 6};
 
     std::string working_directory = std::filesystem::current_path();
 
