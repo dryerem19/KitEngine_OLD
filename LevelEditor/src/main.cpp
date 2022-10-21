@@ -146,14 +146,18 @@ int main(void)
             2, 3, 0
     };
 
+    unsigned int vao = 0;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
     // Vertex buffer object
-    unsigned int buffer = 0;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    unsigned int vbo = 0;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), vertices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     // Index buffer object
     unsigned int ibo;
@@ -243,6 +247,9 @@ int main(void)
 
         window.SwapBuffers();
     }
+
+    glDisableVertexAttribArray(0);
+    glDeleteVertexArrays(1, &vao);
 
     return 0;
 }
