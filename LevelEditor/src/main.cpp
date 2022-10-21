@@ -13,101 +13,7 @@
 
 #include <Graphics/VertexBuffer.h>
 #include <Graphics/IndexBuffer.h>
-
-struct ShaderProgramSource
-{
-    std::string VertexSource;
-    std::string FragmentSource;
-};
-
-enum class ShaderType
-{
-    NONE = -1, VERTEX = 0, FRAGMENT = 1
-};
-
-static ShaderProgramSource ParseShader(const std::string& filepath) {
-
-    if (filepath.empty()) {
-        return {"", ""};
-    }
-
-    std::ifstream stream(filepath);
-    std::string line;
-    std::stringstream ss[2];
-
-    ShaderType type = ShaderType::NONE;
-    while (getline(stream, line)) {
-        if (line.find("#shader") != std::string::npos) {
-            if (line.find("vertex") != std::string::npos) {
-                type = ShaderType::VERTEX;
-            }
-            else if (line.find("fragment") != std::string::npos) {
-                type = ShaderType::FRAGMENT;
-            }
-        }
-        else {
-            ss[(int)type] << line << "\n";
-        }
-    }
-
-    return { ss[0].str(), ss[1].str() };
-
-}
-
-static unsigned int CompileShader(const std::string& shader, unsigned int type)
-{
-    // Create shader
-    unsigned int id = glCreateShader(type);
-
-    // Compile shader
-    const char* source = shader.c_str();
-    glShaderSource(id, 1, &source, nullptr);
-    glCompileShader(id);
-
-    // Check if error
-    int result;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-    if (GL_FALSE == result) {
-
-        int length;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-
-        char* message = (char*) alloca(length * sizeof(char));
-        glGetShaderInfoLog(id, length, &length, message);
-
-        std::cout << "Failed to compile" << (type == GL_VERTEX_SHADER ? "vertex" : "pixel")
-            << "shader!" << std::endl;
-        std::cout << message << std::endl;
-
-        /* Cleanup */
-        glDeleteShader(id);
-
-        return -1;
-    }
-
-    return id;
-}
-
-static unsigned int CreateShader(const std::string& vertexShader, const std::string& pixelShader)
-{
-    // Compile shaders
-    unsigned int idProgram      = glCreateProgram();
-    unsigned int idVertexShader = CompileShader(vertexShader, GL_VERTEX_SHADER);
-    unsigned int idPixelShader  = CompileShader(pixelShader,GL_FRAGMENT_SHADER);
-
-    // Link shaders
-    glAttachShader(idProgram, idVertexShader);
-    glAttachShader(idProgram, idPixelShader);
-
-    glLinkProgram(idProgram);
-    glValidateProgram(idProgram);
-
-    // Cleanup
-    glDeleteShader(idVertexShader);
-    glDeleteShader(idPixelShader);
-
-    return idProgram;
-}
+#include <Graphics/Shader.h>
 
 int main(void)
 {
@@ -162,20 +68,9 @@ int main(void)
 
     std::string working_directory = std::filesystem::current_path();
 
-    // Parse shader file
-    ShaderProgramSource source = ParseShader("res/shaders/glsl/basic.glsl");
-
-    // Load and compile shader file
-    unsigned int shaderId = CreateShader(source.VertexSource,
-                                         source.FragmentSource);
-    // Use shader
-    glUseProgram(shaderId);
-
-    int location = glGetUniformLocation(shaderId, "uColor");
-    assert(location >= 0);
-    glUniform4f(location, 0.3, 0.8, 0.8f, 1.0f);
-
-    // Game loop
+    KitEngine::Graphics::Shader shader("res/shaders/glsl/basic.glsl");
+    shader.Enable();
+    shader.SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
 
     float r = 0.0f;
     float g = 0.0f;
@@ -197,7 +92,7 @@ int main(void)
         //glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // Send r-value color to uniform variable in shader
-        glUniform4f(location, r, g, b, 1.0f);
+        shader.SetUniform4f("uColor", r, g, b, 1.0f);
 
         // Draw indexed primitive
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
