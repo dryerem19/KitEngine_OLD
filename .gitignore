@@ -6,6 +6,13 @@ build/
 cmake-build-debug-visual-studio/
 cmake-build-debug/
 
+.idea/.gitignore
+.idea/.name
+.idea/KitEngine.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+
 !build.yaml
 !postbuild.py
 

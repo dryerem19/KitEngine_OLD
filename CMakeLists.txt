@@ -57,6 +57,6 @@ add_custom_command(TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
 
 if(WIN32)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${PROJECT_SOURCE_DIR}/cmake-build-debug-visual-studio/KitEngine/Debug/KitEngine.dll"
+            "${PROJECT_SOURCE_DIR}/build/Windows/Debug/KitEngine/Debug/KitEngine.dll"
             $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif()
