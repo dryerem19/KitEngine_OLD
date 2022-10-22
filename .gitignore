@@ -2,7 +2,13 @@
 !3rdparty
 
 # Ignore
-*build*
+build/
+cmake-build-debug-visual-studio/
+cmake-build-debug/
+
+!build.yaml
+!postbuild.py
+
 .idea/
-!cmake.xml
+!.idea/cmake.xml
 .PVS-Studio/
