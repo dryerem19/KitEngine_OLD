@@ -2,6 +2,8 @@ import subprocess
 import yaml
 import sys
 
+from datetime import datetime
+
 print("[POST-BUILD] - Started...")
 cmake_source_path: str = sys.argv[1]
 cmake_output_path: str = sys.argv[2]
@@ -15,11 +17,17 @@ with open(path_to_build_fileinfo, "r") as file:
 
 
 def increment_build_number() -> None:
-    build_number: int = data['KitEngine']['build']
+    build_number: int = data['Build']['Number']
     build_number += 1
 
-    data['KitEngine']['build'] = build_number
+    data['Build']['Number'] = build_number
     print(f"[POST-BUILD] - Build number increment from: {build_number - 1} to: {build_number}")
+
+
+def update_build_date() -> None:
+    build_date = datetime.today()
+    data['Build']['Date'] = build_date.strftime("%d-%m-%Y %H:%M:%S")
+    print(f"[POST-BUILD] - Build date: {build_date}")
 
 
 def create_resources_symlink() -> None:
@@ -33,6 +41,7 @@ def create_resources_symlink() -> None:
 
 
 increment_build_number()
+update_build_date()
 with open(path_to_build_fileinfo, "w") as file:
     yaml.dump(data, file)
 
