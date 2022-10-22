@@ -4,6 +4,7 @@
   "description": "Game Engine",
   "dependencies": [
     "glfw3",
+    "glm",
     "glew",
     {
       "name": "imgui",

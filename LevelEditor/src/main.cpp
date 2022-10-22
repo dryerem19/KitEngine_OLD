@@ -69,6 +69,7 @@ int main(void)
     std::string working_directory = std::filesystem::current_path();
 
     KitEngine::Graphics::Shader shader("res/shaders/glsl/basic.glsl");
+    std::string str = "dsdsd";
     shader.Enable();
     shader.SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
 
@@ -90,6 +91,7 @@ int main(void)
 
         // Draw only vertices
         //glDrawArrays(GL_TRIANGLES, 0, 6);
+
 
         // Send r-value color to uniform variable in shader
         shader.SetUniform4f("uColor", r, g, b, 1.0f);
