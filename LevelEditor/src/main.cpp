@@ -66,7 +66,7 @@ int main(void)
 
     KitEngine::Graphics::IndexBuffer indexBuffer{indices, 6};
 
-    std::string working_directory = std::filesystem::current_path();
+    //std::string working_directory = std::filesystem::current_path();
 
     KitEngine::Graphics::Shader shader("res/shaders/glsl/basic.glsl");
     shader.Enable();

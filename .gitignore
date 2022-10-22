@@ -2,7 +2,7 @@
 !3rdparty
 
 # Ignore
-cmake-build-debug/
-build/
+*build*
+idea/
 .idea/
 .PVS-Studio/

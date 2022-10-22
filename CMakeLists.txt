@@ -37,12 +37,25 @@ add_subdirectory(KitEngine)
 
 # Custom commands
 
+#add_custom_command(TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
+#        COMMAND ${CMAKE_COMMAND} -E create_symlink
+#        ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:${PROJECT_NAME}>/res)
+
+#---------------------------------------------------------------------------------
+# Get the full path to the Python virtual environment interpreter from relative
+#---------------------------------------------------------------------------------
+get_filename_component(PYTHON_VENV_EXECUTABLE
+        "${PROJECT_SOURCE_DIR}/python_venv/Scripts/python.exe" ABSOLUTE)
+
+#---------------------------------------------------------------------------------
+# Run a script that performs some actions after the build
+#---------------------------------------------------------------------------------
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E create_symlink
-        ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:${PROJECT_NAME}>/res)
+        COMMAND ${PYTHON_VENV_EXECUTABLE} ${CMAKE_SOURCE_DIR}/postbuild.py
+        ${CMAKE_SOURCE_DIR} $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
 if(WIN32)
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "${PROJECT_SOURCE_DIR}/build/Windows-x64/Debug/KitEngine/Debug"
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${PROJECT_SOURCE_DIR}/cmake-build-debug-visual-studio/KitEngine/Debug/KitEngine.dll"
             $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif()
