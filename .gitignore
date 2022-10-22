@@ -4,6 +4,6 @@
 # Ignore
 *build*
 idea/
-!idea/cmake.xml
+!cmake.xml
 .idea/
 .PVS-Studio/
