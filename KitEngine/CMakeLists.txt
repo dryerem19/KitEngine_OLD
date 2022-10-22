@@ -59,5 +59,12 @@ else()
     message(FATAL_ERROR "Assimp library not found!")
 endif()
 
+find_package(glm CONFIG REQUIRED)
+if (glm_FOUND)
+    message(STATUS "glm library found!")
+    target_link_libraries(${PROJECT_NAME} PUBLIC glm::glm)
+else()
+    message(FATAL_ERROR "glm library not found!")
+endif()
 
 # Custom commands
