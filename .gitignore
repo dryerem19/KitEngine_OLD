@@ -9,6 +9,4 @@ cmake-build-debug/
 !build.yaml
 !postbuild.py
 
-.idea/
-!.idea/cmake.xml
 .PVS-Studio/
