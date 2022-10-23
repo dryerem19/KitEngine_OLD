@@ -67,4 +67,12 @@ else()
     message(FATAL_ERROR "glm library not found!")
 endif()
 
+find_package(SailC++ CONFIG REQUIRED)
+if (SailC++_FOUND)
+    message(STATUS "SailC++ library found!")
+    target_link_libraries(${PROJECT_NAME} PRIVATE SAIL::sail-c++)
+else()
+    message(FATAL_ERROR "SailC++ library not found!")
+endif()
+
 # Custom commands

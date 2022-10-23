@@ -173,3 +173,9 @@ KitEngine::Graphics::ShaderProgramSource KitEngine::Graphics::Shader::ParseShade
     return { ss[0].str(), ss[1].str() };
 
 }
+
+void KitEngine::Graphics::Shader::SetUniform1i(const std::string &uniformName, int value) {
+
+    glUniform1i(this->GetUniformLocation(uniformName), value);
+
+}
