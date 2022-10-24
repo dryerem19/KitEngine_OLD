@@ -28,6 +28,7 @@ namespace KitEngine::Graphics
         ~Shader();
         void Enable() const;
         void Disable();
+        void SetUniform1i(const std::string& uniformName, int value);
         void SetUniform4f(const std::string& uniformName, float x, float y, float z, float w) const;
     private:
         [[nodiscard]] GLint GetUniformLocation(const std::string& uniformName) const;

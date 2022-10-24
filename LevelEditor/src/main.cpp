@@ -13,6 +13,7 @@
 
 #include <Graphics/VertexBuffer.h>
 #include <Graphics/IndexBuffer.h>
+#include <Graphics/Texture.h>
 #include <Graphics/Shader.h>
 
 int main(void)
@@ -41,12 +42,17 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(window.GetWindowPointer(), true);
     ImGui_ImplOpenGL3_Init("#version 130");
 
+    // how opengl sampler alpha pixels
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     // Vertices
     float vertices[] = {
-            -0.5f, -0.5f,
-            0.5f, -0.5f,
-            0.5f, 0.5f,
-            -0.5f, 0.5f,
+            // x, y, tu, tv
+            -0.5f, -0.5f, 0.0f, 0.0f,
+            0.5f, -0.5f, 1.0f, 0.0f,
+            0.5f, 0.5f, 1.0f, 1.0f,
+            -0.5f, 0.5f, 0.0f, 1.0f
     };
 
     // Indices
@@ -59,19 +65,27 @@ int main(void)
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    KitEngine::Graphics::VertexBuffer vertexBuffer{vertices, 8 * sizeof(float)};
+    KitEngine::Graphics::VertexBuffer vertexBuffer{vertices, 4 * 4 * sizeof(float)};
 
+    // Атрибут 0 соответствует координатам текстуры
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)nullptr);
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
     KitEngine::Graphics::IndexBuffer indexBuffer{indices, 6};
 
     //std::string working_directory = std::filesystem::current_path();
 
-    KitEngine::Graphics::Shader shader("res/shaders/glsl/basic.glsl");
+    KitEngine::Graphics::Shader shader("res/shaders/glsl/texture.shader");
     std::string str = "dsdsd";
     shader.Enable();
     shader.SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
+
+    KitEngine::Graphics::Texture texture("res/textures/no_texture.png");
+    texture.Enable();
+    shader.SetUniform1i("uTexture", 0);
 
     float r = 0.0f;
     float g = 0.0f;
