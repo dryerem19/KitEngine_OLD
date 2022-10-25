@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <utility> // std::move
+#include <vector>
 #include <string>
 
 #include <GL/glew.h>

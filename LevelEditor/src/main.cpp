@@ -1,11 +1,6 @@
 #include <Window.h>
 
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <filesystem>
-
-#include <cassert>
 
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
@@ -13,6 +8,7 @@
 
 #include <Graphics/VertexBuffer.h>
 #include <Graphics/IndexBuffer.h>
+//#include <Graphics/VertexArray.h>
 #include <Graphics/Texture.h>
 #include <Graphics/Shader.h>
 
@@ -65,7 +61,15 @@ int main(void)
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
+//    KitEngine::Graphics::VertexArray vertexArray;
     KitEngine::Graphics::VertexBuffer vertexBuffer{vertices, 4 * 4 * sizeof(float)};
+    KitEngine::Graphics::IndexBuffer indexBuffer{indices, 6};
+//
+//    KitEngine::Graphics::VertexBufferLayout vertexBufferDescription;
+//    vertexBufferDescription.AddFloatElement(2);
+//    vertexBufferDescription.AddFloatElement(2);
+//    vertexArray.AddBuffer(vertexBuffer, vertexBufferDescription);
+    //vertexArray.Enable();
 
     // Атрибут 0 соответствует координатам текстуры
     glEnableVertexAttribArray(0);
@@ -74,7 +78,6 @@ int main(void)
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-    KitEngine::Graphics::IndexBuffer indexBuffer{indices, 6};
 
     //std::string working_directory = std::filesystem::current_path();
 
@@ -154,8 +157,8 @@ int main(void)
         window.SwapBuffers();
     }
 
-    glDisableVertexAttribArray(0);
-    glDeleteVertexArrays(1, &vao);
+//    glDisableVertexAttribArray(0);
+//    glDeleteVertexArrays(1, &vao);
 
     return 0;
 }
