@@ -3,7 +3,7 @@
 //
 
 #include "Graphics/Shader.h"
-#include "Graphics/Renderer.h"
+
 
 //-------------------------------------------------------------------------------------------
 // Конструктор
@@ -41,6 +41,18 @@ void KitEngine::Graphics::Shader::Enable() const {
 void KitEngine::Graphics::Shader::Disable() {
 
     glUseProgram(0);
+
+}
+
+//-------------------------------------------------------------------------------------------
+// Установка матрицы 4x4 униформ переменной
+//-------------------------------------------------------------------------------------------
+void
+KitEngine::Graphics::Shader::SetUniformMatrix4fv(const std::string &uniformName, GLsizei count, GLboolean transpose,
+                                                 const GLfloat *value) const {
+
+    const GLint location = this->GetUniformLocation(uniformName);
+    glUniformMatrix4fv(location, count, transpose, value);
 
 }
 
@@ -173,3 +185,5 @@ KitEngine::Graphics::ShaderProgramSource KitEngine::Graphics::Shader::ParseShade
     return { ss[0].str(), ss[1].str() };
 
 }
+
+
