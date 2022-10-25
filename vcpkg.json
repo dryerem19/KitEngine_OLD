@@ -6,6 +6,7 @@
     "glfw3",
     "glm",
     "glew",
+    "sail",
     {
       "name": "imgui",
       "features": ["docking-experimental", "glfw-binding", "opengl3-binding"]

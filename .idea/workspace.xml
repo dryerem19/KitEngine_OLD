@@ -1,37 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
-  <component name="CMakePresetLoader">{
-  &quot;useNewFormat&quot;: true
-}</component>
-  <component name="CMakeReloadState">
-    <option name="reloaded" value="true" />
-  </component>
+  <component name="CMakePresetLoader"><![CDATA[{
+  "useNewFormat": true
+}]]></component>
   <component name="CMakeRunConfigurationManager">
     <generated>
       <config projectName="LevelEditor" targetName="LevelEditor" />
+      <config projectName="LevelEditor" targetName="venv" />
       <config projectName="LevelEditor" targetName="KitEngine" />
     </generated>
   </component>
-  <component name="CMakeSettings" AUTO_RELOAD="true">
-    <configurations>
-      <configuration PROFILE_NAME="Linux-x64-Debug" ENABLED="true" GENERATION_DIR="build/Linux-x64/Debug" CONFIG_NAME="Debug" />
-      <configuration PROFILE_NAME="Windows-x64-Debug" ENABLED="true" GENERATION_DIR="build/Windows-x64/Debug" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Visual Studio" GENERATION_OPTIONS="-G &quot;Visual Studio 16 2019&quot;" />
-    </configurations>
+  <component name="CMakeSettings">
+    <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="813cfe8c-f04f-4325-882c-b7d791529569" name="Changes" comment="">
+    <list default="true" id="b2da610a-8f8e-4478-9e97-af3dad44e9d4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-<<<<<<< HEAD
-=======
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KitEngine/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/KitEngine/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KitEngine/res/shaders/glsl/basic.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/res/shaders/glsl/basic.glsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LevelEditor/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LevelEditor/src/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fonts/Roboto-Bold.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/res/fonts/Roboto-Bold.ttf" afterDir="false" />
->>>>>>> f1b7238e353adebaf4885014bb3ae8cd83a0d38a
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,20 +27,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Linux-x64-Debug" />
-  <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
-      </map>
-    </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="ROOT_SYNC" value="DONT_SYNC" />
-  </component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
-  <component name="ProjectId" id="2GJRPf9VWwxvRegwbXfGZzxx4ik" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:DebugLinux" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -62,32 +35,23 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "C:/Users/fsociety/CLionProjects/KitEngine/build/Linux-x64/Debug",
-    "node.js.selected.package.tslint": "(autodetect)",
+    "last_opened_file_path": "/home/dryerem19/CLionProjects/KitEngine/res/textures",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "CMakeSettings",
-    "structure.view.defaults.are.configured": "true"
+    "settings.editor.selected.configurable": "CPPToolchains"
   }
 }]]></component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/res" />
-      <recent name="$PROJECT_DIR$" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/res/textures" />
     </key>
   </component>
   <component name="RunManager" selected="CMake Application.LevelEditor">
-    <configuration name="KitEngine" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="LevelEditor" TARGET_NAME="KitEngine" CONFIG_NAME="Linux-x64-Debug" RUN_TARGET_PROJECT_NAME="LevelEditor" RUN_TARGET_NAME="KitEngine">
+    <configuration name="KitEngine" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="LevelEditor" TARGET_NAME="KitEngine" CONFIG_NAME="DebugLinux">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LevelEditor" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="LevelEditor" TARGET_NAME="LevelEditor" CONFIG_NAME="Linux-x64-Debug" RUN_TARGET_PROJECT_NAME="LevelEditor" RUN_TARGET_NAME="LevelEditor">
+    <configuration name="LevelEditor" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="LevelEditor" TARGET_NAME="LevelEditor" CONFIG_NAME="DebugLinux" RUN_TARGET_PROJECT_NAME="LevelEditor" RUN_TARGET_NAME="LevelEditor">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -97,28 +61,27 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="venv" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="LevelEditor" TARGET_NAME="venv" CONFIG_NAME="DebugLinux">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="CMake Application.LevelEditor" />
+      <item itemvalue="CMake Application.venv" />
       <item itemvalue="CMake Application.KitEngine" />
     </list>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="813cfe8c-f04f-4325-882c-b7d791529569" name="Changes" comment="" />
-      <created>1666104679720</created>
+      <changelist id="b2da610a-8f8e-4478-9e97-af3dad44e9d4" name="Changes" comment="" />
+      <created>1666439405514</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1666104679720</updated>
-      <workItem from="1666104681341" duration="6619000" />
-      <workItem from="1666131834765" duration="3669000" />
-      <workItem from="1666197404751" duration="19964000" />
-      <workItem from="1666302555923" duration="4000" />
+      <updated>1666439405514</updated>
+      <workItem from="1666439416960" duration="14243000" />
     </task>
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
