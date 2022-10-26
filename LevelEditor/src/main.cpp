@@ -8,7 +8,7 @@
 
 #include <Graphics/VertexBuffer.h>
 #include <Graphics/IndexBuffer.h>
-//#include <Graphics/VertexArray.h>
+#include <Graphics/VertexArray.h>
 #include <Graphics/Texture.h>
 #include <Graphics/Shader.h>
 
@@ -40,7 +40,7 @@ int main(void)
 
     // how opengl sampler alpha pixels
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
     // Vertices
     float vertices[] = {
@@ -57,27 +57,16 @@ int main(void)
             2, 3, 0
     };
 
-    unsigned int vao = 0;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    using namespace KitEngine::Graphics;
 
-//    KitEngine::Graphics::VertexArray vertexArray;
-    KitEngine::Graphics::VertexBuffer vertexBuffer{vertices, 4 * 4 * sizeof(float)};
-    KitEngine::Graphics::IndexBuffer indexBuffer{indices, 6};
-//
-//    KitEngine::Graphics::VertexBufferLayout vertexBufferDescription;
-//    vertexBufferDescription.AddFloatElement(2);
-//    vertexBufferDescription.AddFloatElement(2);
-//    vertexArray.AddBuffer(vertexBuffer, vertexBufferDescription);
-    //vertexArray.Enable();
+    VertexArray vertexArray;
+    VertexBuffer vertexBuffer{vertices, 16 * sizeof(float)};
+    VertexBufferLayout layout;
+    layout.AddFloatElement(2);
+    layout.AddFloatElement(2);
+    vertexArray.AddBuffer(vertexBuffer, layout);
 
-    // Атрибут 0 соответствует координатам текстуры
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)nullptr);
-
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-
+    IndexBuffer indexBuffer{indices, 6};
 
     //std::string working_directory = std::filesystem::current_path();
 
@@ -113,8 +102,12 @@ int main(void)
         // Send r-value color to uniform variable in shader
         shader.SetUniform4f("uColor", r, g, b, 1.0f);
 
+        //vertexArray.Enable();
+
         // Draw indexed primitive
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+//        vertexArray.Bind();
+//        indexBuffer.Bind();
+        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
         if (r > 1.0f) {
             incrementR = -0.02f;
@@ -156,9 +149,6 @@ int main(void)
 
         window.SwapBuffers();
     }
-
-//    glDisableVertexAttribArray(0);
-//    glDeleteVertexArrays(1, &vao);
 
     return 0;
 }

@@ -15,8 +15,8 @@ namespace KitEngine::Graphics
         VertexArray();
         ~VertexArray();
 
-        void AddBuffer(const VertexBuffer& vertexBuffer, const VertexBufferLayout& vertexBufferTemplate) const;
-        void Enable() const;
-        static void Disable();
+        void AddBuffer(const VertexBuffer& vertexBuffer, const VertexBufferLayout& layout) const;
+        void Bind() const;
+        static void Unbind();
     };
 }

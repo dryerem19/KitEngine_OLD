@@ -15,7 +15,7 @@ void KitEngine::Graphics::VertexBufferLayout::AddFloatElement(const unsigned int
                                                               const bool normalized /* = false */) {
 
     mAttributes.push_back({
-       static_cast<GLsizei>(count), GL_FLOAT, normalized
+       static_cast<GLsizei>(count), GL_FLOAT, normalized, GLTypeSize::Float
     });
     mStride += count * GLTypeSize::Float;
 

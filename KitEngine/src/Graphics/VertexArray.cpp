@@ -8,44 +8,42 @@
 KitEngine::Graphics::VertexArray::VertexArray()
     : mVertexArrayId(0) {
 
-    glGenVertexArrays(1, &mVertexArrayId);
+    GLCall(glGenVertexArrays(1, &mVertexArrayId));
 
 }
 
 KitEngine::Graphics::VertexArray::~VertexArray() {
 
-    glDeleteVertexArrays(1, &mVertexArrayId);
+    GLCall(glDeleteVertexArrays(1, &mVertexArrayId));
 
 }
 
 void KitEngine::Graphics::VertexArray::AddBuffer(const KitEngine::Graphics::VertexBuffer &vertexBuffer,
-                                     const KitEngine::Graphics::VertexBufferLayout &vertexBufferTemplate) const {
+                                     const KitEngine::Graphics::VertexBufferLayout &layout) const {
 
-    this->Enable();
+    this->Bind();
     vertexBuffer.Bind();
 
-    unsigned int offset = 0;
-    unsigned int iAttribute = 0;
-    const auto& attributes = vertexBufferTemplate.GetAttributes();
-    for (const auto& attribute : attributes) {
-        glEnableVertexAttribArray(iAttribute);
-        glVertexAttribPointer(iAttribute, attribute.Count, attribute.Type, attribute.Normalized,
-                              static_cast<GLsizei>(vertexBufferTemplate.GetStride()),
-                              reinterpret_cast<const void *>(offset));
-        offset += attribute.Count * VertexBufferAttribute::GetSizeOfType(GLTypeSize::Float);
-        iAttribute++;
+    const auto& attributes = layout.GetAttributes();
+    GLbyte* offset = nullptr;
+    for (unsigned int iAttribute = 0; iAttribute < attributes.size(); iAttribute++) {
+        const auto& attribute = attributes[iAttribute];
+        GLCall(glEnableVertexAttribArray(iAttribute));
+        GLCall(glVertexAttribPointer(iAttribute, attribute.Count, attribute.Type, attribute.Normalized,
+                              layout.GetStride(), offset));
+        offset += attribute.Count * attribute.TypeSize;
     }
 
 }
 
-void KitEngine::Graphics::VertexArray::Enable() const {
+void KitEngine::Graphics::VertexArray::Bind() const {
 
-    glBindVertexArray(mVertexArrayId);
+    GLCall(glBindVertexArray(mVertexArrayId));
 
 }
 
-void KitEngine::Graphics::VertexArray::Disable() {
+void KitEngine::Graphics::VertexArray::Unbind() {
 
-    glBindVertexArray(0);
+    GLCall(glBindVertexArray(0));
 
 }

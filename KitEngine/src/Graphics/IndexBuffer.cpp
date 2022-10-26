@@ -16,13 +16,13 @@ KitEngine::Graphics::IndexBuffer::IndexBuffer(const unsigned int* src, unsigned 
     // TODO: Добавить проверку на то, что sizeof(unsigned int) == sizeof(GLuint)
 
     // Создать новый буфер
-    glGenBuffers(1, &mIndicesBufferId);
+    GLCall(glGenBuffers(1, &mIndicesBufferId));
 
     // Использовать буфер
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndicesBufferId);
+    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndicesBufferId));
 
     // Скопировать данные в буфер
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), src, GL_STATIC_DRAW);
+    GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), src, GL_STATIC_DRAW));
 
 }
 
@@ -32,7 +32,7 @@ KitEngine::Graphics::IndexBuffer::IndexBuffer(const unsigned int* src, unsigned 
 KitEngine::Graphics::IndexBuffer::~IndexBuffer() {
 
     // Cleanup
-    glDeleteBuffers(1, &mIndicesBufferId);
+    GLCall(glDeleteBuffers(1, &mIndicesBufferId));
 
 }
 
@@ -41,7 +41,7 @@ KitEngine::Graphics::IndexBuffer::~IndexBuffer() {
 //-------------------------------------------------------------------------------------------
 void KitEngine::Graphics::IndexBuffer::Bind() const {
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndicesBufferId);
+    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndicesBufferId));
 
 }
 
@@ -50,7 +50,7 @@ void KitEngine::Graphics::IndexBuffer::Bind() const {
 //-------------------------------------------------------------------------------------------
 void KitEngine::Graphics::IndexBuffer::Unbind() const {
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
 }
 

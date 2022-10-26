@@ -10,20 +10,9 @@ namespace KitEngine::Graphics
 {
     struct VertexBufferAttribute
     {
-        GLsizei   Count;
-        GLsizei   Type;
-        GLboolean Normalized;
-
-        static unsigned int GetSizeOfType(unsigned int type) {
-            switch (type) {
-                case GL_FLOAT:
-                    return GLTypeSize::Float;
-                default:
-                    break;
-            }
-
-            // TODO: Сделать ассерт
-            return 0;
-        }
+        GLsizei      Count;
+        GLsizei      Type;
+        GLboolean    Normalized;
+        GLTypeSize   TypeSize;
     };
 }

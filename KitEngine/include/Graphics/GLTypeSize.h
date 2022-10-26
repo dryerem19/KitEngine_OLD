@@ -9,6 +9,6 @@ namespace KitEngine::Graphics
 {
     enum GLTypeSize
     {
-        Float = sizeof(GL_FLOAT),
+        Float = sizeof(GLfloat),
     };
 }
