@@ -16,6 +16,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+using namespace KitEngine::Graphics;
+
 int main(void)
 {
     KitEngine::WindowProps props;
@@ -34,7 +36,8 @@ int main(void)
 
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    io.Fonts->AddFontFromFileTTF("res/fonts/Roboto-Bold.ttf", 14, NULL, io.Fonts->GetGlyphRangesCyrillic());
+    io.Fonts->AddFontFromFileTTF("res/fonts/Roboto-Bold.ttf", 14, NULL,
+                                 io.Fonts->GetGlyphRangesCyrillic());
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
@@ -61,8 +64,6 @@ int main(void)
             2, 3, 0
     };
 
-    using namespace KitEngine::Graphics;
-
     VertexArray vertexArray;
     VertexBuffer vertexBuffer{vertices, 16 * sizeof(float)};
     VertexBufferLayout layout;
@@ -72,14 +73,7 @@ int main(void)
 
     IndexBuffer indexBuffer{indices, 6};
 
-    //std::string working_directory = std::filesystem::current_path();
-
-
     KitEngine::Graphics::Shader shader("res/shaders/glsl/transform_test.glsl");
-
-    //KitEngine::Graphics::Shader shader("res/shaders/glsl/texture.shader");
-
-    std::string str = "dsdsd";
     shader.Enable();
     shader.SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
 
@@ -87,64 +81,17 @@ int main(void)
     texture.Enable();
     shader.SetUniform1i("uTexture", 0);
 
-    float r = 0.0f;
-    float g = 0.0f;
-    float b = 0.0f;
-    float incrementR = 0.09f;
-    float incrementG = 0.07f;
-    float incrementB = 0.02f;
-
-    //glfwSwapInterval(1);
-
     glm::mat4 transform = glm::mat4(1.0f);
     while (window.Exec()) {
         window.Update();
 
         /* Render here */
-        //glClearColor(1,1,1,1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Draw only vertices
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
-
-
-        // Send r-value color to uniform variable in shader
-        shader.SetUniform4f("uColor", r, g, b, 1.0f);
-
-
         transform = glm::rotate(transform, 0.02f, glm::vec3(0.0f, 0.0f, 1.0f));
-
-        shader.SetUniformMatrix4fv("uTransform",1, GL_FALSE, glm::value_ptr(transform));
-
-        // Draw indexed primitive
-//        vertexArray.Bind();
-//        indexBuffer.Bind();
+        shader.SetUniformMatrix4fv("uTransform",1, GL_FALSE,
+                                   glm::value_ptr(transform));
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-
-        if (r > 1.0f) {
-            incrementR = -0.02f;
-        }
-        else if (r < 0.0f){
-            incrementR = 0.06f;
-        }
-        if (g > 1.0f) {
-            incrementG = -0.05f;
-        }
-        else if (g < 0.0f){
-            incrementG = 0.02f;
-        }
-        if (b > 1.0f) {
-            incrementB = -0.05f;
-        }
-        else if (b < 0.0f){
-            incrementB = 0.05f;
-        }
-
-
-        r += incrementR;
-        g += incrementG;
-        b += incrementB;
-
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
