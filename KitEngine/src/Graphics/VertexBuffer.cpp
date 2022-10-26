@@ -13,13 +13,13 @@
 KitEngine::Graphics::VertexBuffer::VertexBuffer(const void* src, unsigned int size) {
 
     // Создать новый буфер
-    glGenBuffers(1, &mVertexBufferId);
+    GLCall(glGenBuffers(1, &mVertexBufferId));
 
     // Использовать буфер
-    glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId));
 
     // Скопировать данные в буфер
-    glBufferData(GL_ARRAY_BUFFER, size, src, GL_STATIC_DRAW);
+    GLCall(glBufferData(GL_ARRAY_BUFFER, size, src, GL_STATIC_DRAW));
 
 }
 
@@ -29,7 +29,7 @@ KitEngine::Graphics::VertexBuffer::VertexBuffer(const void* src, unsigned int si
 KitEngine::Graphics::VertexBuffer::~VertexBuffer() {
 
     // Cleanup
-    glDeleteBuffers(1, &mVertexBufferId);
+    GLCall(glDeleteBuffers(1, &mVertexBufferId));
 
 }
 
@@ -38,7 +38,7 @@ KitEngine::Graphics::VertexBuffer::~VertexBuffer() {
 //-------------------------------------------------------------------------------------------
 void KitEngine::Graphics::VertexBuffer::Bind() const {
 
-    glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId));
 
 }
 
@@ -47,6 +47,6 @@ void KitEngine::Graphics::VertexBuffer::Bind() const {
 //-------------------------------------------------------------------------------------------
 void KitEngine::Graphics::VertexBuffer::Unbind() const {
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 
 }

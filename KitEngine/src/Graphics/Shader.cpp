@@ -22,7 +22,7 @@ KitEngine::Graphics::Shader::Shader(const std::string &filename)
 KitEngine::Graphics::Shader::~Shader() {
 
     // Cleanup
-    glDeleteProgram(mShaderId);
+    GLCall(glDeleteProgram(mShaderId));
 
 }
 
@@ -31,7 +31,7 @@ KitEngine::Graphics::Shader::~Shader() {
 //-------------------------------------------------------------------------------------------
 void KitEngine::Graphics::Shader::Enable() const {
 
-    glUseProgram(mShaderId);
+    GLCall(glUseProgram(mShaderId));
 
 }
 
@@ -40,7 +40,7 @@ void KitEngine::Graphics::Shader::Enable() const {
 //-------------------------------------------------------------------------------------------
 void KitEngine::Graphics::Shader::Disable() {
 
-    glUseProgram(0);
+    GLCall(glUseProgram(0));
 
 }
 
@@ -63,7 +63,7 @@ void KitEngine::Graphics::Shader::SetUniform4f(const std::string &uniformName, f
                                                float w) const {
 
     const GLint location = this->GetUniformLocation(uniformName);
-    glUniform4f(location, x, y, z, w);
+    GLCall(glUniform4f(location, x, y, z, w));
 
 }
 
@@ -96,15 +96,15 @@ unsigned int KitEngine::Graphics::Shader::CreateShader(const ShaderProgramSource
     const unsigned int idPixelShader  = CompileShader(source.FragmentSource,GL_FRAGMENT_SHADER);
 
     // Link shaders
-    glAttachShader(idProgram, idVertexShader);
-    glAttachShader(idProgram, idPixelShader);
+    GLCall(glAttachShader(idProgram, idVertexShader));
+    GLCall(glAttachShader(idProgram, idPixelShader));
 
-    glLinkProgram(idProgram);
-    glValidateProgram(idProgram);
+    GLCall(glLinkProgram(idProgram));
+    GLCall(glValidateProgram(idProgram));
 
     // Cleanup
-    glDeleteShader(idVertexShader);
-    glDeleteShader(idPixelShader);
+    GLCall(glDeleteShader(idVertexShader));
+    GLCall(glDeleteShader(idPixelShader));
 
     return idProgram;
 
@@ -123,19 +123,19 @@ unsigned int KitEngine::Graphics::Shader::CompileShader(const std::string& shade
 
     // Compile shader
     const char* source = shaderText.c_str();
-    glShaderSource(id, 1, &source, nullptr);
-    glCompileShader(id);
+    GLCall(glShaderSource(id, 1, &source, nullptr));
+    GLCall(glCompileShader(id));
 
     // Check if error
     int result;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+    GLCall(glGetShaderiv(id, GL_COMPILE_STATUS, &result));
     if (GL_FALSE == result) {
 
         int length;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+        GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
 
         char* message = (char*) alloca(length * sizeof(char));
-        glGetShaderInfoLog(id, length, &length, message);
+        GLCall(glGetShaderInfoLog(id, length, &length, message));
 
         // TODO: Please, write it to log
         std::cout << "Failed to compile" << (type == GL_VERTEX_SHADER ? "vertex" : "pixel")
@@ -143,7 +143,7 @@ unsigned int KitEngine::Graphics::Shader::CompileShader(const std::string& shade
         std::cout << message << std::endl;
 
         /* Cleanup */
-        glDeleteShader(id);
+        GLCall(glDeleteShader(id));
 
         return -1;
     }
@@ -189,7 +189,7 @@ KitEngine::Graphics::ShaderProgramSource KitEngine::Graphics::Shader::ParseShade
 
 void KitEngine::Graphics::Shader::SetUniform1i(const std::string &uniformName, int value) {
 
-    glUniform1i(this->GetUniformLocation(uniformName), value);
+    GLCall(glUniform1i(this->GetUniformLocation(uniformName), value));
 
 }
 
