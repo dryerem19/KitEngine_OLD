@@ -75,4 +75,13 @@ else()
     message(FATAL_ERROR "SailC++ library not found!")
 endif()
 
+find_package(spdlog CONFIG REQUIRED)
+if (spdlog_FOUND)
+    message(STATUS "Spdlog library found!")
+    include_directories(${spdlog_})
+    target_link_libraries(${PROJECT_NAME} PUBLIC spdlog::spdlog)
+else()
+    message(FATAL_ERROR "Spdlog library not found!")
+endif()
+
 # Custom commands
