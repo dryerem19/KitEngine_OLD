@@ -33,6 +33,12 @@ if (imguizmo_FOUND)
     target_link_libraries(${PROJECT_NAME} PRIVATE imguizmo::imguizmo)
 endif()
 
+find_package(Boost REQUIRED COMPONENTS log REQUIRED)
+if (Boost_FOUND)
+    message(STATUS "Boost library found!")
+    target_link_libraries(${PROJECT_NAME} PRIVATE Boost::boost Boost::log)
+endif()
+
 add_subdirectory(KitEngine)
 
 # Custom commands

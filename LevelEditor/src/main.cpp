@@ -12,6 +12,8 @@
 #include <Graphics/Texture.h>
 #include <Graphics/Shader.h>
 
+#include <Core/Logger.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -30,6 +32,8 @@ int main(void)
     if (!window.Initialize()) {
         return -1;
     }
+
+    KitEngine::Core::Log::ShowMessage("Hello, World!");
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
