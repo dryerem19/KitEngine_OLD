@@ -4,6 +4,7 @@
 
 #pragma once
 #include "KitEnginePch.h"
+#include "Graphics/Renderer.h"
 
 namespace KitEngine::Graphics
 {
@@ -30,6 +31,8 @@ namespace KitEngine::Graphics
         void Disable();
         void SetUniform1i(const std::string& uniformName, int value);
         void SetUniform4f(const std::string& uniformName, float x, float y, float z, float w) const;
+        void SetUniformMatrix4fv(const std::string& uniformName, GLsizei count, GLboolean transpose,
+                                 const GLfloat *value) const;
     private:
         [[nodiscard]] GLint GetUniformLocation(const std::string& uniformName) const;
         [[nodiscard]] unsigned int CreateShader(const ShaderProgramSource& source) const;

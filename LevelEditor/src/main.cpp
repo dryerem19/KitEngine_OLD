@@ -12,6 +12,10 @@
 #include <Graphics/Texture.h>
 #include <Graphics/Shader.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 int main(void)
 {
     KitEngine::WindowProps props;
@@ -70,7 +74,11 @@ int main(void)
 
     //std::string working_directory = std::filesystem::current_path();
 
-    KitEngine::Graphics::Shader shader("res/shaders/glsl/texture.shader");
+
+    KitEngine::Graphics::Shader shader("res/shaders/glsl/transform_test.glsl");
+
+    //KitEngine::Graphics::Shader shader("res/shaders/glsl/texture.shader");
+
     std::string str = "dsdsd";
     shader.Enable();
     shader.SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
@@ -86,8 +94,9 @@ int main(void)
     float incrementG = 0.07f;
     float incrementB = 0.02f;
 
-    glfwSwapInterval(1);
+    //glfwSwapInterval(1);
 
+    glm::mat4 transform = glm::mat4(1.0f);
     while (window.Exec()) {
         window.Update();
 
@@ -102,7 +111,10 @@ int main(void)
         // Send r-value color to uniform variable in shader
         shader.SetUniform4f("uColor", r, g, b, 1.0f);
 
-        //vertexArray.Enable();
+
+        transform = glm::rotate(transform, 0.02f, glm::vec3(0.0f, 0.0f, 1.0f));
+
+        shader.SetUniformMatrix4fv("uTransform",1, GL_FALSE, glm::value_ptr(transform));
 
         // Draw indexed primitive
 //        vertexArray.Bind();
