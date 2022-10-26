@@ -3,19 +3,50 @@
 //
 
 #pragma once
-#include <string>
-#include <boost/log/trivial.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/expressions.hpp>
+#include <spdlog/spdlog.h>
 
 namespace KitEngine::Core
 {
     class Log
     {
     public:
-        static void ShowMessage(const std::string& message)
+        Log() = default;
+        ~Log() = default;
+
+        template<typename... Args>
+        inline static void Trace(spdlog::format_string_t<Args...> fmt, Args &&... args)
         {
-            BOOST_LOG_TRIVIAL(debug) << message;
+            spdlog::trace(fmt, std::forward<Args>(args)...);
+        }
+
+        template<typename... Args>
+        inline static void Debug(spdlog::format_string_t<Args...> fmt, Args &&... args)
+        {
+            spdlog::debug(fmt, std::forward<Args>(args)...);
+        }
+
+        template<typename... Args>
+        inline static void Info(spdlog::format_string_t<Args...> fmt, Args &&... args)
+        {
+            spdlog::info(fmt, std::forward<Args>(args)...);
+        }
+
+        template<typename... Args>
+        inline static void Warning(spdlog::format_string_t<Args...> fmt, Args &&... args)
+        {
+            spdlog::warn(fmt, std::forward<Args>(args)...);
+        }
+
+        template<typename... Args>
+        inline static void Error(spdlog::format_string_t<Args...> fmt, Args &&... args)
+        {
+            spdlog::error(fmt, std::forward<Args>(args)...);
+        }
+
+        template<typename... Args>
+        inline static void Critical(spdlog::format_string_t<Args...> fmt, Args &&... args)
+        {
+            spdlog::critical(fmt, std::forward<Args>(args)...);
         }
     };
 }

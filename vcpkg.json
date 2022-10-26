@@ -15,6 +15,6 @@
     "entt",
     "bullet3",
     "assimp",
-    "boost-log"
+    "spdlog"
   ]
 }

@@ -33,7 +33,9 @@ int main(void)
         return -1;
     }
 
-    KitEngine::Core::Log::ShowMessage("Hello, World!");
+    KitEngine::Core::Log::Info("Самый лучший движок в мире!!");
+    KitEngine::Core::Log::Warning("Привет, {}!", "Женя");
+    KitEngine::Core::Log::Critical("Хьюстон, у нас проблемы :(");
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
