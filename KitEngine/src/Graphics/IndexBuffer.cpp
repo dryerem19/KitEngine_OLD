@@ -2,8 +2,8 @@
 // Created by dryerem19 on 21.10.22.
 //
 
-#include "Graphics/Renderer.h"
 #include "Graphics/IndexBuffer.h"
+#include "Graphics/GlHelpers.h"
 
 //-------------------------------------------------------------------------------------------
 // Конструтор индексного буфера
@@ -51,15 +51,5 @@ void KitEngine::Graphics::IndexBuffer::Bind() const {
 void KitEngine::Graphics::IndexBuffer::Unbind() const {
 
     GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
-}
-
-//-------------------------------------------------------------------------------------------
-// Возвращает кол-во индексов
-// return: unsigned int
-//-------------------------------------------------------------------------------------------
-inline unsigned int KitEngine::Graphics::IndexBuffer::GetCount() const {
-
-    return mIndicesCount;
 
 }

@@ -4,7 +4,6 @@
 
 #pragma once
 #include "KitEnginePch.h"
-#include "Graphics/Renderer.h"
 
 namespace KitEngine::Graphics
 {

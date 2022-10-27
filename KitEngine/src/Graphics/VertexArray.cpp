@@ -3,7 +3,7 @@
 //
 
 #include "Graphics/VertexArray.h"
-#include "Graphics/Renderer.h"
+#include "Graphics/GlHelpers.h"
 
 KitEngine::Graphics::VertexArray::VertexArray()
     : mVertexArrayId(0) {
@@ -18,8 +18,8 @@ KitEngine::Graphics::VertexArray::~VertexArray() {
 
 }
 
-void KitEngine::Graphics::VertexArray::AddBuffer(const KitEngine::Graphics::VertexBuffer &vertexBuffer,
-                                     const KitEngine::Graphics::VertexBufferLayout &layout) const {
+void KitEngine::Graphics::VertexArray::AddBuffer(const VertexBuffer &vertexBuffer,
+                                                 const VertexBufferLayout &layout) const {
 
     this->Bind();
     vertexBuffer.Bind();

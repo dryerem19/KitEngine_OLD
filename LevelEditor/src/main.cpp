@@ -6,11 +6,13 @@
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
 
+#include <Graphics/GlHelpers.h>
 #include <Graphics/VertexBuffer.h>
 #include <Graphics/IndexBuffer.h>
 #include <Graphics/VertexArray.h>
 #include <Graphics/Texture.h>
 #include <Graphics/Shader.h>
+#include <Graphics/Renderer.h>
 
 #include <Core/Logger.h>
 
@@ -87,17 +89,21 @@ int main(void)
     texture.Enable();
     shader.SetUniform1i("uTexture", 0);
 
+    Renderer renderer;
+
     glm::mat4 transform = glm::mat4(1.0f);
     while (window.Exec()) {
         window.Update();
 
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        renderer.Clear();
 
         transform = glm::rotate(transform, 0.02f, glm::vec3(0.0f, 0.0f, 1.0f));
         shader.SetUniformMatrix4fv("uTransform",1, GL_FALSE,
                                    glm::value_ptr(transform));
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+
+        renderer.Draw(vertexArray, indexBuffer, shader);
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();

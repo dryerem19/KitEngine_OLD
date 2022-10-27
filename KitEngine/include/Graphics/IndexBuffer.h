@@ -18,6 +18,6 @@ namespace KitEngine::Graphics
         void Bind() const;
         void Unbind() const;
 
-        inline unsigned int GetCount() const;
+        [[nodiscard]] inline unsigned int GetCount() const { return mIndicesCount; }
     };
 }

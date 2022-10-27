@@ -3,7 +3,6 @@
 //
 
 #pragma once
-#include "Renderer.h"
 #include "GLTypeSize.h"
 
 namespace KitEngine::Graphics

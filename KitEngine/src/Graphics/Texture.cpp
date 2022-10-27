@@ -3,6 +3,7 @@
 //
 
 #include "Graphics/Texture.h"
+#include "Graphics/GlHelpers.h"
 #include <sail/sail-c++/sail-c++.h>
 
 KitEngine::Graphics::Texture::Texture(std::string path)
