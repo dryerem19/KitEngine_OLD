@@ -36,7 +36,7 @@ int main(void)
     }
 
     KitEngine::Core::Log::Info("Самый лучший движок в мире!!");
-    KitEngine::Core::Log::Warning("Привет, {}!", "Женя");
+    KitEngine::Core::Log::Warning("Привет, {} dsdsdsds {}!", "Женя", "Вася");
     KitEngine::Core::Log::Critical("Хьюстон, у нас проблемы :(");
 
     // Setup Dear ImGui context

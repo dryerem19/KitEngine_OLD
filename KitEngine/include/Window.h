@@ -4,6 +4,7 @@
 
 #pragma once
 #include "KitEnginePch.h"
+#include "Core/Logger.h"
 
 namespace KitEngine
 {
@@ -28,6 +29,8 @@ namespace KitEngine
     private:
         WindowProps mProps;
         GLFWwindow* m_pWindow;
+        static void OnErrorHandling(int codeError, const char* descriptionError);
+
     public:
         Window(const WindowProps& windowProps);
         ~Window();
