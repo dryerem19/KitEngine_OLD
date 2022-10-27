@@ -1,6 +1,7 @@
 import subprocess
 import yaml
 import sys
+import os.path
 
 from datetime import datetime
 
@@ -35,9 +36,11 @@ def create_resources_symlink() -> None:
     if sys.platform == "win32":
         subprocess.run(f'mklink /J "{cmake_source_path}/res" "{cmake_output_path}/res"', shell=True)
     elif sys.platform == "linux":
-        subprocess.run(f'ln -s {cmake_source_path}/res {cmake_output_path}/res', shell=True)
-
-    print("[POST-BUILD] - Create symlink to resources folder")
+        if os.path.exists(f'{cmake_output_path}/res'):
+            print("[POST-BUILD] - The symlink to resources folder is exist!")
+        else:
+            subprocess.run(f'ln -s {cmake_source_path}/res {cmake_output_path}/res', shell=True)
+            print("[POST-BUILD] - Create symlink to resources folder")
 
 
 increment_build_number()
