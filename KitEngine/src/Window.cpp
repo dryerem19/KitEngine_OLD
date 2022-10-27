@@ -7,11 +7,18 @@ KitEngine::WindowProps::WindowProps(const std::string &title, const std::string&
  : Title(title), WindowClass(wndClass), Width(width), Height(height) {
 }
 
+
+void KitEngine::Window::OnErrorHandling(const int codeError, const char* descriptionError) {
+    Core::Log::Error("[GLFW] - [{}]: {}!", codeError, descriptionError);
+}
+
 KitEngine::Window::Window(const KitEngine::WindowProps &windowProps)
     : mProps(windowProps) {
 }
 
 bool KitEngine::Window::Initialize() {
+
+    glfwSetErrorCallback(OnErrorHandling);
 
     /* Initialize glfw */
     if (glfwInit()) {
@@ -26,6 +33,8 @@ bool KitEngine::Window::Initialize() {
                                      mProps.Height,
                                      mProps.Title.c_str(),
                                      nullptr, nullptr);
+
+
 
         if (!m_pWindow) {
             glfwTerminate();
@@ -72,4 +81,10 @@ KitEngine::Window::~Window() {
         glfwTerminate();
     }
 }
+
+
+
+
+
+
 
