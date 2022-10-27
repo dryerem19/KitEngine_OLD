@@ -2,8 +2,8 @@
 // Created by dryerem19 on 21.10.22.
 //
 
-#include "Graphics/Renderer.h"
 #include "Graphics/VertexBuffer.h"
+#include "Graphics/GlHelpers.h"
 
 //-------------------------------------------------------------------------------------------
 // Конструтор вершинного буфера

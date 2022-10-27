@@ -5,15 +5,16 @@
 #pragma once
 #include "KitEnginePch.h"
 
-#define EXIT_WITH_ERROR(x) if (!(x)) exit(0);
-#define GLCall(x) GLClearError();\
-    x;\
-    EXIT_WITH_ERROR(GLLogCall(#x, __FILE__, __LINE__))
-
-void GLClearError();
-bool GLLogCall(const char* function, const char* file, int line);
+#include "VertexArray.h"
+#include "IndexBuffer.h"
+#include "Shader.h"
 
 namespace KitEngine::Graphics
 {
-
+    class Renderer
+    {
+    public:
+        void Clear();
+        void Draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader) const;
+    };
 }

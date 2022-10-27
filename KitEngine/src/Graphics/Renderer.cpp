@@ -3,22 +3,21 @@
 //
 
 #include "Graphics/Renderer.h"
+#include "Graphics/GlHelpers.h"
 
-void GLClearError() {
-    while (glGetError() != GL_NO_ERROR);
-}
+void KitEngine::Graphics::Renderer::Clear() {
 
-bool GLLogCall(const char* function, const char* file, int line) {
-    while (GLenum iError = glGetError()) {
-        std::cout << "[OpenGL Error] - (" << iError << "): "
-                  << function << " " << file << ": " << line << std::endl;
-        return false;
-    }
-    return true;
-}
-
-namespace KitEngine::Graphics
-{
+    glClear(GL_COLOR_BUFFER_BIT);
 
 }
 
+void KitEngine::Graphics::Renderer::Draw(const KitEngine::Graphics::VertexArray &vertexArray,
+                                         const KitEngine::Graphics::IndexBuffer &indexBuffer,
+                                         const KitEngine::Graphics::Shader &shader) const {
+
+    vertexArray.Bind();
+    indexBuffer.Bind();
+    GLCall(glDrawElements(GL_TRIANGLES, indexBuffer.GetCount(),
+                          GL_UNSIGNED_INT, nullptr));
+
+}

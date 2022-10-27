@@ -3,9 +3,7 @@
 //
 
 #pragma once
-
 #include "KitEnginePch.h"
-#include "Renderer.h"
 #include "VertexBufferAttribute.h"
 
 namespace KitEngine::Graphics

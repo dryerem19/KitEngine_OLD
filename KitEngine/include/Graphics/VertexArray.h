@@ -3,8 +3,8 @@
 //
 
 #pragma once
-#include "Graphics/VertexBufferLayout.h"
 #include "Graphics/VertexBuffer.h"
+#include "Graphics/VertexBufferLayout.h"
 
 namespace KitEngine::Graphics
 {
