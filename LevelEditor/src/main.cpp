@@ -1,10 +1,6 @@
-#include <Window.h>
+#include "Core/Window.h"
 
 #include <iostream>
-
-#include <imgui.h>
-#include <imgui_impl_opengl3.h>
-#include <imgui_impl_glfw.h>
 
 #include <Graphics/GlHelpers.h>
 #include <Graphics/VertexBuffer.h>
@@ -20,7 +16,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+using namespace KitEngine::Core;
 using namespace KitEngine::Graphics;
+
+#include "LevelEditorApplication.h"
+using namespace LevelEditor;
 
 int main(void)
 {
@@ -30,96 +30,64 @@ int main(void)
     props.Width = 800;
     props.Height = 600;
 
-    KitEngine::Window window(props);
-    if (!window.Initialize()) {
-        return -1;
-    }
+    auto& app = LevelEditorApplication::Instance();
+    app.Start(props);
 
-    KitEngine::Core::Log::Info("Самый лучший движок в мире!!");
-    KitEngine::Core::Log::Warning("Привет, {} dsdsdsds {}!", "Женя", "Вася");
-    KitEngine::Core::Log::Critical("Хьюстон, у нас проблемы :(");
+//    // Vertices
+//    static float vertices[] = {
+//            // x, y, tu, tv
+//            -0.5f, -0.5f, 0.0f, 0.0f,
+//            0.5f, -0.5f, 1.0f, 0.0f,
+//            0.5f, 0.5f, 1.0f, 1.0f,
+//            -0.5f, 0.5f, 0.0f, 1.0f
+//    };
+//
+//    // Indices
+//    static unsigned int indices[] = {
+//            0, 1, 2,
+//            2, 3, 0
+//    };
 
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.Fonts->AddFontFromFileTTF("res/fonts/Roboto-Bold.ttf", 14, NULL,
-                                 io.Fonts->GetGlyphRangesCyrillic());
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(window.GetWindowPointer(), true);
-    ImGui_ImplOpenGL3_Init("#version 130");
-
-    // how opengl sampler alpha pixels
-    glEnable(GL_BLEND);
-    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-
-    // Vertices
-    float vertices[] = {
-            // x, y, tu, tv
-            -0.5f, -0.5f, 0.0f, 0.0f,
-            0.5f, -0.5f, 1.0f, 0.0f,
-            0.5f, 0.5f, 1.0f, 1.0f,
-            -0.5f, 0.5f, 0.0f, 1.0f
-    };
-
-    // Indices
-    unsigned int indices[] = {
-            0, 1, 2,
-            2, 3, 0
-    };
-
-    VertexArray vertexArray;
-    VertexBuffer vertexBuffer{vertices, 16 * sizeof(float)};
-    VertexBufferLayout layout;
-    layout.AddFloatElement(2);
-    layout.AddFloatElement(2);
-    vertexArray.AddBuffer(vertexBuffer, layout);
-
-    IndexBuffer indexBuffer{indices, 6};
-
-    KitEngine::Graphics::Shader shader("res/shaders/glsl/transform_test.glsl");
-    shader.Enable();
-    shader.SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
-
-    KitEngine::Graphics::Texture texture("res/textures/no_texture.png");
-    texture.Enable();
-    shader.SetUniform1i("uTexture", 0);
-
-    Renderer renderer;
-
-    glm::mat4 transform = glm::mat4(1.0f);
-    while (window.Exec()) {
-        window.Update();
-
-        /* Render here */
-        renderer.Clear();
-
-        transform = glm::rotate(transform, 0.02f, glm::vec3(0.0f, 0.0f, 1.0f));
-        shader.SetUniformMatrix4fv("uTransform",1, GL_FALSE,
-                                   glm::value_ptr(transform));
-
-
-        renderer.Draw(vertexArray, indexBuffer, shader);
-
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        // Show demo window
-        ImGui::Begin("Window");
-        ImGui::Text("Как дела ?");
-        ImGui::End();
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        window.SwapBuffers();
-    }
+//    // how opengl sampler alpha pixels
+//    glEnable(GL_BLEND);
+//    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+//
+//    VertexArray vertexArray;
+//    VertexBuffer vertexBuffer{vertices, 16 * sizeof(float)};
+//    VertexBufferLayout layout;
+//    layout.AddFloatElement(2);
+//    layout.AddFloatElement(2);
+//    vertexArray.AddBuffer(vertexBuffer, layout);
+//
+//    IndexBuffer indexBuffer{indices, 6};
+//
+//    KitEngine::Graphics::Shader shader("res/shaders/glsl/transform_test.glsl");
+//    shader.Enable();
+//    shader.SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
+//
+//    KitEngine::Graphics::Texture texture("res/textures/no_texture.png");
+//    texture.Enable();
+//    shader.SetUniform1i("uTexture", 0);
+//
+//    Renderer renderer;
+//
+//    glm::mat4 transform = glm::mat4(1.0f);
+//    while (window.Exec()) {
+//        window.Update();
+//
+//        /* Render here */
+//        renderer.Clear();
+//
+//        transform = glm::rotate(transform, 0.02f, glm::vec3(0.0f, 0.0f, 1.0f));
+//        shader.SetUniformMatrix4fv("uTransform",1, GL_FALSE,
+//                                   glm::value_ptr(transform));
+//
+//
+//        renderer.Draw(vertexArray, indexBuffer, shader);
+//
+//
+//        window.SwapBuffers();
+//    }
 
     return 0;
 }

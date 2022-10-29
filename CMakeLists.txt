@@ -12,10 +12,11 @@ set(CMAKE_CXX_STANDARD 20)
 
 project(LevelEditor)
 
-file(GLOB_RECURSE LEVEL_EDITOR_HEADERS "LevelEditor/src/*.h")
-file(GLOB_RECURSE LEVEL_EDITOR_SOURCE  "LevelEditor/src/*.cpp")
+file(GLOB_RECURSE LEVEL_EDITOR_HEADERS "${CMAKE_SOURCE_DIR}/LevelEditor/*.h")
+file(GLOB_RECURSE LEVEL_EDITOR_SOURCE  "${CMAKE_SOURCE_DIR}/LevelEditor/src/*.cpp")
 
 add_executable(${PROJECT_NAME} ${LEVEL_EDITOR_HEADERS} ${LEVEL_EDITOR_SOURCE})
+target_include_directories(${PROJECT_NAME} PUBLIC LevelEditor/include)
 
 # Подлкючаем библиотеку KitEngine
 target_include_directories(${PROJECT_NAME} PUBLIC KitEngine/include)

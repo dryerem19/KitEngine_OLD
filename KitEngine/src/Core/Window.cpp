@@ -1,7 +1,7 @@
 //
 // Created by dryerem19 on 16.10.22.
 //
-#include "../include/Window.h"
+#include "Core/Window.h"
 
 KitEngine::WindowProps::WindowProps(const std::string &title, const std::string& wndClass, int width, int height)
  : Title(title), WindowClass(wndClass), Width(width), Height(height) {
@@ -44,6 +44,9 @@ bool KitEngine::Window::Initialize() {
         /* Make the window's context current */
         glfwMakeContextCurrent(m_pWindow);
 
+        // ОТключить ограничение кдаров
+        //glfwSwapInterval(0);
+
         /* Initialize glew */
         if (glewInit() != GLEW_OK) {
             return false;
@@ -72,6 +75,12 @@ void KitEngine::Window::Update() {
 void KitEngine::Window::SwapBuffers() {
     /* Swap front and back buffers */
     glfwSwapBuffers(m_pWindow);
+}
+
+void KitEngine::Window::SetWindowTitle(const std::string &title) const {
+
+    glfwSetWindowTitle(m_pWindow, title.c_str());
+
 }
 
 KitEngine::Window::~Window() {

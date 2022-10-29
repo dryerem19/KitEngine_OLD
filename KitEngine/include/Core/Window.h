@@ -38,6 +38,9 @@ namespace KitEngine
         bool Exec();
         void Update();
         void SwapBuffers();
+
+        void SetWindowTitle(const std::string& title) const;
+        const inline WindowProps& GetProps() { return mProps; }
         GLFWwindow* GetWindowPointer() const { return m_pWindow; }
     };
 }
