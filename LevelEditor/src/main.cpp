@@ -175,10 +175,13 @@ void mouse_callback(GLFWwindow* window, int key, int action, int mode)
 
     if(action == GLFW_PRESS)
     {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetCursorPos(window, lastX, lastY);
         keys[key] = true;
     }
     else if (action == GLFW_RELEASE)
     {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         keys[key] = false;
     }
 
@@ -186,6 +189,7 @@ void mouse_callback(GLFWwindow* window, int key, int action, int mode)
 
 void mouse_movement(GLFWwindow* window, double xpos, double ypos)
 {
+
     if(keys[GLFW_MOUSE_BUTTON_LEFT])
     {
 
