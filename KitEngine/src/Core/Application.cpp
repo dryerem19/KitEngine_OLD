@@ -8,10 +8,10 @@
 // PUBLIC SECTION
 //------------------------------------------------------------------------------------
 
-KitEngine::Core::Application &KitEngine::Core::Application::Instance() {
+KitEngine::Core::Application::Application() {
 
-    static Application instance;
-    return instance;
+    mIsRunning = true;
+    mPreviousTime = glfwGetTime();
 
 }
 
@@ -63,6 +63,7 @@ void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
 
         // Рисуем игру
         this->OnRender(interpolate);
+        mWindow->SwapBuffers();
 
         // Увеличиваем счётчик кадров
         frames++;
@@ -99,13 +100,5 @@ void KitEngine::Core::Application::OnUpdate() {
 void KitEngine::Core::Application::OnRender(double dt) {
 
     mRenderer.Clear();
-    mWindow->SwapBuffers();
-
-}
-
-KitEngine::Core::Application::Application() {
-
-    mIsRunning = true;
-    mPreviousTime = glfwGetTime();
 
 }

@@ -30,23 +30,8 @@ int main(void)
     props.Width = 800;
     props.Height = 600;
 
-    auto& app = LevelEditorApplication::Instance();
-    app.Start(props);
-
-//    // Vertices
-//    static float vertices[] = {
-//            // x, y, tu, tv
-//            -0.5f, -0.5f, 0.0f, 0.0f,
-//            0.5f, -0.5f, 1.0f, 0.0f,
-//            0.5f, 0.5f, 1.0f, 1.0f,
-//            -0.5f, 0.5f, 0.0f, 1.0f
-//    };
-//
-//    // Indices
-//    static unsigned int indices[] = {
-//            0, 1, 2,
-//            2, 3, 0
-//    };
+    auto app = std::make_unique<LevelEditorApplication>();
+    app->Start(props);
 
 //    // how opengl sampler alpha pixels
 //    glEnable(GL_BLEND);

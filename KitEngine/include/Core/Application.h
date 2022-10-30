@@ -22,9 +22,10 @@ namespace KitEngine::Core
         bool mIsRunning;
 
     public:
+        Application();
+        ~Application() = default;
         Application(const Application&) = delete;
         Application& operator=(Application&) = delete;
-        static Application& Instance();
 
         [[nodiscard]] inline auto& GetWindow() const { return mWindow; }
         void virtual Start(const KitEngine::WindowProps& props);
@@ -33,10 +34,6 @@ namespace KitEngine::Core
         virtual void OnStart();
         virtual void OnUpdate();
         virtual void OnRender(double dt);
-
-    private:
-        Application();
-        ~Application() = default;
     };
 }
 
