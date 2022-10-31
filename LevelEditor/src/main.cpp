@@ -1,6 +1,7 @@
 #include <Window.h>
 
 #include <iostream>
+#include <vector>
 
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
@@ -12,6 +13,7 @@
 #include <Graphics/VertexArray.h>
 #include <Graphics/Texture.h>
 #include <Graphics/Shader.h>
+#include <Graphics/Vertex.h>
 #include <Graphics/Renderer.h>
 
 #include <Core/Logger.h>
@@ -60,8 +62,6 @@ int main(void)
     KitEngine::Core::Log::Warning("Привет, {} dsdsdsds {}!", "Женя", "Вася");
     KitEngine::Core::Log::Critical("Хьюстон, у нас проблемы :(");
 
-
-
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
 
@@ -80,29 +80,23 @@ int main(void)
     glEnable(GL_BLEND);
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-    // Vertices
-    float vertices[] = {
-            // x, y, tu, tv
-            -0.5f, -0.5f, 0.0f, 0.0f,
-            0.5f, -0.5f, 1.0f, 0.0f,
-            0.5f, 0.5f, 1.0f, 1.0f,
-            -0.5f, 0.5f, 0.0f, 1.0f
+    std::vector<Vertex> vertices = {
+            Vertex { glm::vec3( -0.5f, -0.5f, 0.0f ),  glm::vec2(0.0f, 0.0f) },
+            Vertex { glm::vec3( 0.5f, -0.5f, 0.0f  ),  glm::vec2(1.0f, 0.0f) },
+            Vertex { glm::vec3( 0.5f, 0.5f, 0.0f   ),  glm::vec2(1.0f, 1.0f) },
+            Vertex { glm::vec3( -0.5f, 0.5f, 0.0f  ),  glm::vec2(0.0f, 1.0f) },
     };
 
-    // Indices
-    unsigned int indices[] = {
+    std::vector<unsigned int> indices = {
             0, 1, 2,
-            2, 3, 0
+            2, 3, 0,
     };
 
     VertexArray vertexArray;
-    VertexBuffer vertexBuffer{vertices, 16 * sizeof(float)};
-    VertexBufferLayout layout;
-    layout.AddFloatElement(2);
-    layout.AddFloatElement(2);
-    vertexArray.AddBuffer(vertexBuffer, layout);
+    VertexBuffer vertexBuffer{vertices.data(), static_cast<unsigned int>(vertices.size() * sizeof(Vertex))};
+    vertexArray.AddBuffer(vertexBuffer, Vertex::mLayout);
 
-    IndexBuffer indexBuffer{indices, 6};
+    IndexBuffer indexBuffer{indices.data(), static_cast<unsigned int>(indices.size())};
 
     KitEngine::Graphics::Shader shader("res/shaders/glsl/transform_test.glsl");
     shader.Enable();
