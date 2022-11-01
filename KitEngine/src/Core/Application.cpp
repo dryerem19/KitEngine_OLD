@@ -13,6 +13,35 @@ KitEngine::Core::Application::Application() {
     mIsRunning = true;
     mPreviousTime = glfwGetTime();
 
+    mImguiLayer = std::make_shared<ImGuiLayer>();
+    this->PushLayer(mImguiLayer);
+}
+
+KitEngine::Core::Application::~Application() {
+
+    for (auto& layer : mLayerStack) {
+        layer->OnFinish();
+    }
+
+}
+
+KitEngine::Core::Application &KitEngine::Core::Application::Instance() {
+
+    static Application instance;
+    return instance;
+
+}
+
+void KitEngine::Core::Application::PushLayer(const std::shared_ptr<BaseLayer> layer) {
+
+    mLayerStack.PushLayer(layer);
+
+}
+
+void KitEngine::Core::Application::PopLayer(const std::shared_ptr<BaseLayer> layer) {
+
+    mLayerStack.PopLayer(layer);
+
 }
 
 void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
@@ -24,9 +53,6 @@ void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
         Log::Critical("Failed to create the window!");
         exit(-1);
     }
-
-    // Запускается при старте приложения
-    this->OnStart();
 
     // Ограничиваем FPS до 60
     const double dt = 1 / (double)60;
@@ -54,15 +80,30 @@ void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
 
         // Обновляем игру до тех пор, пока лаг не станет меньше 1 мс
         while (lag >= dt) {
-            this->OnUpdate();
+
+            for (auto& layer : mLayerStack) {
+                layer->OnUpdate();
+            }
+
             lag -= dt;
         }
 
         // Интерполируем разницу между кадрами (получаем более плавное значение)
         const double interpolate = lag / dt;
 
-        // Рисуем игру
-        this->OnRender(interpolate);
+        // Render frame
+        for (auto& layer : mLayerStack) {
+            layer->OnFrameRender(interpolate);
+        }
+
+        // Render UI
+        mImguiLayer->BeginFrame(); {
+            for (auto& layer : mLayerStack) {
+                layer->OnUIRender();
+            }
+        }
+        mImguiLayer->EndFrame();
+
         mWindow->SwapBuffers();
 
         // Увеличиваем счётчик кадров
@@ -79,26 +120,5 @@ void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
     }
 
     Log::Info("Application stopped");
-
-}
-
-
-//------------------------------------------------------------------------------------
-// PRIVATE SECTION
-//------------------------------------------------------------------------------------
-
-void KitEngine::Core::Application::OnStart() {
-
-}
-
-void KitEngine::Core::Application::OnUpdate() {
-
-    mWindow->Update();
-
-}
-
-void KitEngine::Core::Application::OnRender(double dt) {
-
-    mRenderer.Clear();
 
 }

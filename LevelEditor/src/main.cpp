@@ -1,26 +1,16 @@
 #include "Core/Window.h"
+#include "Core/Application.h"
 
 #include <iostream>
 
 #include <Graphics/GlHelpers.h>
-#include <Graphics/VertexBuffer.h>
-#include <Graphics/IndexBuffer.h>
-#include <Graphics/VertexArray.h>
-#include <Graphics/Texture.h>
-#include <Graphics/Shader.h>
 #include <Graphics/Renderer.h>
 
 #include <Core/Logger.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 using namespace KitEngine::Core;
 using namespace KitEngine::Graphics;
 
-#include "LevelEditorApplication.h"
-using namespace LevelEditor;
 
 int main(void)
 {
@@ -30,29 +20,12 @@ int main(void)
     props.Width = 800;
     props.Height = 600;
 
-    auto app = std::make_unique<LevelEditorApplication>();
-    app->Start(props);
+    Application& app = Application::Instance();
+    app.Start(props);
 
 //    // how opengl sampler alpha pixels
 //    glEnable(GL_BLEND);
 //    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-//
-//    VertexArray vertexArray;
-//    VertexBuffer vertexBuffer{vertices, 16 * sizeof(float)};
-//    VertexBufferLayout layout;
-//    layout.AddFloatElement(2);
-//    layout.AddFloatElement(2);
-//    vertexArray.AddBuffer(vertexBuffer, layout);
-//
-//    IndexBuffer indexBuffer{indices, 6};
-//
-//    KitEngine::Graphics::Shader shader("res/shaders/glsl/transform_test.glsl");
-//    shader.Enable();
-//    shader.SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
-//
-//    KitEngine::Graphics::Texture texture("res/textures/no_texture.png");
-//    texture.Enable();
-//    shader.SetUniform1i("uTexture", 0);
 //
 //    Renderer renderer;
 //
