@@ -2,10 +2,12 @@
 // Created by Denis on 01.11.2022.
 //
 #include "Core/BaseLayer.h"
+
+#include <utility>
 #include "Core/Logger.h"
 
-KitEngine::Core::BaseLayer::BaseLayer(const std::string name)
-        : mName(name) {
+KitEngine::Core::BaseLayer::BaseLayer(std::string name)
+        : mName(std::move(name)) {
 
 }
 
@@ -19,7 +21,7 @@ void KitEngine::Core::BaseLayer::OnUpdate() {
 
 }
 
-void KitEngine::Core::BaseLayer::OnFrameRender(double dt) {
+void KitEngine::Core::BaseLayer::OnRender(double dt) {
 
 }
 

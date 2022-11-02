@@ -31,7 +31,7 @@ namespace LevelEditor::Tests
 
         void OnStart() override;
         void OnUpdate() override;
-        void OnFrameRender(double dt) override;
+        void OnRender(double dt) override;
         void OnUIRender() override;
         void OnFinish() override;
     };

@@ -22,6 +22,7 @@ void LevelEditor::Tests::TestLayer::OnStart() {
             2, 3, 0
     };
 
+
     mVertexArray  = std::make_unique<KitEngine::Graphics::VertexArray>();
     mVertexBuffer = std::make_unique<KitEngine::Graphics::VertexBuffer>
             (vertices, 16 * sizeof(float));
@@ -53,7 +54,9 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
 
 }
 
-void LevelEditor::Tests::TestLayer::OnFrameRender(double dt) {
+void LevelEditor::Tests::TestLayer::OnRender(double dt) {
+
+    KitEngine::Graphics::Renderer::Instance().Clear();
 
     KitEngine::Graphics::Renderer& renderer = KitEngine::Graphics::Renderer::Instance();
     renderer.Draw(*mVertexArray, *mIndexBuffer, *mShader);

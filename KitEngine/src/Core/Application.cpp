@@ -8,23 +8,6 @@
 // PUBLIC SECTION
 //------------------------------------------------------------------------------------
 
-KitEngine::Core::Application::Application() {
-
-    mIsRunning = true;
-    mPreviousTime = glfwGetTime();
-
-    mImguiLayer = std::make_shared<ImGuiLayer>();
-    this->PushLayer(mImguiLayer);
-}
-
-KitEngine::Core::Application::~Application() {
-
-    for (auto& layer : mLayerStack) {
-        layer->OnFinish();
-    }
-
-}
-
 KitEngine::Core::Application &KitEngine::Core::Application::Instance() {
 
     static Application instance;
@@ -32,27 +15,24 @@ KitEngine::Core::Application &KitEngine::Core::Application::Instance() {
 
 }
 
-void KitEngine::Core::Application::PushLayer(const std::shared_ptr<BaseLayer> layer) {
-
-    mLayerStack.PushLayer(layer);
-
-}
-
-void KitEngine::Core::Application::PopLayer(const std::shared_ptr<BaseLayer> layer) {
-
-    mLayerStack.PopLayer(layer);
-
-}
-
-void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
-
-    Log::Info("Application running");
+void KitEngine::Core::Application::Initialize(const KitEngine::WindowProps& props) {
 
     mWindow = std::make_unique<Window>(props);
     if (!mWindow->Initialize()) {
         Log::Critical("Failed to create the window!");
         exit(-1);
     }
+
+    mPreviousTime = glfwGetTime();
+
+    m_pImguiLayer = new ImGuiLayer();
+    this->PushLayer(m_pImguiLayer);
+
+}
+
+void KitEngine::Core::Application::Start() {
+
+    Log::Info("Application running");
 
     // Ограничиваем FPS до 60
     const double dt = 1 / (double)60;
@@ -67,8 +47,7 @@ void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
     double frameTime = 0;
 
     // Игровой цикл
-    while (mIsRunning) {
-        mIsRunning = mWindow->Exec();
+    while ((mIsRunning = mWindow->Exec())) {
 
         // Получаем текущее время и находим дельту
         double currentTime = glfwGetTime();
@@ -81,8 +60,8 @@ void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
         // Обновляем игру до тех пор, пока лаг не станет меньше 1 мс
         while (lag >= dt) {
 
-            for (auto& layer : mLayerStack) {
-                layer->OnUpdate();
+            for (auto* pLayer : mLayerStack.GetLayers()) {
+                pLayer->OnUpdate();
             }
 
             lag -= dt;
@@ -92,18 +71,19 @@ void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
         const double interpolate = lag / dt;
 
         // Render frame
-        for (auto& layer : mLayerStack) {
-            layer->OnFrameRender(interpolate);
+        for (auto* pLayer : mLayerStack.GetLayers()) {
+            pLayer->OnRender(interpolate);
         }
 
         // Render UI
-        mImguiLayer->BeginFrame(); {
-            for (auto& layer : mLayerStack) {
-                layer->OnUIRender();
+        KitEngine::Core::ImGuiLayer::BeginFrame(); {
+            for (auto* pLayer : mLayerStack.GetLayers()) {
+                pLayer->OnUIRender();
             }
         }
-        mImguiLayer->EndFrame();
+        KitEngine::Core::ImGuiLayer::EndFrame();
 
+        mWindow->Update();
         mWindow->SwapBuffers();
 
         // Увеличиваем счётчик кадров
@@ -120,5 +100,10 @@ void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
     }
 
     Log::Info("Application stopped");
+
+}
+
+KitEngine::Core::Application::Application()
+    : mIsRunning(false), m_pImguiLayer(nullptr), mPreviousTime(0) {
 
 }

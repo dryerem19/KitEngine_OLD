@@ -10,37 +10,32 @@
 
 namespace KitEngine::Core
 {
+    // Контейнер слоёв.
+    // Пример:
+    //  LayerStack layerStack;
+    //  BaseLayer* pLayer1 = new BaseLayer();
+    //  BaseLayer* pLayer2 = new BaseLayer();
+    //  layerStack.Push(pLayer1);
+    //  layerStack.Push(pLayer2);
     class LayerStack
     {
     private:
-        std::vector<std::shared_ptr<BaseLayer>> mLayers;
+        // Контейнер слоёв
+        std::vector<BaseLayer*> mLayers;
     public:
+        // Конструктор по умолчанию
         LayerStack() = default;
+        // Деструктор
         ~LayerStack();
 
-        void PushLayer(const std::shared_ptr<BaseLayer> layer);
-        void PopLayer(const std::shared_ptr<BaseLayer> layer);
+        // Помещает новый слой в контейнер
+        void Push   (BaseLayer* pLayer);
 
-        inline std::vector<std::shared_ptr<BaseLayer>>::iterator begin()
-        { return mLayers.begin(); }
-        inline std::vector<std::shared_ptr<BaseLayer>>::iterator end()
-        { return mLayers.end(); }
+        // Удаляет слой из контейнера
+        void Pop    (BaseLayer* pLayer);
 
-        [[maybe_unused]] inline std::vector<std::shared_ptr<BaseLayer>>::reverse_iterator rbegin()
-        { return mLayers.rbegin(); }
-        inline std::vector<std::shared_ptr<BaseLayer>>::reverse_iterator rend()
-        { return mLayers.rend(); }
-
-        inline std::vector<std::shared_ptr<BaseLayer>>::const_iterator begin() const
-        { return mLayers.begin(); }
-        inline std::vector<std::shared_ptr<BaseLayer>>::const_iterator end() const
-        { return mLayers.end(); }
-        [[nodiscard]] inline std::vector<std::shared_ptr<BaseLayer>>::const_reverse_iterator rbegin() const
-        { return mLayers.rbegin(); }
-        inline std::vector<std::shared_ptr<BaseLayer>>::const_reverse_iterator rend() const
-        { return mLayers.rend(); }
-
-        inline const auto& GetLayers() const { return mLayers; }
+        // Возвращает контейнер с слоями
+        [[nodiscard]] inline const auto& GetLayers() const { return mLayers; }
     };
 }
 

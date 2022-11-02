@@ -5,25 +5,52 @@
 
 KitEngine::Core::LayerStack::~LayerStack() {
 
-    for (auto& layer : mLayers) {
-        layer->OnFinish();
+    // Iterate for all layers
+    for (auto* pLayer : mLayers) {
+        if (pLayer != nullptr) {
+
+            // Run the finish function
+            pLayer->OnFinish();
+
+            // Free memory
+            delete pLayer;
+        }
     }
 
 }
 
-void KitEngine::Core::LayerStack::PushLayer(const std::unique_ptr<BaseLayer> layer) {
+void KitEngine::Core::LayerStack::Push(KitEngine::Core::BaseLayer *pLayer) {
 
-    mLayers.emplace_back(layer);
-    layer->OnStart();
+    if (pLayer != nullptr) {
+
+        // Push layer to the back
+        mLayers.emplace_back(pLayer);
+
+        // Run the initialization
+        pLayer->OnStart();
+    }
+    else {
+        throw std::runtime_error("Null pointer to the layer");
+    }
 
 }
 
-void KitEngine::Core::LayerStack::PopLayer(const std::unique_ptr<BaseLayer> layer) {
+void KitEngine::Core::LayerStack::Pop(KitEngine::Core::BaseLayer *pLayer) {
 
-    layer->OnFinish();
-    mLayers.erase(std::remove(mLayers.begin(), mLayers.end(),
-                              layer), mLayers.end());
+    if (pLayer != nullptr) {
+
+        // Run the finish function
+        pLayer->OnFinish();
+
+        // Remove layer from vector by value
+        mLayers.erase(std::remove(mLayers.begin(), mLayers.end(),
+                                  pLayer), mLayers.end());
+    }
+    else {
+        throw std::runtime_error("Null pointer to the layer");
+    }
 
 }
+
 
 
