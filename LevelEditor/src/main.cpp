@@ -1,4 +1,12 @@
-#include <Window.h>
+#include <Core/Window.h>
+#include <Core/Application.h>
+
+
+#include "Tests/TestLayer.h"
+
+//Comment
+/*
+int main()
 
 #include <iostream>
 #include <vector>
@@ -37,10 +45,10 @@ glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
 GLfloat yaw   = -90.0f;
 GLfloat pitch =   0.0f;
 GLfloat lastX =  800  / 2.0;
-GLfloat lastY =  600 / 2.0;
+GLfloat lastY =  600 / 2.0;*/
 
 
-int main(void)
+int main()
 {
     KitEngine::WindowProps props;
     props.Title = "KitEngine";
@@ -48,7 +56,16 @@ int main(void)
     props.Width = 800;
     props.Height = 600;
 
-    KitEngine::Window window(props);
+
+    using namespace KitEngine::Core;
+
+    Application& app = Application::Instance();
+    app.Initialize(props);
+    app.PushLayer(new LevelEditor::Tests::TestLayer());
+    app.Start();
+
+    // Comment
+    /*KitEngine::Window window(props);
     if (!window.Initialize()) {
         return -1;
     }
@@ -163,7 +180,7 @@ int main(void)
         window.SwapBuffers();
     }
 
-    return 0;
+    return 0;*/
 }
 
 /*void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -178,6 +195,7 @@ int main(void)
             keys[key] = false;
     }
 }*/
+/*
 void do_movement()
 {
     // Camera controls
@@ -232,4 +250,4 @@ void do_movement()
         Input::SetInputMode(CursorMode::Cursor, CursorState::CursorNormal);
     }
 
-}
+}*/
