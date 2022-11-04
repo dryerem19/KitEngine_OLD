@@ -14,8 +14,8 @@ namespace KitEngine
 
         std::string Title;
         std::string WindowClass;
-        int Width;
-        int Height;
+        int Width{};
+        int Height{};
 
         WindowProps() = default;
         WindowProps(const std::string& title,
@@ -28,11 +28,11 @@ namespace KitEngine
     {
     private:
         WindowProps mProps;
-        GLFWwindow* m_pWindow;
+        GLFWwindow* m_pWindow = nullptr;
         static void OnErrorHandling(int codeError, const char* descriptionError);
 
     public:
-        Window(const WindowProps& windowProps);
+        explicit Window(const WindowProps& windowProps);
         ~Window();
         bool Initialize();
         bool Exec();
@@ -41,6 +41,6 @@ namespace KitEngine
 
         void SetWindowTitle(const std::string& title) const;
         const inline WindowProps& GetProps() { return mProps; }
-        GLFWwindow* GetWindowPointer() const { return m_pWindow; }
+        [[nodiscard]] inline GLFWwindow* GetWindowPointer() const { return m_pWindow; }
     };
 }

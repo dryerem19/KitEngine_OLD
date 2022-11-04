@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <memory>
+#include <algorithm>
 #include <utility> // std::move
 #include <vector>
 #include <string>

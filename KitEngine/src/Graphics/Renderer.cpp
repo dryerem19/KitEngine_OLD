@@ -5,6 +5,13 @@
 #include "Graphics/Renderer.h"
 #include "Graphics/GlHelpers.h"
 
+KitEngine::Graphics::Renderer &KitEngine::Graphics::Renderer::Instance() {
+
+    static Renderer instance;
+    return instance;
+
+}
+
 void KitEngine::Graphics::Renderer::Clear() {
 
     glClear(GL_COLOR_BUFFER_BIT);
@@ -21,3 +28,4 @@ void KitEngine::Graphics::Renderer::Draw(const KitEngine::Graphics::VertexArray 
                           GL_UNSIGNED_INT, nullptr));
 
 }
+

@@ -16,6 +16,16 @@ KitEngine::Window::Window(const KitEngine::WindowProps &windowProps)
     : mProps(windowProps) {
 }
 
+KitEngine::Window::~Window() {
+
+    /* Cleanup */
+    if (m_pWindow) {
+        glfwDestroyWindow(m_pWindow);
+        glfwTerminate();
+    }
+
+}
+
 bool KitEngine::Window::Initialize() {
 
     glfwSetErrorCallback(OnErrorHandling);
@@ -81,14 +91,6 @@ void KitEngine::Window::SetWindowTitle(const std::string &title) const {
 
     glfwSetWindowTitle(m_pWindow, title.c_str());
 
-}
-
-KitEngine::Window::~Window() {
-    /* Cleanup */
-    if (m_pWindow) {
-        glfwDestroyWindow(m_pWindow);
-        glfwTerminate();
-    }
 }
 
 

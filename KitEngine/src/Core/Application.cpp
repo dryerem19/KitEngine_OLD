@@ -8,16 +8,14 @@
 // PUBLIC SECTION
 //------------------------------------------------------------------------------------
 
-KitEngine::Core::Application::Application() {
+KitEngine::Core::Application &KitEngine::Core::Application::Instance() {
 
-    mIsRunning = true;
-    mPreviousTime = glfwGetTime();
+    static Application instance;
+    return instance;
 
 }
 
-void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
-
-    Log::Info("Application running");
+void KitEngine::Core::Application::Initialize(const KitEngine::WindowProps& props) {
 
     mWindow = std::make_unique<Window>(props);
     if (!mWindow->Initialize()) {
@@ -25,8 +23,16 @@ void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
         exit(-1);
     }
 
-    // Запускается при старте приложения
-    this->OnStart();
+    mPreviousTime = glfwGetTime();
+
+    m_pImguiLayer = new ImGuiLayer();
+    this->PushLayer(m_pImguiLayer);
+
+}
+
+void KitEngine::Core::Application::Start() {
+
+    Log::Info("Application running");
 
     // Ограничиваем FPS до 60
     const double dt = 1 / (double)60;
@@ -41,8 +47,7 @@ void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
     double frameTime = 0;
 
     // Игровой цикл
-    while (mIsRunning) {
-        mIsRunning = mWindow->Exec();
+    while ((mIsRunning = mWindow->Exec())) {
 
         // Получаем текущее время и находим дельту
         double currentTime = glfwGetTime();
@@ -54,15 +59,31 @@ void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
 
         // Обновляем игру до тех пор, пока лаг не станет меньше 1 мс
         while (lag >= dt) {
-            this->OnUpdate();
+
+            for (auto* pLayer : mLayerStack.GetLayers()) {
+                pLayer->OnUpdate();
+            }
+
             lag -= dt;
         }
 
         // Интерполируем разницу между кадрами (получаем более плавное значение)
         const double interpolate = lag / dt;
 
-        // Рисуем игру
-        this->OnRender(interpolate);
+        // Render frame
+        for (auto* pLayer : mLayerStack.GetLayers()) {
+            pLayer->OnRender(interpolate);
+        }
+
+        // Render UI
+        KitEngine::Core::ImGuiLayer::BeginFrame(); {
+            for (auto* pLayer : mLayerStack.GetLayers()) {
+                pLayer->OnUIRender();
+            }
+        }
+        KitEngine::Core::ImGuiLayer::EndFrame();
+
+        mWindow->Update();
         mWindow->SwapBuffers();
 
         // Увеличиваем счётчик кадров
@@ -82,23 +103,7 @@ void KitEngine::Core::Application::Start(const KitEngine::WindowProps& props) {
 
 }
 
-
-//------------------------------------------------------------------------------------
-// PRIVATE SECTION
-//------------------------------------------------------------------------------------
-
-void KitEngine::Core::Application::OnStart() {
-
-}
-
-void KitEngine::Core::Application::OnUpdate() {
-
-    mWindow->Update();
-
-}
-
-void KitEngine::Core::Application::OnRender(double dt) {
-
-    mRenderer.Clear();
+KitEngine::Core::Application::Application()
+    : mIsRunning(false), m_pImguiLayer(nullptr), mPreviousTime(0) {
 
 }
