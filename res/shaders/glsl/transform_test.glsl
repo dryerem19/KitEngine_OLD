@@ -5,13 +5,15 @@ layout(location = 0) in vec3 position;
 layout(location = 1) in vec2 texcoord;
 
 uniform mat4 uTransform;
+uniform mat4 uView;
+uniform mat4 uProjection;
 
 
 out vec2 vTexcoord;
 
 void main()
 {
-    gl_Position = uTransform * vec4(position, 1.0f);
+    gl_Position = uProjection * uView * uTransform * vec4(position, 1.0f);
     vTexcoord = texcoord;
 }
 
