@@ -17,6 +17,7 @@
 #include <Graphics/Renderer.h>
 #include <Graphics/Components/ModelComponent.h>
 
+#include <Core/Input.h>
 #include <Core/Logger.h>
 
 #include "Utils/ModelLoader.h"
@@ -26,20 +27,18 @@
 #include <glm/gtc/type_ptr.hpp>
 
 using namespace KitEngine::Graphics;
+using namespace  KitEngine::Core;
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-void mouse_callback(GLFWwindow* window, int key, int action, int mode);
-void mouse_movement(GLFWwindow* window, double xpos, double ypos);
 void do_movement();
 
 glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
-GLfloat yaw   = -90.0f;	// Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right (due to how Eular angles work) so we initially rotate a bit to the left.
+GLfloat yaw   = -90.0f;
 GLfloat pitch =   0.0f;
 GLfloat lastX =  800  / 2.0;
 GLfloat lastY =  600 / 2.0;
-bool keys[1024];
+
 
 int main(void)
 {
@@ -55,13 +54,8 @@ int main(void)
     }
 
 
-
-
-    glfwSetKeyCallback(window.GetWindowPointer(), key_callback);
-    glfwSetMouseButtonCallback(window.GetWindowPointer(), mouse_callback);
-    glfwSetCursorPosCallback(window.GetWindowPointer(), mouse_movement);
-
-    glfwSetInputMode(window.GetWindowPointer(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    Input::Initialize(window.GetWindowPointer());
+    Input::SetCursorPos(glm::vec2(lastX, lastY));
 
     KitEngine::Core::Log::Info("Самый лучший движок в мире!!");
     KitEngine::Core::Log::Warning("Привет, {} dsdsdsds {}!", "Женя", "Вася");
@@ -172,7 +166,7 @@ int main(void)
     return 0;
 }
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+/*void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
@@ -183,36 +177,36 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         else if (action == GLFW_RELEASE)
             keys[key] = false;
     }
-}
-
-void mouse_callback(GLFWwindow* window, int key, int action, int mode)
+}*/
+void do_movement()
 {
-
-    if(action == GLFW_PRESS)
+    // Camera controls
+    GLfloat cameraSpeed = 0.30f;
+    if (Input::GetKeyDown(KeyCode::W))
     {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        glfwSetCursorPos(window, lastX, lastY);
-        keys[key] = true;
+        cameraPos += cameraSpeed * cameraFront;
     }
-    else if (action == GLFW_RELEASE)
+    if (Input::GetKeyDown(KeyCode::S))
     {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        keys[key] = false;
+        cameraPos -= cameraSpeed * cameraFront;
+    }
+    if (Input::GetKeyDown(KeyCode::A))
+    {
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    }
+    if (Input::GetKeyDown(KeyCode::D))
+    {
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
 
-}
-
-void mouse_movement(GLFWwindow* window, double xpos, double ypos)
-{
-
-    if(keys[GLFW_MOUSE_BUTTON_LEFT])
+    if(Input::GetMouseDown(MouseButton::MouseButtonLeft))
     {
+        Input::SetInputMode(CursorMode::Cursor, CursorState::CursorDisabled);
 
-
-        GLfloat xoffset = xpos - lastX;
-        GLfloat yoffset = lastY - ypos;
-        lastX = xpos;
-        lastY = ypos;
+        GLfloat xoffset = Input::mousePosition.x - lastX;
+        GLfloat yoffset = lastY - Input::mousePosition.y;
+        lastX = Input::mousePosition.x;
+        lastY = Input::mousePosition.y;
 
 
         GLfloat sensitivity = 0.05;
@@ -234,32 +228,8 @@ void mouse_movement(GLFWwindow* window, double xpos, double ypos)
         cameraFront = glm::normalize(front);
 
     }
-
-
-}
-
-void do_movement()
-{
-    // Camera controls
-    GLfloat cameraSpeed = 0.30f;
-    if (keys[GLFW_KEY_W])
-    {
-        cameraPos += cameraSpeed * cameraFront;
-
-    }
-    if (keys[GLFW_KEY_S])
-    {
-        cameraPos -= cameraSpeed * cameraFront;
-
-    }
-    if (keys[GLFW_KEY_A])
-    {
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-
-    }
-    if (keys[GLFW_KEY_D])
-    {
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if(Input::GetMouseUp(MouseButton::MouseButtonLeft)){
+        Input::SetInputMode(CursorMode::Cursor, CursorState::CursorNormal);
     }
 
 }
