@@ -114,7 +114,7 @@ int main()
             2, 3, 0,
     };*/
 
-    LevelEditor::Utils::ModelLoader loader;
+    /*LevelEditor::Utils::ModelLoader loader;
     loader.Import("res/models/zil_fire.fbx");
 
     VertexArray vertexArray;
@@ -144,11 +144,11 @@ int main()
     glm::mat4 projection = glm::mat4(1.0f);
     while (window.Exec()) {
         window.Update();
-        do_movement();
+        do_movement();*/
 
 
         /* Render here */
-        renderer.Clear();
+        /*renderer.Clear();
 
         // Camera
         view = glm::lookAt(cameraPos,cameraPos + cameraFront, cameraUp);
