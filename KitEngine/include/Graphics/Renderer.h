@@ -8,6 +8,7 @@
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
+#include "Components/ModelComponent.h"
 
 namespace KitEngine::Graphics
 {
@@ -16,5 +17,6 @@ namespace KitEngine::Graphics
     public:
         void Clear();
         void Draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader) const;
+        void DrawModel(const Components::ModelComponent& model, const Shader& shader);
     };
 }

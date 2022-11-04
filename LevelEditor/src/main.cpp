@@ -15,8 +15,11 @@
 #include <Graphics/Shader.h>
 #include <Graphics/Vertex.h>
 #include <Graphics/Renderer.h>
+#include <Graphics/Components/ModelComponent.h>
 
 #include <Core/Logger.h>
+
+#include "Utils/ModelLoader.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -52,6 +55,8 @@ int main(void)
     }
 
 
+
+
     glfwSetKeyCallback(window.GetWindowPointer(), key_callback);
     glfwSetMouseButtonCallback(window.GetWindowPointer(), mouse_callback);
     glfwSetCursorPosCallback(window.GetWindowPointer(), mouse_movement);
@@ -80,7 +85,13 @@ int main(void)
     glEnable(GL_BLEND);
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-    std::vector<Vertex> vertices = {
+    glEnable(GL_DEPTH_TEST);
+
+//    glEnable(GL_CULL_FACE);
+//    glCullFace(GL_BACK);
+//    glFrontFace(GL_CW);
+
+/*    std::vector<Vertex> vertices = {
             Vertex { glm::vec3( -0.5f, -0.5f, 0.0f ),  glm::vec2(0.0f, 0.0f) },
             Vertex { glm::vec3( 0.5f, -0.5f, 0.0f  ),  glm::vec2(1.0f, 0.0f) },
             Vertex { glm::vec3( 0.5f, 0.5f, 0.0f   ),  glm::vec2(1.0f, 1.0f) },
@@ -90,13 +101,22 @@ int main(void)
     std::vector<unsigned int> indices = {
             0, 1, 2,
             2, 3, 0,
-    };
+    };*/
+
+    LevelEditor::Utils::ModelLoader loader;
+    loader.Import("res/models/zil_fire.fbx");
 
     VertexArray vertexArray;
-    VertexBuffer vertexBuffer{vertices.data(), static_cast<unsigned int>(vertices.size() * sizeof(Vertex))};
+    VertexBuffer vertexBuffer{loader.GetVertices().data(),
+                              static_cast<unsigned int>(loader.GetVertices().size() * sizeof(Vertex))};
     vertexArray.AddBuffer(vertexBuffer, Vertex::mLayout);
 
-    IndexBuffer indexBuffer{indices.data(), static_cast<unsigned int>(indices.size())};
+    IndexBuffer indexBuffer{loader.GetIndices().data(), loader.GetCountOfIndicies()};
+
+
+    // МОДЕЛЬ
+    Components::ModelComponent model(vertexArray, indexBuffer, loader.GetMeshes());
+
 
     KitEngine::Graphics::Shader shader("res/shaders/glsl/transform_test.glsl");
     shader.Enable();
@@ -130,7 +150,8 @@ int main(void)
                                    glm::value_ptr(transform));
 
 
-        renderer.Draw(vertexArray, indexBuffer, shader);
+        //renderer.Draw(vertexArray, indexBuffer, shader);
+        renderer.DrawModel(model, shader);
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
