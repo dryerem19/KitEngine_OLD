@@ -17,14 +17,12 @@
 #include <Graphics/Renderer.h>
 #include <Graphics/Components/ModelComponent.h>
 
+
 #include <Core/Input.h>
+#include <Core/BaseCamera.h>
 #include <Core/Logger.h>
 
 #include "Utils/ModelLoader.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 using namespace KitEngine::Graphics;
 using namespace  KitEngine::Core;
@@ -121,10 +119,11 @@ int main(void)
     shader.SetUniform1i("uTexture", 0);
 
     Renderer renderer;
+    BaseCamera baseCamera;
 
     glm::mat4 transform = glm::mat4(1.0f);
-    glm::mat4 view = glm::mat4(1.0f);
-    glm::mat4 projection = glm::mat4(1.0f);
+    /*glm::mat4 view = glm::mat4(1.0f);
+    glm::mat4 projection = glm::mat4(1.0f);*/
     while (window.Exec()) {
         window.Update();
         do_movement();
@@ -133,11 +132,11 @@ int main(void)
         /* Render here */
         renderer.Clear();
 
-        // Camera
-        view = glm::lookAt(cameraPos,cameraPos + cameraFront, cameraUp);
-        projection = glm::perspective(45.0f, (GLfloat)props.Width / (GLfloat)props.Height, 0.1f, 100.0f);
-        shader.SetUniformMatrix4fv("uView", 1, GL_FALSE, glm::value_ptr(view));
-        shader.SetUniformMatrix4fv("uProjection", 1, GL_FALSE, glm::value_ptr(projection));
+        /* Camera */
+        baseCamera.SetLookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        baseCamera.SetPerspective(45.0f, (GLfloat)props.Width / (GLfloat)props.Height, 0.1f, 100.0f);
+        shader.SetUniformMatrix4fv("uView", 1, GL_FALSE, baseCamera.GetView());
+        shader.SetUniformMatrix4fv("uProjection", 1, GL_FALSE, baseCamera.GetPerspective());
 
         transform = glm::rotate(transform, 0.02f, glm::vec3(0.0f, 0.0f, 1.0f));
         shader.SetUniformMatrix4fv("uTransform",1, GL_FALSE,
