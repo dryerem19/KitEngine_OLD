@@ -3,8 +3,10 @@
 
 #include "Tests/TestLayer.h"
 
-int main()
+
+int main(void)
 {
+
     KitEngine::WindowProps props;
     props.Title = "KitEngine";
     props.WindowClass = "KitEngineWindowClass";
@@ -17,5 +19,5 @@ int main()
     app.Initialize(props);
     app.PushLayer(new LevelEditor::Tests::TestLayer());
     app.Start();
-
+    
 }
