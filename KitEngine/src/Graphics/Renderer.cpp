@@ -5,6 +5,13 @@
 #include "Graphics/Renderer.h"
 #include "Graphics/GlHelpers.h"
 
+KitEngine::Graphics::Renderer &KitEngine::Graphics::Renderer::Instance() {
+
+    static Renderer instance;
+    return instance;
+
+}
+
 void KitEngine::Graphics::Renderer::Clear() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -37,3 +44,10 @@ void KitEngine::Graphics::Renderer::DrawModel(const KitEngine::Graphics::Compone
     KitEngine::Graphics::VertexArray::Unbind();
 
 }
+
+void KitEngine::Graphics::Renderer::Initialize() {
+
+    glEnable(GL_DEPTH_TEST);
+
+}
+
