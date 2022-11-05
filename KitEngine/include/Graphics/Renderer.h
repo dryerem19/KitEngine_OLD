@@ -15,8 +15,18 @@ namespace KitEngine::Graphics
     class Renderer
     {
     public:
+        Renderer(const Renderer&) = delete;
+        Renderer& operator=(Renderer&) = delete;
+
+        static Renderer& Instance();
+        static void Initialize();
+
         void Clear();
         void Draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader) const;
         void DrawModel(const Components::ModelComponent& model, const Shader& shader);
+    private:
+        Renderer() = default;
+        ~Renderer() = default;
+
     };
 }

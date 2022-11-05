@@ -142,10 +142,12 @@ namespace KitEngine::Core
         MouseButton6        = GLFW_MOUSE_BUTTON_7,
         MouseButton7        = GLFW_MOUSE_BUTTON_8
     };
+
     enum class CursorMode
     {
         Cursor              = GLFW_CURSOR
     };
+
     enum class CursorState
     {
         CursorNormal        = GLFW_CURSOR_NORMAL,
