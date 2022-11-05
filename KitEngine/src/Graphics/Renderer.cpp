@@ -45,3 +45,9 @@ void KitEngine::Graphics::Renderer::DrawModel(const KitEngine::Graphics::Compone
 
 }
 
+void KitEngine::Graphics::Renderer::Initialize() {
+
+    glEnable(GL_DEPTH_TEST);
+
+}
+

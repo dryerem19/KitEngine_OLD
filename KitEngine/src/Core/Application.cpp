@@ -2,7 +2,10 @@
 // Created by dryerem19 on 10/28/22.
 //
 #include "Core/Application.h"
+#include "Core/Input.h"
 #include "Core/Logger.h"
+
+#include "Graphics/Renderer.h"
 
 //------------------------------------------------------------------------------------
 // PUBLIC SECTION
@@ -17,11 +20,18 @@ KitEngine::Core::Application &KitEngine::Core::Application::Instance() {
 
 void KitEngine::Core::Application::Initialize(const KitEngine::WindowProps& props) {
 
+    // Инициализация окна
     mWindow = std::make_unique<Window>(props);
     if (!mWindow->Initialize()) {
         Log::Critical("Failed to create the window!");
         exit(-1);
     }
+
+    // Инициализация ввода
+    Input::Initialize(mWindow->GetWindowPointer());
+
+    // Инициализация рендера
+    Renderer::Initialize();
 
     mPreviousTime = glfwGetTime();
 

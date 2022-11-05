@@ -19,6 +19,7 @@ namespace KitEngine::Graphics
         Renderer& operator=(Renderer&) = delete;
 
         static Renderer& Instance();
+        static void Initialize();
 
         void Clear();
         void Draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader) const;

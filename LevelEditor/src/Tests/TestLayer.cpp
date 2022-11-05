@@ -2,37 +2,31 @@
 // Created by Denis on 01.11.2022.
 //
 #include "Tests/TestLayer.h"
+#include "Utils/ModelLoader.h"
 
 #include <imgui.h>
 
+#include <Core/Input.h>
+#include <Core/Application.h>
 #include <Graphics/Renderer.h>
 
 void LevelEditor::Tests::TestLayer::OnStart() {
 
-    float vertices[] = {
-        // x, y, tu, tv
-        -0.5f, -0.5f, 0.0f, 0.0f,
-        0.5f, -0.5f, 1.0f, 0.0f,
-        0.5f, 0.5f, 1.0f, 1.0f,
-        -0.5f, 0.5f, 0.0f, 1.0f
-    };
-
-    unsigned int indices[] = {
-            0, 1, 2,
-            2, 3, 0
-    };
-
+    LevelEditor::Utils::ModelLoader loader;
+    loader.Import("res/models/zil_fire.fbx");
 
     mVertexArray  = std::make_unique<KitEngine::Graphics::VertexArray>();
     mVertexBuffer = std::make_unique<KitEngine::Graphics::VertexBuffer>
-            (vertices, 16 * sizeof(float));
+            (loader.GetVertices().data(), static_cast<unsigned int>(loader.GetVertices().size() *
+            sizeof(KitEngine::Graphics::Vertex)));
 
-    KitEngine::Graphics::VertexBufferLayout layout;
-    layout.AddFloatElement(2);
-    layout.AddFloatElement(2);
-    mVertexArray->AddBuffer(*mVertexBuffer, layout);
+    mVertexArray->AddBuffer(*mVertexBuffer, KitEngine::Graphics::Vertex::mLayout);
 
-    mIndexBuffer = std::make_unique<KitEngine::Graphics::IndexBuffer>(indices, 6);
+    mIndexBuffer = std::make_unique<KitEngine::Graphics::IndexBuffer>(loader.GetIndices().data(),
+                                                                      loader.GetCountOfIndicies());
+
+    mModel = std::make_unique<KitEngine::Graphics::Components::ModelComponent>(*mVertexArray, *mIndexBuffer,
+                                                                               loader.GetMeshes());
 
     mShader = std::make_unique<KitEngine::Graphics::Shader>("res/shaders/glsl/transform_test.glsl");
     mShader->Enable();
@@ -48,6 +42,17 @@ void LevelEditor::Tests::TestLayer::OnStart() {
 
 void LevelEditor::Tests::TestLayer::OnUpdate() {
 
+    // Camera
+    DoMovement();
+
+    mTransform = glm::rotate(mTransform, 0.02f, glm::vec3(0.0f, 0.0f, 1.0f));
+    view = glm::lookAt(cameraPos,cameraPos + cameraFront, cameraUp);
+    projection = glm::perspective(45.0f, (GLfloat)Application::Instance().GetWindow()->GetProps().Width /
+                                         (GLfloat)Application::Instance().GetWindow()->GetProps().Height, 0.1f, 100.0f);
+
+    mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, glm::value_ptr(view));
+    mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, glm::value_ptr(projection));
+
     mTransform = glm::rotate(mTransform, 0.02f, glm::vec3(0.0f, 0.0f, 1.0f));
     mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
                                glm::value_ptr(mTransform));
@@ -59,7 +64,7 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt) {
     KitEngine::Graphics::Renderer::Instance().Clear();
 
     KitEngine::Graphics::Renderer& renderer = KitEngine::Graphics::Renderer::Instance();
-    renderer.Draw(*mVertexArray, *mIndexBuffer, *mShader);
+    renderer.DrawModel(*mModel, *mShader);
 }
 
 void LevelEditor::Tests::TestLayer::OnUIRender() {
@@ -72,5 +77,61 @@ void LevelEditor::Tests::TestLayer::OnUIRender() {
 }
 
 void LevelEditor::Tests::TestLayer::OnFinish() {
+
+}
+
+void LevelEditor::Tests::TestLayer::DoMovement() {
+
+    // Camera controls
+    GLfloat cameraSpeed = 0.30f;
+    if (Input::GetKeyDown(KeyCode::W))
+    {
+        cameraPos += cameraSpeed * cameraFront;
+    }
+    if (Input::GetKeyDown(KeyCode::S))
+    {
+        cameraPos -= cameraSpeed * cameraFront;
+    }
+    if (Input::GetKeyDown(KeyCode::A))
+    {
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    }
+    if (Input::GetKeyDown(KeyCode::D))
+    {
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    }
+
+    if(Input::GetMouseDown(MouseButton::MouseButtonLeft))
+    {
+        Input::SetInputMode(CursorMode::Cursor, CursorState::CursorDisabled);
+
+        GLfloat xoffset = Input::mousePosition.x - lastX;
+        GLfloat yoffset = lastY - Input::mousePosition.y;
+        lastX = Input::mousePosition.x;
+        lastY = Input::mousePosition.y;
+
+
+        GLfloat sensitivity = 0.05;
+        xoffset *= sensitivity;
+        yoffset *= sensitivity;
+
+        yaw   += xoffset;
+        pitch += yoffset;
+
+        if(pitch > 89.0f)
+            pitch = 89.0f;
+        if(pitch < -89.0f)
+            pitch = -89.0f;
+
+        glm::vec3 front;
+        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+        front.y = sin(glm::radians(pitch));
+        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+        cameraFront = glm::normalize(front);
+
+    }
+    if(Input::GetMouseUp(MouseButton::MouseButtonLeft)){
+        Input::SetInputMode(CursorMode::Cursor, CursorState::CursorNormal);
+    }
 
 }
