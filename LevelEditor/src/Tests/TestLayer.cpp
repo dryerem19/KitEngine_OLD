@@ -2,7 +2,8 @@
 // Created by Denis on 01.11.2022.
 //
 #include "Tests/TestLayer.h"
-#include "Utils/ModelLoader.h"
+
+#include <Loader.h> // from utils
 
 #include <imgui.h>
 
@@ -12,21 +13,21 @@
 
 void LevelEditor::Tests::TestLayer::OnStart() {
 
-    LevelEditor::Utils::ModelLoader loader;
+    kitModelLoader::Loader loader;
     loader.Import("res/models/zil_fire.fbx");
 
     mVertexArray  = std::make_unique<KitEngine::Graphics::VertexArray>();
     mVertexBuffer = std::make_unique<KitEngine::Graphics::VertexBuffer>
-            (loader.GetVertices().data(), static_cast<unsigned int>(loader.GetVertices().size() *
+            (loader.mVertices.data(), static_cast<unsigned int>(loader.mVertices.size() *
             sizeof(KitEngine::Graphics::Vertex)));
 
     mVertexArray->AddBuffer(*mVertexBuffer, KitEngine::Graphics::Vertex::mLayout);
 
-    mIndexBuffer = std::make_unique<KitEngine::Graphics::IndexBuffer>(loader.GetIndices().data(),
-                                                                      loader.GetCountOfIndicies());
+    mIndexBuffer = std::make_unique<KitEngine::Graphics::IndexBuffer>(loader.mIndices.data(),
+                                                                      loader.mIndices.size());
 
     mModel = std::make_unique<KitEngine::Graphics::Components::ModelComponent>(*mVertexArray, *mIndexBuffer,
-                                                                               loader.GetMeshes());
+                                                                               loader.mMeshes);
 
     mShader = std::make_unique<KitEngine::Graphics::Shader>("res/shaders/glsl/transform_test.glsl");
     mShader->Enable();

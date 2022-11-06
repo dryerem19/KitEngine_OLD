@@ -7,8 +7,8 @@ KitEngine::Graphics::VertexBufferLayout KitEngine::Graphics::Vertex::mLayout = [
 
    VertexBufferLayout mLayout;
    mLayout.AddFloatElement(3);
-   mLayout.AddFloatElement(2);
    mLayout.AddFloatElement(3);
+    mLayout.AddFloatElement(2);
    return mLayout;
 
 }();
