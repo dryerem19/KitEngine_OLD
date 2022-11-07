@@ -20,6 +20,7 @@
 
 using namespace KitEngine::Core;
 using namespace KitEngine::Graphics;
+using namespace KitEngine::Graphics::Components;
 
 namespace LevelEditor::Tests
 {
@@ -30,8 +31,14 @@ namespace LevelEditor::Tests
         std::unique_ptr<KitEngine::Graphics::VertexBuffer> mVertexBuffer;
         std::unique_ptr<KitEngine::Graphics::IndexBuffer>  mIndexBuffer;
         std::unique_ptr<KitEngine::Graphics::Shader>       mShader;
-        std::unique_ptr<KitEngine::Graphics::Texture>      mTexture;
+        std::vector<Texture>      mTextures;
+
+       //Texture testTexture = Texture("res/textures/no_texture.png");
+//       Texture testTexture = Texture("res/models/nanosuit/body_dif.png");
+
         std::unique_ptr<KitEngine::Graphics::Components::ModelComponent> mModel;
+
+        std::vector<KitEngine::Graphics::Components::ModelComponent> mModels;
 
         glm::mat4                                          mTransform;
         glm::mat4 view = glm::mat4(1.0f);

@@ -20,6 +20,14 @@ target_include_directories(
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
         )
 
+
+#-------------------------------------------------------------------------------------
+#   LINK KIT-ENGINE UTILS
+#-------------------------------------------------------------------------------------
+add_subdirectory(Utils)
+target_include_directories(${PROJECT_NAME} PUBLIC Utils/kitModelLoader/include)
+target_link_libraries(${PROJECT_NAME} PRIVATE kitModelLoader)
+
 find_package(GLEW CONFIG REQUIRED)
 if (GLEW_FOUND)
     message(STATUS "Glew library found!")

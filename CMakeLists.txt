@@ -22,12 +22,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC LevelEditor/include)
 
 # Подлкючаем библиотеку KitEngine
 target_include_directories(${PROJECT_NAME} PUBLIC KitEngine/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE KitEngine)
-
-# Подлкючаем утилиты
-add_subdirectory(Utils)
-target_include_directories(${PROJECT_NAME} PUBLIC Utils/kitModelLoader/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE kitModelLoader)
+target_link_libraries(${PROJECT_NAME} PRIVATE KitEngine kitModelLoader)
 
 find_package(imgui CONFIG REQUIRED)
 if (imgui_FOUND)

@@ -12,6 +12,13 @@ KitEngine::Graphics::VertexArray::VertexArray()
 
 }
 
+KitEngine::Graphics::VertexArray::VertexArray(VertexBuffer vertexBuffer, VertexBufferLayout layout)
+    : VertexArray() {
+
+        this->AddBuffer(vertexBuffer, layout);
+
+}
+
 KitEngine::Graphics::VertexArray::~VertexArray() {
 
     GLCall(glDeleteVertexArrays(1, &mVertexArrayId));
