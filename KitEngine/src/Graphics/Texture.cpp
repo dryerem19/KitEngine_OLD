@@ -9,6 +9,10 @@
 KitEngine::Graphics::Texture::Texture(std::string path)
     : mTextureId(0), mPath(std::move(path)) {
 
+    if (mPath.empty()) {
+        std::runtime_error("The path to the texture file cannot be empty");
+    }
+
     // Load image
     sail::image image;
     image.load(mPath);
@@ -41,6 +45,7 @@ KitEngine::Graphics::Texture::Texture(std::string path)
                    image.pixels()));
 
     // NOT use this texture now
+
     GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
 

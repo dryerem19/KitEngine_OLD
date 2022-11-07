@@ -14,27 +14,55 @@
 void LevelEditor::Tests::TestLayer::OnStart() {
 
     kitModelLoader::Loader loader;
-    loader.Import("res/models/zil_fire.fbx");
+    loader.Import("res/models/nanosuit/nanosuit.obj");
 
-    mVertexArray  = std::make_unique<KitEngine::Graphics::VertexArray>();
-    mVertexBuffer = std::make_unique<KitEngine::Graphics::VertexBuffer>
-            (loader.mVertices.data(), static_cast<unsigned int>(loader.mVertices.size() *
-            sizeof(KitEngine::Graphics::Vertex)));
+    // TODO: Текстур может и не быть вовсе, это стоит учесть и в таком случае грузить текстуру по умолчанию
+    // или назначить материал по умолчанию
 
-    mVertexArray->AddBuffer(*mVertexBuffer, KitEngine::Graphics::Vertex::mLayout);
+    // Выводим путь до текстуры и создаём текстуру
+     for (auto& material : loader.mMaterials) {
+         for (auto& texture : material.mTextures) {
+             if (texture.TextureType == kitModelLoader::kitTextureType::Diffuse) {
+                 mTextures.emplace_back(texture.Path);
+                 std::cout << texture.Path << std::endl;
+             }
+         }
+     }
 
-    mIndexBuffer = std::make_unique<KitEngine::Graphics::IndexBuffer>(loader.mIndices.data(),
-                                                                      loader.mIndices.size());
 
-    mModel = std::make_unique<KitEngine::Graphics::Components::ModelComponent>(*mVertexArray, *mIndexBuffer,
-                                                                               loader.mMeshes);
+    //mTextures.emplace_back("res/models/nanosuit/body_dif.png");
+
+
+     mVertexArray  = std::make_unique<KitEngine::Graphics::VertexArray>();
+     mVertexBuffer = std::make_unique<KitEngine::Graphics::VertexBuffer>
+             (loader.mVertices.data(), static_cast<unsigned int>(loader.mVertices.size() *
+             sizeof(KitEngine::Graphics::Vertex)));
+
+     mVertexArray->AddBuffer(*mVertexBuffer, KitEngine::Graphics::Vertex::mLayout);
+
+     mIndexBuffer = std::make_unique<KitEngine::Graphics::IndexBuffer>(loader.mIndices.data(),
+                                                                       loader.mIndices.size());
+
+    // mModel = std::make_unique<KitEngine::Graphics::Components::ModelComponent>(*mVertexArray, *mIndexBuffer,
+    //                                                                            loader.mMeshes);
 
     mShader = std::make_unique<KitEngine::Graphics::Shader>("res/shaders/glsl/transform_test.glsl");
     mShader->Enable();
     mShader->SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
 
-    mTexture = std::make_unique<KitEngine::Graphics::Texture>("res/textures/no_texture.png");
-    mTexture->Enable();
+    mModel = std::make_unique<ModelComponent>(
+            *mVertexArray, *mIndexBuffer, loader.mMeshes
+    );
+
+
+    // DEPRECATED
+//    mTexture = std::make_unique<KitEngine::Graphics::Texture>("res/textures/no_texture.png");
+//    mTexture->Enable();
+
+    //testTexture.Enable();
+
+   //mTextures[0].Enable();
+
     mShader->SetUniform1i("uTexture", 0);
 
     mTransform = glm::mat4(1.0f);
@@ -65,7 +93,7 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt) {
     KitEngine::Graphics::Renderer::Instance().Clear();
 
     KitEngine::Graphics::Renderer& renderer = KitEngine::Graphics::Renderer::Instance();
-    renderer.DrawModel(*mModel, *mShader);
+    renderer.DrawModel(*mModel, *mShader, mTextures);
 }
 
 void LevelEditor::Tests::TestLayer::OnUIRender() {

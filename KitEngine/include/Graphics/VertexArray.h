@@ -13,6 +13,7 @@ namespace KitEngine::Graphics
         unsigned int mVertexArrayId;
     public:
         VertexArray();
+        VertexArray(VertexBuffer vertexBuffer, VertexBufferLayout layout);
         ~VertexArray();
 
         void AddBuffer(const VertexBuffer& vertexBuffer, const VertexBufferLayout& layout) const;

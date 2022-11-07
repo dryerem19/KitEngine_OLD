@@ -4,6 +4,7 @@
 
 #ifndef LEVELEDITOR_MESHENTRY_H
 #define LEVELEDITOR_MESHENTRY_H
+#include "pch.h"
 
 namespace kitModelLoader
 {

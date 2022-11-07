@@ -1,5 +1,5 @@
 //
-// Created by dryerem19 on 11/6/22.
+// Created by dryerem19 on 11/7/22.
 //
 
 #ifndef LEVELEDITOR_PCH_H
@@ -11,13 +11,11 @@
 #include <assimp/postprocess.h>         // Postprocess flags
 
 // STL includes
+#include <filesystem>                   // STL C++ filesystem
+#include <iostream>                     // STL C++ stdin/stdout
 #include <vector>                       // STL C++ dynamic template array
 
 // C std includes
 #include <cstdint>
-
-// Project includes
-#include "Vertex.h"                     // Custom vertex data structure
-#include "MeshEntry.h"                  // Description of mesh
 
 #endif //LEVELEDITOR_PCH_H

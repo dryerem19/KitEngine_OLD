@@ -30,16 +30,26 @@ void KitEngine::Graphics::Renderer::Draw(const KitEngine::Graphics::VertexArray 
 }
 
 void KitEngine::Graphics::Renderer::DrawModel(const KitEngine::Graphics::Components::ModelComponent &model,
-                                              const KitEngine::Graphics::Shader &shader) {
+                                              const KitEngine::Graphics::Shader &shader,
+                                              const std::vector<KitEngine::Graphics::Texture> &textures) {
 
-    model.mVertexArray.Bind();
+    int i = 0;
+
+
     for (auto& mesh : model.mMeshes) {
+
+        model.mVertexArray.Bind();
+        textures[mesh.MaterialIndex].Enable();
+
         GLCall(glDrawElementsBaseVertex(GL_TRIANGLES,
                                         mesh.NumIndices,
                                         GL_UNSIGNED_INT,
                                         reinterpret_cast<const void *>(sizeof(unsigned int) *
                                                                        mesh.BaseIndex),
                                         mesh.BaseVertex));
+
+        model.mVertexArray.Unbind();
+        textures[mesh.MaterialIndex].Disable();
     }
     KitEngine::Graphics::VertexArray::Unbind();
 

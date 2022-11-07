@@ -9,7 +9,7 @@ file(GLOB_RECURSE SOURCES_FILES  "src/*.cpp")
 #-------------------------------------------------------------------------------------
 #   CREATE DYNAMIC LINK LIBRARY
 #-------------------------------------------------------------------------------------
-add_library(${PROJECT_NAME} SHARED ${SOURCES_FILES} src/pch.h)
+add_library(${PROJECT_NAME} SHARED ${SOURCES_FILES} include/pch.h)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 #-------------------------------------------------------------------------------------
@@ -24,9 +24,9 @@ else()
 endif()
 
 #-------------------------------------------------------------------------------------
-#   USE PRECOMPILED HEADERS
+#   USE PRECOMPILE HEADERS
 #-------------------------------------------------------------------------------------
 target_precompile_headers(${PROJECT_NAME}
         PRIVATE
-        "src/pch.h"
+        "include/pch.h"
 )

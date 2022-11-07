@@ -7,23 +7,28 @@
 
 #include <utility>
 
+#include "KitEnginePch.h"
 #include "Graphics/VertexArray.h"
 #include "Graphics/IndexBuffer.h"
 #include "Graphics/MeshEntry.h"
-#include "KitEnginePch.h"
+#include "Graphics/Texture.h"
+#include "Graphics/Shader.h"
+
+#include <kitVertex.h>
 
 namespace KitEngine::Graphics::Components
 {
     class ModelComponent
     {
     public:
-        VertexArray                 mVertexArray;
-        IndexBuffer                 mIndexBuffer;
-        std::vector<MeshEntry>      mMeshes;
+        VertexArray                                                         mVertexArray;
+        IndexBuffer                                                         mIndexBuffer;
+        std::vector<MeshEntry>                                              mMeshes;
 
-        ModelComponent(const VertexArray&               vertexArray,
-                       const IndexBuffer&               indexBuffer,
-                       std::vector<MeshEntry>           meshes) :
+        ModelComponent(const VertexArray&                                   vertexArray,
+                       const IndexBuffer&                                   indexBuffer,
+                       std::vector<MeshEntry>                               meshes) :
+
 
                        mVertexArray     (vertexArray),
                        mIndexBuffer     (indexBuffer),
