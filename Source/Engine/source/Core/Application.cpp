@@ -5,7 +5,7 @@
 #include "Core/Input.h"
 #include "Core/Logger.h"
 
-#include "Graphics/Renderer.h"
+#include <Renderer.h>
 
 //------------------------------------------------------------------------------------
 // PUBLIC SECTION
@@ -31,7 +31,7 @@ void KitEngine::Core::Application::Initialize(const KitEngine::WindowProps& prop
     Input::Initialize(mWindow->GetWindowPointer());
 
     // Инициализация рендера
-    Renderer::Initialize();
+    Render::Renderer::Initialize();
 
     mPreviousTime = glfwGetTime();
 

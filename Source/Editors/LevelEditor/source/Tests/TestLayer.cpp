@@ -5,12 +5,11 @@
 
 #include <Core/Input.h>
 #include <Core/Application.h>
-#include <Graphics/Renderer.h>
 
 void LevelEditor::Tests::TestLayer::OnStart() {
 
     kitModelLoader::Loader loader;
-    loader.Import("resources/models/nanosuit/nanosuit.obj");
+    loader.Import("../../Resources/models/nanosuit/nanosuit.obj");
 
     // TODO: Текстур может и не быть вовсе, это стоит учесть и в таком случае грузить текстуру по умолчанию
     // или назначить материал по умолчанию
@@ -29,20 +28,20 @@ void LevelEditor::Tests::TestLayer::OnStart() {
     //mTextures.emplace_back("res/models/nanosuit/body_dif.png");
 
 
-     mVertexArray  = std::make_unique<KitEngine::Graphics::VertexArray>();
-     mVertexBuffer = std::make_unique<KitEngine::Graphics::VertexBuffer>
+     mVertexArray  = std::make_unique<Render::VertexArray>();
+     mVertexBuffer = std::make_unique<Render::VertexBuffer>
              (loader.mVertices.data(), static_cast<unsigned int>(loader.mVertices.size() *
-             sizeof(KitEngine::Graphics::Vertex)));
+             sizeof(Render::Vertex)));
 
-     mVertexArray->AddBuffer(*mVertexBuffer, KitEngine::Graphics::Vertex::mLayout);
+     mVertexArray->AddBuffer(*mVertexBuffer, Render::Vertex::mLayout);
 
-     mIndexBuffer = std::make_unique<KitEngine::Graphics::IndexBuffer>(loader.mIndices.data(),
+     mIndexBuffer = std::make_unique<Render::IndexBuffer>(loader.mIndices.data(),
                                                                        loader.mIndices.size());
 
     // mModel = std::make_unique<KitEngine::Graphics::Components::ModelComponent>(*mVertexArray, *mIndexBuffer,
     //                                                                            loader.mMeshes);
 
-    mShader = std::make_unique<KitEngine::Graphics::Shader>("resources/shaders/glsl/transform_test.glsl");
+    mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
     mShader->Enable();
     mShader->SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
 
@@ -86,10 +85,15 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
 
 void LevelEditor::Tests::TestLayer::OnRender(double dt) {
 
-    KitEngine::Graphics::Renderer::Instance().Clear();
+    Render::Renderer::Clear();
 
-    KitEngine::Graphics::Renderer& renderer = KitEngine::Graphics::Renderer::Instance();
-    renderer.DrawModel(*mModel, *mShader, mTextures);
+    mModel->mVertexArray.Bind();
+    for (auto& mesh : mModel->mMeshes) {
+        mTextures[mesh.MaterialIndex].Enable();
+        Render::Renderer::DrawIndexed(mesh.NumIndices, mesh.BaseIndex, mesh.BaseVertex);
+        mTextures[mesh.MaterialIndex].Disable();
+    }
+    mModel->mVertexArray.Unbind();
 }
 
 void LevelEditor::Tests::TestLayer::OnUIRender() {

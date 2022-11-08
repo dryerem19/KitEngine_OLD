@@ -16,9 +16,8 @@ void KitEngine::Core::ImGuiLayer::OnStart() {
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
 
-     // TODO: вернуть
-//    io.Fonts->AddFontFromFileTTF("res/fonts/Roboto-Bold.ttf", 14, nullptr,
-//                                 io.Fonts->GetGlyphRangesCyrillic());
+    io.Fonts->AddFontFromFileTTF("../../Resources/fonts/Roboto-Bold.ttf", 14, nullptr,
+                                 io.Fonts->GetGlyphRangesCyrillic());
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 

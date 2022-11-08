@@ -9,9 +9,6 @@
 #include "LayerStack.h"
 #include "ImGuiLayer.h"
 
-#include "Graphics/Renderer.h"
-using namespace KitEngine::Graphics;
-
 namespace KitEngine::Core
 {
     // Основное приложение.

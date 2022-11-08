@@ -5,10 +5,7 @@
 #ifndef LEVELEDITOR_MESHCOMPONENT_H
 #define LEVELEDITOR_MESHCOMPONENT_H
 
-#include "Graphics/VertexArray.h"
-#include "Graphics/IndexBuffer.h"
-#include "Graphics/Texture.h"
-#include "Graphics/Shader.h"
+#include <Renderer.h>
 
 #include <vector>
 
@@ -21,12 +18,12 @@ namespace KitEngine::Graphics::Components
     class ModelComponent
     {
     public:
-        VertexArray                                                         mVertexArray;
-        IndexBuffer                                                         mIndexBuffer;
+        Render::VertexArray                                                         mVertexArray;
+        Render::IndexBuffer                                                         mIndexBuffer;
         std::vector<kitModelLoader::MeshEntry>                                              mMeshes;
 
-        ModelComponent(const VertexArray&                                   vertexArray,
-                       const IndexBuffer&                                   indexBuffer,
+        ModelComponent(const Render::VertexArray&                                   vertexArray,
+                       const Render::IndexBuffer&                                   indexBuffer,
                        std::vector<kitModelLoader::MeshEntry>                               meshes) :
 
 

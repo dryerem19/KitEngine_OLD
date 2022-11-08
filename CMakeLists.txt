@@ -1,17 +1,18 @@
 cmake_minimum_required(VERSION 3.24)
 project(KitEngine VERSION 1.0.0)
 
+set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR})
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        CACHE STRING "Vcpkg toolchain file")
 
 if (WIN32)
     set(VCPKG_TARGET_TRIPLET x64-windows)
 elseif(UNIX)
     set(VCPKG_TARGET_TRIPLET x64-linux)
 endif(WIN32)
-
-set(CMAKE_TOOLCHAIN_FILE "${CMAKE_HOME_DIRECTORY}/vcpkg/scripts/buildsystems/vcpkg.cmake"
-        CACHE STRING "Vcpkg toolchain file")
 
 # Output all libraries and executable to one folder
 set(COMPILE_OUTPUT_FOLDER ${CMAKE_SOURCE_DIR}/bin/${ARCH_TYPE}/${CMAKE_BUILD_TYPE})
@@ -23,8 +24,7 @@ set(CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY ${COMPILE_OUTPUT_FOLDER})
 
 
 add_subdirectory(Source)
-#add_subdirectory(Resources)
-
+add_subdirectory(Resources)
 
 #target_include_directories(LevelEditor PUBLIC KitEngine/include)
 #target_link_libraries(LevelEditor PRIVATE KitEngine kitModelLoader LevelEditor)

@@ -7,16 +7,14 @@
 
 #include <Core/BaseLayer.h>
 
-#include <Graphics/IndexBuffer.h>
-#include <Graphics/VertexArray.h>
-#include <Graphics/Texture.h>
-#include <Graphics/Vertex.h>
-#include <Graphics/Shader.h>
+
+#include <Renderer.h>
+
+
 #include <Graphics/Components/ModelComponent.h>
 
 // TODO: УБРАТЬ
 #include <memory>
-#include <GL/glew.h>
 #include <Loader.h>
 
 #include <glm/glm.hpp>
@@ -26,7 +24,6 @@
 #include <imgui.h>
 
 using namespace KitEngine::Core;
-using namespace KitEngine::Graphics;
 using namespace KitEngine::Graphics::Components;
 
 namespace LevelEditor::Tests
@@ -34,11 +31,11 @@ namespace LevelEditor::Tests
     class TestLayer : public KitEngine::Core::BaseLayer
     {
     private:
-        std::unique_ptr<KitEngine::Graphics::VertexArray>  mVertexArray;
-        std::unique_ptr<KitEngine::Graphics::VertexBuffer> mVertexBuffer;
-        std::unique_ptr<KitEngine::Graphics::IndexBuffer>  mIndexBuffer;
-        std::unique_ptr<KitEngine::Graphics::Shader>       mShader;
-        std::vector<Texture>      mTextures;
+        std::unique_ptr<Render::VertexArray>  mVertexArray;
+        std::unique_ptr<Render::VertexBuffer> mVertexBuffer;
+        std::unique_ptr<Render::IndexBuffer>  mIndexBuffer;
+        std::unique_ptr<Render::Shader>       mShader;
+        std::vector<Render::Texture>      mTextures;
 
        //Texture testTexture = Texture("res/textures/no_texture.png");
 //       Texture testTexture = Texture("res/models/nanosuit/body_dif.png");
