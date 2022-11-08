@@ -10,22 +10,23 @@ void LevelEditor::Tests::TestLayer::OnStart() {
 
     kitModelLoader::Loader loader;
     loader.Import("../../Resources/models/nanosuit/nanosuit.obj");
+    std::cout << std::filesystem::current_path() << std::endl;
 
     // TODO: Текстур может и не быть вовсе, это стоит учесть и в таком случае грузить текстуру по умолчанию
     // или назначить материал по умолчанию
 
     // Выводим путь до текстуры и создаём текстуру
-     for (auto& material : loader.mMaterials) {
+     /*for (auto& material : loader.mMaterials) {
          for (auto& texture : material.mTextures) {
              if (texture.TextureType == kitModelLoader::kitTextureType::Diffuse) {
                  mTextures.emplace_back(texture.Path);
                  std::cout << texture.Path << std::endl;
              }
          }
-     }
+     }*/
 
 
-    //mTextures.emplace_back("res/models/nanosuit/body_dif.png");
+    mTextures.emplace_back("../../Resources/models/nanosuit/body_dif.png");
 
 
      mVertexArray  = std::make_unique<Render::VertexArray>();
@@ -69,7 +70,7 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
     // Camera
     DoMovement();
 
-    mTransform = glm::rotate(mTransform, 0.02f, glm::vec3(0.0f, 0.0f, 1.0f));
+    mTransform = glm::rotate(mTransform, 0.02f, glm::vec3(0.0f, 1.0f, 0.0f));
     view = glm::lookAt(cameraPos,cameraPos + cameraFront, cameraUp);
     projection = glm::perspective(45.0f, (GLfloat)Application::Instance().GetWindow()->GetProps().Width /
                                          (GLfloat)Application::Instance().GetWindow()->GetProps().Height, 0.1f, 100.0f);
@@ -77,7 +78,7 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
     mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, glm::value_ptr(view));
     mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, glm::value_ptr(projection));
 
-    mTransform = glm::rotate(mTransform, 0.02f, glm::vec3(0.0f, 0.0f, 1.0f));
+
     mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
                                glm::value_ptr(mTransform));
 
@@ -86,12 +87,12 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
 void LevelEditor::Tests::TestLayer::OnRender(double dt) {
 
     Render::Renderer::Clear();
-
+    mTextures[0].Enable();
     mModel->mVertexArray.Bind();
     for (auto& mesh : mModel->mMeshes) {
-        mTextures[mesh.MaterialIndex].Enable();
+        //mTextures[mesh.MaterialIndex].Enable();
         Render::Renderer::DrawIndexed(mesh.NumIndices, mesh.BaseIndex, mesh.BaseVertex);
-        mTextures[mesh.MaterialIndex].Disable();
+        //mTextures[mesh.MaterialIndex].Disable();
     }
     mModel->mVertexArray.Unbind();
 }
