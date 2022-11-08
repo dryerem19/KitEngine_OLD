@@ -3,7 +3,7 @@
   <component name="CMakeSharedSettings">
     <configurations>
       <configuration PROFILE_NAME="DebugWin64" ENABLED="true" GENERATION_DIR="build/Windows/Debug" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Visual Studio" GENERATION_OPTIONS="-G &quot;Visual Studio 16 2019&quot;" />
-      <configuration PROFILE_NAME="DebugLinux" ENABLED="true" GENERATION_DIR="build/Linux/Debug" CONFIG_NAME="Debug" />
+      <configuration PROFILE_NAME="DebugLinux" ENABLED="true" GENERATION_DIR="build/Linux/Debug" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Build" GENERATION_OPTIONS="-G Ninja -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake" />
     </configurations>
   </component>
 </project>
