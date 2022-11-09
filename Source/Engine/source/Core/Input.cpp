@@ -3,8 +3,8 @@
 //
 #include <Core/Input.h>
 
-glm::vec2 KitEngine::Core::Input::mousePosition = glm::vec2(0,0);
-glm::vec2 KitEngine::Core::Input::mouseScrollDelta = glm::vec2(0,0);
+//glm::vec2 KitEngine::Core::Input::mousePosition = glm::vec2(0,0);
+//glm::vec2 KitEngine::Core::Input::mouseScrollDelta = glm::vec2(0,0);
 
 
 GLFWwindow* KitEngine::Core::Input::m_pWindow = nullptr;

@@ -8,12 +8,18 @@ source_group(SRC_FILES)
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
 target_link_libraries(${PROJECT_NAME}
-        PRIVATE
+        PUBLIC
         Engine)
 
 target_link_libraries(${PROJECT_NAME}
         LINK_PUBLIC
         ModelLoader)
+
+find_package(imgui CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        imgui::imgui
+)
 
 target_include_directories(${PROJECT_NAME}
         PRIVATE

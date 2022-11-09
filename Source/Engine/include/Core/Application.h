@@ -7,7 +7,6 @@
 
 #include "Core/Window.h"
 #include "LayerStack.h"
-#include "ImGuiLayer.h"
 
 namespace KitEngine::Core
 {
@@ -28,7 +27,6 @@ namespace KitEngine::Core
         // Контейнер слоёв
         LayerStack mLayerStack;
         // Указатель на слой ImGui
-        ImGuiLayer* m_pImguiLayer;
         // Кол-во секунд прошедших с момента инициализации GLFW на предедущем кадре
         double mPreviousTime;
         // Флаг, запущено ли приложение
@@ -53,6 +51,9 @@ namespace KitEngine::Core
 
         // Удалить слой из контейнера слоёв
         inline void PopLayer(BaseLayer* pLayer) { mLayerStack.Pop(pLayer); }
+
+        inline void PushOverlayLayer(BaseLayer* pLayer) { mLayerStack.PushOverlay(pLayer); }
+        inline void PopOverlayLayer() { mLayerStack.PopOverlay(); }
 
         // Возвращает окно
         [[nodiscard]] inline auto& GetWindow() const { return mWindow; }

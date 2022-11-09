@@ -35,9 +35,6 @@ void KitEngine::Core::Application::Initialize(const KitEngine::WindowProps& prop
 
     mPreviousTime = glfwGetTime();
 
-    m_pImguiLayer = new ImGuiLayer();
-    this->PushLayer(m_pImguiLayer);
-
 }
 
 void KitEngine::Core::Application::Start() {
@@ -86,15 +83,15 @@ void KitEngine::Core::Application::Start() {
         }
 
         // Render UI
-        KitEngine::Core::ImGuiLayer::BeginFrame(); {
-            for (auto* pLayer : mLayerStack.GetLayers()) {
-                pLayer->OnUIRender();
-            }
-        }
-        KitEngine::Core::ImGuiLayer::EndFrame();
+        mLayerStack.GetOverlay()->OnBegin();
+        for (auto* pLayer : mLayerStack.GetLayers()) {
 
-        mWindow->Update();
+            pLayer->OnUIRender();
+        }
+        mLayerStack.GetOverlay()->OnEnd();
+
         mWindow->SwapBuffers();
+        mWindow->Update();
 
         // Увеличиваем счётчик кадров
         frames++;
@@ -114,6 +111,6 @@ void KitEngine::Core::Application::Start() {
 }
 
 KitEngine::Core::Application::Application()
-    : mIsRunning(false), m_pImguiLayer(nullptr), mPreviousTime(0) {
+    : mIsRunning(false), mPreviousTime(0) {
 
 }

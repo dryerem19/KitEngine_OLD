@@ -6,6 +6,9 @@
 #include <Core/Input.h>
 #include <Core/Application.h>
 
+#include <Core/Application.h>
+
+
 void LevelEditor::Tests::TestLayer::OnStart() {
 
     kitModelLoader::Loader loader;
@@ -34,13 +37,18 @@ void LevelEditor::Tests::TestLayer::OnStart() {
              (loader.mVertices.data(), static_cast<unsigned int>(loader.mVertices.size() *
              sizeof(Render::Vertex)));
 
-     mVertexArray->AddBuffer(*mVertexBuffer, Render::Vertex::mLayout);
+     Render::VertexBufferLayout layout;
+     layout.AddFloatElement(3);
+     layout.AddFloatElement(3);
+     layout.AddFloatElement(2);
+
+     mVertexArray->AddBuffer(*mVertexBuffer, layout);
 
      mIndexBuffer = std::make_unique<Render::IndexBuffer>(loader.mIndices.data(),
                                                                        loader.mIndices.size());
 
-    // mModel = std::make_unique<KitEngine::Graphics::Components::ModelComponent>(*mVertexArray, *mIndexBuffer,
-    //                                                                            loader.mMeshes);
+//     mModel = std::make_unique<KitEngine::Graphics::Components::ModelComponent>(*mVertexArray, *mIndexBuffer,
+//                                                                                loader.mMeshes);
 
     mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
     mShader->Enable();
@@ -100,6 +108,7 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt) {
 void LevelEditor::Tests::TestLayer::OnUIRender() {
 
     // Show demo window
+
     ImGui::Begin("Window");
     ImGui::Text("Как дела ?");
     ImGui::End();
