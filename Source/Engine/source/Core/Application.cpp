@@ -113,7 +113,13 @@ void KitEngine::Core::Application::Start() {
 
 }
 
+void KitEngine::Core::Application::Close() {
+    glfwSetWindowShouldClose(mWindow->GetWindowPointer(), GLFW_TRUE);
+}
+
 KitEngine::Core::Application::Application()
     : mIsRunning(false), m_pImguiLayer(nullptr), mPreviousTime(0) {
 
 }
+
+
