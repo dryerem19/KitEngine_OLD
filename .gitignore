@@ -5,6 +5,7 @@
 build/
 cmake-build-debug-visual-studio/
 cmake-build-debug/
+bin/
 
 .idea/*
 !.idea/cmake.xml
