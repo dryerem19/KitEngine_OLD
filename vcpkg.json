@@ -15,6 +15,7 @@
     "entt",
     "bullet3",
     "assimp",
-    "spdlog"
+    "spdlog",
+    "nativefiledialog"
   ]
 }

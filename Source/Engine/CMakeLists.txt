@@ -44,3 +44,7 @@ target_link_libraries(${PROJECT_NAME}
 #        SAIL::sail-c++
         spdlog::spdlog spdlog::spdlog_header_only
 )
+
+
+find_package(unofficial-nativefiledialog CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC unofficial::nativefiledialog::nfd)
