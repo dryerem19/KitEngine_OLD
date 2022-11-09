@@ -8,6 +8,8 @@
 
 #include <Core/Application.h>
 
+#include <OS/FileDialog.h>
+
 
 void LevelEditor::Tests::TestLayer::OnStart() {
 
@@ -110,7 +112,12 @@ void LevelEditor::Tests::TestLayer::OnUIRender() {
     // Show demo window
 
     ImGui::Begin("Window");
-    ImGui::Text("Как дела ?");
+   
+    if (ImGui::Button("Click me!")) {
+        std::string filepath = Engine::OS::FileDialog::OpenFile();
+        std::cout << "FileDialog Check: " << filepath << std::endl;
+    }
+
     ImGui::End();
 
 }
