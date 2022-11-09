@@ -13,8 +13,6 @@ namespace Render
         glm::vec2 mTexcoord { };
         glm::vec3 mNormal   { };
 
-        static VertexBufferLayout mLayout;
-
         explicit Vertex(const glm::vec3& position);
         explicit Vertex(const glm::vec3& position, const glm::vec2& texcoord);
         explicit Vertex(const glm::vec3& position, const glm::vec2& texcoord, const glm::vec3& normal);

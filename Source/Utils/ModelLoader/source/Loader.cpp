@@ -8,7 +8,7 @@ void kitModelLoader::Loader::Import(const std::filesystem::path& filepath) {
     Assimp::Importer importer;
 
     const aiScene *pScene;
-    pScene = importer.ReadFile(filepath,
+    pScene = importer.ReadFile(filepath.string().c_str(),
                                aiProcess_GenSmoothNormals           |
                                aiProcess_ValidateDataStructure      |
                                aiProcess_CalcTangentSpace           |

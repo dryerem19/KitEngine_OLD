@@ -86,15 +86,14 @@ void KitEngine::Core::Application::Start() {
         }
 
         // Render UI
-        KitEngine::Core::ImGuiLayer::BeginFrame(); {
-            for (auto* pLayer : mLayerStack.GetLayers()) {
-                pLayer->OnUIRender();
-            }
+        KitEngine::Core::ImGuiLayer::BeginFrame();
+        for (auto* pLayer : mLayerStack.GetLayers()) {
+            pLayer->OnUIRender();
         }
         KitEngine::Core::ImGuiLayer::EndFrame();
 
-        mWindow->Update();
         mWindow->SwapBuffers();
+        mWindow->Update();
 
         // Увеличиваем счётчик кадров
         frames++;

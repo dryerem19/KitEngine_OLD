@@ -34,7 +34,12 @@ void LevelEditor::Tests::TestLayer::OnStart() {
              (loader.mVertices.data(), static_cast<unsigned int>(loader.mVertices.size() *
              sizeof(Render::Vertex)));
 
-     mVertexArray->AddBuffer(*mVertexBuffer, Render::Vertex::mLayout);
+     Render::VertexBufferLayout layout;
+     layout.AddFloatElement(3);
+     layout.AddFloatElement(3);
+     layout.AddFloatElement(2);
+
+     mVertexArray->AddBuffer(*mVertexBuffer, layout);
 
      mIndexBuffer = std::make_unique<Render::IndexBuffer>(loader.mIndices.data(),
                                                                        loader.mIndices.size());

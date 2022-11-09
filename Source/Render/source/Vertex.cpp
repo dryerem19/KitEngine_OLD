@@ -4,16 +4,6 @@
 #include "../pch/RenderPch.h"
 #include "Vertex.h"
 
-Render::VertexBufferLayout Render::Vertex::mLayout = []() constexpr {
-
-   VertexBufferLayout mLayout;
-   mLayout.AddFloatElement(3);
-   mLayout.AddFloatElement(3);
-   mLayout.AddFloatElement(2);
-   return mLayout;
-
-}();
-
 Render::Vertex::Vertex(const glm::vec3 &position)
         : mPosition(position) {
 
