@@ -28,7 +28,7 @@ namespace Engine::OS
                 break;
             }
 
-            return std::string(outpath);
+            return std::string();
         }
 
         static std::string SaveFile(const std::string& filters = "None", const std::string& defpath = "None")
@@ -50,7 +50,7 @@ namespace Engine::OS
                 break;
             }
 
-            return std::string(savepath);
+            return std::string();
         }
         
     };
