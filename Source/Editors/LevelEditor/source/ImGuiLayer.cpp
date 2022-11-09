@@ -1,14 +1,14 @@
 //
 // Created by Denis on 01.11.2022.
 //
-#include "Core/ImGuiLayer.h"
+#include "../include/ImGuiLayer.h"
 #include "Core/Application.h"
 
-KitEngine::Core::ImGuiLayer::ImGuiLayer()
-    : BaseLayer("ImGuiLayer") {
+LevelEditor::ImGuiLayer::ImGuiLayer()
+    : KitEngine::Core::BaseLayer("ImGuiLayer") {
 }
 
-void KitEngine::Core::ImGuiLayer::OnStart() {
+void LevelEditor::ImGuiLayer::OnStart() {
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -21,16 +21,16 @@ void KitEngine::Core::ImGuiLayer::OnStart() {
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
-    Application& app = Application::Instance();
+    KitEngine::Core::Application& app = KitEngine::Core::Application::Instance();
     GLFWwindow* pWindow = app.GetWindow()->GetWindowPointer();
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(pWindow, true);
-    ImGui_ImplOpenGL3_Init("#version 130");
+    ImGui_ImplOpenGL3_Init("#version 330 core");
 
 }
 
-void KitEngine::Core::ImGuiLayer::OnFinish() {
+void LevelEditor::ImGuiLayer::OnFinish() {
 
     // Уничтожаем контекст ImGui
     ImGui_ImplOpenGL3_Shutdown();
@@ -39,7 +39,7 @@ void KitEngine::Core::ImGuiLayer::OnFinish() {
 
 }
 
-void KitEngine::Core::ImGuiLayer::BeginFrame() {
+void LevelEditor::ImGuiLayer::OnBegin() {
 
     // Создаём новый ImGui кадр
     ImGui_ImplOpenGL3_NewFrame();
@@ -48,7 +48,7 @@ void KitEngine::Core::ImGuiLayer::BeginFrame() {
 
 }
 
-void KitEngine::Core::ImGuiLayer::EndFrame() {
+void LevelEditor::ImGuiLayer::OnEnd() {
 
     // Рисуем кадр ImGui
     ImGui::Render();

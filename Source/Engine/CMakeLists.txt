@@ -33,7 +33,7 @@ target_link_libraries(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} PRIVATE {CMAKE_SOURCE_DIR}/Source/Render/include)
 
 target_link_libraries(${PROJECT_NAME}
-        PUBLIC
+        PRIVATE
 #        GLEW::GLEW
         glfw
         EnTT::EnTT

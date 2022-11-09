@@ -17,6 +17,11 @@ KitEngine::Core::LayerStack::~LayerStack() {
         }
     }
 
+    if (mOverlayLayer != nullptr) {
+        mOverlayLayer->OnFinish();
+        delete mOverlayLayer;
+    }
+
 }
 
 void KitEngine::Core::LayerStack::Push(KitEngine::Core::BaseLayer *pLayer) {
@@ -28,6 +33,23 @@ void KitEngine::Core::LayerStack::Push(KitEngine::Core::BaseLayer *pLayer) {
 
         // Run the initialization
         pLayer->OnStart();
+    }
+    else {
+        throw std::runtime_error("Null pointer to the layer");
+    }
+
+}
+
+void KitEngine::Core::LayerStack::PushOverlay(KitEngine::Core::BaseLayer *pLayer) {
+
+    if (pLayer != nullptr) {
+
+        if (mOverlayLayer == nullptr) {
+            mOverlayLayer = pLayer;
+            mOverlayLayer->OnStart();
+        } else {
+            throw std::runtime_error("Overlay layer exist!");
+        }
     }
     else {
         throw std::runtime_error("Null pointer to the layer");
@@ -48,6 +70,17 @@ void KitEngine::Core::LayerStack::Pop(KitEngine::Core::BaseLayer *pLayer) {
     }
     else {
         throw std::runtime_error("Null pointer to the layer");
+    }
+
+}
+
+void KitEngine::Core::LayerStack::PopOverlay() {
+
+    if (mOverlayLayer != nullptr) {
+
+        mOverlayLayer->OnFinish();
+        mOverlayLayer = nullptr;
+
     }
 
 }

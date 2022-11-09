@@ -5,9 +5,9 @@
 #ifndef KITENGINE_IMGUILAYER_H
 #define KITENGINE_IMGUILAYER_H
 
-#include "BaseLayer.h"
+#include <Core/BaseLayer.h>
 
-namespace KitEngine::Core
+namespace LevelEditor
 {
     // Слой ImGui. Используется для интеграции ImGui.
     // Пример:
@@ -15,7 +15,7 @@ namespace KitEngine::Core
     //
     //  созданный слой следует поместить в LayerStack, он самостоятельно вызывает
     //  методы OnStart() и OnFinish() при инициализации и уничтожении
-    class ImGuiLayer : public BaseLayer
+    class ImGuiLayer : public KitEngine::Core::BaseLayer
     {
     public:
         // Конструктор по умолчанию
@@ -25,6 +25,10 @@ namespace KitEngine::Core
 
         // Вызывается один раз при инициализации
         void OnStart() override;
+
+        void OnBegin() override;
+
+        void OnEnd() override;
 
         // Вызывается один раз при уничтожении
         void OnFinish() override;

@@ -20,6 +20,15 @@ void KitEngine::Core::BaseLayer::OnUpdate() {
 
 }
 
+void KitEngine::Core::BaseLayer::OnBegin() {
+
+}
+
+void KitEngine::Core::BaseLayer::OnEnd() {
+
+}
+
+
 void KitEngine::Core::BaseLayer::OnRender(double dt) {
 
 }

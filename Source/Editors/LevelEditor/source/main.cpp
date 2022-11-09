@@ -2,6 +2,7 @@
 #include <Core/Application.h>
 
 #include "Tests/TestLayer.h"
+#include "ImGuiLayer.h"
 
 
 int main(void)
@@ -17,6 +18,7 @@ int main(void)
 
     Application& app = Application::Instance();
     app.Initialize(props);
+    app.PushOverlayLayer(new LevelEditor::ImGuiLayer());
     app.PushLayer(new LevelEditor::Tests::TestLayer());
     app.Start();
     

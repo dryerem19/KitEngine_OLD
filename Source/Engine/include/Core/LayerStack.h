@@ -21,6 +21,7 @@ namespace KitEngine::Core
     private:
         // Контейнер слоёв
         std::vector<BaseLayer*> mLayers;
+        BaseLayer* mOverlayLayer = nullptr;
     public:
         // Конструктор по умолчанию
         LayerStack() = default;
@@ -32,6 +33,14 @@ namespace KitEngine::Core
 
         // Удаляет слой из контейнера
         void Pop    (BaseLayer* pLayer);
+
+        // Добавляет оверлей слой
+        void PushOverlay(BaseLayer* pLayer);
+
+        // Удаляет слой оверлей
+        void PopOverlay();
+
+        BaseLayer* GetOverlay() const { return mOverlayLayer; }
 
         // Возвращает контейнер с слоями
         [[nodiscard]] inline const auto& GetLayers() const { return mLayers; }
