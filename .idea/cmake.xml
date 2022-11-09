@@ -2,8 +2,9 @@
 <project version="4">
   <component name="CMakeSharedSettings">
     <configurations>
-      <configuration PROFILE_NAME="DebugWin64" ENABLED="true" GENERATION_DIR="build/Windows/Debug" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Visual Studio" GENERATION_OPTIONS="-G &quot;Visual Studio 16 2019&quot; -DCMAKE_TOOLCHAIN_FILE=&quot;vcpkg\scripts\buildsystems\vcpkg.cmake&quot;" />
-      <configuration PROFILE_NAME="DebugLinux" ENABLED="false" GENERATION_DIR="build/Linux/Debug" CONFIG_NAME="Debug" GENERATION_OPTIONS="-DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake" />
+      <configuration PROFILE_NAME="DBG_WIN64_VS2022" ENABLED="true" GENERATION_DIR="build/Windows/Debug" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Visual Studio" GENERATION_OPTIONS="-G &quot;Visual Studio 17 2022&quot; -DCMAKE_TOOLCHAIN_FILE=&quot;vcpkg\scripts\buildsystems\vcpkg.cmake&quot;" />
+      <configuration PROFILE_NAME="DBG_WIN64_VS2019" ENABLED="true" GENERATION_DIR="build/Windows/Debug" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Visual Studio" GENERATION_OPTIONS="-G &quot;Visual Studio 16 2019&quot; -DCMAKE_TOOLCHAIN_FILE=&quot;vcpkg\scripts\buildsystems\vcpkg.cmake&quot;" />
+      <configuration PROFILE_NAME="DBG_LINUX64" ENABLED="true" GENERATION_DIR="build/Linux/Debug" CONFIG_NAME="Debug" GENERATION_OPTIONS="-DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake" />
     </configurations>
   </component>
 </project>
