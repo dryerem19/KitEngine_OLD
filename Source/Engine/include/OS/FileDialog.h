@@ -15,11 +15,10 @@ namespace Engine::OS
             const nfdchar_t* nfd_defpath = defpath.empty() || "None" ? nullptr : defpath.c_str();
 
             nfdchar_t* outpath = nullptr;
-            switch (NFD_SaveDialog(nfd_filters, nfd_defpath, &outpath))
+            switch (NFD_OpenDialog(nfd_filters, nfd_defpath, &outpath))
             {
             case NFD_OKAY:
                 return std::string(outpath);
-                break;
             case NFD_CANCEL:
                 break;
             default:
@@ -41,7 +40,6 @@ namespace Engine::OS
             {
             case NFD_OKAY:
                 return std::string(savepath);
-                break;
             case NFD_CANCEL:
                 break;
             default:
