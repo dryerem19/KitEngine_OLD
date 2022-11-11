@@ -68,6 +68,7 @@ namespace LevelEditor::Tests
         void OnFinish() override;
 
         void DoMovement();
+        void OnLoadModel(std::string filepath);
     };
 }
 

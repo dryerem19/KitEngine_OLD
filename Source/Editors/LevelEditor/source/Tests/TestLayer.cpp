@@ -6,6 +6,8 @@
 #include <Core/Input.h>
 #include <Core/Application.h>
 
+#include <OS/FileDialog.h>
+
 void LevelEditor::Tests::TestLayer::OnStart() {
 
     /*kitModelLoader::Loader loader;
@@ -103,85 +105,44 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt) {
 
 void LevelEditor::Tests::TestLayer::OnUIRender() {
 
-    /*// Menu List Model
-    ImGui::Begin("List Model | Список моделей");
-    if(ImGui::Button("Загрузить модель Нано-костюм"))
-    {
-
-    }
-    ImGui::End();*/
-
-
     // Main Menu Bar
     if(ImGui::BeginMainMenuBar())
     {
         if(ImGui::BeginMenu("File"))
         {
+            if(ImGui::MenuItem("Open Scene")){
+                std::string filepath = Engine::OS::FileDialog::OpenFile();
+                std::cout << "[OpenScene]FileDialog Check: " << filepath << std::endl;
+            }
+            if(ImGui::MenuItem("Save Scene")){
+
+            }
+            if(ImGui::MenuItem("Save Scene As..")){
+                std::string filepath = Engine::OS::FileDialog::SaveFile();
+                std::cout << "[SaveSceneAs ]FileDialog Check: " << filepath << std::endl;
+            }
+            ImGui::Separator();
+            if(ImGui::MenuItem("New Project")){
+
+            }
+            if(ImGui::MenuItem("Open Project")){
+                std::string filepath = Engine::OS::FileDialog::OpenFile();
+                std::cout << "[OpenProject]FileDialog Check: " << filepath << std::endl;
+            }
+            if(ImGui::MenuItem("Save Project")){
+
+            }
+            ImGui::Separator();
             if(ImGui::BeginMenu("Import Model"))
             {
-                if(ImGui::MenuItem("Нано-костюм"))
+                if(ImGui::MenuItem("Нано-костюм")){
+                    OnLoadModel("../../Resources/models/nanosuit/nanosuit.obj");
+                }
+                ImGui::Separator();
+                if(ImGui::MenuItem("Open Model"))
                 {
-                    kitModelLoader::Loader loader;
-                    loader.Import("../../Resources/models/nanosuit/nanosuit.obj");
-                    std::cout << std::filesystem::current_path() << std::endl;
-
-                    // TODO: Текстур может и не быть вовсе, это стоит учесть и в таком случае грузить текстуру по умолчанию
-                    // или назначить материал по умолчанию
-
-                    // Выводим путь до текстуры и создаём текстуру
-                    /*for (auto& material : loader.mMaterials) {
-                        for (auto& texture : material.mTextures) {
-                            if (texture.TextureType == kitModelLoader::kitTextureType::Diffuse) {
-                                mTextures.emplace_back(texture.Path);
-                                std::cout << texture.Path << std::endl;
-                            }
-                        }
-                    }*/
-
-
-                    mTextures.emplace_back("../../Resources/models/nanosuit/body_dif.png");
-
-
-                    mVertexArray  = std::make_unique<Render::VertexArray>();
-                    mVertexBuffer = std::make_unique<Render::VertexBuffer>
-                            (loader.mVertices.data(), static_cast<unsigned int>(loader.mVertices.size() *
-                                                                                sizeof(Render::Vertex)));
-
-                    Render::VertexBufferLayout layout;
-                    layout.AddFloatElement(3);
-                    layout.AddFloatElement(3);
-                    layout.AddFloatElement(2);
-
-                    mVertexArray->AddBuffer(*mVertexBuffer, layout);
-
-                    mIndexBuffer = std::make_unique<Render::IndexBuffer>(loader.mIndices.data(),
-                                                                         loader.mIndices.size());
-
-                    // mModel = std::make_unique<KitEngine::Graphics::Components::ModelComponent>(*mVertexArray, *mIndexBuffer,
-                    //                                                                            loader.mMeshes);
-
-                    mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
-                    mShader->Enable();
-                    mShader->SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
-
-                    mModel = std::make_unique<ModelComponent>(
-                            *mVertexArray, *mIndexBuffer, loader.mMeshes
-                    );
-
-
-                    // DEPRECATED
-                    //    mTexture = std::make_unique<KitEngine::Graphics::Texture>("res/textures/no_texture.png");
-                    //    mTexture->Enable();
-
-                    //testTexture.Enable();
-
-                    //mTextures[0].Enable();
-
-                    mShader->SetUniform1i("uTexture", 0);
-
-                    mTransform = glm::mat4(1.0f);
-
-                    isModelLoaded = true;
+                    std::string filepath = Engine::OS::FileDialog::OpenFile();
+                    OnLoadModel(filepath);
                 }
                 ImGui::EndMenu();
             }
@@ -254,4 +215,68 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
         Input::SetInputMode(CursorMode::Cursor, CursorState::CursorNormal);
     }
 
+}
+
+void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
+    kitModelLoader::Loader loader;
+    loader.Import(filepath);
+    std::cout << std::filesystem::current_path() << std::endl;
+
+    // TODO: Текстур может и не быть вовсе, это стоит учесть и в таком случае грузить текстуру по умолчанию
+    // или назначить материал по умолчанию
+
+    // Выводим путь до текстуры и создаём текстуру
+    /*for (auto& material : loader.mMaterials) {
+        for (auto& texture : material.mTextures) {
+            if (texture.TextureType == kitModelLoader::kitTextureType::Diffuse) {
+                mTextures.emplace_back(texture.Path);
+                std::cout << texture.Path << std::endl;
+            }
+        }
+    }*/
+
+
+    mTextures.emplace_back("../../Resources/models/nanosuit/body_dif.png");
+
+
+    mVertexArray  = std::make_unique<Render::VertexArray>();
+    mVertexBuffer = std::make_unique<Render::VertexBuffer>
+            (loader.mVertices.data(), static_cast<unsigned int>(loader.mVertices.size() *
+                                                                sizeof(Render::Vertex)));
+
+    Render::VertexBufferLayout layout;
+    layout.AddFloatElement(3);
+    layout.AddFloatElement(3);
+    layout.AddFloatElement(2);
+
+    mVertexArray->AddBuffer(*mVertexBuffer, layout);
+
+    mIndexBuffer = std::make_unique<Render::IndexBuffer>(loader.mIndices.data(),
+                                                         loader.mIndices.size());
+
+    // mModel = std::make_unique<KitEngine::Graphics::Components::ModelComponent>(*mVertexArray, *mIndexBuffer,
+    //                                                                            loader.mMeshes);
+
+    mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
+    mShader->Enable();
+    mShader->SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
+
+    mModel = std::make_unique<ModelComponent>(
+            *mVertexArray, *mIndexBuffer, loader.mMeshes
+    );
+
+
+    // DEPRECATED
+    //    mTexture = std::make_unique<KitEngine::Graphics::Texture>("res/textures/no_texture.png");
+    //    mTexture->Enable();
+
+    //testTexture.Enable();
+
+    //mTextures[0].Enable();
+
+    mShader->SetUniform1i("uTexture", 0);
+
+    mTransform = glm::mat4(1.0f);
+
+    isModelLoaded = true;
 }
