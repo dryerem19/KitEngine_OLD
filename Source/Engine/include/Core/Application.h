@@ -56,10 +56,13 @@ namespace KitEngine::Core
         inline void PopOverlayLayer() { mLayerStack.PopOverlay(); }
 
         // Возвращает окно
-        [[nodiscard]] inline auto& GetWindow() const { return mWindow; }
+        [[nodiscard]] inline auto& GetWindow() { return mWindow; }
 
         // Запускает приложение
         void Start();
+
+        // Закрывает приложение
+        void Close();
 
     private:
         // Закрытый конструтор, так как это синглтон
