@@ -31,6 +31,7 @@ namespace LevelEditor::Tests
     class TestLayer : public KitEngine::Core::BaseLayer
     {
     private:
+        bool isModelLoaded = false;
         std::unique_ptr<Render::VertexArray>  mVertexArray;
         std::unique_ptr<Render::VertexBuffer> mVertexBuffer;
         std::unique_ptr<Render::IndexBuffer>  mIndexBuffer;
