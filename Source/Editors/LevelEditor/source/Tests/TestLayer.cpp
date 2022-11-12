@@ -89,9 +89,9 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
 }
 
 void LevelEditor::Tests::TestLayer::OnRender(double dt) {
-
+    Render::Renderer::Clear();
     if(isModelLoaded == true){
-        Render::Renderer::Clear();
+
         mTextures[0].Enable();
         mModel->mVertexArray.Bind();
         for (auto& mesh : mModel->mMeshes) {
@@ -104,6 +104,7 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt) {
 }
 
 void LevelEditor::Tests::TestLayer::OnUIRender() {
+
 
     // Main Menu Bar
     if(ImGui::BeginMainMenuBar())
@@ -152,6 +153,14 @@ void LevelEditor::Tests::TestLayer::OnUIRender() {
             }
             ImGui::EndMenu();
         }
+        static bool open = false;
+        {
+            if(open)
+                ShowAbout(&open);
+            if(ImGui::MenuItem("About"))
+                open = true;
+        }
+
     }
     ImGui::EndMainMenuBar();
 
@@ -279,4 +288,17 @@ void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
     mTransform = glm::mat4(1.0f);
 
     isModelLoaded = true;
+}
+
+void LevelEditor::Tests::TestLayer::ShowAbout(bool* close) {
+
+    if(close)
+    {
+        ImGui::SetNextWindowSize(ImVec2(250,250));
+        ImGui::Begin("About", close, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+        ImGui::Text("Name Product: KitEngine");
+        ImGui::Text("Develepers: dryerem19, EvgehaName");
+        ImGui::End();
+    }
+
 }
