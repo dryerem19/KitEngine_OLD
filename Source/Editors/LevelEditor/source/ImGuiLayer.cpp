@@ -1,8 +1,10 @@
 //
 // Created by Denis on 01.11.2022.
 //
-#include "../include/ImGuiLayer.h"
+#include "ImGuiLayer.h"
+#include "IconsFontAwesome6.h"
 #include "Core/Application.h"
+
 
 LevelEditor::ImGuiLayer::ImGuiLayer()
     : KitEngine::Core::BaseLayer("ImGuiLayer") {
@@ -18,6 +20,14 @@ void LevelEditor::ImGuiLayer::OnStart() {
 
     io.Fonts->AddFontFromFileTTF("../../Resources/fonts/Roboto-Bold.ttf", 14, nullptr,
                                  io.Fonts->GetGlyphRangesCyrillic());
+    // merge in icons from Font Awesome
+    static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
+    ImFontConfig icons_config;
+    icons_config.MergeMode = true;
+    icons_config.PixelSnapH = true;
+    io.Fonts->AddFontFromFileTTF( "../../Resources/fonts/fa-solid-900.ttf", 14.0f, &icons_config, icons_ranges );
+
+
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 

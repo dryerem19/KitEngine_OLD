@@ -6,6 +6,8 @@
 #include <Core/Input.h>
 #include <Core/Application.h>
 
+#include "IconsFontAwesome6.h"
+
 #include <OS/FileDialog.h>
 
 void LevelEditor::Tests::TestLayer::OnStart() {
@@ -109,28 +111,28 @@ void LevelEditor::Tests::TestLayer::OnUIRender() {
     // Main Menu Bar
     if(ImGui::BeginMainMenuBar())
     {
-        if(ImGui::BeginMenu("File"))
+        if(ImGui::BeginMenu(ICON_FA_FILE " File"))
         {
-            if(ImGui::MenuItem("Open Scene")){
+            if(ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open Scene")){
                 std::string filepath = Engine::OS::FileDialog::OpenFile();
                 std::cout << "[OpenScene]FileDialog Check: " << filepath << std::endl;
             }
-            if(ImGui::MenuItem("Save Scene")){
+            if(ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save Scene")){
 
             }
-            if(ImGui::MenuItem("Save Scene As..")){
+            if(ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save Scene As..")){
                 std::string filepath = Engine::OS::FileDialog::SaveFile();
                 std::cout << "[SaveSceneAs ]FileDialog Check: " << filepath << std::endl;
             }
             ImGui::Separator();
-            if(ImGui::MenuItem("New Project")){
+            if(ImGui::MenuItem(ICON_FA_SQUARE_PLUS " New Project")){
 
             }
-            if(ImGui::MenuItem("Open Project")){
+            if(ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open Project")){
                 std::string filepath = Engine::OS::FileDialog::OpenFile();
                 std::cout << "[OpenProject]FileDialog Check: " << filepath << std::endl;
             }
-            if(ImGui::MenuItem("Save Project")){
+            if(ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save Project")){
 
             }
             ImGui::Separator();
@@ -140,14 +142,14 @@ void LevelEditor::Tests::TestLayer::OnUIRender() {
                     OnLoadModel("../../Resources/models/nanosuit/nanosuit.obj");
                 }
                 ImGui::Separator();
-                if(ImGui::MenuItem("Open Model"))
+                if(ImGui::MenuItem(ICON_FA_FILE_IMPORT " Open Model"))
                 {
                     std::string filepath = Engine::OS::FileDialog::OpenFile();
                     OnLoadModel(filepath);
                 }
                 ImGui::EndMenu();
             }
-            if(ImGui::MenuItem("Exit"))
+            if(ImGui::MenuItem(ICON_FA_RIGHT_FROM_BRACKET " Exit"))
             {
                 Application::Instance().Close();
             }
@@ -157,7 +159,7 @@ void LevelEditor::Tests::TestLayer::OnUIRender() {
         {
             if(open)
                 ShowAbout(&open);
-            if(ImGui::MenuItem("About"))
+            if(ImGui::MenuItem(ICON_FA_ADDRESS_CARD " About"))
                 open = true;
         }
 
@@ -296,7 +298,7 @@ void LevelEditor::Tests::TestLayer::ShowAbout(bool* close) {
     {
         ImGui::SetNextWindowSize(ImVec2(250,250));
         ImGui::Begin("About", close, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-        ImGui::Text("Name Product: KitEngine");
+        ImGui::Text("Имя Product: KitEngine");
         ImGui::Text("Develepers: dryerem19, EvgehaName");
         ImGui::End();
     }
