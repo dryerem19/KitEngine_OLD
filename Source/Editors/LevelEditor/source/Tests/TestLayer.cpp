@@ -177,19 +177,19 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
 
     // Camera controls
     GLfloat cameraSpeed = 0.30f;
-    if (Input::GetKeyDown(KeyCode::W))
+    if (Input::GetKey(KeyCode::W))
     {
         cameraPos += cameraSpeed * cameraFront;
     }
-    if (Input::GetKeyDown(KeyCode::S))
+    if (Input::GetKey(KeyCode::S))
     {
         cameraPos -= cameraSpeed * cameraFront;
     }
-    if (Input::GetKeyDown(KeyCode::A))
+    if (Input::GetKey(KeyCode::A))
     {
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
-    if (Input::GetKeyDown(KeyCode::D))
+    if (Input::GetKey(KeyCode::D))
     {
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
