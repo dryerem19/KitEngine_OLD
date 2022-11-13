@@ -17,6 +17,9 @@ void LevelEditor::ImGuiLayer::OnStart() {
 
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
+    // Enable docking window
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
 
     io.Fonts->AddFontFromFileTTF("../../Resources/fonts/Roboto-Bold.ttf", 14, nullptr,
                                  io.Fonts->GetGlyphRangesCyrillic());
