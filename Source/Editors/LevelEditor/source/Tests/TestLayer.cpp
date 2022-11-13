@@ -106,7 +106,8 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt) {
 }
 
 void LevelEditor::Tests::TestLayer::OnUIRender() {
-
+    // Docking Window
+    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
     // Main Menu Bar
     if(ImGui::BeginMainMenuBar())
