@@ -194,7 +194,7 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
 
-    if(Input::GetMouseDown(MouseButton::MouseButtonLeft))
+    if(Input::GetMouseButton(MouseButton::MouseButtonLeft))
     {
         Input::SetInputMode(CursorMode::Cursor, CursorState::CursorDisabled);
 
@@ -202,7 +202,6 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
         GLfloat yoffset = lastY - Input::mousePosition.y;
         lastX = Input::mousePosition.x;
         lastY = Input::mousePosition.y;
-
 
         GLfloat sensitivity = 0.05;
         xoffset *= sensitivity;
