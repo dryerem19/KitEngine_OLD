@@ -183,10 +183,11 @@ namespace KitEngine::Core
         static int mKey;
         static int mMouseButton;
 
-        inline static bool mCurrentState[1024];
-        inline static bool mPreviousState[1024];
+        inline static bool mCurrentStateKeyboard[1024];
+        inline static bool mPreviousStateKeyboard[1024];
 
-        static int mMouseAction;
+        inline static bool mCurrentStateMouse[8];
+        inline static bool mPreviousStateMouse[8];
 
         static void OnKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
         static void OnMouseButtonCallback(GLFWwindow* window, int button, int action, int mods);

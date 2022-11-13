@@ -14,8 +14,6 @@ bool KitEngine::Core::Input::mIsInit = false;
 int KitEngine::Core::Input::mKey = -1;
 int KitEngine::Core::Input::mMouseButton = -1;
 
-int KitEngine::Core::Input::mMouseAction = GLFW_RELEASE;
-
 void KitEngine::Core::Input::Initialize(GLFWwindow *pWindow) {
 
     if(!mIsInit)
@@ -32,23 +30,31 @@ void KitEngine::Core::Input::Initialize(GLFWwindow *pWindow) {
 
 void KitEngine::Core::Input::OnKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
 
-    memcpy(mPreviousState, mCurrentState, 1024);
+    memcpy(mPreviousStateKeyboard, mCurrentStateKeyboard, 1024);
 
     if(action == GLFW_PRESS)
     {
-        mCurrentState[key] = true;
+        mCurrentStateKeyboard[key] = true;
     }
     else if(action == GLFW_RELEASE)
     {
-        mCurrentState[key] = false;
+        mCurrentStateKeyboard[key] = false;
     }
 
 }
 
 void KitEngine::Core::Input::OnMouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
 
-    mMouseButton = button;
-    mMouseAction = action;
+    memcpy(mPreviousStateMouse, mCurrentStateMouse, 8);
+
+    if(action == GLFW_PRESS)
+    {
+        mCurrentStateMouse[button] = true;
+    }
+    else if(action == GLFW_RELEASE)
+    {
+        mCurrentStateMouse[button] = false;
+    }
 
 }
 
@@ -69,39 +75,42 @@ void KitEngine::Core::Input::OnScrollCallback(GLFWwindow *window, double xoffset
 bool KitEngine::Core::Input::GetKey(KitEngine::Core::KeyCode keyCode) {
 
     int key = static_cast<int>(keyCode);
-    return mCurrentState[key];
+    return mCurrentStateKeyboard[key];
 
 }
 
 bool KitEngine::Core::Input::GetKeyDown(KitEngine::Core::KeyCode keyCode) {
 
     int key = static_cast<int>(keyCode);
-    return mCurrentState[key] && !mPreviousState[key];
+    return mCurrentStateKeyboard[key] && !mPreviousStateKeyboard[key];
 
 }
 
 bool KitEngine::Core::Input::GetKeyUp(KitEngine::Core::KeyCode keyCode) {
 
     int key = static_cast<int>(keyCode);
-    return mPreviousState[key] && !mCurrentState[key];
+    return mPreviousStateKeyboard[key] && !mCurrentStateKeyboard[key];
 
 }
 
 bool KitEngine::Core::Input::GetMouseButton(KitEngine::Core::MouseButton mouseButton) {
 
-    return static_cast<MouseButton>(mMouseButton) == mouseButton;
+    int mouse = static_cast<int>(mouseButton);
+    return mCurrentStateMouse[mouse];
 
 }
 
 bool KitEngine::Core::Input::GetMouseDown(KitEngine::Core::MouseButton mouseButton) {
 
-    return mMouseAction == GLFW_PRESS && static_cast<MouseButton>(mMouseButton) == mouseButton;
+    int mouse = static_cast<int>(mouseButton);
+    return mCurrentStateMouse[mouse] && !mPreviousStateMouse[mouse];
 
 }
 
 bool KitEngine::Core::Input::GetMouseUp(KitEngine::Core::MouseButton mouseButton) {
 
-    return mMouseAction == GLFW_RELEASE && static_cast<MouseButton>(mMouseButton) == mouseButton;
+    int mouse = static_cast<int>(mouseButton);
+    return mPreviousStateMouse[mouse] && !mCurrentStateMouse[mouse];
 
 }
 
