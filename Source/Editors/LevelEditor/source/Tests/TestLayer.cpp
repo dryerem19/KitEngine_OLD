@@ -107,7 +107,7 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt) {
 
 void LevelEditor::Tests::TestLayer::OnUIRender() {
     // Docking Window
-    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
+    Docking();
 
     // Main Menu Bar
     if(ImGui::BeginMainMenuBar())
@@ -297,10 +297,68 @@ void LevelEditor::Tests::TestLayer::ShowAbout(bool* close) {
     if(close)
     {
         ImGui::SetNextWindowSize(ImVec2(250,250));
-        ImGui::Begin("About", close, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-        ImGui::Text("Имя Product: KitEngine");
+        ImGui::Begin("About", close, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking);
+        ImGui::Text("Name Product: KitEngine");
         ImGui::Text("Develepers: dryerem19, EvgehaName");
         ImGui::End();
     }
+
+}
+
+void LevelEditor::Tests::TestLayer::Docking() {
+
+    ImGuiViewport* viewport = ImGui::GetMainViewport();
+    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+
+    ImGui::SetNextWindowPos(viewport->WorkPos);
+    ImGui::SetNextWindowSize(viewport->WorkSize);
+    ImGui::SetNextWindowViewport(viewport->ID);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
+
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+    ImGui::Begin("MenuPanel", nullptr, window_flags);
+
+
+    ImGui::PopStyleVar(3);
+
+    ImGui::DockSpace(ImGui::GetID("DockSpace"), ImVec2(0.0f, 0.0f), dockspace_flags);
+
+    if(ImGui::BeginMenuBar())
+    {
+        if(ImGui::MenuItem(ICON_FA_CIRCLE_ARROW_LEFT))
+        {
+
+        }
+        if(ImGui::MenuItem(ICON_FA_CIRCLE_ARROW_RIGHT))
+        {
+
+        }
+        if(ImGui::MenuItem(ICON_FA_ARROW_POINTER))
+        {
+
+        }
+        if(ImGui::MenuItem(ICON_FA_ARROWS_UP_DOWN_LEFT_RIGHT))
+        {
+
+        }
+        if(ImGui::MenuItem(ICON_FA_ROTATE))
+        {
+
+        }
+        if(ImGui::MenuItem(ICON_FA_UP_RIGHT_FROM_SQUARE))
+        {
+
+        }
+        ImGui::EndMenuBar();
+    }
+
+    ImGui::End();
 
 }

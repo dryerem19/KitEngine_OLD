@@ -69,7 +69,10 @@ namespace LevelEditor::Tests
 
         void DoMovement();
         void OnLoadModel(std::string filepath);
+
+        // UI Window
         void ShowAbout(bool* close);
+        void Docking();
     };
 }
 
