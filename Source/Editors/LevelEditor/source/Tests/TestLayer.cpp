@@ -91,6 +91,7 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
 }
 
 void LevelEditor::Tests::TestLayer::OnRender(double dt) {
+    frameBuffer.Bind();
     Render::Renderer::Clear();
     if(isModelLoaded == true){
 
@@ -103,12 +104,15 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt) {
         }
         mModel->mVertexArray.Unbind();
     }
+
+    frameBuffer.Unbind();
+    Render::Renderer::Clear();
 }
 
 void LevelEditor::Tests::TestLayer::OnUIRender() {
     // Docking Window
     Docking();
-
+    Viewport();
     // Main Menu Bar
     if(ImGui::BeginMainMenuBar())
     {
@@ -308,7 +312,7 @@ void LevelEditor::Tests::TestLayer::ShowAbout(bool* close) {
 void LevelEditor::Tests::TestLayer::Docking() {
 
     ImGuiViewport* viewport = ImGui::GetMainViewport();
-    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+    static ImGuiDockNodeFlags dockspace_flags;
 
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 
@@ -361,4 +365,22 @@ void LevelEditor::Tests::TestLayer::Docking() {
 
     ImGui::End();
 
+}
+
+void LevelEditor::Tests::TestLayer::Viewport() {
+    uint32_t backTexture = frameBuffer.GetTextureRenderID();
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0,0));
+    ImGui::Begin("Viewport");
+    {
+        ImVec2 vMin = ImGui::GetWindowContentRegionMin();
+        ImVec2 vMax = ImGui::GetWindowContentRegionMax();
+        vMin.x += ImGui::GetWindowPos().x;
+        vMin.y += ImGui::GetWindowPos().y;
+        vMax.x += ImGui::GetWindowPos().x;
+        vMax.y += ImGui::GetWindowPos().y;
+        ImGui::GetWindowDrawList()->AddImage((ImTextureID)backTexture, vMin, vMax, ImVec2(0,1), ImVec2(1,0));
+    }
+    ImGui::PopStyleVar(1);
+    ImGui::End();
 }
