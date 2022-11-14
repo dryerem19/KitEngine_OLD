@@ -58,6 +58,8 @@ namespace LevelEditor::Tests
         GLfloat lastX =  800  / 2.0;
         GLfloat lastY =  600 / 2.0;
 
+        Render::FrameBuffer frameBuffer;
+
     public:
         TestLayer() = default;
 
@@ -73,6 +75,8 @@ namespace LevelEditor::Tests
         // UI Window
         void ShowAbout(bool* close);
         void Docking();
+        void Viewport();
+
     };
 }
 
