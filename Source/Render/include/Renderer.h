@@ -17,6 +17,11 @@
 
 namespace Render
 {
+    enum class WireframeMode{
+        Vertices    = GL_POINT,
+        Edge        = GL_LINE,
+        Polygon     = GL_FILL
+    };
     class Renderer
     {
     private:
@@ -39,6 +44,11 @@ namespace Render
         static void Clear()
         {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        }
+
+        static void Wireframe(WireframeMode mode)
+        {
+            glPolygonMode(GL_FRONT_AND_BACK, (GLenum)mode);
         }
     };
 }
