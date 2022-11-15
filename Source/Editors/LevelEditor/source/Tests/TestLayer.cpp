@@ -94,7 +94,6 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt) {
     frameBuffer.Bind();
     Render::Renderer::Clear();
     if(isModelLoaded == true){
-
         mTextures[0].Enable();
         mModel->mVertexArray.Bind();
         for (auto& mesh : mModel->mMeshes) {
@@ -359,6 +358,23 @@ void LevelEditor::Tests::TestLayer::Docking() {
         if(ImGui::MenuItem(ICON_FA_UP_RIGHT_FROM_SQUARE))
         {
 
+        }
+        ImGui::Separator();
+        if(ImGui::BeginMenu(ICON_FA_DRAW_POLYGON))
+        {
+            if(ImGui::MenuItem(ICON_FA_CIRCLE " Vertices"))
+            {
+                Render::Renderer::Wireframe(Render::WireframeMode::Vertices);
+            }
+            if(ImGui::MenuItem(ICON_FA_SLASH " Edge"))
+            {
+                Render::Renderer::Wireframe(Render::WireframeMode::Edge);
+            }
+            if(ImGui::MenuItem(ICON_FA_SQUARE " Polygon"))
+            {
+                Render::Renderer::Wireframe(Render::WireframeMode::Polygon);
+            }
+            ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
     }
