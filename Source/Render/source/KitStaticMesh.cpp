@@ -55,7 +55,7 @@ void Render::KitStaticMesh::Init(const std::string& filepath)
 void Render::KitStaticMesh::Init(const std::vector<KitVertex>& vertices, const std::vector<uint32_t>&  indices)
 {
     // Инициализация буфера вершин
-    mVertexBuffer.Init(vertices.data(), vertices.size());
+    mVertexBuffer.Init(vertices.data(), vertices.size() * sizeof(vertices[0]));
 
     // Инициализация слоя буфера
     VertexBufferLayout bufferLayout;

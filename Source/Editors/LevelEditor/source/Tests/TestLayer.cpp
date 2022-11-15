@@ -89,9 +89,6 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
         mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, glm::value_ptr(view));
         mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, glm::value_ptr(projection));
 
-
-        mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
-                                     glm::value_ptr(mTransform));
     }
 
 }
@@ -103,14 +100,14 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt)
 
     if(isModelLoaded == true){
 
-        //mTextures[0].Enable();
         for (auto& mesh : mNanoMesh)
         {
             mesh->mMaterial.diffuseTextures[0].Bind();
+            mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
+                    glm::value_ptr(mesh->mTransform.GetTransform()));
             Render::Renderer::Draw(mesh->mVertexArray, mesh->mIndexBuffer);
             mesh->mMaterial.diffuseTextures[0].Unbind();
         }
-        //mTextures[0].Disable();
 
         // mTextures[0].Enable();
         // mModel->mVertexArray.Bind();

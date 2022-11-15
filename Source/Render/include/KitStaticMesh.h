@@ -2,6 +2,7 @@
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "KitMaterial.h"
+#include "KitTransform.h"
 #include "KitVertex.h"
 
 namespace Render
@@ -12,6 +13,7 @@ namespace Render
         VertexArray  mVertexArray;
         VertexBuffer mVertexBuffer;
         IndexBuffer  mIndexBuffer;
+        KitTransform mTransform;
 
         // Дочерние меши
         std::vector<std::shared_ptr<KitStaticMesh>> mChildren;

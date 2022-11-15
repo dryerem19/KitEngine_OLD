@@ -42,8 +42,10 @@ namespace Render
             GLCall(glBindVertexArray(0));
 
             varray.Bind();
-            //ibuffer.Bind();
+            ibuffer.Bind();
             GLCall(glDrawElements(GL_TRIANGLES, ibuffer.GetCount(), GL_UNSIGNED_INT, nullptr));
+            varray.Unbind();
+            ibuffer.Unbind();
         }
 
         static void Clear()
