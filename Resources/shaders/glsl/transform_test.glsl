@@ -9,26 +9,24 @@ uniform mat4 uTransform;
 uniform mat4 uView;
 uniform mat4 uProjection;
 
-
 out vec2 vTexcoord;
 
 void main()
 {
-    gl_Position = uProjection * uView * uTransform * vec4(position, 1.0f);
     vTexcoord = texcoord;
+    gl_Position = uProjection * uView * uTransform * vec4(position, 1.0);
 }
 
 #shader fragment
 #version 410 core
 
-layout(location = 0) out vec4 color;
+layout(location = 0) out vec4 OutColor;
 
-uniform sampler2D uTexture;
+uniform sampler2D uTextureDiffuse;
 
 in vec2 vTexcoord;
 
 void main()
 {
-    vec4 texcolor = texture(uTexture, vTexcoord);
-    color = texcolor;
+    OutColor = texture(uTextureDiffuse, vTexcoord);
 }
