@@ -13,6 +13,7 @@ void kitModelLoader::Loader::Import(const std::filesystem::path& filepath) {
                                aiProcess_ValidateDataStructure      |
                                aiProcess_CalcTangentSpace           |
                                aiProcess_RemoveRedundantMaterials   |
+                               aiProcess_FlipUVs                    |
                                aiProcess_GenUVCoords                |
                                aiProcess_TransformUVCoords          |
                                aiProcess_Triangulate                |

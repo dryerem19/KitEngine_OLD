@@ -1,25 +1,25 @@
 //
 // Created by dryerem19 on 10/31/22.
 //
-#include "../pch/RenderPch.h"
-#include "Vertex.h"
+#include "RenderPch.h"
+#include "KitVertex.h"
 
-Render::Vertex::Vertex(const glm::vec3 &position)
+Render::KitVertex::KitVertex(const glm::vec3 &position)
         : mPosition(position) {
 
 }
 
-Render::Vertex::Vertex(const glm::vec3 &position, const glm::vec2 &texcoord)
+Render::KitVertex::KitVertex(const glm::vec3 &position, const glm::vec2 &texcoord)
         : mPosition(position), mTexcoord(texcoord) {
 
 }
 
-Render::Vertex::Vertex(const glm::vec3 &position, const glm::vec2 &texcoord, const glm::vec3 &normal)
+Render::KitVertex::KitVertex(const glm::vec3 &position, const glm::vec2 &texcoord, const glm::vec3 &normal)
     :  mPosition(position), mTexcoord(texcoord), mNormal(normal) {
 
 }
 
-bool Render::Vertex::operator==(const Render::Vertex &other) const {
+bool Render::KitVertex::operator==(const Render::KitVertex &other) const {
 
     return this->mPosition == other.mPosition
         && this->mTexcoord == other.mTexcoord
@@ -27,7 +27,7 @@ bool Render::Vertex::operator==(const Render::Vertex &other) const {
 
 }
 
-bool Render::Vertex::operator!=(const Render::Vertex &other) const {
+bool Render::KitVertex::operator!=(const Render::KitVertex &other) const {
 
     return this->mPosition != other.mPosition
         && this->mTexcoord != other.mTexcoord

@@ -98,9 +98,9 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt) {
         mTextures[0].Enable();
         mModel->mVertexArray.Bind();
         for (auto& mesh : mModel->mMeshes) {
-            //mTextures[mesh.MaterialIndex].Enable();
+            mTextures[mesh.MaterialIndex].Enable();
             Render::Renderer::DrawIndexed(mesh.NumIndices, mesh.BaseIndex, mesh.BaseVertex);
-            //mTextures[mesh.MaterialIndex].Disable();
+            mTextures[mesh.MaterialIndex].Disable();
         }
         mModel->mVertexArray.Unbind();
     }
@@ -241,23 +241,23 @@ void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
     // или назначить материал по умолчанию
 
     // Выводим путь до текстуры и создаём текстуру
-    /*for (auto& material : loader.mMaterials) {
+    for (auto& material : loader.mMaterials) {
         for (auto& texture : material.mTextures) {
             if (texture.TextureType == kitModelLoader::kitTextureType::Diffuse) {
                 mTextures.emplace_back(texture.Path);
                 std::cout << texture.Path << std::endl;
             }
         }
-    }*/
+    }
 
 
-    mTextures.emplace_back("../../Resources/models/nanosuit/body_dif.png");
+    //mTextures.emplace_back("../../Resources/models/nanosuit/body_dif.png");
 
 
     mVertexArray  = std::make_unique<Render::VertexArray>();
     mVertexBuffer = std::make_unique<Render::VertexBuffer>
             (loader.mVertices.data(), static_cast<unsigned int>(loader.mVertices.size() *
-                                                                sizeof(Render::Vertex)));
+                                                                sizeof(Render::KitVertex)));
 
     Render::VertexBufferLayout layout;
     layout.AddFloatElement(3);

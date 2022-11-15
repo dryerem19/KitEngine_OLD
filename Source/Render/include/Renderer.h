@@ -7,7 +7,7 @@
 #include "../pch/RenderPch.h"
 
 #include "Shader.h"
-#include "Vertex.h"
+#include "KitVertex.h"
 #include "Texture.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
