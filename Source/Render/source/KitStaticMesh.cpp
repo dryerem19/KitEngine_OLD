@@ -138,8 +138,8 @@ std::shared_ptr<Render::KitStaticMesh> Render::KitStaticMesh::ProcessAssimpMesh(
         std::filesystem::path directory = std::filesystem::path(filepath);
         directory.remove_filename();
         
-        // ОБрабатываем материал
-        material = this->ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], directory);
+        // Обрабатываем материал
+        this->ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], directory, material);
     }
 
     // Создаём новый меш
@@ -148,28 +148,26 @@ std::shared_ptr<Render::KitStaticMesh> Render::KitStaticMesh::ProcessAssimpMesh(
     kitMesh->mName = pMesh->mName.C_Str(); // Загружаем имя меша
     kitMesh->mMaterial = material; // Устанавливаем материал
 
-    std::cout << "ID: " << kitMesh->mVertexArray.GetId() << std::endl;
-
     // Возвращаем меш
     return kitMesh;
 }
 
-Render::KitMaterial Render::KitStaticMesh::ProcessAssimpMaterial(const aiMaterial* pMaterial, const std::string& directory)
+void Render::KitStaticMesh::ProcessAssimpMaterial(const aiMaterial* pMaterial, const std::string& directory, 
+    KitMaterial& kitMaterial)
 {
-    // Создаём новый материал
-    KitMaterial material;
-    material.mName = pMaterial->GetName().C_Str(); // Загружаем имя материала
-    material.diffuseTextures = this->LoadMaterialTextures(pMaterial, aiTextureType_DIFFUSE, directory); // Загружаем diffuse текстуры 
+    // Загружаем имя материала
+    kitMaterial.mName = pMaterial->GetName().C_Str();
 
-    // Возвращаем материал
-    return material;
+    // Загружаем diffuse текстуры 
+    kitMaterial.diffuseTextures = this->LoadMaterialTextures(pMaterial, aiTextureType_DIFFUSE, directory);
+
 }
 
-std::vector<Render::KitTexture> Render::KitStaticMesh::LoadMaterialTextures(const aiMaterial* pMaterial, aiTextureType type, 
-    const std::string& directory)
+std::vector<std::shared_ptr<Render::KitTexture>> Render::KitStaticMesh::LoadMaterialTextures(const aiMaterial* pMaterial, 
+    aiTextureType type, const std::string& directory)
 {
     // Создаём вектор под текстуры и резервируем место 
-    std::vector<KitTexture> textures;
+    std::vector<std::shared_ptr<KitTexture>> textures;
     textures.reserve(pMaterial->GetTextureCount(type));
 
     // Обходим все текстуры указанного типа
@@ -188,7 +186,7 @@ std::vector<Render::KitTexture> Render::KitStaticMesh::LoadMaterialTextures(cons
         filepath.concat(name.C_Str());
 
         // Добавляем текстуру в список текстур
-        textures.emplace_back(KitTexture(filepath, static_cast<KitTextureType>(type)));
+        textures.emplace_back(std::make_shared<KitTexture>(filepath, static_cast<KitTextureType>(type)));
     }
 
     // Возвращаем список загруженных текстур

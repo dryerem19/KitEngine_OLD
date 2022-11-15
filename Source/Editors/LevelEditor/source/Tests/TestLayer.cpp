@@ -102,11 +102,11 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt)
 
         for (auto& mesh : mNanoMesh)
         {
-            mesh->mMaterial.diffuseTextures[0].Bind();
+            mesh->mMaterial.diffuseTextures[0]->Bind();
             mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
                     glm::value_ptr(mesh->mTransform.GetTransform()));
             Render::Renderer::Draw(mesh->mVertexArray, mesh->mIndexBuffer);
-            mesh->mMaterial.diffuseTextures[0].Unbind();
+            mesh->mMaterial.diffuseTextures[0]->Unbind();
         }
 
         // mTextures[0].Enable();

@@ -92,7 +92,7 @@ namespace Render
         @param directory Директория с моделью
         @return Экземпляр класса KitMaterial
         */
-        KitMaterial ProcessAssimpMaterial(const aiMaterial* pMaterial, const std::string& directory);
+        void ProcessAssimpMaterial(const aiMaterial* pMaterial, const std::string& directory, KitMaterial& kitMaterial);
 
         /*
         @brief Загрузка текстур
@@ -101,7 +101,7 @@ namespace Render
         @param directory Директория с моделью
         @return Список текстур std::vector<KitTexture>
         */
-        std::vector<KitTexture> LoadMaterialTextures(const aiMaterial* pMaterial, aiTextureType type, 
+        std::vector<std::shared_ptr<KitTexture>> LoadMaterialTextures(const aiMaterial* pMaterial, aiTextureType type, 
             const std::string& directory);
     };
 }

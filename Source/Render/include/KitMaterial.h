@@ -7,6 +7,6 @@ namespace Render
     {
     public:
         std::string mName;
-        std::vector<KitTexture> diffuseTextures;
+        std::vector<std::shared_ptr<KitTexture>> diffuseTextures;
     };
 }
