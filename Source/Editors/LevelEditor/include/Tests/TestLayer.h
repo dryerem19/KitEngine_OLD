@@ -32,9 +32,11 @@ namespace LevelEditor::Tests
     {
     private:
         bool isModelLoaded = false;
-        std::unique_ptr<Render::VertexArray>  mVertexArray;
-        std::unique_ptr<Render::VertexBuffer> mVertexBuffer;
-        std::unique_ptr<Render::IndexBuffer>  mIndexBuffer;
+
+        Render::VertexArray  mVertexArray;
+        Render::VertexBuffer mVertexBuffer;
+        Render::IndexBuffer  mIndexBuffer;
+        
         std::unique_ptr<Render::Shader>       mShader;
         std::vector<Render::Texture>      mTextures;
 

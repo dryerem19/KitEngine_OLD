@@ -254,20 +254,20 @@ void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
     //mTextures.emplace_back("../../Resources/models/nanosuit/body_dif.png");
 
 
-    mVertexArray  = std::make_unique<Render::VertexArray>();
-    mVertexBuffer = std::make_unique<Render::VertexBuffer>
+    mVertexBuffer.Init
             (loader.mVertices.data(), static_cast<unsigned int>(loader.mVertices.size() *
                                                                 sizeof(Render::KitVertex)));
+
+
 
     Render::VertexBufferLayout layout;
     layout.AddFloatElement(3);
     layout.AddFloatElement(3);
     layout.AddFloatElement(2);
 
-    mVertexArray->AddBuffer(*mVertexBuffer, layout);
+    mVertexArray.AddBuffer(mVertexBuffer, layout);
 
-    mIndexBuffer = std::make_unique<Render::IndexBuffer>(loader.mIndices.data(),
-                                                         loader.mIndices.size());
+    mIndexBuffer.Init(loader.mIndices.data(), loader.mIndices.size());
 
     // mModel = std::make_unique<KitEngine::Graphics::Components::ModelComponent>(*mVertexArray, *mIndexBuffer,
     //                                                                            loader.mMeshes);
@@ -277,7 +277,7 @@ void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
     mShader->SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
 
     mModel = std::make_unique<ModelComponent>(
-            *mVertexArray, *mIndexBuffer, loader.mMeshes
+            mVertexArray, mIndexBuffer, loader.mMeshes
     );
 
 

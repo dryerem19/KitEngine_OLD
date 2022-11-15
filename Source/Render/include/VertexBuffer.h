@@ -19,9 +19,10 @@ namespace Render
     private:
         uint32_t mVertexBufferId;
     public:
-        VertexBuffer(const void* src, unsigned int size);
+        VertexBuffer() = default;
         ~VertexBuffer();
 
+        void Init(const void* src, const uint32_t size);
         void Bind() const;
         void Unbind() const;
     };
