@@ -60,8 +60,8 @@ void Render::KitStaticMesh::Init(const std::vector<KitVertex>& vertices, const s
     // Инициализация слоя буфера
     VertexBufferLayout bufferLayout;
     bufferLayout.AddFloatElement(3);
-    bufferLayout.AddFloatElement(2);
     bufferLayout.AddFloatElement(3);
+    bufferLayout.AddFloatElement(2);
 
     // Добавляем буфер в буфер вершин
     mVertexArray.AddBuffer(mVertexBuffer, bufferLayout);
@@ -109,8 +109,8 @@ std::shared_ptr<Render::KitStaticMesh> Render::KitStaticMesh::ProcessAssimpMesh(
         // Заносим вершину в вектор
         vertices.emplace_back(KitVertex{
             glm::vec3(pos.x, pos.y, pos.z),
-            glm::vec2(tex.z, tex.y),
-            glm::vec3(nor.x, nor.y, nor.z)
+            glm::vec3(nor.x, nor.y, nor.z),
+            glm::vec2(tex.z, tex.y)
         });
     }
 

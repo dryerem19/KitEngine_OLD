@@ -10,12 +10,12 @@ namespace Render
 {
     struct KitVertex {
         glm::vec3 mPosition { };
-        glm::vec2 mTexcoord { };
         glm::vec3 mNormal   { };
+        glm::vec2 mTexcoord { };
 
         explicit KitVertex(const glm::vec3& position);
-        explicit KitVertex(const glm::vec3& position, const glm::vec2& texcoord);
-        explicit KitVertex(const glm::vec3& position, const glm::vec2& texcoord, const glm::vec3& normal);
+        explicit KitVertex(const glm::vec3& position, const glm::vec3& normal);
+        explicit KitVertex(const glm::vec3& position, const glm::vec3& normal, const glm::vec2& texcoord);
 
         bool operator==(const KitVertex& other) const;
         bool operator!=(const KitVertex& other) const;

@@ -9,12 +9,12 @@ Render::KitVertex::KitVertex(const glm::vec3 &position)
 
 }
 
-Render::KitVertex::KitVertex(const glm::vec3 &position, const glm::vec2 &texcoord)
-        : mPosition(position), mTexcoord(texcoord) {
+Render::KitVertex::KitVertex(const glm::vec3 &position, const glm::vec3 &normal)
+        : mPosition(position), mNormal(normal) {
 
 }
 
-Render::KitVertex::KitVertex(const glm::vec3 &position, const glm::vec2 &texcoord, const glm::vec3 &normal)
+Render::KitVertex::KitVertex(const glm::vec3 &position, const glm::vec3 &normal, const glm::vec2 &texcoord)
     :  mPosition(position), mTexcoord(texcoord), mNormal(normal) {
 
 }
