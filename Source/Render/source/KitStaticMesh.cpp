@@ -19,7 +19,12 @@ Render::KitStaticMesh::KitStaticMesh(const std::vector<KitVertex>& vertices,
 
 Render::KitStaticMesh::KitStaticMesh(const std::string& filepath)
 {
-    // TODO: add assert filepath empty?
+    this->Init(filepath);
+}
+
+void Render::KitStaticMesh::Init(const std::string& filepath)
+{
+        // TODO: add assert filepath empty?
 
     // Создаём объект импортера данных assimp'а
     Assimp::Importer importer;
@@ -82,7 +87,7 @@ void Render::KitStaticMesh::ProcessAssimpNode(const aiNode* pNode, const aiScene
     }
 }
 
-Render::KitStaticMesh Render::KitStaticMesh::ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene, 
+std::shared_ptr<Render::KitStaticMesh> Render::KitStaticMesh::ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene, 
     const std::string& filepath)
 {
     const aiVector3D zero3D(0.0f, 0.0f, 0.0f);
@@ -138,10 +143,12 @@ Render::KitStaticMesh Render::KitStaticMesh::ProcessAssimpMesh(const aiMesh* pMe
     }
 
     // Создаём новый меш
-    KitStaticMesh kitMesh;
-    kitMesh.Init(vertices, indices); // Инициализируем его
-    kitMesh.mName = pMesh->mName.C_Str(); // Загружаем имя меша
-    kitMesh.mMaterial = material; // Устанавливаем материал
+    std::shared_ptr<KitStaticMesh> kitMesh = std::make_shared<KitStaticMesh>();
+    kitMesh->Init(vertices, indices); // Инициализируем его
+    kitMesh->mName = pMesh->mName.C_Str(); // Загружаем имя меша
+    kitMesh->mMaterial = material; // Устанавливаем материал
+
+    std::cout << "ID: " << kitMesh->mVertexArray.GetId() << std::endl;
 
     // Возвращаем меш
     return kitMesh;

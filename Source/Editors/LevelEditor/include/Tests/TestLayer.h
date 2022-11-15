@@ -33,12 +33,14 @@ namespace LevelEditor::Tests
     private:
         bool isModelLoaded = false;
 
-        Render::VertexArray  mVertexArray;
-        Render::VertexBuffer mVertexBuffer;
-        Render::IndexBuffer  mIndexBuffer;
+        //Render::VertexArray  mVertexArray;
+        //Render::VertexBuffer mVertexBuffer;
+        //Render::IndexBuffer  mIndexBuffer;
         
         std::unique_ptr<Render::Shader>       mShader;
         std::vector<Render::Texture>      mTextures;
+
+        Render::KitStaticMesh mNanoMesh;
 
        //Texture testTexture = Texture("res/textures/no_texture.png");
 //       Texture testTexture = Texture("res/models/nanosuit/body_dif.png");

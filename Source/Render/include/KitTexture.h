@@ -23,9 +23,11 @@ namespace Render
     public:
         KitTexture(const std::string& path, KitTextureType type);
         ~KitTexture();
+
         KitTextureType GetType() const;
         std::string GetPath() const;
         uint32_t GetId() const;
+
         void Bind(uint32_t slotNumber = 0) const;
         void Unbind();
     };

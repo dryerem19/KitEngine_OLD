@@ -14,7 +14,7 @@ namespace Render
         IndexBuffer  mIndexBuffer;
 
         // Дочерние меши
-        std::vector<KitStaticMesh> mChildren;
+        std::vector<std::shared_ptr<KitStaticMesh>> mChildren;
 
         // Материал меша
         KitMaterial mMaterial;
@@ -47,14 +47,25 @@ namespace Render
         */
         KitStaticMesh(const std::string& filepath);
 
-    private:
+        /*
+        @brief Метод инициализация меша 
+        @param filepath Путь к модели на диске для импорта 
+        */
+        void Init(const std::vector<KitVertex>& vertices, const std::vector<uint32_t>&  indices);
 
         /*
         @brief Метод инициализация меша 
-        @param vertices Данные вершин
-        @param indices Данные индексов
+        @param filepath Путь к модели на диске для импорта 
         */
-        void Init(const std::vector<KitVertex>& vertices, const std::vector<uint32_t>&  indices);
+        void Init(const std::string& filepath);
+
+        std::vector<std::shared_ptr<Render::KitStaticMesh>>::iterator begin() { return mChildren.begin(); }
+        std::vector<std::shared_ptr<Render::KitStaticMesh>>::iterator end() { return mChildren.end(); }
+        std::vector<std::shared_ptr<Render::KitStaticMesh>>::const_iterator cbegin() { return mChildren.cbegin(); }
+        std::vector<std::shared_ptr<Render::KitStaticMesh>>::const_iterator cend() { return mChildren.cend(); }
+
+
+    private:
 
         /*
         @brief Рекурсивная обработка нод сцены assimp'а 
@@ -71,7 +82,7 @@ namespace Render
         @param filepath Путь к файлу модели
         @return Экземпляр класса KitStaticMesh
         */
-        KitStaticMesh ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene, const std::string& filepath);
+        std::shared_ptr<KitStaticMesh> ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene, const std::string& filepath);
 
         /*
         @brief Обработка материала assimp'а

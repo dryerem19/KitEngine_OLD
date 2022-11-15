@@ -43,4 +43,8 @@ namespace KitEngine
         const inline WindowProps& GetProps() { return mProps; }
         [[nodiscard]] inline GLFWwindow* GetWindowPointer() const { return m_pWindow; }
     };
+
+    void OnDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, 
+                    const char *message, 
+                    const void *userParam);
 }

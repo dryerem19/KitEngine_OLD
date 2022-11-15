@@ -37,6 +37,15 @@ namespace Render
                     baseVertex);
         }
 
+        static void Draw(const VertexArray& varray, const IndexBuffer& ibuffer)
+        {
+            GLCall(glBindVertexArray(0));
+
+            varray.Bind();
+            //ibuffer.Bind();
+            GLCall(glDrawElements(GL_TRIANGLES, ibuffer.GetCount(), GL_UNSIGNED_INT, nullptr));
+        }
+
         static void Clear()
         {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

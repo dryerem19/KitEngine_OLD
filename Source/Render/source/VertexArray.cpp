@@ -22,6 +22,8 @@ Render::VertexArray::~VertexArray() {
 
     GLCall(glDeleteVertexArrays(1, &mVertexArrayId));
 
+     std::cout << "Удален ID: " << mVertexArrayId << std::endl;
+
 }
 
 void Render::VertexArray::AddBuffer(const VertexBuffer &vertexBuffer,
@@ -49,6 +51,8 @@ void Render::VertexArray::Bind() const {
 }
 
 void Render::VertexArray::Unbind() {
+
+    
 
     GLCall(glBindVertexArray(0));
 
