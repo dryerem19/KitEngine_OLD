@@ -10,6 +10,7 @@
 #include <fstream>
 #include <cstdint>
 #include <string>
+#include <list>
 #include <filesystem>
 
 #include <sail/sail-c++/sail-c++.h>

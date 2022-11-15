@@ -14,6 +14,7 @@
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "FrameBuffer.h"
+#include "KitStaticMesh.h"
 
 namespace Render
 {

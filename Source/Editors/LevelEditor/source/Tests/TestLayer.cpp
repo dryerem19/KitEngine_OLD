@@ -10,7 +10,13 @@
 
 #include <OS/FileDialog.h>
 
+#include <KitStaticMesh.h>
+
 void LevelEditor::Tests::TestLayer::OnStart() {
+
+    Render::KitStaticMesh mesh("../../Resources/models/nanosuit/nanosuit.obj");
+    
+    int a = 10;
 
     /*kitModelLoader::Loader loader;
     loader.Import("../../Resources/models/nanosuit/nanosuit.obj");
