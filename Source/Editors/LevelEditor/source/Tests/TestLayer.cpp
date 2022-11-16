@@ -66,7 +66,11 @@ void LevelEditor::Tests::TestLayer::OnUIRender() {
     // Docking Window
     Docking();
     Viewport();
-
+    ImGui::Begin("Scene Tree");
+    {
+        SceneTree();
+    }
+    ImGui::End();
     // Main Menu Bar
     if(ImGui::BeginMainMenuBar())
     {
@@ -327,4 +331,23 @@ std::string LevelEditor::Tests::TestLayer::FileDialog(){
         isCheckFileDialog = false;
     }
     return filepath;
+}
+
+void LevelEditor::Tests::TestLayer::SceneTree()
+{
+    if(isModelLoaded)
+    {
+        if(ImGui::TreeNode(mNanoModel.mName.c_str()))
+        {
+            for(auto& mesh : mNanoModel)
+            {
+                ImGuiTreeNodeFlags flags = mesh->mChildren.empty() ? ImGuiTreeNodeFlags_Leaf : 0;
+                if(ImGui::TreeNodeEx(std::string(ICON_FA_CUBE + mesh->mName).c_str(), flags))
+                {
+                    ImGui::TreePop();
+                }
+            }
+            ImGui::TreePop();
+        }
+    }
 }
