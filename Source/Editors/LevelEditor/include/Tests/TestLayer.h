@@ -22,6 +22,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
+#include <ImGuiFileDialog.h>
 
 #include <KitModel.h>
 
@@ -54,6 +55,7 @@ namespace LevelEditor::Tests
         Render::FrameBuffer frameBuffer;
 
         bool isCheckMouse = true;
+        bool isCheckFileDialog = false;
 
     public:
         TestLayer() = default;
@@ -71,6 +73,7 @@ namespace LevelEditor::Tests
         void ShowAbout(bool* close);
         void Docking();
         void Viewport();
+        std::string FileDialog();
 
     };
 }
