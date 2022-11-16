@@ -104,13 +104,14 @@ std::shared_ptr<Render::KitStaticMesh> Render::KitStaticMesh::ProcessAssimpMesh(
         const aiVector3D& nor = pMesh->mNormals[iVertex];
 
         // Если у меша нет текстурных координат, назначаем нулевые текстурные координаты
-        const aiVector3D& tex = pMesh->HasTextureCoords(0) ? pMesh->mTextureCoords[0][iVertex] : zero3D;
+        const aiVector3D& tex = pMesh->HasTextureCoords(0) 
+            ? pMesh->mTextureCoords[0][iVertex] : zero3D;
 
         // Заносим вершину в вектор
         vertices.emplace_back(KitVertex{
             glm::vec3(pos.x, pos.y, pos.z),
             glm::vec3(nor.x, nor.y, nor.z),
-            glm::vec2(tex.z, tex.y)
+            glm::vec2(tex.x, tex.y)
         });
     }
 
