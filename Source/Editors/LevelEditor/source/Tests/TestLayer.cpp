@@ -12,67 +12,11 @@
 
 #include <KitStaticMesh.h>
 
-void LevelEditor::Tests::TestLayer::OnStart() {
-
-    //Render::KitStaticMesh mesh("../../Resources/models/nanosuit/nanosuit.obj");
-    
-    //int a = 10;
-
-    /*kitModelLoader::Loader loader;
-    loader.Import("../../Resources/models/nanosuit/nanosuit.obj");
-    std::cout << std::filesystem::current_path() << std::endl;
-
-    // TODO: Текстур может и не быть вовсе, это стоит учесть и в таком случае грузить текстуру по умолчанию
-    // или назначить материал по умолчанию
-
-    // Выводим путь до текстуры и создаём текстуру
-     *//*for (auto& material : loader.mMaterials) {
-         for (auto& texture : material.mTextures) {
-             if (texture.TextureType == kitModelLoader::kitTextureType::Diffuse) {
-                 mTextures.emplace_back(texture.Path);
-                 std::cout << texture.Path << std::endl;
-             }
-         }
-     }*//*
-
-
-    mTextures.emplace_back("../../Resources/models/nanosuit/body_dif.png");
-
-
-     mVertexArray  = std::make_unique<Render::VertexArray>();
-     mVertexBuffer = std::make_unique<Render::VertexBuffer>
-             (loader.mVertices.data(), static_cast<unsigned int>(loader.mVertices.size() *
-             sizeof(Render::Vertex)));
-
-     mVertexArray->AddBuffer(*mVertexBuffer, Render::Vertex::mLayout);
-
-     mIndexBuffer = std::make_unique<Render::IndexBuffer>(loader.mIndices.data(),
-                                                                       loader.mIndices.size());
-
-    // mModel = std::make_unique<KitEngine::Graphics::Components::ModelComponent>(*mVertexArray, *mIndexBuffer,
-    //                                                                            loader.mMeshes);
-
+void LevelEditor::Tests::TestLayer::OnStart() 
+{
     mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
     mShader->Enable();
-    mShader->SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
-
-    mModel = std::make_unique<ModelComponent>(
-            *mVertexArray, *mIndexBuffer, loader.mMeshes
-    );
-
-
-    // DEPRECATED
-    //    mTexture = std::make_unique<KitEngine::Graphics::Texture>("res/textures/no_texture.png");
-    //    mTexture->Enable();
-
-    //testTexture.Enable();
-
-   //mTextures[0].Enable();
-
-    mShader->SetUniform1i("uTexture", 0);
-
-    mTransform = glm::mat4(1.0f);*/
-
+    mTransform = glm::mat4(1.0f);
 }
 
 void LevelEditor::Tests::TestLayer::OnUpdate() {
@@ -109,15 +53,6 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt)
             Render::Renderer::Draw(mesh->mVertexArray, mesh->mIndexBuffer);
             mesh->mMaterial.diffuseTextures[0]->Unbind();
         }
-
-        // mTextures[0].Enable();
-        // mModel->mVertexArray.Bind();
-        // for (auto& mesh : mModel->mMeshes) {
-        //     mTextures[mesh.MaterialIndex].Enable();
-        //     Render::Renderer::DrawIndexed(mesh.NumIndices, mesh.BaseIndex, mesh.BaseVertex);
-        //     mTextures[mesh.MaterialIndex].Disable();
-        // }
-        // mModel->mVertexArray.Unbind();
     }
 
     frameBuffer.Unbind();
@@ -249,69 +184,7 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
 
 void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
 
-
-
     mNanoMesh.Init(filepath);
-
-
-    // kitModelLoader::Loader loader;
-    // loader.Import(filepath);
-    // std::cout << std::filesystem::current_path() << std::endl;
-
-    // TODO: Текстур может и не быть вовсе, это стоит учесть и в таком случае грузить текстуру по умолчанию
-    // или назначить материал по умолчанию
-
-    // Выводим путь до текстуры и создаём текстуру
-    // for (auto& material : loader.mMaterials) {
-    //     for (auto& texture : material.mTextures) {
-    //         if (texture.TextureType == kitModelLoader::kitTextureType::Diffuse) {
-    //             mTextures.emplace_back(texture.Path);
-    //             std::cout << texture.Path << std::endl;
-    //         }
-    //     }
-    // }
-
-
-    //mTextures.emplace_back("../../Resources/models/nanosuit/body_dif.png");
-
-
-    // mVertexBuffer.Init
-    //         (loader.mVertices.data(), static_cast<unsigned int>(loader.mVertices.size() *
-    //                                                             sizeof(Render::KitVertex)));
-
-
-
-    // Render::VertexBufferLayout layout;
-    // layout.AddFloatElement(3);
-    // layout.AddFloatElement(3);
-    // layout.AddFloatElement(2);
-
-    // mVertexArray.AddBuffer(mVertexBuffer, layout);
-
-    // mIndexBuffer.Init(loader.mIndices.data(), loader.mIndices.size());
-
-    // mModel = std::make_unique<KitEngine::Graphics::Components::ModelComponent>(*mVertexArray, *mIndexBuffer,
-    //                                                                            loader.mMeshes);
-
-    mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
-    mShader->Enable();
-    //mShader->SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
-
-    // mModel = std::make_unique<ModelComponent>(
-    //         mVertexArray, mIndexBuffer, loader.mMeshes
-    // );
-
-
-    // DEPRECATED
-    //    mTexture = std::make_unique<KitEngine::Graphics::Texture>("res/textures/no_texture.png");
-    //    mTexture->Enable();
-
-    //testTexture.Enable();
-
-    //mTextures[0].Enable();
-
-    mTransform = glm::mat4(1.0f);
-
     isModelLoaded = true;
 }
 
