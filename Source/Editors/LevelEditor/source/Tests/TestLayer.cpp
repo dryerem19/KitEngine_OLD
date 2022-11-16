@@ -46,12 +46,18 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt)
     {
         for (auto& mesh : mNanoMesh)
         {
-            mesh->mMaterial.diffuseTextures[0]->Bind();
+            if(!mesh->mMaterial.diffuseTextures.empty()){
+                mesh->mMaterial.diffuseTextures[0]->Bind();
+            }
+            
             mShader->SetUniform1i("uTextureDiffuse", 0);
             mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
                     glm::value_ptr(mesh->mTransform.GetTransform()));
             Render::Renderer::Draw(mesh->mVertexArray, mesh->mIndexBuffer);
-            mesh->mMaterial.diffuseTextures[0]->Unbind();
+            
+            if(!mesh->mMaterial.diffuseTextures.empty()){
+                mesh->mMaterial.diffuseTextures[0]->Unbind();
+            }
         }
     }
 
