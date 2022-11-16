@@ -14,6 +14,8 @@ namespace Render
         VertexArray  mVertexArray;
         VertexBuffer mVertexBuffer;
         IndexBuffer  mIndexBuffer;
+
+        std::vector<std::shared_ptr<KitStaticMesh>> mChildren; 
         
         // Материал меша
         KitMaterial mMaterial;

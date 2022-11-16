@@ -75,6 +75,8 @@ namespace LevelEditor::Tests
         void Viewport();
         std::string FileDialog();
 
+        void SceneTree();
+
     };
 }
 
