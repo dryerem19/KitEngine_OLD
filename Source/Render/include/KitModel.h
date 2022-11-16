@@ -2,10 +2,11 @@
 #include "KitStaticMesh.h"
 #include "KitMaterial.h"
 #include "KitVertex.h"
+#include "KitObject.h"
 
 namespace Render
 {
-    class KitModel
+    class KitModel : public KitObject
     {
     private:
         // @brief Список мешей модели

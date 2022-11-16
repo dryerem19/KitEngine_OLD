@@ -25,6 +25,9 @@ void Render::KitModel::Init(const std::string& filepath)
                                aiProcess_JoinIdenticalVertices      );
 
     // Обрабатываем все ноды сцены начиная с родительской
+    mName = std::filesystem::path(pScene->mRootNode->mName.C_Str())
+                                    .replace_extension("")
+                                    .string();
     this->ProcessAssimpNode(pScene->mRootNode, pScene, filepath);
     
     // TODO: add assert scene incompete

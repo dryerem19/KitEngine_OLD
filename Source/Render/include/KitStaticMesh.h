@@ -4,22 +4,19 @@
 #include "KitMaterial.h"
 #include "KitTransform.h"
 #include "KitVertex.h"
+#include "KitObject.h"
 
 namespace Render
 {
-    class KitStaticMesh
+    class KitStaticMesh : public KitObject
     {
     public:
         VertexArray  mVertexArray;
         VertexBuffer mVertexBuffer;
         IndexBuffer  mIndexBuffer;
-        KitTransform mTransform;
         
         // Материал меша
         KitMaterial mMaterial;
-
-        // Имя меша
-        std::string mName;
 
         /*
         Конструктор по умолчанию
