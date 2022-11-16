@@ -103,6 +103,7 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt)
         for (auto& mesh : mNanoMesh)
         {
             mesh->mMaterial.diffuseTextures[0]->Bind();
+            mShader->SetUniform1i("uTextureDiffuse", 0);
             mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
                     glm::value_ptr(mesh->mTransform.GetTransform()));
             Render::Renderer::Draw(mesh->mVertexArray, mesh->mIndexBuffer);
@@ -271,7 +272,7 @@ void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
     // }
 
 
-    mTextures.emplace_back("../../Resources/models/nanosuit/body_dif.png");
+    //mTextures.emplace_back("../../Resources/models/nanosuit/body_dif.png");
 
 
     // mVertexBuffer.Init
@@ -294,7 +295,7 @@ void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
 
     mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
     mShader->Enable();
-    mShader->SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
+    //mShader->SetUniform4f("uColor", 0.3, 0.8, 0.8f, 1.0f);
 
     // mModel = std::make_unique<ModelComponent>(
     //         mVertexArray, mIndexBuffer, loader.mMeshes
@@ -308,8 +309,6 @@ void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
     //testTexture.Enable();
 
     //mTextures[0].Enable();
-
-    mShader->SetUniform1i("uTexture", 0);
 
     mTransform = glm::mat4(1.0f);
 

@@ -35,13 +35,12 @@ void Render::KitStaticMesh::Init(const std::string& filepath)
                                aiProcess_GenSmoothNormals           |
                                aiProcess_ValidateDataStructure      |
                                aiProcess_CalcTangentSpace           |
+                               aiProcess_FlipUVs                    |
                                aiProcess_RemoveRedundantMaterials   |
                                aiProcess_GenUVCoords                |
-                               aiProcess_TransformUVCoords          |
                                aiProcess_Triangulate                |
                                aiProcess_OptimizeMeshes             |
-                               aiProcess_JoinIdenticalVertices      |
-                               aiProcess_SortByPType                );
+                               aiProcess_JoinIdenticalVertices      );
 
     // Обрабатываем все ноды сцены начиная с родительской
     this->ProcessAssimpNode(pScene->mRootNode, pScene, filepath);
