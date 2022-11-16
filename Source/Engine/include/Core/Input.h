@@ -169,7 +169,7 @@ namespace KitEngine::Core
         static bool GetMouseDown(MouseButton mouseButton);
         static bool GetMouseUp(MouseButton mouseButton);
         static void SetInputMode(CursorMode mode, CursorState state);
-        static void SetCursorPos(glm::vec2 pos);
+        static void SetCursorPos(double x, double y);
 
 
     private:

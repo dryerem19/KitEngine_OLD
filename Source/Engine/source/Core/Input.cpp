@@ -120,9 +120,9 @@ void KitEngine::Core::Input::SetInputMode(KitEngine::Core::CursorMode mode, KitE
 
 }
 
-void KitEngine::Core::Input::SetCursorPos(glm::vec2 pos) {
+void KitEngine::Core::Input::SetCursorPos(double x, double y) {
 
-    glfwSetCursorPos(m_pWindow, pos.x, pos.y);
+    glfwSetCursorPos(m_pWindow, x, y);
 
 }
 
