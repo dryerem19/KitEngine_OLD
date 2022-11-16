@@ -51,6 +51,8 @@ namespace LevelEditor::Tests
 
         Render::FrameBuffer frameBuffer;
 
+        bool isCheckMouse = true;
+
     public:
         TestLayer() = default;
 

@@ -151,12 +151,20 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
     if(Input::GetMouseButton(MouseButton::MouseButtonLeft))
     {
         Input::SetInputMode(CursorMode::Cursor, CursorState::CursorDisabled);
-
+        
         GLfloat xoffset = Input::mousePosition.x - lastX;
         GLfloat yoffset = lastY - Input::mousePosition.y;
+
+        // Установка курсора на последнее подложение камеры
+        if(isCheckMouse)
+        {
+            Input::SetCursorPos(lastX, lastY);
+            isCheckMouse = false;
+        }
+
         lastX = Input::mousePosition.x;
         lastY = Input::mousePosition.y;
-
+        
         GLfloat sensitivity = 0.05;
         xoffset *= sensitivity;
         yoffset *= sensitivity;
@@ -178,6 +186,10 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
     }
     if(Input::GetMouseUp(MouseButton::MouseButtonLeft)){
         Input::SetInputMode(CursorMode::Cursor, CursorState::CursorNormal);
+        isCheckMouse = true;
+        // Установка последних координт камеры на позицию мыши
+        Input::mousePosition.x = lastX;
+        Input::mousePosition.y = lastY;
     }
 
 }
