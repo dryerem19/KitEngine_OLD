@@ -10,8 +10,6 @@
 
 #include <OS/FileDialog.h>
 
-#include <KitStaticMesh.h>
-
 void LevelEditor::Tests::TestLayer::OnStart() 
 {
     mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
@@ -44,7 +42,7 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt)
 
     if(isModelLoaded == true)
     {
-        for (auto& mesh : mNanoMesh)
+        for (auto& mesh : mNanoModel)
         {
             if(!mesh->mMaterial.diffuseTextures.empty()){
                 mesh->mMaterial.diffuseTextures[0]->Bind();
@@ -202,7 +200,7 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
 
 void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
 
-    mNanoMesh.Init(filepath);
+    mNanoModel.Init(filepath);
     isModelLoaded = true;
 }
 

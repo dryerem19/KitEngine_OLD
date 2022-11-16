@@ -23,6 +23,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 
+#include <KitModel.h>
+
 using namespace KitEngine::Core;
 using namespace KitEngine::Graphics::Components;
 
@@ -33,7 +35,7 @@ namespace LevelEditor::Tests
     private:
         bool isModelLoaded = false;        
         std::unique_ptr<Render::Shader>       mShader;
-        Render::KitStaticMesh mNanoMesh;
+        Render::KitModel mNanoModel;
         std::unique_ptr<KitEngine::Graphics::Components::ModelComponent> mModel;
 
         glm::mat4                                          mTransform;
