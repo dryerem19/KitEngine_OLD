@@ -12,9 +12,10 @@ namespace Render
         uint32_t mIndicesBufferId;
         uint32_t mIndicesCount;
     public:
-        IndexBuffer(const uint32_t* src, uint32_t count);
+        IndexBuffer() = default;
         ~IndexBuffer();
 
+        void Init(const uint32_t* src, const uint32_t count);
         void Bind() const;
         void Unbind() const;
 

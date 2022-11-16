@@ -31,19 +31,10 @@ namespace LevelEditor::Tests
     class TestLayer : public KitEngine::Core::BaseLayer
     {
     private:
-        bool isModelLoaded = false;
-        std::unique_ptr<Render::VertexArray>  mVertexArray;
-        std::unique_ptr<Render::VertexBuffer> mVertexBuffer;
-        std::unique_ptr<Render::IndexBuffer>  mIndexBuffer;
+        bool isModelLoaded = false;        
         std::unique_ptr<Render::Shader>       mShader;
-        std::vector<Render::Texture>      mTextures;
-
-       //Texture testTexture = Texture("res/textures/no_texture.png");
-//       Texture testTexture = Texture("res/models/nanosuit/body_dif.png");
-
+        Render::KitStaticMesh mNanoMesh;
         std::unique_ptr<KitEngine::Graphics::Components::ModelComponent> mModel;
-
-        std::vector<KitEngine::Graphics::Components::ModelComponent> mModels;
 
         glm::mat4                                          mTransform;
         glm::mat4 view = glm::mat4(1.0f);

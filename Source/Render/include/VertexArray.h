@@ -18,6 +18,9 @@ namespace Render
 
         void AddBuffer(const VertexBuffer& vertexBuffer, const VertexBufferLayout& layout) const;
         void Bind() const;
+
+        uint32_t GetId() const { return mVertexArrayId; }
+
         static void Unbind();
     };
 }

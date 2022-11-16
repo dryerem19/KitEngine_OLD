@@ -5,14 +5,20 @@
 #include "IndexBuffer.h"
 
 //-------------------------------------------------------------------------------------------
-// Конструтор индексного буфера
-// const unsigned int* src - указатель на источник данных
-// unsigned int count - количество индексов
+// Деструктор индексного буфера, уничтожает буфер
 //-------------------------------------------------------------------------------------------
-Render::IndexBuffer::IndexBuffer(const uint32_t* src, uint32_t count)
-    : mIndicesCount(count) {
+Render::IndexBuffer::~IndexBuffer() {
 
+    // Cleanup
+    GLCall(glDeleteBuffers(1, &mIndicesBufferId));
+
+}
+
+void Render::IndexBuffer::Init(const uint32_t* src, const uint32_t count)
+{
     // TODO: Добавить проверку на то, что sizeof(unsigned int) == sizeof(GLuint)
+
+    mIndicesCount = count;
 
     // Создать новый буфер
     GLCall(glGenBuffers(1, &mIndicesBufferId));
@@ -22,17 +28,6 @@ Render::IndexBuffer::IndexBuffer(const uint32_t* src, uint32_t count)
 
     // Скопировать данные в буфер
     GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), src, GL_STATIC_DRAW));
-
-}
-
-//-------------------------------------------------------------------------------------------
-// Деструктор индексного буфера, уничтожает буфер
-//-------------------------------------------------------------------------------------------
-Render::IndexBuffer::~IndexBuffer() {
-
-    // Cleanup
-    GLCall(glDeleteBuffers(1, &mIndicesBufferId));
-
 }
 
 //-------------------------------------------------------------------------------------------

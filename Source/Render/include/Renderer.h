@@ -7,13 +7,14 @@
 #include "../pch/RenderPch.h"
 
 #include "Shader.h"
-#include "Vertex.h"
+#include "KitVertex.h"
 #include "Texture.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "FrameBuffer.h"
+#include "KitStaticMesh.h"
 
 namespace Render
 {
@@ -39,6 +40,17 @@ namespace Render
                     GL_UNSIGNED_INT,
                     reinterpret_cast<const void*>(sizeof(uint32_t) * baseIndex),
                     baseVertex);
+        }
+
+        static void Draw(const VertexArray& varray, const IndexBuffer& ibuffer)
+        {
+            GLCall(glBindVertexArray(0));
+
+            varray.Bind();
+            ibuffer.Bind();
+            GLCall(glDrawElements(GL_TRIANGLES, ibuffer.GetCount(), GL_UNSIGNED_INT, nullptr));
+            varray.Unbind();
+            ibuffer.Unbind();
         }
 
         static void Clear()

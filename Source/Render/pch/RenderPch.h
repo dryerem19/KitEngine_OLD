@@ -10,13 +10,20 @@
 #include <fstream>
 #include <cstdint>
 #include <string>
+#include <list>
+#include <filesystem>
 
 #include <sail/sail-c++/sail-c++.h>
 #include <GL/glew.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 #include "Helpers.h"
 

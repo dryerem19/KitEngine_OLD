@@ -23,6 +23,12 @@ target_link_libraries(${PROJECT_NAME}
         GLEW::GLEW
 )
 
+find_package(assimp CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        assimp::assimp
+)
+
 find_package(SailC++ CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME}
         PUBLIC
