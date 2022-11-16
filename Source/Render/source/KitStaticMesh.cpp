@@ -139,7 +139,8 @@ std::shared_ptr<Render::KitStaticMesh> Render::KitStaticMesh::ProcessAssimpMesh(
         directory.remove_filename();
         
         // Обрабатываем материал
-        this->ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], directory, material);
+        this->ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], 
+            directory.string(), material);
     }
 
     // Создаём новый меш
@@ -186,7 +187,8 @@ std::vector<std::shared_ptr<Render::KitTexture>> Render::KitStaticMesh::LoadMate
         filepath.concat(name.C_Str());
 
         // Добавляем текстуру в список текстур
-        textures.emplace_back(std::make_shared<KitTexture>(filepath, static_cast<KitTextureType>(type)));
+        textures.emplace_back(std::make_shared<KitTexture>(filepath.string(), 
+            static_cast<KitTextureType>(type)));
     }
 
     // Возвращаем список загруженных текстур
