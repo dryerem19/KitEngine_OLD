@@ -8,8 +8,6 @@
 
 #include "IconsFontAwesome6.h"
 
-#include <OS/FileDialog.h>
-
 #include <KitStaticMesh.h>
 
 void LevelEditor::Tests::TestLayer::OnStart() 
@@ -69,29 +67,27 @@ void LevelEditor::Tests::TestLayer::OnUIRender() {
     // Docking Window
     Docking();
     Viewport();
+
     // Main Menu Bar
     if(ImGui::BeginMainMenuBar())
     {
         if(ImGui::BeginMenu(ICON_FA_FILE " File"))
         {
             if(ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open Scene")){
-                std::string filepath = Engine::OS::FileDialog::OpenFile();
-                std::cout << "[OpenScene]FileDialog Check: " << filepath << std::endl;
+
             }
             if(ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save Scene")){
 
             }
             if(ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save Scene As..")){
-                std::string filepath = Engine::OS::FileDialog::SaveFile();
-                std::cout << "[SaveSceneAs ]FileDialog Check: " << filepath << std::endl;
+                
             }
             ImGui::Separator();
             if(ImGui::MenuItem(ICON_FA_SQUARE_PLUS " New Project")){
 
             }
             if(ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open Project")){
-                std::string filepath = Engine::OS::FileDialog::OpenFile();
-                std::cout << "[OpenProject]FileDialog Check: " << filepath << std::endl;
+                
             }
             if(ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save Project")){
 
@@ -105,9 +101,9 @@ void LevelEditor::Tests::TestLayer::OnUIRender() {
                 ImGui::Separator();
                 if(ImGui::MenuItem(ICON_FA_FILE_IMPORT " Open Model"))
                 {
-                    std::string filepath = Engine::OS::FileDialog::OpenFile();
-                    OnLoadModel(filepath);
+                    isCheckFileDialog = true;
                 }
+                                
                 ImGui::EndMenu();
             }
             if(ImGui::MenuItem(ICON_FA_RIGHT_FROM_BRACKET " Exit"))
@@ -126,6 +122,14 @@ void LevelEditor::Tests::TestLayer::OnUIRender() {
 
     }
     ImGui::EndMainMenuBar();
+
+    // Create FileDialog
+    if(isCheckFileDialog){
+        std::string filepath = FileDialog();
+        if(!filepath.empty()){
+            OnLoadModel(filepath);
+        }
+    }
 
 }
 
@@ -310,4 +314,18 @@ void LevelEditor::Tests::TestLayer::Viewport() {
     }
     ImGui::PopStyleVar(1);
     ImGui::End();
+}
+
+std::string LevelEditor::Tests::TestLayer::FileDialog(){
+    std::string filepath;
+    ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".fbx,.obj,.stl,.*", ".");
+    ImGui::SetNextWindowSizeConstraints(ImVec2(600,400), ImVec2(-1,-1));
+    if(ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")){
+        if(ImGuiFileDialog::Instance()->IsOk()){
+            filepath = ImGuiFileDialog::Instance()->GetFilePathName();
+        }
+        ImGuiFileDialog::Instance()->Close();
+        isCheckFileDialog = false;
+    }
+    return filepath;
 }

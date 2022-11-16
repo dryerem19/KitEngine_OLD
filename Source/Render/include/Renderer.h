@@ -55,6 +55,8 @@ namespace Render
 
         static void Clear()
         {
+            float color = 85.0f/255.0f;
+            glClearColor(color, color, color, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
 
