@@ -22,6 +22,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
+#include <ImGuizmo.h>
 #include <ImGuiFileDialog.h>
 
 #include <KitModel.h>
@@ -38,6 +39,9 @@ namespace LevelEditor::Tests
         std::unique_ptr<Render::Shader>       mShader;
         Render::KitModel mNanoModel;
         std::unique_ptr<KitEngine::Graphics::Components::ModelComponent> mModel;
+
+        std::shared_ptr<Render::KitObject> mSelectedObject;
+
 
         glm::mat4                                          mTransform;
         glm::mat4 view = glm::mat4(1.0f);
