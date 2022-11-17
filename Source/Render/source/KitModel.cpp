@@ -1,19 +1,22 @@
 #include "RenderPch.h"
 #include "KitModel.h"
 
-Render::KitModel::KitModel(const std::string& filepath)
+Render::KitModel::KitModel(KitScene* pScene, const std::string& filepath)
 {
-    this->Init(filepath);
+    this->Init(pScene, filepath);
 }
 
-void Render::KitModel::Init(const std::string& filepath)
+void Render::KitModel::Init(KitScene* pScene, const std::string& filepath)
 {
+    m_pScene = pScene;
+    mFilepath = filepath;
+
     // Создаём объект импортера данных assimp'а
     Assimp::Importer importer;
 
     // Считываем данные файлы в сцену assimp'а
-    const aiScene *pScene = nullptr;
-    pScene = importer.ReadFile(filepath.c_str(),
+    const aiScene *p_assimpScene = nullptr;
+    p_assimpScene = importer.ReadFile(filepath.c_str(),
                                aiProcess_GenSmoothNormals           |
                                aiProcess_ValidateDataStructure      |
                                aiProcess_CalcTangentSpace           |
@@ -25,10 +28,11 @@ void Render::KitModel::Init(const std::string& filepath)
                                aiProcess_JoinIdenticalVertices      );
 
     // Обрабатываем все ноды сцены начиная с родительской
-    mName = std::filesystem::path(pScene->mRootNode->mName.C_Str())
+    mName = std::filesystem::path(p_assimpScene->mRootNode->mName.C_Str())
                                     .replace_extension("")
                                     .string();
-    this->ProcessAssimpNode(pScene->mRootNode, pScene, filepath);
+
+    this->ProcessAssimpNode(p_assimpScene->mRootNode, p_assimpScene, filepath);
     
     // TODO: add assert scene incompete
     //if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode) {
@@ -54,7 +58,7 @@ void Render::KitModel::ProcessAssimpNode(const aiNode* pNode, const aiScene* pSc
 }
 
 
-std::shared_ptr<Render::KitStaticMesh> Render::KitModel::ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene, 
+Render::KitObject Render::KitModel::ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene, 
     const std::string& filepath)
 {
     const aiVector3D zero3D(0.0f, 0.0f, 0.0f);
@@ -111,14 +115,23 @@ std::shared_ptr<Render::KitStaticMesh> Render::KitModel::ProcessAssimpMesh(const
             directory.string(), material);
     }
 
-    // Создаём новый меш
-    std::shared_ptr<KitStaticMesh> kitMesh = std::make_shared<KitStaticMesh>();
-    kitMesh->Init(vertices, indices); // Инициализируем его
-    kitMesh->mName = pMesh->mName.C_Str(); // Загружаем имя меша
-    kitMesh->mMaterial = material; // Устанавливаем материал
+    // Cоздаём новый объект
+    auto obj = m_pScene->CreateObject();
 
-    // Возвращаем меш
-    return kitMesh;
+    // Добавляем ему компонент меша
+    auto& mesh = obj.AddComponent<KitStaticMesh>();
+
+    // Инициализируем меш
+    mesh.Init(m_pScene, vertices, indices);
+
+    // Сохраняем имя
+    mesh.mName = pMesh->mName.C_Str();
+
+    // Сохраняем материал
+    mesh.mMaterial = material;
+
+    // Возвращаем объект
+    return obj;
 }
 
 void Render::KitModel::ProcessAssimpMaterial(const aiMaterial* pMaterial, const std::string& directory, 

@@ -10,9 +10,6 @@
 
 #include <Renderer.h>
 
-
-#include <Graphics/Components/ModelComponent.h>
-
 // TODO: УБРАТЬ
 #include <memory>
 #include <Loader.h>
@@ -24,10 +21,11 @@
 #include <imgui.h>
 #include <ImGuiFileDialog.h>
 
+#include <KitTransform.h>
 #include <KitModel.h>
+#include <KitScene.h>
 
 using namespace KitEngine::Core;
-using namespace KitEngine::Graphics::Components;
 
 namespace LevelEditor::Tests
 {
@@ -36,8 +34,7 @@ namespace LevelEditor::Tests
     private:
         bool isModelLoaded = false;        
         std::unique_ptr<Render::Shader>       mShader;
-        Render::KitModel mNanoModel;
-        std::unique_ptr<KitEngine::Graphics::Components::ModelComponent> mModel;
+        Render::KitScene mScene;
 
         glm::mat4                                          mTransform;
         glm::mat4 view = glm::mat4(1.0f);
