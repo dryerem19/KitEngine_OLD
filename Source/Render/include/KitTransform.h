@@ -26,5 +26,10 @@ namespace Render
 				* rotation
 				* glm::scale(glm::mat4(1.0f), Scale);
 		}
+
+		[[nodiscard]] glm::mat4 GetGlobalTransform(const KitTransform& globalTransform)
+		{
+			return globalTransform.GetTransform() * this->GetTransform();
+		}
     };
 }

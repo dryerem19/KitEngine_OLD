@@ -1,5 +1,6 @@
 #pragma once
 #include "KitScene.h"
+#include "KitTransform.h"
 
 namespace Render
 {
@@ -23,17 +24,19 @@ namespace Render
     public:
         /* Название объекта */
         std::string mName;
-
-        /* Конструктор по умолчанию */
-        KitObject() = default;
-
+        
         /* 
         Констуктор для создания объекта в конкретной сцене
         @param handle идентификатор сущности
         @param pScene указатель на сцену, которой принадлежит объект
         */
         KitObject(entt::entity handle, KitScene* pScene)
-            : mHandle(handle), m_pScene(pScene) { }
+            : mHandle(handle), m_pScene(pScene)
+        {
+            // Добавляем компонент трансформации
+            // * Трансформацию содержит любой объект сцены
+            m_pScene->mRegistry.emplace<KitTransform>(mHandle);
+        }
 
         /* Деструктор по умолчанию */
         ~KitObject() = default;       
@@ -60,5 +63,19 @@ namespace Render
         {
             return m_pScene->mRegistry.get<T>(mHandle);           
         }
+
+        KitScene* GetScene() const 
+        {
+            return m_pScene;
+        }
+
+        /*
+        Возвращает трансформацию объекта
+        */
+        KitTransform& GetTransform()
+        {
+            return m_pScene->mRegistry.get<KitTransform>(mHandle);
+        }
+
     };
 }

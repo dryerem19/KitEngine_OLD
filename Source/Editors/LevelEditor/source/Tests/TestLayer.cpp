@@ -39,18 +39,24 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt)
     frameBuffer.Bind();
     Render::Renderer::Clear();
 
-    auto view = mScene.View<Render::KitStaticMesh, Render::KitTransform>(); 
-    for (auto [entity, mesh, transform] : view.each())
-    {
-        if (!mesh.mMaterial.diffuseTextures.empty()) {
-            mesh.mMaterial.diffuseTextures[0]->Bind();
-        }
+    // auto view = mScene.View<Render::KitModel, Render::KitTransform>();
+    // for (auto [entity, model, globalTransform] : view.each())
+    // {
         
-        mShader->SetUniform1i("uTextureDiffuse", 0);
-        mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
-            glm::value_ptr(transform.GetTransform()));
-        Render::Renderer::Draw(mesh.mVertexArray, mesh.mIndexBuffer);
-    }
+    // }
+
+    // auto view = mScene.View<Render::KitStaticMesh, Render::KitTransform>(); 
+    // for (auto [entity, mesh, transform] : view.each())
+    // {
+    //     // if (!mesh.mMaterial.diffuseTextures.empty()) {
+    //     //     mesh.mMaterial.diffuseTextures[0]->Bind();
+    //     // }
+        
+    //     // mShader->SetUniform1i("uTextureDiffuse", 0);
+    //     // mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
+    //     //     glm::value_ptr(transform.GetTransform()));
+    //     // Render::Renderer::Draw(mesh.mVertexArray, mesh.mIndexBuffer);
+    // }
 
     // if(isModelLoaded == true)
     // {
@@ -223,7 +229,7 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
 void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
 
     auto obj    = mScene.CreateObject();
-    auto& model = obj.AddComponent<Render::KitModel>(&mScene, filepath);
+    auto& model = obj.AddComponent<Render::KitModel>(obj, filepath);
     isModelLoaded = true;
 }
 
@@ -349,26 +355,26 @@ std::string LevelEditor::Tests::TestLayer::FileDialog(){
 
 void LevelEditor::Tests::TestLayer::SceneTree()
 {
-    auto view = mScene.View<Render::KitModel>();
-    for (auto [entity, model]: view.each())
-    {
-        if (ImGui::TreeNode(model.mName.c_str()))
-        {
-            for (auto obj : model.mChildren)
-            {
-                auto& mc = obj.GetComponent<Render::KitStaticMesh>();
+    // auto view = mScene.View<Render::KitModel>();
+    // for (auto [entity, model]: view.each())
+    // {
+    //     if (ImGui::TreeNode(model.mName.c_str()))
+    //     {
+    //         for (auto obj : model.mChildren)
+    //         {
+    //             auto& mc = obj.GetComponent<Render::KitStaticMesh>();
                 
-                ImGuiTreeNodeFlags flags = mc.mChildren.empty() 
-                    ? ImGuiTreeNodeFlags_Leaf : 0;
+    //             ImGuiTreeNodeFlags flags = mc.mChildren.empty() 
+    //                 ? ImGuiTreeNodeFlags_Leaf : 0;
 
-                if (ImGui::TreeNodeEx(
-                    std::format("{0}\t{1}", ICON_FA_CUBE, mc.mName).c_str(),
-                    flags))
-                {
-                    ImGui::TreePop();
-                }
-            }
-            ImGui::TreePop();
-        }         
-    }
+    //             if (ImGui::TreeNodeEx(
+    //                 std::format("{0}\t{1}", ICON_FA_CUBE, mc.mName).c_str(),
+    //                 flags))
+    //             {
+    //                 ImGui::TreePop();
+    //             }
+    //         }
+    //         ImGui::TreePop();
+    //     }         
+    // }
 }
