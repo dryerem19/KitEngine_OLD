@@ -1,5 +1,6 @@
 #pragma once
 #include "KitComponent.h"
+#include "KitTransform.h"
 
 namespace Render
 {
@@ -18,10 +19,10 @@ namespace Render
         /* Родительская нода */
         KitSceneNode* mParent = nullptr;
 
-        /* Дочерние ноды */
-        std::vector<KitSceneNode*> mChildren;
-
     public:
+            /* Дочерние ноды */
+        std::vector<KitSceneNode*> mChildren;
+        
         /* Конструктор ноды с именем ноды, иконка не устанавливается*/
         KitSceneNode(const KitObject& attachedObject) : KitComponent(attachedObject) { }
         /*
@@ -47,6 +48,35 @@ namespace Render
         @return Указатель на родительскую ноду
         */
         KitSceneNode* GetParent() const { return mParent; }    
+
+        /*
+        @brief Возвращает компонент трансформации объекта
+        @return Трансформация объекта 
+        */
+        KitTransform GetTransformComponent()
+        {
+            return mAttachedObject.GetTransform();
+        }
+
+        /*
+        @brief Возвращает матрицу трансформации для ноды
+        */
+        glm::mat4 GetLocalModelTransform(KitSceneNode* childNode)
+        {
+            glm::mat4 transformMatrix = GetTransformComponent().GetTransform();
+            if (mParent) {
+                transformMatrix *= mParent->GetTransformComponent().GetTransform();
+            }
+
+            for (auto* child : mChildren)
+            {
+                if (!child->mChildren.empty()) {
+                    transformMatrix *= this->GetLocalModelTransform(child);
+                }
+            }
+
+            return transformMatrix;
+        }
 
         /*
         @brief Добавить дочернюю ноду
@@ -75,28 +105,28 @@ namespace Render
         @brief Возвращает итератор на первый дочерний меш
         @return Итератор на дочерний меш
         */
-        constexpr std::vector<Render::KitSceneNode*>::iterator begin() noexcept
+        auto begin() noexcept
         { return mChildren.begin(); }
 
         /*
         @brief Возвращает итератор на последний дочерний меш
         @return Итератор на последний меш
         */
-        constexpr std::vector<Render::KitSceneNode *>::iterator end() noexcept
+        auto end() noexcept
         { return mChildren.end(); }
 
         /*
         @brief Возвращает константный итератор на первый дочерний меш
         @return Итератор на дочерний меш
         */
-        constexpr std::vector<Render::KitSceneNode*>::const_iterator cbegin() noexcept
+        auto cbegin() noexcept
         { return mChildren.cbegin(); }
 
         /*
         @brief Возвращает константный итератор на последний дочерний меш
         @return Итератор на дочрений меш
         */
-        constexpr std::vector<Render::KitSceneNode*>::const_iterator cend() noexcept
+        auto cend() noexcept
         { return mChildren.cend(); }             
     };
 }

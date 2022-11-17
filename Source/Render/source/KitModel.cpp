@@ -51,11 +51,13 @@ void Render::KitModel::ProcessAssimpNode(const aiNode* pNode, const aiScene* pSc
         const aiMesh* pMesh = pScene->mMeshes[pNode->mMeshes[iMesh]];
 
         KitStaticMesh& kitMesh = this->ProcessAssimpMesh(pMesh, pScene);
+        kitMesh.SetHierarchyIcon("\xef\x86\xb2"); // TODO: fix it! cube icon
+
         pParent = &kitMesh;
         if (parentMesh == nullptr) {
-            mMeshes.emplace_back(pParent);
+            mChildren.emplace_back(pParent);
         } else {
-            pParent->mChildren.emplace_back(pParent);
+            pParent->AddChild(pParent);
         }
 
     }

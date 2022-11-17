@@ -11,9 +11,6 @@ namespace Render
     class KitModel : public KitSceneNode
     {
     public:
-        // Список мешей модели
-        std::vector<KitStaticMesh*> mMeshes;
-
         std::string mFilepath;
 
         // Конструктор копирования по умолчанию

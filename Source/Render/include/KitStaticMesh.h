@@ -15,10 +15,7 @@ namespace Render
         VertexArray  mVertexArray;
         VertexBuffer mVertexBuffer;
         IndexBuffer  mIndexBuffer;
-
-        // Дочерние сетки
-        std::vector<KitStaticMesh*> mChildren;
-
+        
         // Материал сетки
         KitMaterial mMaterial;
 

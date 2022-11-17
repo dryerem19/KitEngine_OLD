@@ -27,9 +27,9 @@ namespace Render
 				* glm::scale(glm::mat4(1.0f), Scale);
 		}
 
-		[[nodiscard]] glm::mat4 GetGlobalTransform(const KitTransform& globalTransform)
+		glm::mat4 ComputeModelTransform(const KitTransform& parentTransform)
 		{
-			return globalTransform.GetTransform() * this->GetTransform();
+			return this->GetTransform() * parentTransform.GetTransform();
 		}
     };
 }
