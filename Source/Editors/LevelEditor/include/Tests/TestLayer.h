@@ -51,8 +51,12 @@ namespace LevelEditor::Tests
 
         Render::FrameBuffer frameBuffer;
 
+        // Checked
         bool isCheckMouse = true;
         bool isCheckFileDialog = false;
+
+
+        ImGuizmo::OPERATION mode = ImGuizmo::OPERATION::TRANSLATE;
 
     public:
         TestLayer() = default;
@@ -74,6 +78,9 @@ namespace LevelEditor::Tests
         std::string FileDialog();
 
         void SceneTree();
+
+        // UI Gizmo
+        void DrawGizmo();
 
     };
 }

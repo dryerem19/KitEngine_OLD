@@ -267,30 +267,36 @@ void LevelEditor::Tests::TestLayer::Docking() {
     ImGui::DockSpace(ImGui::GetID("DockSpace"), ImVec2(0.0f, 0.0f), dockspace_flags);
 
     if(ImGui::BeginMenuBar())
-    {
+    {   
+        // Arrow left - undo (назад)
         if(ImGui::MenuItem(ICON_FA_CIRCLE_ARROW_LEFT))
         {
-
+            
         }
+        // Arrow right - redo (вперед)
         if(ImGui::MenuItem(ICON_FA_CIRCLE_ARROW_RIGHT))
         {
 
         }
+        // Enable mouse pointer
         if(ImGui::MenuItem(ICON_FA_ARROW_POINTER))
         {
 
         }
+        // Enable movement object (gizmo)
         if(ImGui::MenuItem(ICON_FA_ARROWS_UP_DOWN_LEFT_RIGHT))
         {
-
+            mode = ImGuizmo::OPERATION::TRANSLATE;
         }
+        // Enable rotate object (gizmo)
         if(ImGui::MenuItem(ICON_FA_ROTATE))
         {
-
+            mode = ImGuizmo::OPERATION::ROTATE;
         }
+        // Enable scale object (gizmo)
         if(ImGui::MenuItem(ICON_FA_UP_RIGHT_FROM_SQUARE))
         {
-
+            mode = ImGuizmo::OPERATION::SCALE;
         }
         ImGui::Separator();
         if(ImGui::BeginMenu(ICON_FA_DRAW_POLYGON))
@@ -311,7 +317,6 @@ void LevelEditor::Tests::TestLayer::Docking() {
         }
         ImGui::EndMenuBar();
     }
-
     ImGui::End();
 
 }
@@ -329,69 +334,11 @@ void LevelEditor::Tests::TestLayer::Viewport() {
         vMax.x += ImGui::GetWindowPos().x;
         vMax.y += ImGui::GetWindowPos().y;
         ImGui::GetWindowDrawList()->AddImage((ImTextureID)backTexture, vMin, vMax, ImVec2(0,1), ImVec2(1,0));
-
+        // Draw Gizmo
         ImGuizmo::SetDrawlist();
         ImGuizmo::SetRect(vMin.x, vMin.y, ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
-
-        if (mSelectedObject)
-        {
-            auto& transform = mSelectedObject->mTransform;
-
-            float translationComponent[3] = 
-            { 
-                transform.Translation.x,
-                transform.Translation.y,
-                transform.Translation.z
-            };
-
-            float rotationComponent[3] =
-            { 
-                transform.Rotation.x,
-                transform.Rotation.y,
-                transform.Rotation.z
-            };
-
-            float scaleComponent[3] =
-            { 
-                transform.Scale.x,
-                transform.Scale.y,
-                transform.Scale.z
-            };
-
-            /* Build transform matrix */
-            float transformMatrix[16];
-            ImGuizmo::RecomposeMatrixFromComponents(translationComponent, rotationComponent, scaleComponent, transformMatrix);
-            ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), ImGuizmo::TRANSLATE, ImGuizmo::MODE::LOCAL, transformMatrix);
-
-            /* If we moved the manipulator */
-            if (ImGuizmo::IsUsing())
-            {
-                /* We get new transformed components */
-                float translationComponent[3] = {}, rotationComponent[3] = {}, scaleComponent[3] = {};
-                ImGuizmo::DecomposeMatrixToComponents(transformMatrix, translationComponent, rotationComponent, scaleComponent);
-
-                /* Restore the new transformed components */
-                transform.Translation = 
-                {
-                    translationComponent[0],
-                    translationComponent[1],
-                    translationComponent[2]
-                };
-                transform.Rotation =
-                {
-                    rotationComponent[0], 
-                    rotationComponent[1], 
-                    rotationComponent[2]
-                };
-                transform.Scale =
-                {
-                    scaleComponent[0],
-                    scaleComponent[1],
-                    scaleComponent[2]
-                };
-            }
-        }
-	} 
+        DrawGizmo();
+    } 
     ImGui::End();
     ImGui::PopStyleVar();
 }
@@ -434,5 +381,68 @@ void LevelEditor::Tests::TestLayer::SceneTree()
         if (ImGui::IsItemClicked()) {
             mSelectedObject = static_cast<std::shared_ptr<Render::KitObject>>(&mNanoModel);
         }        
+    }
+}
+
+
+void LevelEditor::Tests::TestLayer::DrawGizmo(){
+
+    if (mSelectedObject)
+    {
+        auto& transform = mSelectedObject->mTransform;
+        float translationComponent[3] = 
+        { 
+            transform.Translation.x,
+            transform.Translation.y,
+            transform.Translation.z
+        };
+
+        float rotationComponent[3] =
+        { 
+            transform.Rotation.x,
+            transform.Rotation.y,
+            transform.Rotation.z
+        };
+
+        float scaleComponent[3] =
+        { 
+            transform.Scale.x,
+            transform.Scale.y,
+            transform.Scale.z
+        };
+
+        /* Build transform matrix */
+        float transformMatrix[16];
+        ImGuizmo::RecomposeMatrixFromComponents(translationComponent, rotationComponent, scaleComponent, transformMatrix);
+        ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), mode, ImGuizmo::MODE::LOCAL, transformMatrix);
+        
+
+        /* If we moved the manipulator */
+        if (ImGuizmo::IsUsing())
+        {
+            /* We get new transformed components */
+            float translationComponent[3] = {}, rotationComponent[3] = {}, scaleComponent[3] = {};
+            ImGuizmo::DecomposeMatrixToComponents(transformMatrix, translationComponent, rotationComponent, scaleComponent);
+
+            /* Restore the new transformed components */
+            transform.Translation = 
+            {
+                translationComponent[0],
+                translationComponent[1],
+                translationComponent[2]
+            };
+            transform.Rotation =
+            {
+                rotationComponent[0], 
+                rotationComponent[1], 
+                rotationComponent[2]
+            };
+            transform.Scale =
+            {
+                scaleComponent[0],
+                scaleComponent[1],
+                scaleComponent[2]
+            };
+        }
     }
 }
