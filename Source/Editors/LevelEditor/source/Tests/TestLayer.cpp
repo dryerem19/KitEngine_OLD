@@ -8,6 +8,7 @@
 
 #include "IconsFontAwesome6.h"
 
+#include <fmt/format.h>
 #include <Events/WindowResizeEvent.h>
 #include <Events/FrameBufferResizeEvent.h>
 
@@ -175,7 +176,7 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
 
-    if(Core::Input::GetMouseButton(Core::MouseButton::MouseButtonLeft))
+    if(Input::GetMouseButton(MouseButton::MouseButtonRight))
     {
         Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorDisabled);
         
@@ -211,8 +212,8 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
         cameraFront = glm::normalize(front);
 
     }
-    if(Core::Input::GetMouseUp(Core::MouseButton::MouseButtonLeft)){
-        Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorNormal);
+    if(Input::GetMouseUp(MouseButton::MouseButtonRight)){
+        Input::SetInputMode(CursorMode::Cursor, CursorState::CursorNormal);
         isCheckMouse = true;
         // Установка последних координт камеры на позицию мыши
         Core::Input::mousePosition.x = lastX;
@@ -328,9 +329,71 @@ void LevelEditor::Tests::TestLayer::Viewport() {
         vMax.x += ImGui::GetWindowPos().x;
         vMax.y += ImGui::GetWindowPos().y;
         ImGui::GetWindowDrawList()->AddImage((ImTextureID)backTexture, vMin, vMax, ImVec2(0,1), ImVec2(1,0));
-    }
-    ImGui::PopStyleVar(1);
+
+        ImGuizmo::SetDrawlist();
+        ImGuizmo::SetRect(vMin.x, vMin.y, ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
+
+        if (mSelectedObject)
+        {
+            auto& transform = mSelectedObject->mTransform;
+
+            float translationComponent[3] = 
+            { 
+                transform.Translation.x,
+                transform.Translation.y,
+                transform.Translation.z
+            };
+
+            float rotationComponent[3] =
+            { 
+                transform.Rotation.x,
+                transform.Rotation.y,
+                transform.Rotation.z
+            };
+
+            float scaleComponent[3] =
+            { 
+                transform.Scale.x,
+                transform.Scale.y,
+                transform.Scale.z
+            };
+
+            /* Build transform matrix */
+            float transformMatrix[16];
+            ImGuizmo::RecomposeMatrixFromComponents(translationComponent, rotationComponent, scaleComponent, transformMatrix);
+            ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), ImGuizmo::TRANSLATE, ImGuizmo::MODE::LOCAL, transformMatrix);
+
+            /* If we moved the manipulator */
+            if (ImGuizmo::IsUsing())
+            {
+                /* We get new transformed components */
+                float translationComponent[3] = {}, rotationComponent[3] = {}, scaleComponent[3] = {};
+                ImGuizmo::DecomposeMatrixToComponents(transformMatrix, translationComponent, rotationComponent, scaleComponent);
+
+                /* Restore the new transformed components */
+                transform.Translation = 
+                {
+                    translationComponent[0],
+                    translationComponent[1],
+                    translationComponent[2]
+                };
+                transform.Rotation =
+                {
+                    rotationComponent[0], 
+                    rotationComponent[1], 
+                    rotationComponent[2]
+                };
+                transform.Scale =
+                {
+                    scaleComponent[0],
+                    scaleComponent[1],
+                    scaleComponent[2]
+                };
+            }
+        }
+	} 
     ImGui::End();
+    ImGui::PopStyleVar();
 }
 
 std::string LevelEditor::Tests::TestLayer::FileDialog(){
@@ -356,12 +419,20 @@ void LevelEditor::Tests::TestLayer::SceneTree()
             for(auto& mesh : mNanoModel)
             {
                 ImGuiTreeNodeFlags flags = mesh->mChildren.empty() ? ImGuiTreeNodeFlags_Leaf : 0;
-                if(ImGui::TreeNodeEx(std::string(ICON_FA_CUBE + mesh->mName).c_str(), flags))
+                if(ImGui::TreeNodeEx(fmt::format("{}\t{}", ICON_FA_CUBE, mesh->mName).c_str(), flags))
                 {
                     ImGui::TreePop();
                 }
+
+                if (ImGui::IsItemClicked()) {
+                    mSelectedObject = mesh;
+                }                
             }
             ImGui::TreePop();
         }
+
+        if (ImGui::IsItemClicked()) {
+            mSelectedObject = static_cast<std::shared_ptr<Render::KitObject>>(&mNanoModel);
+        }        
     }
 }

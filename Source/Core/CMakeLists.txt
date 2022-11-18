@@ -15,8 +15,6 @@ target_include_directories(${PROJECT_NAME}
 find_package(glfw3 CONFIG REQUIRED)
 find_package(EnTT CONFIG REQUIRED)
 find_package(Bullet CONFIG REQUIRED)
-find_package(imgui CONFIG REQUIRED)
-find_package(imguizmo CONFIG REQUIRED)
 #find_package(glm CONFIG REQUIRED)
 #find_package(SailC++ CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)

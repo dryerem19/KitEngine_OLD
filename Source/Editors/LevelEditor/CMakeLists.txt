@@ -18,9 +18,11 @@ target_link_libraries(${PROJECT_NAME}
         ModelLoader)
 
 find_package(imgui CONFIG REQUIRED)
+find_package(imguizmo CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME}
         PRIVATE
         imgui::imgui
+        imguizmo::imguizmo
 )
 
 target_include_directories(${PROJECT_NAME}

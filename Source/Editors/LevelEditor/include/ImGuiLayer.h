@@ -7,6 +7,12 @@
 
 #include <BaseLayer.h>
 
+#include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_internal.h>
+#include <ImGuizmo.h>
+
 namespace LevelEditor
 {
     // Слой ImGui. Используется для интеграции ImGui.
