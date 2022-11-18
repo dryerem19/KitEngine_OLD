@@ -36,8 +36,6 @@ target_link_libraries(${PROJECT_NAME}
         glfw
         EnTT::EnTT
         LinearMath Bullet3Common BulletDynamics BulletSoftBody
-        imgui::imgui
-        imguizmo::imguizmo
 #        glm::glm
 #        SAIL::sail-c++
         spdlog::spdlog spdlog::spdlog_header_only

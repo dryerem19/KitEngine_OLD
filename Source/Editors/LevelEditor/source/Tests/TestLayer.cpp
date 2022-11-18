@@ -176,7 +176,7 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
 
-    if(Input::GetMouseButton(MouseButton::MouseButtonRight))
+    if(Core::Input::GetMouseButton(Core::MouseButton::MouseButtonRight))
     {
         Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorDisabled);
         
@@ -212,8 +212,8 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
         cameraFront = glm::normalize(front);
 
     }
-    if(Input::GetMouseUp(MouseButton::MouseButtonRight)){
-        Input::SetInputMode(CursorMode::Cursor, CursorState::CursorNormal);
+    if(Core::Input::GetMouseUp(Core::MouseButton::MouseButtonRight)){
+        Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorNormal);
         isCheckMouse = true;
         // Установка последних координт камеры на позицию мыши
         Core::Input::mousePosition.x = lastX;
