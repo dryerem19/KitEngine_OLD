@@ -23,6 +23,9 @@ void Core::Application::Initialize(const WindowProps& props) {
     // Инициализация окна
     mWindow = std::make_unique<Window>(props);
 
+    const auto& handler = std::bind(&Application::EventHandler, this, std::placeholders::_1);
+    mWindow->SetEventHandlerCallback(handler);
+
     // Инициализация ввода
     Input::Initialize(mWindow->GetWindowPointer());
 
@@ -31,6 +34,14 @@ void Core::Application::Initialize(const WindowProps& props) {
 
     mPreviousTime = glfwGetTime();
 
+}
+
+void Core::Application::EventHandler(const Core::Event& event)
+{
+    for (auto& layer : mLayerStack.GetLayers())
+    {
+        layer->EventHandler(event);
+    }
 }
 
 void Core::Application::Start() {

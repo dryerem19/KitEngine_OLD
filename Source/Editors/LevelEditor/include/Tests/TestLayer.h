@@ -55,6 +55,7 @@ namespace LevelEditor::Tests
 
         void OnStart() override;
         void OnUpdate() override;
+        void EventHandler(const Core::Event& event) override;
         void OnRender(double dt) override;
         void OnUIRender() override;
         void OnFinish() override;

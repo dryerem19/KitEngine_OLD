@@ -16,6 +16,8 @@
 #include <vector>
 #include <string>
 
+#include <functional>
+
 // 3rdparty includes
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

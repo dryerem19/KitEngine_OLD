@@ -28,6 +28,8 @@ namespace LevelEditor
 
         void OnBegin() override;
 
+        void EventHandler(const Core::Event& event);
+
         void OnEnd() override;
 
         // Вызывается один раз при уничтожении

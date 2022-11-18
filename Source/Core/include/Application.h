@@ -49,6 +49,8 @@ namespace Core
         // Поместить слой в контейнер слоёв
         inline void PushLayer(BaseLayer* pLayer) { mLayerStack.Push(pLayer); }
 
+        void EventHandler(const Core::Event& event);
+
         // Удалить слой из контейнера слоёв
         inline void PopLayer(BaseLayer* pLayer) { mLayerStack.Pop(pLayer); }
 
