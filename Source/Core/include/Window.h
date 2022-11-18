@@ -5,6 +5,8 @@
 #pragma once
 #include "core.h"
 #include "Logger.h"
+#include "Events/WindowResizeEvent.h"
+#include "Events/FrameBufferResizeEvent.h"
 
 namespace Core
 {
@@ -31,8 +33,11 @@ namespace Core
         uint32_t mHeight;
         std::string mTitle;
         GLFWwindow* m_pWindow = nullptr;
+        std::function<void(Event&)> eventHandlerCallback;
 
         static void OnErrorCallback(int codeError, const char* descriptionError);        
+        static void OnResizeCallback(GLFWwindow* window, int width, int height);
+        static void OnFrameBufferResizeCallback(GLFWwindow* window, int width, int height);
 
         void Init();
 
@@ -44,6 +49,8 @@ namespace Core
         void SwapBuffers();
 
         void SetWindowTitle(const std::string& title);
+    
+        void SetEventHandlerCallback(const std::function<void(Event&)>& fn) { eventHandlerCallback = fn; }
 
         inline uint32_t GetWidth() const { return mWidth; }
         inline uint32_t GetHeight() const { return mHeight; }

@@ -43,6 +43,11 @@ void LevelEditor::ImGuiLayer::OnStart() {
 
 }
 
+void LevelEditor::ImGuiLayer::EventHandler(const Core::Event& event)
+{
+    
+}
+
 void LevelEditor::ImGuiLayer::OnFinish() {
 
     // Уничтожаем контекст ImGui

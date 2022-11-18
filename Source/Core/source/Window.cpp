@@ -52,7 +52,10 @@ namespace Core
             exit(1); 
         }  
 
-        glfwMakeContextCurrent(m_pWindow);       
+        glfwMakeContextCurrent(m_pWindow);
+        glfwSetWindowUserPointer(m_pWindow, this);
+        glfwSetWindowSizeCallback(m_pWindow, OnResizeCallback);       
+        glfwSetFramebufferSizeCallback(m_pWindow, OnFrameBufferResizeCallback);
     }
 
     bool Window::Exec()
@@ -62,11 +65,7 @@ namespace Core
 
     void Window::Update()
     {
-        glfwPollEvents();
-
-        int display_w, display_h;
-        glfwGetFramebufferSize(m_pWindow, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);        
+        glfwPollEvents();    
     }
 
     void Window::SwapBuffers()
@@ -83,6 +82,30 @@ namespace Core
     void Window::OnErrorCallback(int codeError, const char* descriptionError)
     {
         Log::Error("[GLFW] - [{}]: {}!", codeError, descriptionError);
+    }
+
+    void Window::OnResizeCallback(GLFWwindow* window, int width, int height)
+    {
+        auto& handle   = *(Window*)glfwGetWindowUserPointer(window);
+        handle.mWidth  = width;
+        handle.mHeight = height;
+
+        if (handle.eventHandlerCallback)
+        {
+            WindowResizeEvent event(width, height);
+            handle.eventHandlerCallback(event);
+        }
+    }
+
+    void Window::OnFrameBufferResizeCallback(GLFWwindow* window, int width, int height)
+    {
+        auto& handle   = *(Window*)glfwGetWindowUserPointer(window);
+
+        if (handle.eventHandlerCallback)
+        {
+            FrameBufferResizeEvent event(width, height);
+            handle.eventHandlerCallback(event);
+        }        
     }
 }
 

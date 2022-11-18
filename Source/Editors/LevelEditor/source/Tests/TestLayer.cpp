@@ -8,12 +8,28 @@
 
 #include "IconsFontAwesome6.h"
 
+#include <Events/WindowResizeEvent.h>
+#include <Events/FrameBufferResizeEvent.h>
+
 
 void LevelEditor::Tests::TestLayer::OnStart() 
 {
     mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
     mShader->Enable();
     mTransform = glm::mat4(1.0f);
+}
+
+void LevelEditor::Tests::TestLayer::EventHandler(const Core::Event& event)
+{
+    const Core::EventType& type = event.GetType();
+    if (type == Core::EventType::FrameBufferResizeEvent)
+    {
+        auto& e = (Core::FrameBufferResizeEvent&)event;
+        projection = glm::perspective(45.0f, (float)e.GetWidth() / e.GetHeight(), 0.1f, 100.0f);
+        glViewport(0, 0, e.GetWidth(), e.GetHeight());   
+    }
+
+    std::cout << event.ToString() << std::endl;
 }
 
 void LevelEditor::Tests::TestLayer::OnUpdate() {
@@ -23,8 +39,6 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
 
     mTransform = glm::rotate(mTransform, 0.02f, glm::vec3(0.0f, 1.0f, 0.0f));
     view = glm::lookAt(cameraPos,cameraPos + cameraFront, cameraUp);
-    projection = glm::perspective(45.0f, (GLfloat)Core::Application::Instance().GetWindow()->GetWidth() /
-                                         (GLfloat)Core::Application::Instance().GetWindow()->GetHeight(), 0.1f, 100.0f);
 
     if(isModelLoaded == true){
         mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, glm::value_ptr(view));

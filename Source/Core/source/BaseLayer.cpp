@@ -23,6 +23,11 @@ void Core::BaseLayer::OnBegin() {
 
 }
 
+void Core::BaseLayer::EventHandler(const Event& event)
+{
+    
+}
+
 void Core::BaseLayer::OnEnd() {
 
 }
