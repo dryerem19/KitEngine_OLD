@@ -45,9 +45,9 @@ namespace Core
 
         void SetWindowTitle(const std::string& title);
 
-        __forceinline uint32_t GetWidth() const { return mWidth; }
-        __forceinline uint32_t GetHeight() const { return mHeight; }
-        __forceinline std::string GetTitle() const { return mTitle; }
-        __forceinline GLFWwindow* GetWindowPointer() const { return m_pWindow; }
+        inline uint32_t GetWidth() const { return mWidth; }
+        inline uint32_t GetHeight() const { return mHeight; }
+        inline std::string GetTitle() const { return mTitle; }
+        inline GLFWwindow* GetWindowPointer() const { return m_pWindow; }
     };
 }
