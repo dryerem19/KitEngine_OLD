@@ -1,4 +1,4 @@
-project(Engine VERSION 1.0.0 DESCRIPTION "KitEngine SDK")
+project(Core)
 
 file(GLOB_RECURSE INCLUDE "include/*.h")
 file(GLOB_RECURSE SOURCE "source/*.cpp")

@@ -1,20 +1,16 @@
 //
 // Created by piokxix on 01.11.22.
 //
-#include <Core/Input.h>
+#include "Input.h"
 
-//glm::vec2 KitEngine::Core::Input::mousePosition = glm::vec2(0,0);
-//glm::vec2 KitEngine::Core::Input::mouseScrollDelta = glm::vec2(0,0);
+GLFWwindow* Core::Input::m_pWindow = nullptr;
 
+bool Core::Input::mIsInit = false;
 
-GLFWwindow* KitEngine::Core::Input::m_pWindow = nullptr;
+int Core::Input::mKey = -1;
+int Core::Input::mMouseButton = -1;
 
-bool KitEngine::Core::Input::mIsInit = false;
-
-int KitEngine::Core::Input::mKey = -1;
-int KitEngine::Core::Input::mMouseButton = -1;
-
-void KitEngine::Core::Input::Initialize(GLFWwindow *pWindow) {
+void Core::Input::Initialize(GLFWwindow *pWindow) {
 
     if(!mIsInit)
     {
@@ -28,7 +24,7 @@ void KitEngine::Core::Input::Initialize(GLFWwindow *pWindow) {
 
 }
 
-void KitEngine::Core::Input::OnKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+void Core::Input::OnKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
 
     memcpy(mPreviousStateKeyboard, mCurrentStateKeyboard, 1024);
 
@@ -43,7 +39,7 @@ void KitEngine::Core::Input::OnKeyCallback(GLFWwindow *window, int key, int scan
 
 }
 
-void KitEngine::Core::Input::OnMouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
+void Core::Input::OnMouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
 
     memcpy(mPreviousStateMouse, mCurrentStateMouse, 8);
 
@@ -58,69 +54,69 @@ void KitEngine::Core::Input::OnMouseButtonCallback(GLFWwindow *window, int butto
 
 }
 
-void KitEngine::Core::Input::OnCursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {
+void Core::Input::OnCursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {
 
     mousePosition.x = (float)xpos;
     mousePosition.y = (float)ypos;
 
 }
 
-void KitEngine::Core::Input::OnScrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
+void Core::Input::OnScrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
 
     mouseScrollDelta.x = (float)xoffset;
     mouseScrollDelta.y = (float)yoffset;
 
 }
 
-bool KitEngine::Core::Input::GetKey(KitEngine::Core::KeyCode keyCode) {
+bool Core::Input::GetKey(Core::KeyCode keyCode) {
 
     int key = static_cast<int>(keyCode);
     return mCurrentStateKeyboard[key];
 
 }
 
-bool KitEngine::Core::Input::GetKeyDown(KitEngine::Core::KeyCode keyCode) {
+bool Core::Input::GetKeyDown(Core::KeyCode keyCode) {
 
     int key = static_cast<int>(keyCode);
     return mCurrentStateKeyboard[key] && !mPreviousStateKeyboard[key];
 
 }
 
-bool KitEngine::Core::Input::GetKeyUp(KitEngine::Core::KeyCode keyCode) {
+bool Core::Input::GetKeyUp(Core::KeyCode keyCode) {
 
     int key = static_cast<int>(keyCode);
     return mPreviousStateKeyboard[key] && !mCurrentStateKeyboard[key];
 
 }
 
-bool KitEngine::Core::Input::GetMouseButton(KitEngine::Core::MouseButton mouseButton) {
+bool Core::Input::GetMouseButton(Core::MouseButton mouseButton) {
 
     int mouse = static_cast<int>(mouseButton);
     return mCurrentStateMouse[mouse];
 
 }
 
-bool KitEngine::Core::Input::GetMouseDown(KitEngine::Core::MouseButton mouseButton) {
+bool Core::Input::GetMouseDown(Core::MouseButton mouseButton) {
 
     int mouse = static_cast<int>(mouseButton);
     return mCurrentStateMouse[mouse] && !mPreviousStateMouse[mouse];
 
 }
 
-bool KitEngine::Core::Input::GetMouseUp(KitEngine::Core::MouseButton mouseButton) {
+bool Core::Input::GetMouseUp(Core::MouseButton mouseButton) {
 
     int mouse = static_cast<int>(mouseButton);
     return mPreviousStateMouse[mouse] && !mCurrentStateMouse[mouse];
 
 }
 
-void KitEngine::Core::Input::SetInputMode(KitEngine::Core::CursorMode mode, KitEngine::Core::CursorState state) {
+void Core::Input::SetInputMode(Core::CursorMode mode, Core::CursorState state) {
 
     glfwSetInputMode(m_pWindow, static_cast<int>(mode), static_cast<int>(state));
 
 }
 
-void KitEngine::Core::Input::SetCursorPos(double x, double y) {
+void Core::Input::SetCursorPos(double x, double y) {
 
     glfwSetCursorPos(m_pWindow, x, y);
 

@@ -6,7 +6,7 @@
 #define LEVELEDITOR_BASECAMERA_H
 #include "core.h"
 
-namespace KitEngine::Core
+namespace Core
 {
     class BaseCamera
     {

@@ -1,9 +1,9 @@
 //
 // Created by Denis on 01.11.2022.
 //
-#include "Core/LayerStack.h"
+#include "LayerStack.h"
 
-KitEngine::Core::LayerStack::~LayerStack() {
+Core::LayerStack::~LayerStack() {
 
     // Iterate for all layers
     for (auto* pLayer : mLayers) {
@@ -24,7 +24,7 @@ KitEngine::Core::LayerStack::~LayerStack() {
 
 }
 
-void KitEngine::Core::LayerStack::Push(KitEngine::Core::BaseLayer *pLayer) {
+void Core::LayerStack::Push(Core::BaseLayer *pLayer) {
 
     if (pLayer != nullptr) {
 
@@ -40,7 +40,7 @@ void KitEngine::Core::LayerStack::Push(KitEngine::Core::BaseLayer *pLayer) {
 
 }
 
-void KitEngine::Core::LayerStack::PushOverlay(KitEngine::Core::BaseLayer *pLayer) {
+void Core::LayerStack::PushOverlay(Core::BaseLayer *pLayer) {
 
     if (pLayer != nullptr) {
 
@@ -57,7 +57,7 @@ void KitEngine::Core::LayerStack::PushOverlay(KitEngine::Core::BaseLayer *pLayer
 
 }
 
-void KitEngine::Core::LayerStack::Pop(KitEngine::Core::BaseLayer *pLayer) {
+void Core::LayerStack::Pop(Core::BaseLayer *pLayer) {
 
     if (pLayer != nullptr) {
 
@@ -74,7 +74,7 @@ void KitEngine::Core::LayerStack::Pop(KitEngine::Core::BaseLayer *pLayer) {
 
 }
 
-void KitEngine::Core::LayerStack::PopOverlay() {
+void Core::LayerStack::PopOverlay() {
 
     if (mOverlayLayer != nullptr) {
 

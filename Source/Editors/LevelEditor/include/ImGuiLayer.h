@@ -5,7 +5,7 @@
 #ifndef KITENGINE_IMGUILAYER_H
 #define KITENGINE_IMGUILAYER_H
 
-#include <Core/BaseLayer.h>
+#include <BaseLayer.h>
 
 namespace LevelEditor
 {
@@ -15,7 +15,7 @@ namespace LevelEditor
     //
     //  созданный слой следует поместить в LayerStack, он самостоятельно вызывает
     //  методы OnStart() и OnFinish() при инициализации и уничтожении
-    class ImGuiLayer : public KitEngine::Core::BaseLayer
+    class ImGuiLayer : public Core::BaseLayer
     {
     public:
         // Конструктор по умолчанию

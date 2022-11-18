@@ -3,8 +3,8 @@
 //
 #include "Tests/TestLayer.h"
 
-#include <Core/Input.h>
-#include <Core/Application.h>
+#include <Input.h>
+#include <Application.h>
 
 #include "IconsFontAwesome6.h"
 
@@ -23,8 +23,8 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
 
     mTransform = glm::rotate(mTransform, 0.02f, glm::vec3(0.0f, 1.0f, 0.0f));
     view = glm::lookAt(cameraPos,cameraPos + cameraFront, cameraUp);
-    projection = glm::perspective(45.0f, (GLfloat)Application::Instance().GetWindow()->GetProps().Width /
-                                         (GLfloat)Application::Instance().GetWindow()->GetProps().Height, 0.1f, 100.0f);
+    projection = glm::perspective(45.0f, (GLfloat)Core::Application::Instance().GetWindow()->GetWidth() /
+                                         (GLfloat)Core::Application::Instance().GetWindow()->GetHeight(), 0.1f, 100.0f);
 
     if(isModelLoaded == true){
         mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, glm::value_ptr(view));
@@ -111,7 +111,7 @@ void LevelEditor::Tests::TestLayer::OnUIRender() {
             }
             if(ImGui::MenuItem(ICON_FA_RIGHT_FROM_BRACKET " Exit"))
             {
-                Application::Instance().Close();
+                Core::Application::Instance().Close();
             }
             ImGui::EndMenu();
         }
@@ -144,39 +144,39 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
 
     // Camera controls
     GLfloat cameraSpeed = 0.30f;
-    if (Input::GetKey(KeyCode::W))
+    if (Core::Input::GetKey(Core::KeyCode::W))
     {
         cameraPos += cameraSpeed * cameraFront;
     }
-    if (Input::GetKey(KeyCode::S))
+    if (Core::Input::GetKey(Core::KeyCode::S))
     {
         cameraPos -= cameraSpeed * cameraFront;
     }
-    if (Input::GetKey(KeyCode::A))
+    if (Core::Input::GetKey(Core::KeyCode::A))
     {
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
-    if (Input::GetKey(KeyCode::D))
+    if (Core::Input::GetKey(Core::KeyCode::D))
     {
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
 
-    if(Input::GetMouseButton(MouseButton::MouseButtonLeft))
+    if(Core::Input::GetMouseButton(Core::MouseButton::MouseButtonLeft))
     {
-        Input::SetInputMode(CursorMode::Cursor, CursorState::CursorDisabled);
+        Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorDisabled);
         
-        GLfloat xoffset = Input::mousePosition.x - lastX;
-        GLfloat yoffset = lastY - Input::mousePosition.y;
+        GLfloat xoffset = Core::Input::mousePosition.x - lastX;
+        GLfloat yoffset = lastY - Core::Input::mousePosition.y;
 
         // Установка курсора на последнее подложение камеры
         if(isCheckMouse)
         {
-            Input::SetCursorPos(lastX, lastY);
+            Core::Input::SetCursorPos(lastX, lastY);
             isCheckMouse = false;
         }
 
-        lastX = Input::mousePosition.x;
-        lastY = Input::mousePosition.y;
+        lastX = Core::Input::mousePosition.x;
+        lastY = Core::Input::mousePosition.y;
         
         GLfloat sensitivity = 0.05;
         xoffset *= sensitivity;
@@ -197,12 +197,12 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
         cameraFront = glm::normalize(front);
 
     }
-    if(Input::GetMouseUp(MouseButton::MouseButtonLeft)){
-        Input::SetInputMode(CursorMode::Cursor, CursorState::CursorNormal);
+    if(Core::Input::GetMouseUp(Core::MouseButton::MouseButtonLeft)){
+        Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorNormal);
         isCheckMouse = true;
         // Установка последних координт камеры на позицию мыши
-        Input::mousePosition.x = lastX;
-        Input::mousePosition.y = lastY;
+        Core::Input::mousePosition.x = lastX;
+        Core::Input::mousePosition.y = lastY;
     }
 
 }
