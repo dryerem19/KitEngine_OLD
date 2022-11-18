@@ -6,7 +6,7 @@
 #define KITENGINE_BASELAYER_H
 #include "core.h"
 
-namespace KitEngine::Core
+namespace Core
 {
     // Интерфейс базового слоя.
     // Пример:

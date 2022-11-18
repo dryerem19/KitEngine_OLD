@@ -7,7 +7,7 @@
 
 #include "BaseLayer.h"
 
-namespace KitEngine::Core
+namespace Core
 {
     // Контейнер слоёв.
     // Пример:

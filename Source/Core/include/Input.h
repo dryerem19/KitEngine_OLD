@@ -6,7 +6,7 @@
 #define KITENGINE_INPUT_H
 #include "core.h"
 
-namespace KitEngine::Core
+namespace Core
 {
     #pragma region enums
     enum class KeyCode

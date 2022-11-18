@@ -6,7 +6,7 @@
 #define KITENGINE_LOGGER_H
 #include "core.h"
 
-namespace KitEngine::Core
+namespace Core
 {
     class Log
     {

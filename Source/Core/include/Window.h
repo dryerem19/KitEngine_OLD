@@ -4,9 +4,9 @@
 
 #pragma once
 #include "core.h"
-#include "Core/Logger.h"
+#include "Logger.h"
 
-namespace KitEngine
+namespace Core
 {
     class WindowProps
     {
@@ -27,24 +27,27 @@ namespace KitEngine
     class Window
     {
     private:
-        WindowProps mProps;
+        uint32_t mWidth;
+        uint32_t mHeight;
+        std::string mTitle;
         GLFWwindow* m_pWindow = nullptr;
-        static void OnErrorHandling(int codeError, const char* descriptionError);
+
+        static void OnErrorCallback(int codeError, const char* descriptionError);        
+
+        void Init();
 
     public:
         explicit Window(const WindowProps& windowProps);
         ~Window();
-        bool Initialize();
         bool Exec();
         void Update();
         void SwapBuffers();
 
-        void SetWindowTitle(const std::string& title) const;
-        const inline WindowProps& GetProps() { return mProps; }
-        [[nodiscard]] inline GLFWwindow* GetWindowPointer() const { return m_pWindow; }
-    };
+        void SetWindowTitle(const std::string& title);
 
-    void OnDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, 
-                    const char *message, 
-                    const void *userParam);
+        __forceinline uint32_t GetWidth() const { return mWidth; }
+        __forceinline uint32_t GetHeight() const { return mHeight; }
+        __forceinline std::string GetTitle() const { return mTitle; }
+        __forceinline GLFWwindow* GetWindowPointer() const { return m_pWindow; }
+    };
 }

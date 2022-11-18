@@ -1,9 +1,9 @@
 //
 // Created by dryerem19 on 10/28/22.
 //
-#include "Core/Application.h"
-#include "Core/Input.h"
-#include "Core/Logger.h"
+#include "Application.h"
+#include "Input.h"
+#include "Logger.h"
 
 #include <Renderer.h>
 
@@ -11,21 +11,17 @@
 // PUBLIC SECTION
 //------------------------------------------------------------------------------------
 
-KitEngine::Core::Application &KitEngine::Core::Application::Instance() {
+Core::Application &Core::Application::Instance() {
 
     static Application instance;
     return instance;
 
 }
 
-void KitEngine::Core::Application::Initialize(const KitEngine::WindowProps& props) {
+void Core::Application::Initialize(const WindowProps& props) {
 
     // Инициализация окна
     mWindow = std::make_unique<Window>(props);
-    if (!mWindow->Initialize()) {
-        Log::Critical("Failed to create the window!");
-        exit(-1);
-    }
 
     // Инициализация ввода
     Input::Initialize(mWindow->GetWindowPointer());
@@ -37,7 +33,7 @@ void KitEngine::Core::Application::Initialize(const KitEngine::WindowProps& prop
 
 }
 
-void KitEngine::Core::Application::Start() {
+void Core::Application::Start() {
 
     Log::Info("Application running");
 
@@ -98,7 +94,8 @@ void KitEngine::Core::Application::Start() {
 
         // Если время кадра больше 1 секунды, обнуляем счётчик кадров и время
         if (frameTime >= 1.0) {
-            std::string fpsWindowTitle = mWindow->GetProps().Title + " FPS: " + std::to_string(frames);
+            std::string fpsWindowTitle = std::string("KitEngine") + std::string(" FPS: ") + std::to_string(frames);
+            std::cout << mWindow->GetTitle() << std::endl;
             mWindow->SetWindowTitle(fpsWindowTitle);
 
             frames = 0;
@@ -110,11 +107,11 @@ void KitEngine::Core::Application::Start() {
 
 }
 
-void KitEngine::Core::Application::Close() {
+void Core::Application::Close() {
     glfwSetWindowShouldClose(mWindow->GetWindowPointer(), GLFW_TRUE);
 }
 
-KitEngine::Core::Application::Application()
+Core::Application::Application()
     : mIsRunning(false), mPreviousTime(0) {
 
 }

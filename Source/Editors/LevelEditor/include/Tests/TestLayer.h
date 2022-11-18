@@ -5,13 +5,10 @@
 #ifndef KITENGINE_TESTLAYER_H
 #define KITENGINE_TESTLAYER_H
 
-#include <Core/BaseLayer.h>
+#include <BaseLayer.h>
 
 
 #include <Renderer.h>
-
-
-#include <Graphics/Components/ModelComponent.h>
 
 // TODO: УБРАТЬ
 #include <memory>
@@ -26,18 +23,14 @@
 
 #include <KitModel.h>
 
-using namespace KitEngine::Core;
-using namespace KitEngine::Graphics::Components;
-
 namespace LevelEditor::Tests
 {
-    class TestLayer : public KitEngine::Core::BaseLayer
+    class TestLayer : public Core::BaseLayer
     {
     private:
         bool isModelLoaded = false;        
         std::unique_ptr<Render::Shader>       mShader;
         Render::KitModel mNanoModel;
-        std::unique_ptr<KitEngine::Graphics::Components::ModelComponent> mModel;
 
         glm::mat4                                          mTransform;
         glm::mat4 view = glm::mat4(1.0f);
