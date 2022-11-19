@@ -41,5 +41,17 @@ namespace Render
             return mRegistry.view<Components...>();
         }
 
+        /*
+        Возвращает объект, к которому прикреплен компонент
+        @param instance экземпляр компонента
+        @return объект 
+        */
+        template<typename Component>
+        auto GetObject(const Component& instance)
+        {
+            const entt::entity entity = entt::to_entity(mRegistry, instance);
+            return KitObject(entity, this);
+        }
+
     };
 }

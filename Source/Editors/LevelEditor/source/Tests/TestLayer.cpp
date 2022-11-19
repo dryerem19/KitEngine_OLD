@@ -341,9 +341,34 @@ std::string LevelEditor::Tests::TestLayer::FileDialog(){
     return filepath;
 }
 
+void LevelEditor::Tests::TestLayer::DrawNode(Render::KitTransform& tr)
+{
+    auto obj = mScene.GetObject(tr);
+    auto& tc = obj.GetComponent<Render::KitTag>();
+
+    ImGuiTreeNodeFlags flags = tr.mChildren.empty() 
+            ? ImGuiTreeNodeFlags_Leaf : 0;
+    if (ImGui::TreeNodeEx(tc.Tag.c_str(), flags))
+    {
+        for (auto&& child : tr.mChildren)
+        {
+            this->DrawNode(*child);
+        }
+
+        ImGui::TreePop();
+    }
+}
+
 void LevelEditor::Tests::TestLayer::SceneTree()
 {
-
+    auto view = mScene.View<Render::KitTransform>();
+    for (auto [entity, tr] : view.each())
+    {
+        if (nullptr == tr.pParent) 
+        {
+            this->DrawNode(tr);
+        }     
+    }
     
     // auto view = mScene.View<Render::KitSceneNode>();
     // for (auto [entity, node] : view.each())

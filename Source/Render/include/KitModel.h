@@ -40,7 +40,7 @@ namespace Render
         @param filepath Путь к файлу модели
         */
         void ProcessAssimpNode(const aiNode* pNode, const aiScene* pScene, 
-            KitTransform* rootTransform);
+            KitObject rootObject);
 
         /*
         @brief Обработка меша assimp'а
@@ -49,7 +49,7 @@ namespace Render
         @param filepath Путь к файлу модели
         @return Экземпляр класса KitStaticMesh
         */
-        KitObject ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene);
+        KitTransform& ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene);
 
         /*
         @brief Обработка материала assimp'а

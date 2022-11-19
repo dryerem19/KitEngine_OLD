@@ -31,12 +31,7 @@ namespace Render
         @param pScene указатель на сцену, которой принадлежит объект
         */
         KitObject(entt::entity handle, KitScene* pScene)
-            : mHandle(handle), m_pScene(pScene)
-        {
-            // Добавляем компонент трансформации
-            // * Трансформацию содержит любой объект сцены
-            m_pScene->mRegistry.emplace<KitTransform>(mHandle);
-        }
+            : mHandle(handle), m_pScene(pScene) { }
 
         /* Деструктор по умолчанию */
         ~KitObject() = default;       
@@ -72,14 +67,5 @@ namespace Render
         {
             return m_pScene;
         }
-
-        /*
-        Возвращает компонент трансформации объекта
-        */
-        KitTransform& GetTransform()
-        {
-            return m_pScene->mRegistry.get<KitTransform>(mHandle);
-        }
-
     };
 }

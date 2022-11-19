@@ -73,6 +73,7 @@ namespace LevelEditor::Tests
         std::string FileDialog();
 
         void SceneTree();
+        void DrawNode(Render::KitTransform& tr);
 
     };
 }

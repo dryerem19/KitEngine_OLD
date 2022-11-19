@@ -35,7 +35,7 @@ void Render::KitModel::Init(KitScene* kitScene, const std::string& filepath)
     rootObject.AddComponent<KitTag>(tag);
 
     // Обрабатываем все ноды сцены начиная с родительской
-    this->ProcessAssimpNode(p_assimpScene->mRootNode, p_assimpScene, &rootObject.GetTransform());
+    this->ProcessAssimpNode(p_assimpScene->mRootNode, p_assimpScene, rootObject);
     
     // TODO: add assert scene incompete
     //if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode) {
@@ -44,30 +44,32 @@ void Render::KitModel::Init(KitScene* kitScene, const std::string& filepath)
 }
 
 void Render::KitModel::ProcessAssimpNode(const aiNode* pNode, const aiScene* pScene, 
-    KitTransform* rootTransform)
+    KitObject rootNode)
 {
-    KitTransform* _rootTransform = rootTransform;
+    auto& rootTransform = rootNode.GetComponent<KitTransform>();
 
     // Обрабатываем все меши ноды
     for (uint32_t iMesh = 0; iMesh < pNode->mNumMeshes; iMesh++)
-    {
-        // Получаем меш по индексу
-        const aiMesh* pMesh = pScene->mMeshes[pNode->mMeshes[iMesh]];
-
-        auto obj = this->ProcessAssimpMesh(pMesh, pScene);
-        obj.GetTransform().pParent = _rootTransform;
-        _rootTransform = &obj.GetTransform();
+    {   
+        auto& tc = this->ProcessAssimpMesh(pScene->mMeshes[pNode->mMeshes[iMesh]], pScene);
+        tc.pParent = &rootTransform;
+        rootTransform.mChildren.emplace_back(&tc);
     }
 
     // Рекурсивно обрабатываем все дочерние ноды
     for (uint32_t iChild = 0; iChild < pNode->mNumChildren; iChild++)
     {
-        this->ProcessAssimpNode(pNode->mChildren[iChild], pScene, _rootTransform);
+        auto obj = pKitScene->CreateObject();
+        obj.AddComponent<KitTag>(pNode->mChildren[iChild]->mName.C_Str());
+        auto& tc = obj.GetComponent<KitTransform>();
+        tc.pParent = &rootTransform;
+        rootTransform.mChildren.emplace_back(&tc);
+        this->ProcessAssimpNode(pNode->mChildren[iChild], pScene, obj);
     }
 }
 
 
-Render::KitObject Render::KitModel::ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene)
+Render::KitTransform& Render::KitModel::ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene)
 {
     const aiVector3D zero3D(0.0f, 0.0f, 0.0f);
 
@@ -123,20 +125,13 @@ Render::KitObject Render::KitModel::ProcessAssimpMesh(const aiMesh* pMesh, const
             directory.string(), material);
     }
 
-    // Cоздаём новый объект
-    auto obj = pKitScene->CreateObject();
-
     // Добавляем ему компонент меша
+    auto obj = pKitScene->CreateObject();
     auto& mesh = obj.AddComponent<KitStaticMesh>(vertices, indices);
-
-    // Сохраняем имя
+    mesh.mMaterial = material;
     obj.AddComponent<KitTag>(pMesh->mName.C_Str());
 
-    // Сохраняем материал
-    mesh.mMaterial = material;
-
-    // Возвращаем объект
-    return obj;
+    return obj.GetComponent<KitTransform>();
 }
 
 void Render::KitModel::ProcessAssimpMaterial(const aiMaterial* pMaterial, const std::string& directory, 

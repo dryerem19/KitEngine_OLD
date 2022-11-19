@@ -23,7 +23,7 @@ namespace Render
 		/* Список указателей на дочерние компоненты трансформации */
 		std::list<KitTransform*> mChildren;
 
-        KitTransform() = default;
+		KitTransform() = default;
 		KitTransform(const KitTransform&) = default;
 		explicit KitTransform(const glm::vec3& translation)
 			: Translation(translation) {}

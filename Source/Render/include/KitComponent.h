@@ -7,7 +7,8 @@ namespace Render
     {
     public:
         KitObject mAttachedObject;
-
+        
+    protected:
         KitComponent(const KitComponent&) = default;
         KitComponent(const KitObject& attachedObject) 
             : mAttachedObject(attachedObject) { }
