@@ -5,7 +5,13 @@
 #ifndef KITENGINE_IMGUILAYER_H
 #define KITENGINE_IMGUILAYER_H
 
-#include <Core/BaseLayer.h>
+#include <BaseLayer.h>
+
+#include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_internal.h>
+#include <ImGuizmo.h>
 
 namespace LevelEditor
 {
@@ -15,7 +21,7 @@ namespace LevelEditor
     //
     //  созданный слой следует поместить в LayerStack, он самостоятельно вызывает
     //  методы OnStart() и OnFinish() при инициализации и уничтожении
-    class ImGuiLayer : public KitEngine::Core::BaseLayer
+    class ImGuiLayer : public Core::BaseLayer
     {
     public:
         // Конструктор по умолчанию
@@ -27,6 +33,8 @@ namespace LevelEditor
         void OnStart() override;
 
         void OnBegin() override;
+
+        void EventHandler(const Core::Event& event);
 
         void OnEnd() override;
 

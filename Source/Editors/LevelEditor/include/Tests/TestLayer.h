@@ -5,7 +5,7 @@
 #ifndef KITENGINE_TESTLAYER_H
 #define KITENGINE_TESTLAYER_H
 
-#include <Core/BaseLayer.h>
+#include <BaseLayer.h>
 
 
 #include <Renderer.h>
@@ -19,6 +19,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
+#include <ImGuizmo.h>
 #include <ImGuiFileDialog.h>
 
 #include <KitTransform.h>
@@ -29,12 +30,17 @@ using namespace KitEngine::Core;
 
 namespace LevelEditor::Tests
 {
-    class TestLayer : public KitEngine::Core::BaseLayer
+    class TestLayer : public Core::BaseLayer
     {
     private:
         bool isModelLoaded = false;        
         std::unique_ptr<Render::Shader>       mShader;
+
         Render::KitScene mScene;
+        Render::KitModel mNanoModel;
+
+        std::shared_ptr<Render::KitObject> mSelectedObject;
+
 
         glm::mat4                                          mTransform;
         glm::mat4 view = glm::mat4(1.0f);
@@ -51,14 +57,19 @@ namespace LevelEditor::Tests
 
         Render::FrameBuffer frameBuffer;
 
+        // Checked
         bool isCheckMouse = true;
         bool isCheckFileDialog = false;
+
+
+        ImGuizmo::OPERATION mode = ImGuizmo::OPERATION::TRANSLATE;
 
     public:
         TestLayer() = default;
 
         void OnStart() override;
         void OnUpdate() override;
+        void EventHandler(const Core::Event& event) override;
         void OnRender(double dt) override;
         void OnUIRender() override;
         void OnFinish() override;
@@ -74,6 +85,9 @@ namespace LevelEditor::Tests
 
         void SceneTree();
         void DrawNode(Render::KitTransform& tr);
+
+        // UI Gizmo
+        void DrawGizmo();
 
     };
 }

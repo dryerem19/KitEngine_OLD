@@ -5,8 +5,9 @@
 #ifndef KITENGINE_BASELAYER_H
 #define KITENGINE_BASELAYER_H
 #include "core.h"
+#include "Events/Event.h"
 
-namespace KitEngine::Core
+namespace Core
 {
     // Интерфейс базового слоя.
     // Пример:
@@ -31,6 +32,8 @@ namespace KitEngine::Core
         //
         // вызывается автоматически, если был помещён в LayerStack.
         virtual void OnStart();
+
+        virtual void EventHandler(const Event& event);
 
         // Вызывается каждый кадр.
         //

@@ -3,11 +3,11 @@
 //
 #include "ImGuiLayer.h"
 #include "IconsFontAwesome6.h"
-#include "Core/Application.h"
+#include "Application.h"
 
 
 LevelEditor::ImGuiLayer::ImGuiLayer()
-    : KitEngine::Core::BaseLayer("ImGuiLayer") {
+    : Core::BaseLayer("ImGuiLayer") {
 }
 
 void LevelEditor::ImGuiLayer::OnStart() {
@@ -34,13 +34,18 @@ void LevelEditor::ImGuiLayer::OnStart() {
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
-    KitEngine::Core::Application& app = KitEngine::Core::Application::Instance();
+    Core::Application& app = Core::Application::Instance();
     GLFWwindow* pWindow = app.GetWindow()->GetWindowPointer();
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(pWindow, true);
     ImGui_ImplOpenGL3_Init("#version 330 core");
 
+}
+
+void LevelEditor::ImGuiLayer::EventHandler(const Core::Event& event)
+{
+    
 }
 
 void LevelEditor::ImGuiLayer::OnFinish() {
@@ -58,6 +63,7 @@ void LevelEditor::ImGuiLayer::OnBegin() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+    ImGuizmo::BeginFrame();
 
 }
 

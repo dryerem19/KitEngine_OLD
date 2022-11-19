@@ -12,6 +12,9 @@ bin/
 
 venv/
 
+./vcpkg
+
+
 !build.yaml
 !postbuild.py
 

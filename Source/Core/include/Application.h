@@ -5,10 +5,10 @@
 #ifndef LEVELEDITOR_APPLICATION_H
 #define LEVELEDITOR_APPLICATION_H
 
-#include "Core/Window.h"
+#include "Window.h"
 #include "LayerStack.h"
 
-namespace KitEngine::Core
+namespace Core
 {
     // Основное приложение.
     // Пример использования:
@@ -44,10 +44,12 @@ namespace KitEngine::Core
         // Инициализирует приложение
         //
         // Параметр WindowProps используется для информации о окне, которое будет создано.
-        void Initialize(const KitEngine::WindowProps& props);
+        void Initialize(const WindowProps& props);
 
         // Поместить слой в контейнер слоёв
         inline void PushLayer(BaseLayer* pLayer) { mLayerStack.Push(pLayer); }
+
+        void EventHandler(const Core::Event& event);
 
         // Удалить слой из контейнера слоёв
         inline void PopLayer(BaseLayer* pLayer) { mLayerStack.Pop(pLayer); }

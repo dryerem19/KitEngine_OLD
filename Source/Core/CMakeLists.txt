@@ -1,4 +1,4 @@
-project(Engine VERSION 1.0.0 DESCRIPTION "KitEngine SDK")
+project(Core)
 
 file(GLOB_RECURSE INCLUDE "include/*.h")
 file(GLOB_RECURSE SOURCE "source/*.cpp")
@@ -15,8 +15,6 @@ target_include_directories(${PROJECT_NAME}
 find_package(glfw3 CONFIG REQUIRED)
 find_package(EnTT CONFIG REQUIRED)
 find_package(Bullet CONFIG REQUIRED)
-find_package(imgui CONFIG REQUIRED)
-find_package(imguizmo CONFIG REQUIRED)
 #find_package(glm CONFIG REQUIRED)
 #find_package(SailC++ CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
@@ -38,8 +36,6 @@ target_link_libraries(${PROJECT_NAME}
         glfw
         EnTT::EnTT
         LinearMath Bullet3Common BulletDynamics BulletSoftBody
-        imgui::imgui
-        imguizmo::imguizmo
 #        glm::glm
 #        SAIL::sail-c++
         spdlog::spdlog spdlog::spdlog_header_only

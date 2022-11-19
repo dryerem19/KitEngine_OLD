@@ -3,18 +3,35 @@
 //
 #include "Tests/TestLayer.h"
 
-#include <Core/Input.h>
-#include <Core/Application.h>
+#include <Input.h>
+#include <Application.h>
 
 #include "IconsFontAwesome6.h"
 
 #include <fmt/format.h>
+
+#include <Events/WindowResizeEvent.h>
+#include <Events/FrameBufferResizeEvent.h>
+
 
 void LevelEditor::Tests::TestLayer::OnStart() 
 {
     mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
     mShader->Enable();
     mTransform = glm::mat4(1.0f);
+}
+
+void LevelEditor::Tests::TestLayer::EventHandler(const Core::Event& event)
+{
+    const Core::EventType& type = event.GetType();
+    if (type == Core::EventType::FrameBufferResizeEvent)
+    {
+        auto& e = (Core::FrameBufferResizeEvent&)event;
+        projection = glm::perspective(45.0f, (float)e.GetWidth() / e.GetHeight(), 0.1f, 100.0f);
+        glViewport(0, 0, e.GetWidth(), e.GetHeight());   
+    }
+
+    std::cout << event.ToString() << std::endl;
 }
 
 void LevelEditor::Tests::TestLayer::OnUpdate() {
@@ -24,8 +41,6 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
 
     mTransform = glm::rotate(mTransform, 0.02f, glm::vec3(0.0f, 1.0f, 0.0f));
     view = glm::lookAt(cameraPos,cameraPos + cameraFront, cameraUp);
-    projection = glm::perspective(45.0f, (GLfloat)Application::Instance().GetWindow()->GetProps().Width /
-                                         (GLfloat)Application::Instance().GetWindow()->GetProps().Height, 0.1f, 100.0f);
 
     if(isModelLoaded == true){
         mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, glm::value_ptr(view));
@@ -117,7 +132,7 @@ void LevelEditor::Tests::TestLayer::OnUIRender() {
             }
             if(ImGui::MenuItem(ICON_FA_RIGHT_FROM_BRACKET " Exit"))
             {
-                Application::Instance().Close();
+                Core::Application::Instance().Close();
             }
             ImGui::EndMenu();
         }
@@ -150,39 +165,39 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
 
     // Camera controls
     GLfloat cameraSpeed = 0.30f;
-    if (Input::GetKey(KeyCode::W))
+    if (Core::Input::GetKey(Core::KeyCode::W))
     {
         cameraPos += cameraSpeed * cameraFront;
     }
-    if (Input::GetKey(KeyCode::S))
+    if (Core::Input::GetKey(Core::KeyCode::S))
     {
         cameraPos -= cameraSpeed * cameraFront;
     }
-    if (Input::GetKey(KeyCode::A))
+    if (Core::Input::GetKey(Core::KeyCode::A))
     {
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
-    if (Input::GetKey(KeyCode::D))
+    if (Core::Input::GetKey(Core::KeyCode::D))
     {
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
 
-    if(Input::GetMouseButton(MouseButton::MouseButtonLeft))
+    if(Core::Input::GetMouseButton(Core::MouseButton::MouseButtonRight))
     {
-        Input::SetInputMode(CursorMode::Cursor, CursorState::CursorDisabled);
+        Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorDisabled);
         
-        GLfloat xoffset = Input::mousePosition.x - lastX;
-        GLfloat yoffset = lastY - Input::mousePosition.y;
+        GLfloat xoffset = Core::Input::mousePosition.x - lastX;
+        GLfloat yoffset = lastY - Core::Input::mousePosition.y;
 
         // Установка курсора на последнее подложение камеры
         if(isCheckMouse)
         {
-            Input::SetCursorPos(lastX, lastY);
+            Core::Input::SetCursorPos(lastX, lastY);
             isCheckMouse = false;
         }
 
-        lastX = Input::mousePosition.x;
-        lastY = Input::mousePosition.y;
+        lastX = Core::Input::mousePosition.x;
+        lastY = Core::Input::mousePosition.y;
         
         GLfloat sensitivity = 0.05;
         xoffset *= sensitivity;
@@ -203,12 +218,12 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
         cameraFront = glm::normalize(front);
 
     }
-    if(Input::GetMouseUp(MouseButton::MouseButtonLeft)){
-        Input::SetInputMode(CursorMode::Cursor, CursorState::CursorNormal);
+    if(Core::Input::GetMouseUp(Core::MouseButton::MouseButtonRight)){
+        Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorNormal);
         isCheckMouse = true;
         // Установка последних координт камеры на позицию мыши
-        Input::mousePosition.x = lastX;
-        Input::mousePosition.y = lastY;
+        Core::Input::mousePosition.x = lastX;
+        Core::Input::mousePosition.y = lastY;
     }
 
 }
@@ -260,30 +275,36 @@ void LevelEditor::Tests::TestLayer::Docking() {
     ImGui::DockSpace(ImGui::GetID("DockSpace"), ImVec2(0.0f, 0.0f), dockspace_flags);
 
     if(ImGui::BeginMenuBar())
-    {
+    {   
+        // Arrow left - undo (назад)
         if(ImGui::MenuItem(ICON_FA_CIRCLE_ARROW_LEFT))
         {
-
+            
         }
+        // Arrow right - redo (вперед)
         if(ImGui::MenuItem(ICON_FA_CIRCLE_ARROW_RIGHT))
         {
 
         }
+        // Enable mouse pointer
         if(ImGui::MenuItem(ICON_FA_ARROW_POINTER))
         {
 
         }
+        // Enable movement object (gizmo)
         if(ImGui::MenuItem(ICON_FA_ARROWS_UP_DOWN_LEFT_RIGHT))
         {
-
+            mode = ImGuizmo::OPERATION::TRANSLATE;
         }
+        // Enable rotate object (gizmo)
         if(ImGui::MenuItem(ICON_FA_ROTATE))
         {
-
+            mode = ImGuizmo::OPERATION::ROTATE;
         }
+        // Enable scale object (gizmo)
         if(ImGui::MenuItem(ICON_FA_UP_RIGHT_FROM_SQUARE))
         {
-
+            mode = ImGuizmo::OPERATION::SCALE;
         }
         ImGui::Separator();
         if(ImGui::BeginMenu(ICON_FA_DRAW_POLYGON))
@@ -304,7 +325,6 @@ void LevelEditor::Tests::TestLayer::Docking() {
         }
         ImGui::EndMenuBar();
     }
-
     ImGui::End();
 
 }
@@ -322,9 +342,13 @@ void LevelEditor::Tests::TestLayer::Viewport() {
         vMax.x += ImGui::GetWindowPos().x;
         vMax.y += ImGui::GetWindowPos().y;
         ImGui::GetWindowDrawList()->AddImage((ImTextureID)backTexture, vMin, vMax, ImVec2(0,1), ImVec2(1,0));
-    }
-    ImGui::PopStyleVar(1);
+        // Draw Gizmo
+        ImGuizmo::SetDrawlist();
+        ImGuizmo::SetRect(vMin.x, vMin.y, ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
+        DrawGizmo();
+    } 
     ImGui::End();
+    ImGui::PopStyleVar();
 }
 
 std::string LevelEditor::Tests::TestLayer::FileDialog(){
@@ -367,39 +391,69 @@ void LevelEditor::Tests::TestLayer::SceneTree()
         if (nullptr == tr.pParent) 
         {
             this->DrawNode(tr);
-        }     
+        }           
     }
-    
-    // auto view = mScene.View<Render::KitSceneNode>();
-    // for (auto [entity, node] : view.each())
-    // {
-    //     ImGuiTreeNodeFlags flags = node.mChildren.empty() 
-    //             ? ImGuiTreeNodeFlags_Leaf : 0;
-    //     if (ImGui::TreeNodeEx(fmt::format("{} {}", node.GetHierarchyIcon(), node.GetName()).c_str()), flags)
-    //     {
-    //         ImGui::TreePop();
-    //     }
-    // }
-    // auto view = mScene.View<Render::KitModel>();
-    // for (auto [entity, model]: view.each())
-    // {
-    //     if (ImGui::TreeNode(model.mName.c_str()))
-    //     {
-    //         for (auto obj : model.mChildren)
-    //         {
-    //             auto& mc = obj.GetComponent<Render::KitStaticMesh>();
-                
-    //             ImGuiTreeNodeFlags flags = mc.mChildren.empty() 
-    //                 ? ImGuiTreeNodeFlags_Leaf : 0;
+}
 
-    //             if (ImGui::TreeNodeEx(
-    //                 std::format("{0}\t{1}", ICON_FA_CUBE, mc.mName).c_str(),
-    //                 flags))
-    //             {
-    //                 ImGui::TreePop();
-    //             }
-    //         }
-    //         ImGui::TreePop();
-    //     }         
-    // }
+
+void LevelEditor::Tests::TestLayer::DrawGizmo(){
+
+    if (mSelectedObject)
+    {
+        auto& transform = mSelectedObject->mTransform;
+        float translationComponent[3] = 
+        { 
+            transform.Translation.x,
+            transform.Translation.y,
+            transform.Translation.z
+        };
+
+        float rotationComponent[3] =
+        { 
+            transform.Rotation.x,
+            transform.Rotation.y,
+            transform.Rotation.z
+        };
+
+        float scaleComponent[3] =
+        { 
+            transform.Scale.x,
+            transform.Scale.y,
+            transform.Scale.z
+        };
+
+        /* Build transform matrix */
+        float transformMatrix[16];
+        ImGuizmo::RecomposeMatrixFromComponents(translationComponent, rotationComponent, scaleComponent, transformMatrix);
+        ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), mode, ImGuizmo::MODE::LOCAL, transformMatrix);
+        
+
+        /* If we moved the manipulator */
+        if (ImGuizmo::IsUsing())
+        {
+            /* We get new transformed components */
+            float translationComponent[3] = {}, rotationComponent[3] = {}, scaleComponent[3] = {};
+            ImGuizmo::DecomposeMatrixToComponents(transformMatrix, translationComponent, rotationComponent, scaleComponent);
+
+            /* Restore the new transformed components */
+            transform.Translation = 
+            {
+                translationComponent[0],
+                translationComponent[1],
+                translationComponent[2]
+            };
+            transform.Rotation =
+            {
+                rotationComponent[0], 
+                rotationComponent[1], 
+                rotationComponent[2]
+            };
+            transform.Scale =
+            {
+                scaleComponent[0],
+                scaleComponent[1],
+                scaleComponent[2]
+            };
+        }
+    }
 }
