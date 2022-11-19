@@ -74,5 +74,24 @@ namespace Render
         {
             return mHandle != entt::null;
         }        
+
+        /**
+         * Проверяет на равенство два объекта
+         * @return True, если левый объект равен правому, иначе False
+        */
+        bool operator==(const KitObject& other) const
+        {
+            return mHandle == other.mHandle 
+                && m_pScene == other.m_pScene;
+        }
+
+        /**
+         * Проверяет на равенство два объекта
+         * @return True, если левый объект не равен правому, иначе False
+        */
+        bool operator!=(const KitObject& other) const
+        {
+            return !(*this == other);
+        }         
     };
 }
