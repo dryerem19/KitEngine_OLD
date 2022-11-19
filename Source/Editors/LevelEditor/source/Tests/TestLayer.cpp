@@ -370,6 +370,7 @@ void LevelEditor::Tests::TestLayer::DrawNode(Render::KitTransform& tr)
 
     ImGuiTreeNodeFlags flags = tr.mChildren.empty() 
             ? ImGuiTreeNodeFlags_Leaf : 0;
+    flags |= ImGuiTreeNodeFlags_OpenOnArrow;    
     flags |= obj == mSelectedObject ? ImGuiTreeNodeFlags_Selected : 0;
     if (ImGui::TreeNodeEx(tc.Tag.c_str(), flags))
     {
