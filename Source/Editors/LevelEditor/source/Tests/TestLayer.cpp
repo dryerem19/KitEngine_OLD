@@ -231,8 +231,6 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
 void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
 
     Render::KitModel model(&mScene, filepath);
-    // auto obj    = mScene.CreateObject();
-    // auto& model = obj.AddComponent<Render::KitModel>(obj, filepath);
     isModelLoaded = true;
 }
 
@@ -381,6 +379,11 @@ void LevelEditor::Tests::TestLayer::DrawNode(Render::KitTransform& tr)
 
         ImGui::TreePop();
     }
+
+    if (ImGui::IsItemClicked())
+    {
+        mSelectedObject = obj;
+    }
 }
 
 void LevelEditor::Tests::TestLayer::SceneTree()
@@ -400,7 +403,7 @@ void LevelEditor::Tests::TestLayer::DrawGizmo(){
 
     if (mSelectedObject)
     {
-        auto& transform = mSelectedObject->mTransform;
+        auto& transform = mSelectedObject.GetComponent<Render::KitTransform>();
         float translationComponent[3] = 
         { 
             transform.Translation.x,

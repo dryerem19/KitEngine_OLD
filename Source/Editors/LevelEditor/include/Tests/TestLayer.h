@@ -26,8 +26,6 @@
 #include <KitModel.h>
 #include <KitScene.h>
 
-using namespace KitEngine::Core;
-
 namespace LevelEditor::Tests
 {
     class TestLayer : public Core::BaseLayer
@@ -37,10 +35,8 @@ namespace LevelEditor::Tests
         std::unique_ptr<Render::Shader>       mShader;
 
         Render::KitScene mScene;
-        Render::KitModel mNanoModel;
 
-        std::shared_ptr<Render::KitObject> mSelectedObject;
-
+        Render::KitObject mSelectedObject;
 
         glm::mat4                                          mTransform;
         glm::mat4 view = glm::mat4(1.0f);

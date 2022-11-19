@@ -24,6 +24,8 @@ namespace Render
     public:
         /* Название объекта */
         std::string mName;
+
+        KitObject() = default;
         
         /* 
         Констуктор для создания объекта в конкретной сцене
@@ -67,5 +69,10 @@ namespace Render
         {
             return m_pScene;
         }
+
+        operator bool() const
+        {
+            return mHandle != entt::null;
+        }        
     };
 }
