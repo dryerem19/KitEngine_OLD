@@ -5,9 +5,23 @@ namespace Render
     class KitTransform
     {
 	public:
+		/*
+		Локальная информация о трансформации
+		*/
         glm::vec3 Translation   = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 Rotation      = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 Scale         = { 1.0f, 1.0f, 1.0f };
+
+		/*
+		Мировая информация о трансформации получаемая путём перемножения всех дочерних трансформаций
+		*/
+		glm::mat4 WorldTransformMatrix = glm::mat4(1.0f);
+		
+		/* Указатель на родительский компонент трансформации */
+		KitTransform* pParent = { nullptr };
+
+		/* Список указателей на дочерние компоненты трансформации */
+		std::list<KitTransform*> mChildren;
 
         KitTransform() = default;
 		KitTransform(const KitTransform&) = default;
@@ -18,7 +32,11 @@ namespace Render
         KitTransform(const glm::vec3& translation, const glm::vec3& rotation, const glm::vec3& scale)
             : Translation(translation), Rotation(rotation), Scale(scale) {}
 
-        [[nodiscard]] glm::mat4 GetTransform() const
+		/*
+		@brief Возвращает матрицу с локальной трансформацией объекта
+		@return локальная матрица трансформации 
+		*/
+        glm::mat4 GetLocalTransform() const
 		{
 			glm::mat4 rotation = glm::toMat4(glm::quat(Rotation));
 
@@ -27,9 +45,24 @@ namespace Render
 				* glm::scale(glm::mat4(1.0f), Scale);
 		}
 
-		glm::mat4 ComputeModelTransform(const KitTransform& parentTransform)
+		/*
+		Обновляет информацию о мировой трансформации объекта
+		*/
+		void UpdateWorldTransform()
 		{
-			return this->GetTransform() * parentTransform.GetTransform();
+			if (nullptr != pParent)
+			{
+				WorldTransformMatrix = pParent->WorldTransformMatrix * this->GetLocalTransform();
+			} 
+			else 
+			{
+				WorldTransformMatrix = this->GetLocalTransform();
+			}
+
+			for (auto&& child : mChildren)
+			{
+				child->UpdateWorldTransform();
+			}
 		}
     };
 }

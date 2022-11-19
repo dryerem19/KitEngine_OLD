@@ -1,59 +1,35 @@
 #pragma once
 #include "KitStaticMesh.h"
-#include "KitSceneNode.h"
 #include "KitMaterial.h"
 #include "KitVertex.h"
 #include "KitObject.h"
 #include "KitScene.h"
+#include "KitTag.h"
 
 namespace Render
 {
-    class KitModel : public KitSceneNode
+    class KitModel
     {
+    private:
+        KitScene* pKitScene;
     public:
         std::string mFilepath;
 
         // Конструктор копирования по умолчанию
         KitModel(const KitModel&) = default;
 
+        KitModel() = default;
+
         /*
         Конструктор импорта модели с помощью Assimp
         */
-        KitModel(const KitObject& attachedObject, const std::string& filepath);
+        KitModel(KitScene* kitScene, const std::string& filepath);
 
         /*
         @brief Метод инициализация меша 
         @param filepath Путь к модели на диске для импорта 
         */
-        void Init(const std::string& filepath);
-
-        /*
-        @brief Итератор
-        @return Итератор на первый элемент
-        */
-        constexpr std::vector<Render::KitSceneNode *>::iterator begin() 
-        { return mChildren.begin(); }
-
-        /*
-        @brief Итератор
-        @return Итератор на последний элемент
-        */
-        constexpr std::vector<Render::KitSceneNode *>::iterator end() 
-        { return mChildren.end(); }
-
-        /*
-        @brief Константный итератор
-        @return Итератор на последний элемент
-        */
-        constexpr std::vector<Render::KitSceneNode *>::const_iterator cbegin() 
-        { return mChildren.cbegin(); }
-
-        /*
-        @brief Константный итератор
-        @return Итератор на последний элемент
-        */
-        constexpr std::vector<Render::KitSceneNode *>::const_iterator cend() 
-        { return mChildren.cend(); }        
+        void Init(KitScene* kitScene, const std::string& filepath);
 
     private:
 
@@ -64,7 +40,7 @@ namespace Render
         @param filepath Путь к файлу модели
         */
         void ProcessAssimpNode(const aiNode* pNode, const aiScene* pScene, 
-            KitStaticMesh* parentMesh);
+            KitTransform* rootTransform);
 
         /*
         @brief Обработка меша assimp'а
@@ -73,7 +49,7 @@ namespace Render
         @param filepath Путь к файлу модели
         @return Экземпляр класса KitStaticMesh
         */
-        KitStaticMesh& ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene);
+        KitObject ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene);
 
         /*
         @brief Обработка материала assimp'а

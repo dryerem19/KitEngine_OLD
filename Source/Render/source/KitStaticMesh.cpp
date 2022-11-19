@@ -1,8 +1,11 @@
 #include "RenderPch.h"
 #include "KitStaticMesh.h"
 
-Render::KitStaticMesh::KitStaticMesh(const KitObject& attachedObject)
-    : KitSceneNode(attachedObject) { }
+Render::KitStaticMesh::KitStaticMesh(const std::vector<KitVertex>& vertices, 
+    const std::vector<uint32_t>&  indices)
+{
+    this->Init(vertices, indices);
+}
 
 void Render::KitStaticMesh::Init(const std::vector<KitVertex>& vertices, const std::vector<uint32_t>&  indices)
 {

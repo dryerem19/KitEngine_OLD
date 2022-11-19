@@ -33,6 +33,12 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
 
     }
 
+    auto view = mScene.View<Render::KitTransform>();
+    for (auto [entity, transform] : view.each())
+    {
+        transform.UpdateWorldTransform();
+    }
+
 }
 
 void LevelEditor::Tests::TestLayer::OnRender(double dt) 
@@ -40,23 +46,22 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt)
     frameBuffer.Bind();
     Render::Renderer::Clear();
 
-    auto view = mScene.View<Render::KitModel>();
-    for (auto [entity, model] : view.each())
+    auto view = mScene.View<Render::KitStaticMesh, Render::KitTransform>();
+    for (auto [entity, mesh, transform] : view.each())
     {
         mShader->SetUniform1i("uTextureDiffuse", 0);
         mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
-                glm::value_ptr(model.GetLocalModelTransform(nullptr)));
-        for (auto* node : model)
-        {
-            auto& mesh = node->mAttachedObject.GetComponent<Render::KitStaticMesh>();
-            if(!mesh.mMaterial.diffuseTextures.empty()) {
-                mesh.mMaterial.diffuseTextures[0]->Bind();
-            }
-            Render::Renderer::Draw(mesh.mVertexArray, mesh.mIndexBuffer);  
-            if(!mesh.mMaterial.diffuseTextures.empty()){
-                mesh.mMaterial.diffuseTextures[0]->Unbind();
-            }
-        }      
+            glm::value_ptr(transform.WorldTransformMatrix));      
+
+        if(!mesh.mMaterial.diffuseTextures.empty()) {
+            mesh.mMaterial.diffuseTextures[0]->Bind();
+        }
+
+        Render::Renderer::Draw(mesh.mVertexArray, mesh.mIndexBuffer); 
+
+        if(!mesh.mMaterial.diffuseTextures.empty()){
+            mesh.mMaterial.diffuseTextures[0]->Unbind();
+        }             
     }
 
     frameBuffer.Unbind();
@@ -210,8 +215,9 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
 
 void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
 
-    auto obj    = mScene.CreateObject();
-    auto& model = obj.AddComponent<Render::KitModel>(obj, filepath);
+    Render::KitModel model(&mScene, filepath);
+    // auto obj    = mScene.CreateObject();
+    // auto& model = obj.AddComponent<Render::KitModel>(obj, filepath);
     isModelLoaded = true;
 }
 
@@ -337,16 +343,18 @@ std::string LevelEditor::Tests::TestLayer::FileDialog(){
 
 void LevelEditor::Tests::TestLayer::SceneTree()
 {
-    auto view = mScene.View<Render::KitSceneNode>();
-    for (auto [entity, node] : view.each())
-    {
-        ImGuiTreeNodeFlags flags = node.mChildren.empty() 
-                ? ImGuiTreeNodeFlags_Leaf : 0;
-        if (ImGui::TreeNodeEx(fmt::format("{} {}", node.GetHierarchyIcon(), node.GetName()).c_str()), flags)
-        {
-            ImGui::TreePop();
-        }
-    }
+
+    
+    // auto view = mScene.View<Render::KitSceneNode>();
+    // for (auto [entity, node] : view.each())
+    // {
+    //     ImGuiTreeNodeFlags flags = node.mChildren.empty() 
+    //             ? ImGuiTreeNodeFlags_Leaf : 0;
+    //     if (ImGui::TreeNodeEx(fmt::format("{} {}", node.GetHierarchyIcon(), node.GetName()).c_str()), flags)
+    //     {
+    //         ImGui::TreePop();
+    //     }
+    // }
     // auto view = mScene.View<Render::KitModel>();
     // for (auto [entity, model]: view.each())
     // {

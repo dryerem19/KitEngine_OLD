@@ -64,13 +64,17 @@ namespace Render
             return m_pScene->mRegistry.get<T>(mHandle);           
         }
 
+        /*
+        Вовзращает указатель на сцену на которой расположен объект
+        @return указатель на сцену
+        */
         KitScene* GetScene() const 
         {
             return m_pScene;
         }
 
         /*
-        Возвращает трансформацию объекта
+        Возвращает компонент трансформации объекта
         */
         KitTransform& GetTransform()
         {
