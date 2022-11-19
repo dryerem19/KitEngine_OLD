@@ -1,19 +1,9 @@
 #include "RenderPch.h"
 #include "KitStaticMesh.h"
 
-Render::KitStaticMesh::KitStaticMesh(const std::vector<KitVertex>& vertices,
-                                     const std::vector<uint32_t>&  indices)
+Render::KitStaticMesh::KitStaticMesh(const std::vector<KitVertex>& vertices, 
+    const std::vector<uint32_t>&  indices)
 {
-    // Инициализация меша
-    this->Init(vertices, indices);
-}
-
-Render::KitStaticMesh::KitStaticMesh(const std::vector<KitVertex>& vertices,
-                                     const std::vector<uint32_t>&  indices, 
-                                     const KitMaterial& material)
-                                     : mMaterial(material)
-{
-    // Инициализация меша
     this->Init(vertices, indices);
 }
 

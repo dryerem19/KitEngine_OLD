@@ -3,63 +3,33 @@
 #include "KitMaterial.h"
 #include "KitVertex.h"
 #include "KitObject.h"
+#include "KitScene.h"
+#include "KitTag.h"
 
 namespace Render
 {
-    class KitModel : public KitObject
+    class KitModel
     {
     private:
-        // @brief Список мешей модели
-        std::vector<std::shared_ptr<KitStaticMesh>> mChildren;
-
+        KitScene* pKitScene;
     public:
-        // @brief Конструктор по умолчанию
-        KitModel() = default;
+        std::string mFilepath;
 
-        // @brief Конструктор копирования по умолчанию
+        // Конструктор копирования по умолчанию
         KitModel(const KitModel&) = default;
 
-        // @brief Деструктор по умолчанию
-        ~KitModel() = default;
+        KitModel() = default;
 
         /*
-        @brief Конструктор импорта модели с помощью Assimp
+        Конструктор импорта модели с помощью Assimp
         */
-        KitModel(const std::string& filepath);
+        KitModel(KitScene* kitScene, const std::string& filepath);
 
         /*
         @brief Метод инициализация меша 
         @param filepath Путь к модели на диске для импорта 
         */
-        void Init(const std::string& filepath);
-
-        /*
-        @brief Итератор
-        @return Итератор на первый элемент
-        */
-        std::vector<std::shared_ptr<Render::KitStaticMesh>>::iterator begin() 
-        { return mChildren.begin(); }
-
-        /*
-        @brief Итератор
-        @return Итератор на последний элемент
-        */
-        std::vector<std::shared_ptr<Render::KitStaticMesh>>::iterator end() 
-        { return mChildren.end(); }
-
-        /*
-        @brief Константный итератор
-        @return Итератор на последний элемент
-        */
-        std::vector<std::shared_ptr<Render::KitStaticMesh>>::const_iterator cbegin() 
-        { return mChildren.cbegin(); }
-
-        /*
-        @brief Константный итератор
-        @return Итератор на последний элемент
-        */
-        std::vector<std::shared_ptr<Render::KitStaticMesh>>::const_iterator cend() 
-        { return mChildren.cend(); }        
+        void Init(KitScene* kitScene, const std::string& filepath);
 
     private:
 
@@ -69,7 +39,8 @@ namespace Render
         @param pScene Указатель на сцену
         @param filepath Путь к файлу модели
         */
-        void ProcessAssimpNode(const aiNode* pNode, const aiScene* pScene, const std::string& filepath);
+        void ProcessAssimpNode(const aiNode* pNode, const aiScene* pScene, 
+            KitObject rootObject);
 
         /*
         @brief Обработка меша assimp'а
@@ -78,7 +49,7 @@ namespace Render
         @param filepath Путь к файлу модели
         @return Экземпляр класса KitStaticMesh
         */
-        std::shared_ptr<KitStaticMesh> ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene, const std::string& filepath);
+        KitTransform& ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene);
 
         /*
         @brief Обработка материала assimp'а

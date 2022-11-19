@@ -22,7 +22,11 @@
 #include <ImGuizmo.h>
 #include <ImGuiFileDialog.h>
 
+#include <KitTransform.h>
 #include <KitModel.h>
+#include <KitScene.h>
+
+using namespace KitEngine::Core;
 
 namespace LevelEditor::Tests
 {
@@ -31,6 +35,8 @@ namespace LevelEditor::Tests
     private:
         bool isModelLoaded = false;        
         std::unique_ptr<Render::Shader>       mShader;
+
+        Render::KitScene mScene;
         Render::KitModel mNanoModel;
 
         std::shared_ptr<Render::KitObject> mSelectedObject;
@@ -78,6 +84,7 @@ namespace LevelEditor::Tests
         std::string FileDialog();
 
         void SceneTree();
+        void DrawNode(Render::KitTransform& tr);
 
         // UI Gizmo
         void DrawGizmo();
