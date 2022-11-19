@@ -25,6 +25,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include <entt/entt.hpp>
+
 #include "Helpers.h"
 
 #endif //KITENGINE_RENDERPCH_H

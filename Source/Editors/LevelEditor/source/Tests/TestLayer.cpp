@@ -9,6 +9,7 @@
 #include "IconsFontAwesome6.h"
 
 #include <fmt/format.h>
+
 #include <Events/WindowResizeEvent.h>
 #include <Events/FrameBufferResizeEvent.h>
 
@@ -47,6 +48,12 @@ void LevelEditor::Tests::TestLayer::OnUpdate() {
 
     }
 
+    auto view = mScene.View<Render::KitTransform>();
+    for (auto [entity, transform] : view.each())
+    {
+        transform.UpdateWorldTransform();
+    }
+
 }
 
 void LevelEditor::Tests::TestLayer::OnRender(double dt) 
@@ -54,23 +61,22 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt)
     frameBuffer.Bind();
     Render::Renderer::Clear();
 
-    if(isModelLoaded == true)
+    auto view = mScene.View<Render::KitStaticMesh, Render::KitTransform>();
+    for (auto [entity, mesh, transform] : view.each())
     {
-        for (auto& mesh : mNanoModel)
-        {
-            if(!mesh->mMaterial.diffuseTextures.empty()){
-                mesh->mMaterial.diffuseTextures[0]->Bind();
-            }
-            
-            mShader->SetUniform1i("uTextureDiffuse", 0);
-            mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
-                    glm::value_ptr(mesh->mTransform.GetTransform()));
-            Render::Renderer::Draw(mesh->mVertexArray, mesh->mIndexBuffer);
-            
-            if(!mesh->mMaterial.diffuseTextures.empty()){
-                mesh->mMaterial.diffuseTextures[0]->Unbind();
-            }
+        mShader->SetUniform1i("uTextureDiffuse", 0);
+        mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
+            glm::value_ptr(transform.WorldTransformMatrix));      
+
+        if(!mesh.mMaterial.diffuseTextures.empty()) {
+            mesh.mMaterial.diffuseTextures[0]->Bind();
         }
+
+        Render::Renderer::Draw(mesh.mVertexArray, mesh.mIndexBuffer); 
+
+        if(!mesh.mMaterial.diffuseTextures.empty()){
+            mesh.mMaterial.diffuseTextures[0]->Unbind();
+        }             
     }
 
     frameBuffer.Unbind();
@@ -224,7 +230,7 @@ void LevelEditor::Tests::TestLayer::DoMovement() {
 
 void LevelEditor::Tests::TestLayer::OnLoadModel(std::string filepath) {
 
-    mNanoModel.Init(filepath);
+    Render::KitModel model(&mScene, filepath);
     isModelLoaded = true;
 }
 
@@ -357,30 +363,38 @@ std::string LevelEditor::Tests::TestLayer::FileDialog(){
     return filepath;
 }
 
-void LevelEditor::Tests::TestLayer::SceneTree()
+void LevelEditor::Tests::TestLayer::DrawNode(Render::KitTransform& tr)
 {
-    if(isModelLoaded)
-    {
-        if(ImGui::TreeNode(mNanoModel.mName.c_str()))
-        {
-            for(auto& mesh : mNanoModel)
-            {
-                ImGuiTreeNodeFlags flags = mesh->mChildren.empty() ? ImGuiTreeNodeFlags_Leaf : 0;
-                if(ImGui::TreeNodeEx(fmt::format("{}\t{}", ICON_FA_CUBE, mesh->mName).c_str(), flags))
-                {
-                    ImGui::TreePop();
-                }
+    auto obj = mScene.GetObject(tr);
+    auto& tc = obj.GetComponent<Render::KitTag>();
 
-                if (ImGui::IsItemClicked()) {
-                    mSelectedObject = mesh;
-                }                
-            }
-            ImGui::TreePop();
+    ImGuiTreeNodeFlags flags = tr.mChildren.empty() 
+            ? ImGuiTreeNodeFlags_Leaf : 0;
+    if (ImGui::TreeNodeEx(tc.Tag.c_str(), flags))
+    {
+        for (auto&& child : tr.mChildren)
+        {
+            this->DrawNode(*child);
         }
 
-        if (ImGui::IsItemClicked()) {
-            mSelectedObject = static_cast<std::shared_ptr<Render::KitObject>>(&mNanoModel);
-        }        
+        ImGui::TreePop();
+    }
+
+    if (ImGui::IsItemClicked())
+    {
+        mSelectedObject = obj;
+    }
+}
+
+void LevelEditor::Tests::TestLayer::SceneTree()
+{
+    auto view = mScene.View<Render::KitTransform>();
+    for (auto [entity, tr] : view.each())
+    {
+        if (nullptr == tr.pParent) 
+        {
+            this->DrawNode(tr);
+        }           
     }
 }
 
@@ -389,7 +403,7 @@ void LevelEditor::Tests::TestLayer::DrawGizmo(){
 
     if (mSelectedObject)
     {
-        auto& transform = mSelectedObject->mTransform;
+        auto& transform = mSelectedObject.GetComponent<Render::KitTransform>();
         float translationComponent[3] = 
         { 
             transform.Translation.x,
