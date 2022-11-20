@@ -43,6 +43,7 @@ namespace UI
         void OnFinish() override;
 
         Render::FrameBuffer frameBuffer;
+        
 
         // UI Window
         UITopMainMenu uiTopMainMenu;

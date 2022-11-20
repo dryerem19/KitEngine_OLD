@@ -31,59 +31,33 @@ namespace UI
     {
         if (uiSceneTree->mSelectedObject)
         {
-            auto& transform = uiSceneTree->mSelectedObject->mTransform;
-            float translationComponent[3] = 
-            { 
-                transform.Translation.x,
-                transform.Translation.y,
-                transform.Translation.z
-            };
-
-            float rotationComponent[3] =
-            { 
-                transform.Rotation.x,
-                transform.Rotation.y,
-                transform.Rotation.z
-            };
-
-            float scaleComponent[3] =
-            { 
-                transform.Scale.x,
-                transform.Scale.y,
-                transform.Scale.z
-            };
+            auto& transform = uiSceneTree->mSelectedObject.GetComponent<Render::KitTransform>();
 
             /* Build transform matrix */
             float transformMatrix[16];
-            ImGuizmo::RecomposeMatrixFromComponents(translationComponent, rotationComponent, scaleComponent, transformMatrix);
+            ImGuizmo::RecomposeMatrixFromComponents(&transform.Translation.x, &transform.Rotation.x, &transform.Scale.x, transformMatrix);
             ImGuizmo::Manipulate(EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective(), uiTopBarTools->mode, ImGuizmo::MODE::LOCAL, transformMatrix);
-
+            
             /* If we moved the manipulator */
             if (ImGuizmo::IsUsing())
             {
                 /* We get new transformed components */
-                float translationComponent[3] = {}, rotationComponent[3] = {}, scaleComponent[3] = {};
-                ImGuizmo::DecomposeMatrixToComponents(transformMatrix, translationComponent, rotationComponent, scaleComponent);
+                float translation[3], rotation[3], scale[3];
+                ImGuizmo::DecomposeMatrixToComponents(transformMatrix, translation, rotation, scale);
 
-                /* Restore the new transformed components */
-                transform.Translation = 
+                if (uiTopBarTools->mode == ImGuizmo::OPERATION::TRANSLATE)
                 {
-                    translationComponent[0],
-                    translationComponent[1],
-                    translationComponent[2]
-                };
-                transform.Rotation =
+                    transform.Translation = glm::vec3(translation[0], translation[1], translation[2]);
+                }
+                else if (uiTopBarTools->mode == ImGuizmo::OPERATION::ROTATE)
                 {
-                    rotationComponent[0], 
-                    rotationComponent[1], 
-                    rotationComponent[2]
-                };
-                transform.Scale =
+                    glm::vec3 deltaRotation = glm::vec3(rotation[0], rotation[1], rotation[2]) - transform.Rotation;
+                    transform.Rotation += deltaRotation;
+                }
+                else if (uiTopBarTools->mode == ImGuizmo::OPERATION::SCALE)
                 {
-                    scaleComponent[0],
-                    scaleComponent[1],
-                    scaleComponent[2]
-                };
+                    transform.Scale = glm::vec3(scale[0], scale[1], scale[2]);
+                }
             }
         }
     }

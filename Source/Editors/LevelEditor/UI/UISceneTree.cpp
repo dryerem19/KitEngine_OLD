@@ -13,28 +13,38 @@ namespace UI
 
     void UISceneTree::SceneTree()
     {
-        if(isModelLoaded)
+        auto view = mScene.View<Render::KitTransform>();
+        for (auto [entity, tr] : view.each())
         {
-            if(ImGui::TreeNode(mNanoModel.mName.c_str()))
+            if (nullptr == tr.pParent) 
             {
-                for(auto& mesh : mNanoModel)
-                {
-                    ImGuiTreeNodeFlags flags = mesh->mChildren.empty() ? ImGuiTreeNodeFlags_Leaf : 0;
-                    if(ImGui::TreeNodeEx(fmt::format("{}\t{}", ICON_FA_CUBE, mesh->mName).c_str(), flags))
-                    {
-                        ImGui::TreePop();
-                    }
+                this->DrawNode(tr);
+            }
+        }
+    }
 
-                    if (ImGui::IsItemClicked()) {
-                        mSelectedObject = mesh;
-                    }
-                }
-                ImGui::TreePop();
+    void UISceneTree::DrawNode(Render::KitTransform& tr)
+    {
+        auto obj = mScene.GetObject(tr);
+        auto& tc = obj.GetComponent<Render::KitTag>();
+
+        ImGuiTreeNodeFlags flags = tr.mChildren.empty() 
+                ? ImGuiTreeNodeFlags_Leaf : 0;
+        flags |= ImGuiTreeNodeFlags_OpenOnArrow;    
+        flags |= obj == mSelectedObject ? ImGuiTreeNodeFlags_Selected : 0;
+        if (ImGui::TreeNodeEx(tc.Tag.c_str(), flags))
+        {
+            for (auto&& child : tr.mChildren)
+            {
+                this->DrawNode(*child);
             }
 
-            if (ImGui::IsItemClicked()) {
-                mSelectedObject = static_cast<std::shared_ptr<Render::KitObject>>(&mNanoModel);
-            }
+            ImGui::TreePop();
+        }
+
+        if (ImGui::IsItemClicked())
+        {
+            mSelectedObject = obj;
         }
     }
 }

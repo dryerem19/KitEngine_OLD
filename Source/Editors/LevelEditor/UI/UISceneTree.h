@@ -10,9 +10,12 @@ namespace UI
         UISceneTree() = default;
         void Draw() override;
         Render::KitModel mNanoModel;
-        std::shared_ptr<Render::KitObject> mSelectedObject;
+        Render::KitScene mScene;
+
+        Render::KitObject mSelectedObject;
         bool isModelLoaded = false;
 
         void SceneTree();
+        void DrawNode(Render::KitTransform& tr);
     };
 }

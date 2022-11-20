@@ -69,7 +69,7 @@ namespace UI
 
     void UITopMainMenu::OnLoadModel(std::string* filepath)
     {
-        uiSceneTree->mNanoModel.Init(*filepath);
+        Render::KitModel model(&uiSceneTree->mScene, *filepath);
         uiSceneTree->isModelLoaded = true;
     }
 

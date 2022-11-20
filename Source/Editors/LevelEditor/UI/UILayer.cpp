@@ -14,6 +14,9 @@ namespace UI
         mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
         mShader->Enable();
         mTransform = glm::mat4(1.0f);
+
+        auto& app = Core::Application::Instance();
+        frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
     }
 
     void UILayer::EventHandler(const Core::Event& event)
@@ -22,6 +25,10 @@ namespace UI
         if (type == Core::EventType::FrameBufferResizeEvent)
         {
             auto& e = (Core::FrameBufferResizeEvent&)event;
+
+            frameBuffer.Delete();
+            frameBuffer.Init(e.GetWidth(), e.GetHeight());
+
             EditorCamera::Instance().SetPerspective(45.0f, (float)e.GetWidth() / e.GetHeight(), 0.1f, 100.0f);
             glViewport(0, 0, e.GetWidth(), e.GetHeight());
         }
@@ -39,6 +46,12 @@ namespace UI
             mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, EditorCamera::Instance().GetView());
             mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, EditorCamera::Instance().GetPerspective());
         }
+
+        auto view = uiSceneTree.mScene.View<Render::KitTransform>();
+        for (auto [entity, transform] : view.each())
+        {
+            transform.UpdateWorldTransform();
+        }
     }
 
     void UILayer::OnRender(double dt) 
@@ -46,23 +59,22 @@ namespace UI
         frameBuffer.Bind();
         Render::Renderer::Clear();
 
-        if(uiSceneTree.isModelLoaded == true)
+        auto view = uiSceneTree.mScene.View<Render::KitStaticMesh, Render::KitTransform>();
+        for (auto [entity, mesh, transform] : view.each())
         {
-            for (auto& mesh : uiSceneTree.mNanoModel)
-            {
-                if(!mesh->mMaterial.diffuseTextures.empty()){
-                    mesh->mMaterial.diffuseTextures[0]->Bind();
-                }
-                
-                mShader->SetUniform1i("uTextureDiffuse", 0);
-                mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
-                        glm::value_ptr(mesh->mTransform.GetTransform()));
-                Render::Renderer::Draw(mesh->mVertexArray, mesh->mIndexBuffer);
-                
-                if(!mesh->mMaterial.diffuseTextures.empty()){
-                    mesh->mMaterial.diffuseTextures[0]->Unbind();
-                }
+            mShader->SetUniform1i("uTextureDiffuse", 0);
+            mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
+                glm::value_ptr(transform.WorldTransformMatrix));      
+
+            if(!mesh.mMaterial.diffuseTextures.empty()) {
+                mesh.mMaterial.diffuseTextures[0]->Bind();
             }
+
+            Render::Renderer::Draw(mesh.mVertexArray, mesh.mIndexBuffer); 
+
+            if(!mesh.mMaterial.diffuseTextures.empty()){
+                mesh.mMaterial.diffuseTextures[0]->Unbind();
+            }             
         }
 
         frameBuffer.Unbind();
