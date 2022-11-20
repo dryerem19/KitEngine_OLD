@@ -17,8 +17,15 @@ namespace Core
         void SetPerspective(float fovy, float aspect, float zNear, float zFar);
         void SetLookAt(glm::vec3 eye, glm::vec3 center, glm::vec3 up);
         float* GetView();
-        float * GetPerspective();
-    private:
+        float* GetPerspective();
+        glm::vec3 GetPos() const { return cameraPos; };
+        glm::vec3 GetFront() const { return cameraFront; };
+        glm::vec3 GetUp() const { return cameraUp; };
+    protected:
+        glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
+        glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+        glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
+
         glm::mat4 mTransform = glm::mat4(1.0f);
         glm::mat4 mView = glm::mat4(1.0f);
         glm::mat4 mProjection = glm::mat4(1.0f);

@@ -1,13 +1,9 @@
-#include <Window.h>
-#include <Application.h>
-
-#include "Tests/TestLayer.h"
+#include "UI/UILayer.h"
 #include "ImGuiLayer.h"
-
+#include "UI/KitUI.h"
 
 int main(void)
 {
-
     Core::WindowProps props;
     props.Title = "KitEngine";
     props.Width = 800;
@@ -15,8 +11,7 @@ int main(void)
 
     Core::Application& app = Core::Application::Instance();
     app.Initialize(props);
-    app.PushOverlayLayer(new LevelEditor::ImGuiLayer());
-    app.PushLayer(new LevelEditor::Tests::TestLayer());
+    app.PushOverlayLayer(new UI::ImGuiLayer());
+    app.PushLayer(new UI::UILayer());
     app.Start();
-    
 }
