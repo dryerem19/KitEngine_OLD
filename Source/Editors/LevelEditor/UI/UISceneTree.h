@@ -1,13 +1,14 @@
 #pragma once
 
-#include "KitUI.h"
+#include "Core/KitUI.h"
 
-namespace UI
+namespace LevelEditor
 {
     class UISceneTree : public KitUI
     {
     public:
         UISceneTree() = default;
+        UISceneTree(IController* controller) : KitUI(controller) { }
         void Draw() override;
         Render::KitModel mNanoModel;
         Render::KitScene mScene;

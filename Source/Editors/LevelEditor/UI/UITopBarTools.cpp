@@ -1,6 +1,6 @@
 #include "UITopBarTools.h"
 
-namespace UI
+namespace LevelEditor
 {
     void UITopBarTools::Draw()
     {
@@ -24,17 +24,20 @@ namespace UI
             // Enable movement object (gizmo)
             if(ImGui::MenuItem(ICON_FA_ARROWS_UP_DOWN_LEFT_RIGHT))
             {
-                mode = ImGuizmo::OPERATION::TRANSLATE;
+                SelectGizmoEvent e(GizmoOperation::TRANSLATE);
+                mController->OnNotify(this, e);
             }
             // Enable rotate object (gizmo)
             if(ImGui::MenuItem(ICON_FA_ROTATE))
             {
-                mode = ImGuizmo::OPERATION::ROTATE;
+                SelectGizmoEvent e(GizmoOperation::ROTATE);
+                mController->OnNotify(this, e);
             }
             // Enable scale object (gizmo)
             if(ImGui::MenuItem(ICON_FA_UP_RIGHT_FROM_SQUARE))
             {
-                mode = ImGuizmo::OPERATION::SCALE;
+                SelectGizmoEvent e(GizmoOperation::SCALE);
+                mController->OnNotify(this, e);
             }
             ImGui::Separator();
             if(ImGui::BeginMenu(ICON_FA_DRAW_POLYGON))

@@ -2,7 +2,7 @@
 // Created by Denis on 01.11.2022.
 //
 #include "ImGuiLayer.h"
-namespace UI
+namespace LevelEditor
 {
     ImGuiLayer::ImGuiLayer()
         : Core::BaseLayer("ImGuiLayer") { }

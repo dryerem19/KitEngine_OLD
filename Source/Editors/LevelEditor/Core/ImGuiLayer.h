@@ -7,10 +7,10 @@
 
 #include <BaseLayer.h>
 #include <Application.h>
-#include "UI/KitUI.h"
+#include "KitUI.h"
 
 
-namespace UI
+namespace LevelEditor
 {
     // Слой ImGui. Используется для интеграции ImGui.
     // Пример:

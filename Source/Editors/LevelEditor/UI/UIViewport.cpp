@@ -1,8 +1,6 @@
 #include "UIViewport.h"
 
-
-
-namespace UI
+namespace LevelEditor
 {
     void UIViewport::Draw()
     {
@@ -29,8 +27,10 @@ namespace UI
 
     void UIViewport::DrawGizmo()
     {
-        if (uiSceneTree->mSelectedObject)
+        
+        if (uiSceneTree->mSelectedObject && mOperation != SelectGizmoEvent::GizmoOperation::None)
         {
+            ImGuizmo::OPERATION op = (ImGuizmo::OPERATION)mOperation;
             auto& transform = uiSceneTree->mSelectedObject.GetComponent<Render::KitTransform>();
 
             /* Build transform matrix */
@@ -45,16 +45,16 @@ namespace UI
                 float translation[3], rotation[3], scale[3];
                 ImGuizmo::DecomposeMatrixToComponents(transformMatrix, translation, rotation, scale);
 
-                if (uiTopBarTools->mode == ImGuizmo::OPERATION::TRANSLATE)
+                if (op == ImGuizmo::OPERATION::TRANSLATE)
                 {
                     transform.Translation = glm::vec3(translation[0], translation[1], translation[2]);
                 }
-                else if (uiTopBarTools->mode == ImGuizmo::OPERATION::ROTATE)
+                else if (op == ImGuizmo::OPERATION::ROTATE)
                 {
                     glm::vec3 deltaRotation = glm::vec3(rotation[0], rotation[1], rotation[2]) - transform.Rotation;
                     transform.Rotation += deltaRotation;
                 }
-                else if (uiTopBarTools->mode == ImGuizmo::OPERATION::SCALE)
+                else if (op == ImGuizmo::OPERATION::SCALE)
                 {
                     transform.Scale = glm::vec3(scale[0], scale[1], scale[2]);
                 }

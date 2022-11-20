@@ -1,6 +1,6 @@
 #include "UI/UILayer.h"
-#include "ImGuiLayer.h"
-#include "UI/KitUI.h"
+#include "Core/ImGuiLayer.h"
+#include "Core/KitUI.h"
 
 int main(void)
 {
@@ -11,7 +11,7 @@ int main(void)
 
     Core::Application& app = Core::Application::Instance();
     app.Initialize(props);
-    app.PushOverlayLayer(new UI::ImGuiLayer());
-    app.PushLayer(new UI::UILayer());
+    app.PushOverlayLayer(new LevelEditor::ImGuiLayer());
+    app.PushLayer(new LevelEditor::UILayer());
     app.Start();
 }
