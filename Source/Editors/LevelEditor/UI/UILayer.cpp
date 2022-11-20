@@ -7,9 +7,10 @@ namespace LevelEditor
 {
     void UILayer::OnStart()
     {
-        mUIController = new UIController(&uiTopBarTools,&uiViewport);
-        uiViewport = new UIViewport(&mUIController);
-        uiTopBarTools = new UITopBarTools(&mUIController);
+        uiViewport      = new UIViewport();
+        uiTopBarTools   = new UITopBarTools();
+
+        mUIController   = new UIController(uiTopBarTools, uiViewport);
 
         uiViewport->uiSceneTree = &uiSceneTree;
         uiViewport->uiTopBarTools = uiTopBarTools;

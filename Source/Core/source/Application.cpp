@@ -107,7 +107,6 @@ void Core::Application::Start() {
         // Если время кадра больше 1 секунды, обнуляем счётчик кадров и время
         if (frameTime >= 1.0) {
             std::string fpsWindowTitle = std::string("KitEngine") + std::string(" FPS: ") + std::to_string(frames);
-            std::cout << mWindow->GetTitle() << std::endl;
             mWindow->SetWindowTitle(fpsWindowTitle);
 
             frames = 0;

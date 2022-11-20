@@ -27,11 +27,10 @@ namespace LevelEditor
     class KitUI
     {
     protected:
-        IController* mController;
-        KitUI(IController* controller) : mController(controller) { }
+        IController* mController { nullptr };
+        KitUI(IController* controller = nullptr) : mController(controller) { }
     public:
-        KitUI() = default;
-        virtual ~KitUI() = default;
+        void SetController(IController* controller) { mController = controller; }
         virtual void Draw() = 0;
     };
 }

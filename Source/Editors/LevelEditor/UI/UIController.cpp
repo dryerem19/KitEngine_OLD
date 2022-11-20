@@ -2,6 +2,13 @@
 
 namespace LevelEditor
 {
+    UIController::UIController(UITopBarTools* uiTopBarTools, UIViewport* uiViewport)
+        : mUITopBarTools(uiTopBarTools), mUIViewport(uiViewport)
+    {
+        mUITopBarTools->SetController(this);
+        mUIViewport->SetController(this);
+    }
+
     void UIController::OnNotify(KitUI* sender, const Event& event)
     {
         EventType type = event.GetType();
