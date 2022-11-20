@@ -14,6 +14,9 @@ namespace Render
         FrameBuffer();
         ~FrameBuffer();
 
+        void Init(uint32_t width, uint32_t height);
+        void Delete();
+
         void Bind() const;
         void Unbind() const;
         void GetFlipTexture();

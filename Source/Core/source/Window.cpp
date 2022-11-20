@@ -18,8 +18,6 @@ namespace Core
         this->mWidth  = props.Width;
         this->mHeight = props.Height;
         this->mTitle  = props.Title;
-
-        this->Init();
     }
 
     Window::~Window()
@@ -55,7 +53,15 @@ namespace Core
         glfwMakeContextCurrent(m_pWindow);
         glfwSetWindowUserPointer(m_pWindow, this);
         glfwSetWindowSizeCallback(m_pWindow, OnResizeCallback);       
-        glfwSetFramebufferSizeCallback(m_pWindow, OnFrameBufferResizeCallback);
+        glfwSetFramebufferSizeCallback(m_pWindow, OnFrameBufferResizeCallback);  
+
+        // int init_framebuffer_width, init_framebuffer_height;
+        // glfwGetFramebufferSize(m_pWindow, &init_framebuffer_width, &init_framebuffer_height);       
+        // if (eventHandlerCallback)
+        // {
+        //     FrameBufferResizeEvent event(init_framebuffer_width, init_framebuffer_height);
+        //     eventHandlerCallback(event);
+        // }
     }
 
     bool Window::Exec()

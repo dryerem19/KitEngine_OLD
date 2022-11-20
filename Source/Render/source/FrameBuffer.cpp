@@ -6,10 +6,16 @@
 #include "FrameBuffer.h"
 
 Render::FrameBuffer::~FrameBuffer() {
-    GLCall(glDeleteFramebuffers(1, &mFrameBufferId));
+    this->Delete();
 }
 
-Render::FrameBuffer::FrameBuffer() {
+Render::FrameBuffer::FrameBuffer()
+ {
+
+}
+
+void Render::FrameBuffer::Init(uint32_t width, uint32_t height)
+{
     // Создание кадрового буфера
     GLCall(glCreateFramebuffers(1,&mFrameBufferId));
 
@@ -21,7 +27,7 @@ Render::FrameBuffer::FrameBuffer() {
     // Привязка текстуры
     GLCall(glBindTexture(GL_TEXTURE_2D, mTextureId));
     // Установка текстуры
-    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr));
+    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr));
     // Установка параметров текстуры
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
@@ -31,13 +37,18 @@ Render::FrameBuffer::FrameBuffer() {
     GLCall(glCreateTextures(GL_TEXTURE_2D, 1,  &mDepthId));
     GLCall(glBindTexture(GL_TEXTURE_2D, mDepthId));
 
-    GLCall(glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, 800, 600));
+    GLCall(glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, width, height));
     GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mDepthId, 0));
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "not compiler" << std::endl;
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+}
+
+void Render::FrameBuffer::Delete()
+{
+    GLCall(glDeleteFramebuffers(1, &mFrameBufferId));
 }
 
 void Render::FrameBuffer::Bind() const {

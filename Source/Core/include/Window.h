@@ -38,12 +38,10 @@ namespace Core
         static void OnErrorCallback(int codeError, const char* descriptionError);        
         static void OnResizeCallback(GLFWwindow* window, int width, int height);
         static void OnFrameBufferResizeCallback(GLFWwindow* window, int width, int height);
-
-        void Init();
-
     public:
         explicit Window(const WindowProps& windowProps);
         ~Window();
+        void Init();
         bool Exec();
         void Update();
         void SwapBuffers();

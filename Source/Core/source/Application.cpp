@@ -25,6 +25,7 @@ void Core::Application::Initialize(const WindowProps& props) {
 
     const auto& handler = std::bind(&Application::EventHandler, this, std::placeholders::_1);
     mWindow->SetEventHandlerCallback(handler);
+    mWindow->Init();
 
     // Инициализация ввода
     Input::Initialize(mWindow->GetWindowPointer());
