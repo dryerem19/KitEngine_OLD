@@ -6,14 +6,11 @@
 #define KITENGINE_IMGUILAYER_H
 
 #include <BaseLayer.h>
+#include <Application.h>
+#include "UI/KitUI.h"
 
-#include <imgui.h>
-#include <imgui_impl_opengl3.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_internal.h>
-#include <ImGuizmo.h>
 
-namespace LevelEditor
+namespace UI
 {
     // Слой ImGui. Используется для интеграции ImGui.
     // Пример:
