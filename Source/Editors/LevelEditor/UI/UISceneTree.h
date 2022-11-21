@@ -1,6 +1,7 @@
 #pragma once
 
 #include "KitUI.h"
+#include "SceneManager.h"
 
 namespace UI
 {
@@ -10,9 +11,6 @@ namespace UI
         UISceneTree() = default;
         void Draw() override;
         Render::KitModel mNanoModel;
-        Render::KitScene mScene;
-
-        Render::KitObject mSelectedObject;
         bool isModelLoaded = false;
 
         void SceneTree();

@@ -29,7 +29,8 @@ namespace UI
 
     void UIViewport::DrawGizmo()
     {
-        if (uiSceneTree->mSelectedObject)
+        const auto& scene_manager = Render::SceneManager::Instance();
+        if (scene_manager.GetCurrentScene()->GetSelectedObject())
         {
             auto& transform = uiSceneTree->mSelectedObject.GetComponent<Render::KitTransform>();
 
