@@ -22,7 +22,12 @@
 #include "UITopBarTools.h"
 #include "UISceneTree.h"
 #include "UIViewport.h"
+
 #include "UIController.h"
+=======
+#include "KitScene.h"
+#include "SceneManager.h"
+
 
 namespace LevelEditor
 {

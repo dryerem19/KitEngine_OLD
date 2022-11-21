@@ -21,6 +21,8 @@ namespace Render
         /* Объявляем класс KitObject дружественным */
         friend class KitObject; 
 
+        KitObject mSelectedObject;
+
     public:
         KitScene() = default;
 
@@ -51,6 +53,16 @@ namespace Render
         {
             const entt::entity entity = entt::to_entity(mRegistry, instance);
             return KitObject(entity, this);
+        }
+
+        void SetSelectedObject(KitObject obj)
+        {
+            mSelectedObject = obj;
+        }
+
+        KitObject GetSelectedObject() const
+        {
+            return mSelectedObject;
         }
 
     };
