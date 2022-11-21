@@ -13,7 +13,6 @@ namespace LevelEditor
         mUIController   = new UIController(uiTopBarTools, uiViewport);
 
         uiViewport->uiSceneTree = &uiSceneTree;
-        uiViewport->uiTopBarTools = uiTopBarTools;
         uiViewport->frameBuffer = &frameBuffer;
         uiTopMainMenu.uiSceneTree = &uiSceneTree;
         mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");

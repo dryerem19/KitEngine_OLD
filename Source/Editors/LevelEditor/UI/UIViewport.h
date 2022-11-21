@@ -19,8 +19,7 @@ namespace LevelEditor
         void Draw() override;
         void DrawGizmo();
         void SetGizmoOperation(GizmoOperation operation) { mOperation = operation; }
-
-        UITopBarTools* uiTopBarTools;
+        
         UISceneTree*   uiSceneTree;
         Render::FrameBuffer* frameBuffer;
     };
