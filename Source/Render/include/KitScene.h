@@ -52,6 +52,5 @@ namespace Render
             const entt::entity entity = entt::to_entity(mRegistry, instance);
             return KitObject(entity, this);
         }
-
     };
 }

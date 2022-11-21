@@ -2,14 +2,17 @@
 // Created by Denis on 01.11.2022.
 //
 #include "UILayer.h"
-#include "ImGuiLayer.h"
-namespace UI
+
+namespace LevelEditor
 {
     void UILayer::OnStart()
     {
-        uiViewport.uiSceneTree = &uiSceneTree;
-        uiViewport.uiTopBarTools = &uiTopBarTools;
-        uiViewport.frameBuffer = &frameBuffer;
+        uiViewport      = new UIViewport();
+        uiTopBarTools   = new UITopBarTools();
+
+        mUIController   = new UIController(uiTopBarTools, uiViewport);
+
+        uiViewport->frameBuffer = &frameBuffer;
         uiTopMainMenu.uiSceneTree = &uiSceneTree;
         mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
         mShader->Enable();
@@ -17,6 +20,10 @@ namespace UI
 
         auto& app = Core::Application::Instance();
         frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
+
+        auto& scene_manager = Render::SceneManager::Instance();
+        scene_manager.CreateScene("test");
+
     }
 
     void UILayer::EventHandler(const Core::Event& event)
@@ -38,6 +45,8 @@ namespace UI
 
     void UILayer::OnUpdate()
     {
+        auto& scene_manager = Render::SceneManager::Instance();
+
         // Camera
         EditorCamera::Instance().Update();
         
@@ -47,7 +56,7 @@ namespace UI
             mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, EditorCamera::Instance().GetPerspective());
         }
 
-        auto view = uiSceneTree.mScene.View<Render::KitTransform>();
+        auto view = scene_manager.GetCurrentScene()->View<Render::KitTransform>();
         for (auto [entity, transform] : view.each())
         {
             transform.UpdateWorldTransform();
@@ -59,7 +68,9 @@ namespace UI
         frameBuffer.Bind();
         Render::Renderer::Clear();
 
-        auto view = uiSceneTree.mScene.View<Render::KitStaticMesh, Render::KitTransform>();
+        auto& scene_manager = Render::SceneManager::Instance();
+
+        auto view = scene_manager.GetCurrentScene()->View<Render::KitStaticMesh, Render::KitTransform>();
         for (auto [entity, mesh, transform] : view.each())
         {
             mShader->SetUniform1i("uTextureDiffuse", 0);
@@ -84,7 +95,7 @@ namespace UI
     void UILayer::OnUIRender()
     {
         Docking();
-        uiViewport.Draw();
+        uiViewport->Draw();
         uiSceneTree.Draw();
         uiTopMainMenu.Draw();
     }
@@ -119,7 +130,7 @@ namespace UI
 
         ImGui::DockSpace(ImGui::GetID("DockSpace"), ImVec2(0.0f, 0.0f), dockspace_flags);
 
-        uiTopBarTools.Draw();
+        uiTopBarTools->Draw();
         
         ImGui::End();
     }

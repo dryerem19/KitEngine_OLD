@@ -1,6 +1,6 @@
 #include "UITopMainMenu.h"
 
-namespace UI
+namespace LevelEditor
 {
     void UITopMainMenu::Draw()
     {
@@ -69,7 +69,8 @@ namespace UI
 
     void UITopMainMenu::OnLoadModel(std::string* filepath)
     {
-        Render::KitModel model(&uiSceneTree->mScene, *filepath);
+        const auto& scene_manager = Render::SceneManager::Instance();
+        Render::KitModel model(scene_manager.GetCurrentScene(), *filepath);
         uiSceneTree->isModelLoaded = true;
     }
 
