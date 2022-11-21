@@ -2,14 +2,18 @@
 // Created by Denis on 01.11.2022.
 //
 #include "UILayer.h"
-#include "ImGuiLayer.h"
-namespace UI
+
+namespace LevelEditor
 {
     void UILayer::OnStart()
     {
-        uiViewport.uiSceneTree = &uiSceneTree;
-        uiViewport.uiTopBarTools = &uiTopBarTools;
-        uiViewport.frameBuffer = &frameBuffer;
+        uiViewport      = new UIViewport();
+        uiTopBarTools   = new UITopBarTools();
+
+        mUIController   = new UIController(uiTopBarTools, uiViewport);
+
+        uiViewport->uiSceneTree = &uiSceneTree;
+        uiViewport->frameBuffer = &frameBuffer;
         uiTopMainMenu.uiSceneTree = &uiSceneTree;
         mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
         mShader->Enable();
@@ -92,7 +96,7 @@ namespace UI
     void UILayer::OnUIRender()
     {
         Docking();
-        uiViewport.Draw();
+        uiViewport->Draw();
         uiSceneTree.Draw();
         uiTopMainMenu.Draw();
     }
@@ -127,7 +131,7 @@ namespace UI
 
         ImGui::DockSpace(ImGui::GetID("DockSpace"), ImVec2(0.0f, 0.0f), dockspace_flags);
 
-        uiTopBarTools.Draw();
+        uiTopBarTools->Draw();
         
         ImGui::End();
     }

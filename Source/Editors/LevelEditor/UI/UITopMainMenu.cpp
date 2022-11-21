@@ -1,6 +1,6 @@
 #include "UITopMainMenu.h"
 
-namespace UI
+namespace LevelEditor
 {
     void UITopMainMenu::Draw()
     {

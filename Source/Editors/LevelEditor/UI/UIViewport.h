@@ -1,22 +1,25 @@
 #pragma once
 
-#include "KitUI.h"
+#include "Core/KitUI.h"
 #include "UITopBarTools.h"
 #include "UISceneTree.h"
 #include <Core/EditorCamera.h>
+#include "Core/Events/SelectGizmoEvent.h"
 
-using namespace LevelEditor;
 
-namespace UI
+namespace LevelEditor
 {
     class UIViewport : public KitUI
     {
+    private:
+        GizmoOperation mOperation;
     public:
         UIViewport() = default;
+        UIViewport(IController* controller) : KitUI(controller) { }
         void Draw() override;
         void DrawGizmo();
-
-        UITopBarTools* uiTopBarTools;
+        void SetGizmoOperation(GizmoOperation operation) { mOperation = operation; }
+        
         UISceneTree*   uiSceneTree;
         Render::FrameBuffer* frameBuffer;
     };

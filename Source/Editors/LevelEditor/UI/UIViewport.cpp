@@ -1,8 +1,6 @@
 #include "UIViewport.h"
 
-
-
-namespace UI
+namespace LevelEditor
 {
     void UIViewport::Draw()
     {
@@ -30,14 +28,14 @@ namespace UI
     void UIViewport::DrawGizmo()
     {
         const auto& scene_manager = Render::SceneManager::Instance();
-        if (scene_manager.GetCurrentScene()->GetSelectedObject())
+        if (scene_manager.GetCurrentScene()->GetSelectedObject() && mOperation != GizmoOperation::NONE)
         {
             auto& transform = uiSceneTree->mSelectedObject.GetComponent<Render::KitTransform>();
 
             /* Build transform matrix */
             float transformMatrix[16];
             ImGuizmo::RecomposeMatrixFromComponents(&transform.Translation.x, &transform.Rotation.x, &transform.Scale.x, transformMatrix);
-            ImGuizmo::Manipulate(EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective(), uiTopBarTools->mode, ImGuizmo::MODE::LOCAL, transformMatrix);
+            ImGuizmo::Manipulate(EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective(), (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, transformMatrix);
             
             /* If we moved the manipulator */
             if (ImGuizmo::IsUsing())
@@ -46,18 +44,22 @@ namespace UI
                 float translation[3], rotation[3], scale[3];
                 ImGuizmo::DecomposeMatrixToComponents(transformMatrix, translation, rotation, scale);
 
-                if (uiTopBarTools->mode == ImGuizmo::OPERATION::TRANSLATE)
+                switch (mOperation)
                 {
+                case GizmoOperation::TRANSLATE:
                     transform.Translation = glm::vec3(translation[0], translation[1], translation[2]);
-                }
-                else if (uiTopBarTools->mode == ImGuizmo::OPERATION::ROTATE)
-                {
-                    glm::vec3 deltaRotation = glm::vec3(rotation[0], rotation[1], rotation[2]) - transform.Rotation;
-                    transform.Rotation += deltaRotation;
-                }
-                else if (uiTopBarTools->mode == ImGuizmo::OPERATION::SCALE)
-                {
+                    break;
+                case GizmoOperation::ROTATE:
+                    {
+                        glm::vec3 deltaRotation = glm::vec3(rotation[0], rotation[1], rotation[2]) - transform.Rotation;
+                        transform.Rotation += deltaRotation;
+                    }
+                    break;
+                case GizmoOperation::SCALE:
                     transform.Scale = glm::vec3(scale[0], scale[1], scale[2]);
+                    break;
+                default:
+                    break;
                 }
             }
         }

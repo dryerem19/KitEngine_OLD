@@ -1,6 +1,6 @@
 #include "UISceneTree.h"
 
-namespace UI
+namespace LevelEditor
 {
     void UISceneTree::Draw()
     {

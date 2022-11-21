@@ -1,6 +1,6 @@
 #include "UIFileDialog.h"
 
-namespace UI
+namespace LevelEditor
 {
     std::string UIFileDialog::OpenFile(const std::string& filters,bool* isCheckFileDialog)
     {

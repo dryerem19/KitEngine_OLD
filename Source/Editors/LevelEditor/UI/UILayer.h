@@ -15,17 +15,21 @@
 
 #include "Core/EditorCamera.h"
 
-#include "KitUI.h"
+#include "Core/ImGuiLayer.h"
+
+#include "Core/KitUI.h"
 #include "UITopMainMenu.h"
 #include "UITopBarTools.h"
 #include "UISceneTree.h"
 #include "UIViewport.h"
+
+#include "UIController.h"
+=======
 #include "KitScene.h"
 #include "SceneManager.h"
 
-using namespace LevelEditor;
 
-namespace UI
+namespace LevelEditor
 {
     class UILayer : public Core::BaseLayer
     {
@@ -46,12 +50,12 @@ namespace UI
 
         Render::FrameBuffer frameBuffer;
         
-
+        UIController* mUIController;
         // UI Window
         UITopMainMenu uiTopMainMenu;
-        UITopBarTools uiTopBarTools;
+        UITopBarTools* uiTopBarTools;
         UISceneTree   uiSceneTree;
-        UIViewport    uiViewport;
+        UIViewport*    uiViewport;
         void Docking();
     };
 }

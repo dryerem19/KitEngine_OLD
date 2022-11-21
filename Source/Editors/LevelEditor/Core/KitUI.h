@@ -19,14 +19,18 @@
 #include <KitTransform.h>
 #include <KitObject.h>
 
-namespace UI
+
+namespace LevelEditor
 {
+    class IController;
+
     class KitUI
     {
     protected:
-        KitUI() = default;
+        IController* mController { nullptr };
+        KitUI(IController* controller = nullptr) : mController(controller) { }
     public:
-        virtual ~KitUI() = default;
+        void SetController(IController* controller) { mController = controller; }
         virtual void Draw() = 0;
     };
 }
