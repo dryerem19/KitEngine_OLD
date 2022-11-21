@@ -50,10 +50,14 @@ namespace LevelEditor
                     transform.Translation = glm::vec3(translation[0], translation[1], translation[2]);
                     break;
                 case GizmoOperation::ROTATE:
-                    glm::vec3 deltaRotation = glm::vec3(rotation[0], rotation[1], rotation[2]) - transform.Rotation;
-                    transform.Rotation += deltaRotation;
+                    {
+                        glm::vec3 deltaRotation = glm::vec3(rotation[0], rotation[1], rotation[2]) - transform.Rotation;
+                        transform.Rotation += deltaRotation;
+                    }
+                    break;
                 case GizmoOperation::SCALE:
                     transform.Scale = glm::vec3(scale[0], scale[1], scale[2]);
+                    break;
                 default:
                     break;
                 }
