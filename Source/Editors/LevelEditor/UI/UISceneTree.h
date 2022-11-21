@@ -2,8 +2,6 @@
 
 
 #include "Core/KitUI.h"
-
-#include "KitUI.h"
 #include "SceneManager.h"
 
 

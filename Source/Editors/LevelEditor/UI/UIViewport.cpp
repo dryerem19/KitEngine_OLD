@@ -28,9 +28,9 @@ namespace LevelEditor
     void UIViewport::DrawGizmo()
     {
         const auto& scene_manager = Render::SceneManager::Instance();
-        if (scene_manager.GetCurrentScene()->GetSelectedObject() && mOperation != GizmoOperation::NONE)
+        if (scene_manager.GetSelectedObject() && mOperation != GizmoOperation::NONE)
         {
-            auto& transform = uiSceneTree->mSelectedObject.GetComponent<Render::KitTransform>();
+            auto& transform = scene_manager.GetSelectedObject().GetComponent<Render::KitTransform>();
 
             /* Build transform matrix */
             float transformMatrix[16];

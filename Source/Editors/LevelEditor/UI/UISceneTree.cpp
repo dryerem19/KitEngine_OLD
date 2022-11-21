@@ -32,8 +32,9 @@ namespace LevelEditor
 
         ImGuiTreeNodeFlags flags = tr.mChildren.empty() 
                 ? ImGuiTreeNodeFlags_Leaf : 0;
-        flags |= ImGuiTreeNodeFlags_OpenOnArrow;    
-        flags |= obj == mSelectedObject ? ImGuiTreeNodeFlags_Selected : 0;
+        flags |= ImGuiTreeNodeFlags_OpenOnArrow;   
+        flags |= (obj == scene_manager.GetSelectedObject()) ? ImGuiTreeNodeFlags_Selected : 0;
+
         if (ImGui::TreeNodeEx(tc.Tag.c_str(), flags))
         {
             for (auto&& child : tr.mChildren)
@@ -48,7 +49,7 @@ namespace LevelEditor
         if (ImGui::IsItemClicked())
         {
             // Устанавливаем выбранный объект текущей сцены
-            scene_manager.GetCurrentScene()->SetSelectedObject(obj);
+            scene_manager.SetSelectedObject(obj);
         }
     }
 }

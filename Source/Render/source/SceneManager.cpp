@@ -18,4 +18,14 @@ namespace Render
     {
         return mCurrentScene;
     }
+
+    void SceneManager::SetSelectedObject(const KitObject& obj)
+    {
+        mSelectedObject = obj;
+    }
+
+    KitObject SceneManager::GetSelectedObject() const
+    {
+        return mSelectedObject;
+    }
 }
