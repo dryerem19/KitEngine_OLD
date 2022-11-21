@@ -17,11 +17,12 @@
 void LevelEditor::Tests::TestLayer::OnStart() 
 {
     mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
-    mShader->Enable();
     mTransform = glm::mat4(1.0f);
 
     auto& app = Core::Application::Instance();
     frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
+
+    grid.Init();
 }
 
 void LevelEditor::Tests::TestLayer::EventHandler(const Core::Event& event)
@@ -34,7 +35,7 @@ void LevelEditor::Tests::TestLayer::EventHandler(const Core::Event& event)
         frameBuffer.Delete();
         frameBuffer.Init(e.GetWidth(), e.GetHeight());
 
-        projection = glm::perspective(45.0f, (float)e.GetWidth() / e.GetHeight(), 0.1f, 100.0f);
+        projection = glm::perspective(45.0f, (float)e.GetWidth() / e.GetHeight(), 0.1f, 1000.0f);
         glViewport(0, 0, e.GetWidth(), e.GetHeight());   
     }
 
@@ -68,6 +69,9 @@ void LevelEditor::Tests::TestLayer::OnRender(double dt)
     frameBuffer.Bind();
     Render::Renderer::Clear();
 
+    grid.Draw(glm::value_ptr(view), glm::value_ptr(projection));
+
+    mShader->Enable();
     auto view = mScene.View<Render::KitStaticMesh, Render::KitTransform>();
     for (auto [entity, mesh, transform] : view.each())
     {

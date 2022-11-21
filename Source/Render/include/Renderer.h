@@ -29,7 +29,7 @@ namespace Render
     public:
         static void Initialize()
         {
-            glEnable(GL_DEPTH_TEST);
+            glEnable(GL_DEPTH_TEST);         
 
             if (glewInit() != GLEW_OK) 
             {

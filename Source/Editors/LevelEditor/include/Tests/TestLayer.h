@@ -26,6 +26,8 @@
 #include <KitModel.h>
 #include <KitScene.h>
 
+#include "../InfinityGrid.h"
+
 namespace LevelEditor::Tests
 {
     class TestLayer : public Core::BaseLayer
@@ -37,6 +39,8 @@ namespace LevelEditor::Tests
         Render::KitScene mScene;
 
         Render::KitObject mSelectedObject;
+
+        InfinityGrid grid;
 
         glm::mat4                                          mTransform;
         glm::mat4 view = glm::mat4(1.0f);
