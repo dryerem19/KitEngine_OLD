@@ -38,12 +38,17 @@ namespace LevelEditor
             // Enable mouse pointer
             if(ImGui::MenuItem(ICON_FA_ARROW_POINTER, nullptr, &selected_pointer))
             {
+
+                SelectGizmoEvent e(GizmoOperation::NONE);
+                mController->OnNotify(this, e);
+
                 selected_pointer      = true;
                 selected_arrow_left   = false;
                 selected_arrow_right  = false;
                 selected_gizmo_move   = false;
                 selected_gizmo_rotate = false;
                 selected_gizmo_scale  = false;                
+
             }
 
             // Enable movement object (gizmo)

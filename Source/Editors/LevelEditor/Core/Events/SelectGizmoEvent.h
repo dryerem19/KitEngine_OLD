@@ -35,7 +35,10 @@ namespace LevelEditor
             std::stringstream format;
             format << "[" << mName << "] : " << "{ SelectOperation: ";
 
-            if(mOperation == GizmoOperation::TRANSLATE) 
+            if(mOperation == GizmoOperation::NONE)
+                format << "None";
+
+            else if(mOperation == GizmoOperation::TRANSLATE) 
                 format << "Translate";
 
             else if(mOperation == GizmoOperation::ROTATE)
