@@ -28,6 +28,7 @@
 #include "KitScene.h"
 #include "SceneManager.h"
 #include "ToolsTab.h"
+#include "Inspector.h"
 
 
 namespace LevelEditor
@@ -58,6 +59,7 @@ namespace LevelEditor
         UISceneTree   uiSceneTree;
         UIViewport*    uiViewport;
         ToolsTab        mToolsTab;
+        Inspector mInspector;
         void Docking();
     };
 }
