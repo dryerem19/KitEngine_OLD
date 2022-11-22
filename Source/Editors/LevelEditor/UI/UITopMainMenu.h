@@ -3,6 +3,7 @@
 #include "Core/KitUI.h"
 #include "UIFileDialog.h"
 
+#include "SceneManager.h"
 #include "UISceneTree.h"
 
 namespace LevelEditor

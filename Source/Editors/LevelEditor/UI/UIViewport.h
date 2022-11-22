@@ -1,11 +1,9 @@
 #pragma once
 
 #include "Core/KitUI.h"
-#include "UITopBarTools.h"
-#include "UISceneTree.h"
 #include <Core/EditorCamera.h>
 #include "Core/Events/SelectGizmoEvent.h"
-
+#include "SceneManager.h"
 
 namespace LevelEditor
 {
@@ -19,9 +17,7 @@ namespace LevelEditor
         void Draw() override;
         void DrawGizmo();
         void SetGizmoOperation(GizmoOperation operation) { mOperation = operation; }
-
-        UITopBarTools* uiTopBarTools;
-        UISceneTree*   uiSceneTree;
+        
         Render::FrameBuffer* frameBuffer;
     };
 }

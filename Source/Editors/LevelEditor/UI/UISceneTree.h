@@ -1,6 +1,9 @@
 #pragma once
 
+
 #include "Core/KitUI.h"
+#include "SceneManager.h"
+
 
 namespace LevelEditor
 {
@@ -11,9 +14,6 @@ namespace LevelEditor
         UISceneTree(IController* controller) : KitUI(controller) { }
         void Draw() override;
         Render::KitModel mNanoModel;
-        Render::KitScene mScene;
-
-        Render::KitObject mSelectedObject;
         bool isModelLoaded = false;
 
         void SceneTree();

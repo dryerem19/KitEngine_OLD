@@ -12,8 +12,6 @@ namespace LevelEditor
 
         mUIController   = new UIController(uiTopBarTools, uiViewport);
 
-        uiViewport->uiSceneTree = &uiSceneTree;
-        uiViewport->uiTopBarTools = uiTopBarTools;
         uiViewport->frameBuffer = &frameBuffer;
         uiTopMainMenu.uiSceneTree = &uiSceneTree;
         mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
@@ -22,6 +20,10 @@ namespace LevelEditor
 
         auto& app = Core::Application::Instance();
         frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
+
+        auto& scene_manager = Render::SceneManager::Instance();
+        scene_manager.CreateScene("test");
+
     }
 
     void UILayer::EventHandler(const Core::Event& event)
@@ -43,6 +45,8 @@ namespace LevelEditor
 
     void UILayer::OnUpdate()
     {
+        auto& scene_manager = Render::SceneManager::Instance();
+
         // Camera
         EditorCamera::Instance().Update();
         
@@ -52,7 +56,7 @@ namespace LevelEditor
             mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, EditorCamera::Instance().GetPerspective());
         }
 
-        auto view = uiSceneTree.mScene.View<Render::KitTransform>();
+        auto view = scene_manager.GetCurrentScene()->View<Render::KitTransform>();
         for (auto [entity, transform] : view.each())
         {
             transform.UpdateWorldTransform();
@@ -64,7 +68,9 @@ namespace LevelEditor
         frameBuffer.Bind();
         Render::Renderer::Clear();
 
-        auto view = uiSceneTree.mScene.View<Render::KitStaticMesh, Render::KitTransform>();
+        auto& scene_manager = Render::SceneManager::Instance();
+
+        auto view = scene_manager.GetCurrentScene()->View<Render::KitStaticMesh, Render::KitTransform>();
         for (auto [entity, mesh, transform] : view.each())
         {
             mShader->SetUniform1i("uTextureDiffuse", 0);
@@ -92,6 +98,7 @@ namespace LevelEditor
         uiViewport->Draw();
         uiSceneTree.Draw();
         uiTopMainMenu.Draw();
+        mToolsTab.Draw();
     }
 
     void UILayer::OnFinish()
