@@ -12,6 +12,7 @@ namespace Render
     KitScene* SceneManager::CreateScene(const std::string& name)
     {
         mCurrentScene = new KitScene();
+        return mCurrentScene;
     }
 
     KitScene* SceneManager::GetCurrentScene() const
