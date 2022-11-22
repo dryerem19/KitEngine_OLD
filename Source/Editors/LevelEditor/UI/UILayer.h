@@ -22,6 +22,7 @@
 #include "UITopBarTools.h"
 #include "UISceneTree.h"
 #include "UIViewport.h"
+#include "ToolsTab.h"
 
 #include "UIController.h"
 #include "KitScene.h"
@@ -55,6 +56,7 @@ namespace LevelEditor
         UITopBarTools* uiTopBarTools;
         UISceneTree   uiSceneTree;
         UIViewport*    uiViewport;
+        ToolsTab        mToolsTab;
         void Docking();
     };
 }
