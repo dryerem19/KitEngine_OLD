@@ -27,6 +27,7 @@
 #include "UIController.h"
 #include "KitScene.h"
 #include "SceneManager.h"
+#include "ToolsTab.h"
 
 
 namespace LevelEditor
