@@ -100,6 +100,7 @@ namespace LevelEditor
         uiTopMainMenu.Draw();
         mToolsTab.Draw();
         mInspector.Draw();
+        mBottombar.Draw();
     }
 
     void UILayer::OnFinish()
