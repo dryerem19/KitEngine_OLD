@@ -99,6 +99,7 @@ namespace LevelEditor
         uiSceneTree.Draw();
         uiTopMainMenu.Draw();
         mToolsTab.Draw();
+        mInspector.Draw();
     }
 
     void UILayer::OnFinish()
