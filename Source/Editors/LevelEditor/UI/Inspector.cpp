@@ -21,7 +21,7 @@ namespace LevelEditor
                 if (ImGui::CollapsingHeader("Transform"))
                 {
                     this->DrawTransformComponent(transform);
-                }                
+                }
             }
         }
         ImGui::End();
