@@ -131,8 +131,36 @@ namespace LevelEditor
 
         ImGui::PopStyleVar(3);
 
-        ImGui::DockSpace(ImGui::GetID("DockSpace"), ImVec2(0.0f, 0.0f), dockspace_flags);
+        ImGuiID dockspace_id = ImGui::GetID("RootDockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
 
+        static bool first = true;
+        if(first)
+        {
+            first = false;
+            // Если файл настроек не существует, настраиваем макет по умолчанию
+            if(!std::filesystem::exists(ImGui::GetIO().IniFilename))
+            {
+                ImGui::DockBuilderAddNode(dockspace_id);
+                ImGui::DockBuilderSetNodePos(dockspace_id,  viewport->Pos);
+                ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
+
+                ImGuiID scene_tree_id = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.5f, nullptr, &dockspace_id);
+                
+                ImGuiID tools_tab_id = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.5f, nullptr, &dockspace_id);
+
+                ImGuiID viewport_id = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.5f, nullptr, &dockspace_id);
+
+                ImGuiID object_inspector_id = ImGui::DockBuilderSplitNode(tools_tab_id, ImGuiDir_Down, 0.5f, nullptr, &tools_tab_id);
+
+                ImGui::DockBuilderDockWindow("Scene Tree", scene_tree_id);
+                ImGui::DockBuilderDockWindow("Viewport", viewport_id);
+                ImGui::DockBuilderDockWindow("ToolsTab", tools_tab_id);
+                ImGui::DockBuilderDockWindow("Object inspector", object_inspector_id);
+                ImGui::DockBuilderFinish(dockspace_id);
+            }
+        }
+        
         uiTopBarTools->Draw();
         
         ImGui::End();
