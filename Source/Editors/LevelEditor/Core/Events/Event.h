@@ -6,7 +6,8 @@ namespace LevelEditor
     enum class EventType
     {
         None = -1,
-        SelectGizmo
+        
+        SelectGizmo,
     };
 
     class Event
