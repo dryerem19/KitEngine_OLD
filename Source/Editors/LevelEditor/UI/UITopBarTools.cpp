@@ -110,6 +110,19 @@ namespace LevelEditor
                 }
                 ImGui::EndMenu();
             }
+            ImGui::Separator();
+            if(ImGui::BeginMenu("Camera Speed"))
+            {
+                if(ImGui::MenuItem("x1"))
+                {
+                    EditorCamera::Instance().cameraSpeed = 0.30f;
+                }
+                if(ImGui::MenuItem("x2"))
+                {
+                    EditorCamera::Instance().cameraSpeed = 0.60f;
+                }
+                ImGui::EndMenu();
+            }
             ImGui::EndMenuBar();
         }
     }

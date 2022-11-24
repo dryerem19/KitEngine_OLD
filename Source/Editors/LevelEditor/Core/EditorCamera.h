@@ -21,6 +21,8 @@ namespace LevelEditor
         bool isCheckMouse = true;
 
     public:
+        inline static float cameraSpeed = 0.30f;
+
         static EditorCamera& Instance()
         {
             static EditorCamera instance;
