@@ -6,7 +6,7 @@ namespace LevelEditor
     {
         SetLookAt(cameraPos,cameraPos + cameraFront, cameraUp);
 
-        GLfloat cameraSpeed = 0.30f;
+        //GLfloat cameraSpeed = 0.30f;
         if (Core::Input::GetKey(Core::KeyCode::W))
         {
             cameraPos += cameraSpeed * cameraFront;
