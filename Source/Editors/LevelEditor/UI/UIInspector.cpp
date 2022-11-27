@@ -1,4 +1,4 @@
-#include "Inspector.h"
+#include "UIInspector.h"
 
 namespace LevelEditor
 {

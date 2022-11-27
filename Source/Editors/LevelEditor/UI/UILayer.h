@@ -22,14 +22,14 @@
 #include "UITopBarTools.h"
 #include "UISceneTree.h"
 #include "UIViewport.h"
-#include "ToolsTab.h"
+#include "UIToolsTab.h"
 
 #include "UIController.h"
 #include "KitScene.h"
 #include "SceneManager.h"
-#include "ToolsTab.h"
-#include "Inspector.h"
-#include "BottomMenuBar.h"
+#include "UIToolsTab.h"
+#include "UIInspector.h"
+#include "UIBottomMenuBar.h"
 
 
 namespace LevelEditor
