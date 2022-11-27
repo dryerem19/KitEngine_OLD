@@ -101,6 +101,7 @@ namespace LevelEditor
         mToolsTab.Draw();
         mInspector.Draw();
         mBottombar.Draw();
+        mUIContentBrowser.Draw();
     }
 
     void UILayer::OnFinish()
@@ -151,12 +152,15 @@ namespace LevelEditor
 
                 ImGuiID viewport_id = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.5f, nullptr, &dockspace_id);
 
+                ImGuiID content_browser_id = ImGui::DockBuilderSplitNode(scene_tree_id, ImGuiDir_Down, 0.5f, nullptr, &scene_tree_id);
+
                 ImGuiID object_inspector_id = ImGui::DockBuilderSplitNode(tools_tab_id, ImGuiDir_Down, 0.5f, nullptr, &tools_tab_id);
 
                 ImGui::DockBuilderDockWindow("Scene Tree", scene_tree_id);
                 ImGui::DockBuilderDockWindow("Viewport", viewport_id);
                 ImGui::DockBuilderDockWindow("ToolsTab", tools_tab_id);
                 ImGui::DockBuilderDockWindow("Object inspector", object_inspector_id);
+                ImGui::DockBuilderDockWindow("Content Browser", content_browser_id);
                 ImGui::DockBuilderFinish(dockspace_id);
             }
         }
