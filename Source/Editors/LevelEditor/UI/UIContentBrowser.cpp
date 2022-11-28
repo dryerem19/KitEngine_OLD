@@ -27,13 +27,11 @@ namespace LevelEditor
                     mLastDirectory = mCurrentProjectDirectory;
                 }
                 mCurrentProjectDirectory = mCurrentProjectDirectory.parent_path();
-                std::cout << mCurrentProjectDirectory << std::endl;
             }
             ImGui::SameLine();
             if(ImGui::ButtonEx("->", ImVec2(0.0f, 0.0f), flagsButtonForward))
             {
                 mCurrentProjectDirectory = mLastDirectory;
-                std::cout << mCurrentProjectDirectory << std::endl;
             }
             ImGui::Separator();
             
@@ -43,28 +41,10 @@ namespace LevelEditor
                 if(path.is_directory())
                 {
                     
-                    if(ImGui::Button(relative.string().c_str()))
+                    if(ImGui::Button(relative.filename().c_str()))
                     {
                         mCurrentProjectDirectory /= relative.filename();
                         mLastDirectory = mCurrentProjectDirectory;
-                        std::cout << "|| C " <<mCurrentProjectDirectory << " || L " << mLastDirectory  << std::endl;
-                    }
-                    if(mCurrentProjectDirectory != mProjectDirectory)
-                    {
-                        flagsButtonBack = 0;
-                    }
-                    else
-                    {
-                       flagsButtonBack = ImGuiItemFlags_Disabled;
-                    }
-                    // TODO: Нужно исправить возвращение на последнюю папку [->]
-                    if(mCurrentProjectDirectory != mLastDirectory)
-                    {
-                        flagsButtonForward = 0;
-                    }
-                    else
-                    {
-                        flagsButtonForward = ImGuiItemFlags_Disabled;
                     }
                 }
                 else
@@ -74,6 +54,23 @@ namespace LevelEditor
 
                     }
                 }
+            }
+            if(mCurrentProjectDirectory != mProjectDirectory)
+            {
+                flagsButtonBack = 0;
+            }
+            else
+            {
+                flagsButtonBack = ImGuiItemFlags_Disabled;
+            }
+            
+            if(mCurrentProjectDirectory != mLastDirectory)
+            {
+                flagsButtonForward = 0;
+            }
+            else
+            {
+                flagsButtonForward = ImGuiItemFlags_Disabled;
             }
         }
         ImGui::End();

@@ -21,11 +21,11 @@ namespace LevelEditor
         void Draw() override;
 
         const std::filesystem::path mProjectDirectory = "project";
-        std::filesystem::path mLastDirectory;
-        ImGuiItemFlags flagsButtonBack = ImGuiItemFlags_Disabled;
-        ImGuiItemFlags flagsButtonForward = ImGuiItemFlags_Disabled;
+        std::filesystem::path mLastDirectory = "project";
+        ImGuiItemFlags flagsButtonBack = 0;
+        ImGuiItemFlags flagsButtonForward = 0;
 
-        bool isCheck = false;
+        
 
     private:
         std::filesystem::path mCurrentProjectDirectory;
