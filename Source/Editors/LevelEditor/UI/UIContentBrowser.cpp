@@ -38,9 +38,9 @@ namespace LevelEditor
             for(auto&& path : std::filesystem::directory_iterator(mCurrentProjectDirectory))
             {
                 auto relative = std::filesystem::relative(path.path(), mProjectDirectory);
+                
                 if(path.is_directory())
                 {
-                    
                     if(ImGui::Button(relative.filename().c_str()))
                     {
                         mCurrentProjectDirectory /= relative.filename();
@@ -49,12 +49,17 @@ namespace LevelEditor
                 }
                 else
                 {
-                    if(ImGui::Button(relative.string().c_str()))
+                    if(ImGui::Button(relative.filename().c_str()))
                     {
 
                     }
                 }
             }
+            if(std::filesystem::is_empty(mCurrentProjectDirectory))
+            {
+                ImGui::Text("No Item");
+            }
+
             if(mCurrentProjectDirectory != mProjectDirectory)
             {
                 flagsButtonBack = 0;
