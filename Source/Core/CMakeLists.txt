@@ -19,6 +19,8 @@ find_package(Bullet CONFIG REQUIRED)
 #find_package(SailC++ CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 
+find_package(yaml-cpp CONFIG REQUIRED)
+
 target_link_libraries(${PROJECT_NAME}
         LINK_PUBLIC
         ModelLoader)
@@ -39,4 +41,5 @@ target_link_libraries(${PROJECT_NAME}
 #        glm::glm
 #        SAIL::sail-c++
         spdlog::spdlog spdlog::spdlog_header_only
+        yaml-cpp
 )

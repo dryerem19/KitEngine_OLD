@@ -33,4 +33,6 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_internal.h>
 
+#include <yaml-cpp/yaml.h>
+
 #endif //KITENGINE_CORE_H
