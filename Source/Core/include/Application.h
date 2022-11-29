@@ -32,6 +32,11 @@ namespace Core
         // Флаг, запущено ли приложение
         bool mIsRunning;
 
+        /**
+         * @brief Путь рабочей директории
+         */
+        std::filesystem::path mWorkingDirectory;
+
     public:
         // Конструтор копирования удалён, так как это синглтон
         Application(const Application&) = delete;
@@ -56,6 +61,8 @@ namespace Core
 
         inline void PushOverlayLayer(BaseLayer* pLayer) { mLayerStack.PushOverlay(pLayer); }
         inline void PopOverlayLayer() { mLayerStack.PopOverlay(); }
+
+        inline std::filesystem::path& GetWorkingDirectory() { return mWorkingDirectory; }
 
         // Возвращает окно
         [[nodiscard]] inline auto& GetWindow() { return mWindow; }
