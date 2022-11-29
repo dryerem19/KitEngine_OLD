@@ -9,7 +9,9 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_internal.h>
 #include <ImGuizmo.h>
-#include "3rdparty/ImGuiFileDialog/ImGuiFileDialog.h"
+
+#include <ImGuiFileDialog.h>
+
 #include "3rdparty/IconsFontAwesome6.h"
 
 #include "ImGuiLayer.h"

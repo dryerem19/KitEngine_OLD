@@ -1,8 +1,8 @@
 //
 // Created by Denis on 01.11.2022.
 //
+#include "pch.h"
 #include "BaseLayer.h"
-#include "Logger.h"
 
 Core::BaseLayer::BaseLayer(std::string name)
     : mName(std::move(name)) {

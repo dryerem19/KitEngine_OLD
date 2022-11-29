@@ -2,6 +2,8 @@
 #include "Core/KitUI.h"
 #include "KitLight.h"
 
+#include <ImGuiFileDialog.h>
+
 namespace LevelEditor
 {
     class ToolsTab : public KitUI

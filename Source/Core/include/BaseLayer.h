@@ -4,8 +4,8 @@
 
 #ifndef KITENGINE_BASELAYER_H
 #define KITENGINE_BASELAYER_H
-#include "core.h"
 #include "Events/Event.h"
+#include "Logger.h"
 
 namespace Core
 {

@@ -4,7 +4,6 @@
 
 #ifndef KITENGINE_LOGGER_H
 #define KITENGINE_LOGGER_H
-#include "core.h"
 
 namespace Core
 {

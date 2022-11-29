@@ -4,7 +4,6 @@
 
 #ifndef LEVELEDITOR_BASECAMERA_H
 #define LEVELEDITOR_BASECAMERA_H
-#include "core.h"
 
 namespace Core
 {

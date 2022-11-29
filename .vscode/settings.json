@@ -98,6 +98,7 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "coroutine": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "cfloat": "cpp"
     }
 }
