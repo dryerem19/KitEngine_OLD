@@ -123,8 +123,9 @@ void Core::Application::Close() {
 }
 
 Core::Application::Application()
-    : mIsRunning(false), mPreviousTime(0) {
-
+    : mIsRunning(false), mPreviousTime(0) 
+{
+    mWorkingDirectory = std::filesystem::current_path();
 }
 
 
