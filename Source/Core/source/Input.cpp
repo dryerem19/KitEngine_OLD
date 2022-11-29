@@ -1,6 +1,7 @@
 //
 // Created by piokxix on 01.11.22.
 //
+#include "pch.h"
 #include "Input.h"
 
 GLFWwindow* Core::Input::m_pWindow = nullptr;

@@ -3,7 +3,6 @@
 //
 
 #pragma once
-#include "core.h"
 #include "Logger.h"
 #include "Events/WindowResizeEvent.h"
 #include "Events/FrameBufferResizeEvent.h"

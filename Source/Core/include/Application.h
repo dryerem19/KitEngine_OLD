@@ -7,6 +7,9 @@
 
 #include "Window.h"
 #include "LayerStack.h"
+#include "Input.h"
+#include "Logger.h"
+#include <Renderer.h>
 
 namespace Core
 {

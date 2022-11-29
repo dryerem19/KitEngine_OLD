@@ -1,6 +1,7 @@
 //
 // Created by piokxix on 04.11.22.
 //
+#include "pch.h"
 #include "BaseCamera.h"
 
 

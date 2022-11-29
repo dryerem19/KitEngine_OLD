@@ -4,7 +4,6 @@
 
 #ifndef KITENGINE_INPUT_H
 #define KITENGINE_INPUT_H
-#include "core.h"
 
 namespace Core
 {
