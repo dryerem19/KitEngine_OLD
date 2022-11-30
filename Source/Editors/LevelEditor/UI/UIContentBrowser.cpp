@@ -20,7 +20,7 @@ namespace LevelEditor
     {
         ImGui::Begin("Content Browser");
         {
-            if(ImGui::ButtonEx("<-", ImVec2(0.0f, 0.0f), flagsButtonBack))
+            if(ImGui::ButtonEx("<-", ImVec2(0.0f, 0.0f), mFlagsButtonBack))
             {
                 if(mCurrentProjectDirectory != mProjectDirectory)
                 {
@@ -29,9 +29,24 @@ namespace LevelEditor
                 mCurrentProjectDirectory = mCurrentProjectDirectory.parent_path();
             }
             ImGui::SameLine();
-            if(ImGui::ButtonEx("->", ImVec2(0.0f, 0.0f), flagsButtonForward))
+            if(ImGui::ButtonEx("->", ImVec2(0.0f, 0.0f), mFlagsButtonForward))
             {
                 mCurrentProjectDirectory = mLastDirectory;
+            }
+            if(ImGui::BeginPopupContextWindow("Content Browser"))
+            {
+                if(ImGui::Selectable("New Folder"))
+                {
+                    mIsCheckOnNewFolder = true;
+                    mIsFolder = false;
+                }
+                ImGui::Separator();
+                if(ImGui::Selectable("New File"))
+                {
+                    mIsCheckOnNewFolder = true;
+                    mIsFolder = true;
+                }
+                ImGui::EndPopup();
             }
             ImGui::Separator();
             
@@ -62,20 +77,57 @@ namespace LevelEditor
 
             if(mCurrentProjectDirectory != mProjectDirectory)
             {
-                flagsButtonBack = 0;
+                mFlagsButtonBack = 0;
             }
             else
             {
-                flagsButtonBack = ImGuiItemFlags_Disabled;
+                mFlagsButtonBack = ImGuiItemFlags_Disabled;
             }
             
             if(mCurrentProjectDirectory != mLastDirectory)
             {
-                flagsButtonForward = 0;
+                mFlagsButtonForward = 0;
             }
             else
             {
-                flagsButtonForward = ImGuiItemFlags_Disabled;
+                mFlagsButtonForward = ImGuiItemFlags_Disabled;
+            }
+        }
+        ImGui::End();
+
+        if(mIsCheckOnNewFolder)
+        {
+            NewFile(&mIsCheckOnNewFolder, mIsFolder);
+        }
+    }
+
+    void UIContentBrowser::NewFile( bool* close, bool isFolder /*= false*/ )
+    {
+        const char* title = isFolder == false ? "Create Folder" : "Create File";
+        const char* nameInput = isFolder == false ? "Name Folder" : "Name File";
+        ImGui::SetNextWindowSize(ImVec2(300.0f,100.0f));
+        ImGui::Begin(title, close, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoResize);
+        {
+            ImGui::InputText(nameInput, &mNameFile);
+            if(ImGui::Button("Add"))
+            {
+                if(!isFolder)
+                {
+                    std::filesystem::create_directories(mCurrentProjectDirectory / mNameFile);
+                    mIsCheckOnNewFolder = false;
+                    mNameFile.clear();
+                }
+                else
+                {
+                    std::ofstream fstream(mCurrentProjectDirectory / mNameFile);
+                    fstream.close();
+                    mNameFile.clear();
+                }
+            }
+            ImGui::SameLine();
+            if(ImGui::Button("Close"))
+            {
+                *close = false;
             }
         }
         ImGui::End();
