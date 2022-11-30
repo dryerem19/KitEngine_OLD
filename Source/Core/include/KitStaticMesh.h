@@ -28,5 +28,7 @@ namespace Render
         */
         void Init(const std::vector<KitVertex>& vertices, 
                 const std::vector<uint32_t>&  indices);
+
+        void Draw();
     };
 }

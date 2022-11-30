@@ -24,3 +24,12 @@ void Render::KitStaticMesh::Init(const std::vector<KitVertex>& vertices, const s
     // Инициализация буфера индексов
     mIndexBuffer.Init(indices.data(), indices.size());
 }
+
+void Render::KitStaticMesh::Draw()
+{
+    mVertexArray.Bind();
+    mIndexBuffer.Bind();
+    GLCall(glDrawElements(GL_TRIANGLES, mIndexBuffer.GetCount(), GL_UNSIGNED_INT, nullptr));
+    mVertexArray.Unbind();
+    mIndexBuffer.Unbind();
+}

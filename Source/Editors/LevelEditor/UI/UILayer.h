@@ -31,6 +31,7 @@
 #include "UIInspector.h"
 #include "UIBottomMenuBar.h"
 
+#include "BaseEntity.h"
 
 namespace LevelEditor
 {
@@ -40,6 +41,8 @@ namespace LevelEditor
           
         std::unique_ptr<Render::Shader> mShader;
         glm::mat4 mTransform;
+
+        Core::BaseEntity* pEntity;
 
     public:
         UILayer() = default;

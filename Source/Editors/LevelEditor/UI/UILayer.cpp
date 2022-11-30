@@ -3,6 +3,8 @@
 //
 #include "UILayer.h"
 
+#include "MeshVisualImporter.h"
+
 namespace LevelEditor
 {
     void UILayer::OnStart()
@@ -23,6 +25,11 @@ namespace LevelEditor
 
         auto& scene_manager = Render::SceneManager::Instance();
         scene_manager.CreateScene("test");
+
+        auto importer = Core::MeshVisualImporter();
+        importer.LoadVisual("../../Resources/models/nanosuit/nanosuit.obj");
+
+        pEntity = importer.GetRootEntity();
 
     }
 
@@ -50,17 +57,19 @@ namespace LevelEditor
         // Camera
         EditorCamera::Instance().Update();
         
-        if(uiSceneTree.isModelLoaded == true)
+        mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, EditorCamera::Instance().GetView());
+        mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, EditorCamera::Instance().GetPerspective());
+
+        if (pEntity)
         {
-            mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, EditorCamera::Instance().GetView());
-            mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, EditorCamera::Instance().GetPerspective());
+            pEntity->UpdateWorldMatrix();
         }
 
-        auto view = scene_manager.GetCurrentScene()->View<Render::KitTransform>();
-        for (auto [entity, transform] : view.each())
-        {
-            transform.UpdateWorldTransform();
-        }
+        // auto view = scene_manager.GetCurrentScene()->View<Render::KitTransform>();
+        // for (auto [entity, transform] : view.each())
+        // {
+        //     transform.UpdateWorldTransform();
+        // }
     }
 
     void UILayer::OnRender(double dt) 
@@ -68,25 +77,30 @@ namespace LevelEditor
         frameBuffer.Bind();
         Render::Renderer::Clear();
 
-        auto& scene_manager = Render::SceneManager::Instance();
-
-        auto view = scene_manager.GetCurrentScene()->View<Render::KitStaticMesh, Render::KitTransform>();
-        for (auto [entity, mesh, transform] : view.each())
+        if (pEntity)
         {
-            mShader->SetUniform1i("uTextureDiffuse", 0);
-            mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
-                glm::value_ptr(transform.WorldTransformMatrix));      
-
-            if(!mesh.mMaterial.diffuseTextures.empty()) {
-                mesh.mMaterial.diffuseTextures[0]->Bind();
-            }
-
-            Render::Renderer::Draw(mesh.mVertexArray, mesh.mIndexBuffer); 
-
-            if(!mesh.mMaterial.diffuseTextures.empty()){
-                mesh.mMaterial.diffuseTextures[0]->Unbind();
-            }             
+            pEntity->DrawMesh(mShader.get());
         }
+
+        // auto& scene_manager = Render::SceneManager::Instance();
+
+        // auto view = scene_manager.GetCurrentScene()->View<Render::KitStaticMesh, Render::KitTransform>();
+        // for (auto [entity, mesh, transform] : view.each())
+        // {
+        //     mShader->SetUniform1i("uTextureDiffuse", 0);
+        //     mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
+        //         glm::value_ptr(transform.WorldTransformMatrix));      
+
+        //     if(!mesh.mMaterial.diffuseTextures.empty()) {
+        //         mesh.mMaterial.diffuseTextures[0]->Bind();
+        //     }
+
+        //     Render::Renderer::Draw(mesh.mVertexArray, mesh.mIndexBuffer); 
+
+        //     if(!mesh.mMaterial.diffuseTextures.empty()){
+        //         mesh.mMaterial.diffuseTextures[0]->Unbind();
+        //     }             
+        // }
 
         frameBuffer.Unbind();
         Render::Renderer::Clear();
