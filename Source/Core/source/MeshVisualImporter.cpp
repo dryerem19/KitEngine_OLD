@@ -11,7 +11,7 @@ namespace Core
         Assimp::Importer importer;
 
         // Считываем данные файлы в сцену assimp'а
-        const aiScene* pScene = importer.ReadFile(mFilepath.c_str(),
+        const aiScene* pScene = importer.ReadFile(mFilepath.string().c_str(),
                                 aiProcess_GenSmoothNormals           |
                                 aiProcess_ValidateDataStructure      |
                                 aiProcess_CalcTangentSpace           |

@@ -30,14 +30,20 @@ namespace LevelEditor
 
     void UISceneTree::DrawNode(Core::BaseEntity* pEntity)
     {
-        //assert( pEntity == nullptr && "Entity must not be nullptr!" );
+        assert( pEntity && "Entity must not be nullptr!" );
 
-        ImGuiTreeNodeFlags flags = pEntity->HasChilds() ? ImGuiTreeNodeFlags_Leaf : 0;
+        ImGuiTreeNodeFlags flags = !pEntity->HasChilds() ? ImGuiTreeNodeFlags_Leaf : 0;
         flags |= ImGuiTreeNodeFlags_OpenOnArrow;   
         flags |= (pEntity == pSelectedEntity) ? ImGuiTreeNodeFlags_Selected : 0;        
 
-        if (ImGui::TreeNodeEx(pEntity->GetName().c_str(), flags))
+        bool isNodeOpen = false;
+        if (isNodeOpen = ImGui::TreeNodeEx(pEntity->GetName().c_str(), flags))
         {
+            if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
+            {
+                pSelectedEntity = pEntity;
+            }
+
             for (uint32_t iChild = 0; iChild < pEntity->GetCountOfChilds(); iChild++)
             {
                 DrawNode(pEntity->GetChildByIndex(iChild));
@@ -46,7 +52,7 @@ namespace LevelEditor
             ImGui::TreePop();
         }
 
-        if (ImGui::IsItemClicked())
+        if (!isNodeOpen && ImGui::IsItemClicked(ImGuiMouseButton_Left))
         {
             pSelectedEntity = pEntity;
         }
