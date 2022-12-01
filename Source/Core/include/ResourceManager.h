@@ -12,7 +12,7 @@ namespace Core
         ResourceManager& operator=(const ResourceManager&) = delete;
     private:
         std::unordered_map<std::string, std::shared_ptr<Render::Shader>> mShaders;
-        std::unordered_map<std::string, std::shared_ptr<Render::Texture>> mTexturs;
+        std::unordered_map<std::string, std::shared_ptr<Render::Texture>> mTextures;
     public:
         inline static ResourceManager& Instance()
         {
@@ -20,25 +20,19 @@ namespace Core
             return instance;
         }
 
-        inline std::shared_ptr<Render::Shader> LoadShader(const std::string& filepath)
+        void LoadShader(const std::string& filepath);
+
+        inline std::shared_ptr<Render::Shader> GetShader(const std::string& filepath)
         {
             assert(!filepath.empty() && "Filepath must not be empty!");
-            
-            return mShaders.emplace(std::make_shared<Render::Shader>(filepath));
-        }
-        
-        inline std::shared_ptr<Render::Shader> GetShader(const std::string& filepath) const
-        {
-            assert(!filepath.empty() && "Filepath must not be empty!")
 
-            if (mShaders.find(filepath) != mShaders.end())
+            bool isFind = mShaders.find(filepath) != mShaders.end(); 
+            if ( !isFind )
             {
-                return mShaders[filepath];
+                this->LoadShader(filepath);
             }
-            else
-            {
-                return this->LoadSahder(filepath);
-            }
+
+            return mShaders.at(filepath);
         }
 
         /**
@@ -47,13 +41,7 @@ namespace Core
          * @param filepath путь к текстуре
          * @return std::shared_ptr<Render::Texture> 
          */
-        inline std::shared_ptr<Render::Texture> LoadTexture(const std::string& filepath)
-        {
-            assert(!filepath.empty() && "Filepath must not be empty!");
-
-            std::shared_ptr<Render::Texture> texture = std::make_shared<Render::Texture>(filepath);
-            return mTexturs.emplace(texture);
-        }
+        void LoadTexture(const std::string& filepath);
 
         /**
          * @brief Возвращает кэшированную текстуру, если она загружена, 
@@ -64,18 +52,17 @@ namespace Core
          * @param filepath путь к текстуре
          * @return std::shared_ptr<Render::Texture> 
          */
-        inline std::shared_ptr<Render::Texture> GetTexture(const std::string& filepath) const
+        inline std::shared_ptr<Render::Texture> GetTexture(const std::string& filepath)
         {
             assert(!filepath.empty() && "Filepath must not be empty!");
 
-            if (mTexturs.find(filepath) != mTexturs.end())
+            bool isFind = mTextures.find( filepath ) != mTextures.end(); 
+            if ( !isFind )
             {
-                return mTexturs[filepath];
+                this->LoadTexture( filepath );
             }
-            else
-            {
-                return this->LoadTexture(filepath);
-            }
+
+            return mTextures.at( filepath );
         }
     };
 }

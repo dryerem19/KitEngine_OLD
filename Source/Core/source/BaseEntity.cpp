@@ -132,11 +132,16 @@ namespace Core
         }
     }
 
-    void BaseEntity::DrawMesh(Render::Shader* pShader) const
+    void BaseEntity::DrawMesh(Render::Shader* pShader, const float* view_matrix, float* proj_matrix) const
     {
+        assert(view_matrix && "view_matrix can't be nullptr");
+        assert(proj_matrix && "proj_matrix can't be nullptr");
+
         // Если назначен меш
         if (mMesh)
         {
+            pShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, view_matrix);
+            pShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, proj_matrix);            
             pShader->SetUniformMatrix4fv("uTransform", 1, GL_FALSE, glm::value_ptr(mWorldMatrix));
             mMesh->Draw();
         }
@@ -144,7 +149,7 @@ namespace Core
         // Рисуем меши дочерних объектов
         for (auto&& child : mChildren)
         {
-            child->DrawMesh(pShader);
+            child->DrawMesh(pShader, view_matrix, proj_matrix);
         }
     }
 }

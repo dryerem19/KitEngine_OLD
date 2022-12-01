@@ -314,7 +314,7 @@ namespace Core
          * @brief Нарисовать меш, если он есть
          * 
          */
-        void DrawMesh(Render::Shader* pShader) const;
+        void DrawMesh(Render::Shader* pShader, const float* view_matrix, float* proj_matrix) const;
 
         /**
          * @brief Установить материал на сущность

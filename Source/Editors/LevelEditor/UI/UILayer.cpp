@@ -60,8 +60,8 @@ namespace LevelEditor
         // Camera
         EditorCamera::Instance().Update();
         
-        mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, EditorCamera::Instance().GetView());
-        mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, EditorCamera::Instance().GetPerspective());
+        // mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, EditorCamera::Instance().GetView());
+        // mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, EditorCamera::Instance().GetPerspective());
 
         if (pEntity)
         {
@@ -82,7 +82,7 @@ namespace LevelEditor
 
         if (pEntity)
         {
-            pEntity->DrawMesh(mShader.get());
+            pEntity->DrawMesh(mShader.get(), EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
         }
 
         // auto& scene_manager = Render::SceneManager::Instance();
