@@ -5,6 +5,9 @@
 
 #include "MeshVisualImporter.h"
 
+#include "ResourceManager.h"
+#include "Texture.h"
+
 namespace LevelEditor
 {
     void UILayer::OnStart()
@@ -28,7 +31,7 @@ namespace LevelEditor
 
         auto importer = Core::MeshVisualImporter();
         importer.LoadVisual("../../Resources/models/nanosuit/nanosuit.obj");
-
+        
         pEntity = importer.GetRootEntity();
 
     }
