@@ -13,10 +13,13 @@ namespace LevelEditor
         UISceneTree() = default;
         UISceneTree(IController* controller) : KitUI(controller) { }
         void Draw() override;
-        Render::KitModel mNanoModel;
+        //Render::KitModel mNanoModel;
+
+        Core::BaseEntity* pSelectedEntity;
         bool isModelLoaded = false;
 
         void SceneTree();
-        void DrawNode(Render::KitTransform& tr);
+        // void DrawNode(Render::KitTransform& tr);
+        void DrawNode(Core::BaseEntity* pEntity);    
     };
 }

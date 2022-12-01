@@ -25,7 +25,6 @@
 #include "UIToolsTab.h"
 
 #include "UIController.h"
-#include "KitScene.h"
 #include "SceneManager.h"
 #include "UIToolsTab.h"
 #include "UIInspector.h"

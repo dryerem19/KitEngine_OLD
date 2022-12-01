@@ -168,7 +168,18 @@ namespace Core
          * @param index индекс дочерней сущности
          * @return Указатель на дочернюю сущность или nullptr, если она не найдена
          */
-        BaseEntity* FindChildByIndex(size_t index) const;
+        BaseEntity* GetChildByIndex(size_t index) const;
+
+
+        inline bool HasChilds() const
+        {
+            return mChildren.size();
+        }
+
+        inline BaseEntity* GetSelf()
+        {
+            return this;
+        }
 
         /**
          * @brief Получить вектор положения сущности

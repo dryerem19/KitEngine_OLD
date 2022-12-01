@@ -1,24 +1,16 @@
 #pragma once
-#include "KitScene.h"
-#include "KitObject.h"
+#include "BaseEntity.h"
 
 namespace Render
 {
-    class SceneManager
+    class World : public Core::BaseEntity
     {
     private:
-        SceneManager() = default;
-        SceneManager(const SceneManager&) = delete;
-        SceneManager& operator=(SceneManager&) = delete;
-        ~SceneManager() = default;
-
-        KitScene* mCurrentScene;
-        KitObject mSelectedObject;
+        World() = default;
+        World(const World&) = delete;
+        World& operator=(World&) = delete;
+        ~World() = default;
     public:
-        static SceneManager& Instance();
-        KitScene* CreateScene(const std::string& name);
-        KitScene* GetCurrentScene() const;
-        void SetSelectedObject(const KitObject& obj);
-        KitObject GetSelectedObject() const;
+        static World& Get();
     };
 }

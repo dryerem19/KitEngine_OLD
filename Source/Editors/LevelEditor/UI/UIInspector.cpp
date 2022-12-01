@@ -10,19 +10,19 @@ namespace LevelEditor
     {
         ImGui::Begin("Object inspector");
         {
-            auto& scene_manager = Render::SceneManager::Instance();
-            auto selected_object = scene_manager.GetSelectedObject();
-            if (selected_object)
-            {
-                auto& tag = selected_object.GetComponent<Render::KitTag>();
-                ImGui::Text("Name: %s", tag.Tag.c_str());
+            // auto& scene_manager = Render::SceneManager::Instance();
+            // auto selected_object = scene_manager.GetSelectedObject();
+            // if (selected_object)
+            // {
+            //     auto& tag = selected_object.GetComponent<Render::KitTag>();
+            //     ImGui::Text("Name: %s", tag.Tag.c_str());
 
-                auto& transform = selected_object.GetComponent<Render::KitTransform>();
-                if (ImGui::CollapsingHeader("Transform"))
-                {
-                    this->DrawTransformComponent(transform);
-                }
-            }
+            //     auto& transform = selected_object.GetComponent<Render::KitTransform>();
+            //     if (ImGui::CollapsingHeader("Transform"))
+            //     {
+            //         this->DrawTransformComponent(transform);
+            //     }
+            // }
         }
         ImGui::End();
     }

@@ -17,9 +17,7 @@
 #include "ImGuiLayer.h"
 
 #include <Renderer.h>
-#include <KitModel.h>
 #include <KitTransform.h>
-#include <KitObject.h>
 
 
 namespace LevelEditor

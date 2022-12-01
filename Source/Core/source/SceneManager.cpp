@@ -3,30 +3,9 @@
 
 namespace Render
 {
-    SceneManager& SceneManager::Instance()
+    World& World::Get()
     {
-        static SceneManager instance;
+        static World instance;
         return instance;
-    }
-
-    KitScene* SceneManager::CreateScene(const std::string& name)
-    {
-        mCurrentScene = new KitScene();
-        return mCurrentScene;
-    }
-
-    KitScene* SceneManager::GetCurrentScene() const
-    {
-        return mCurrentScene;
-    }
-
-    void SceneManager::SetSelectedObject(const KitObject& obj)
-    {
-        mSelectedObject = obj;
-    }
-
-    KitObject SceneManager::GetSelectedObject() const
-    {
-        return mSelectedObject;
     }
 }

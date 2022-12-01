@@ -87,9 +87,9 @@ namespace Core
         return find;
     }
 
-    BaseEntity* BaseEntity::FindChildByIndex(size_t index) const
+    BaseEntity* BaseEntity::GetChildByIndex(size_t index) const
     {
-        if (index > 0 && index < mChildren.size())
+        if (index >= 0 && index < mChildren.size())
         {
             return mChildren[index];
         }

@@ -26,13 +26,12 @@ namespace LevelEditor
         auto& app = Core::Application::Instance();
         frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
 
-        auto& scene_manager = Render::SceneManager::Instance();
-        scene_manager.CreateScene("test");
 
         auto importer = Core::MeshVisualImporter();
         importer.LoadVisual("../../Resources/models/nanosuit/nanosuit.obj");
         
         pEntity = importer.GetRootEntity();
+        Render::World::Get().LinkChild(pEntity);
 
     }
 
@@ -55,8 +54,6 @@ namespace LevelEditor
 
     void UILayer::OnUpdate()
     {
-        auto& scene_manager = Render::SceneManager::Instance();
-
         // Camera
         EditorCamera::Instance().Update();
         

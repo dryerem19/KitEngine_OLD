@@ -3,8 +3,6 @@
 #include "IndexBuffer.h"
 #include "KitMaterial.h"
 #include "KitVertex.h"
-#include "KitObject.h"
-#include "KitScene.h"
 
 namespace Render
 {
