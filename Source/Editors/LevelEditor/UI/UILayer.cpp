@@ -19,8 +19,8 @@ namespace LevelEditor
 
         uiViewport->frameBuffer = &frameBuffer;
         uiTopMainMenu.uiSceneTree = &uiSceneTree;
-        mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
-        mShader->Enable();
+        //mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
+        //mShader->Enable();
         mTransform = glm::mat4(1.0f);
 
         auto& app = Core::Application::Instance();

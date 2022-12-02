@@ -57,7 +57,6 @@ namespace LevelEditor
             pSelectedEntity = pEntity;
         }
     }
-
     // void UISceneTree::DrawNode(Render::KitTransform& tr)
     // {
     //     auto& scene_manager = Render::SceneManager::Instance();

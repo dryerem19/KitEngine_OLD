@@ -1,16 +1,34 @@
 #pragma once
 #include "KitTexture.h"
 #include "Shader.h"
+#include "ResourceManager.h"
 
 namespace Render
 {
     class KitMaterial
     {
     private:
-        //std::shared_ptr<Shader> mShader;
     public:
+        KitMaterial();
+        std::shared_ptr<Shader> mShader;
+
         std::string mName;
-        std::vector<std::shared_ptr<KitTexture>> diffuseTextures;
+        std::shared_ptr<KitTexture> mMainDiffuseTexture;
+
+        void Use()
+        {
+            if (mMainDiffuseTexture)
+            {
+                mShader->SetUniform1i("uTextureDiffuse", 0);
+                mMainDiffuseTexture->Bind();
+            }
+        }
+
+        inline void AssignShader(std::shared_ptr<Shader> shader)
+        {
+            assert(shader.get() && "Shader can not be nullptr");
+            mShader = shader;
+        }
 
         // inline void UseMaterial() const
         // {

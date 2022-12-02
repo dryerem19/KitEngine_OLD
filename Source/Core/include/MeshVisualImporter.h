@@ -26,8 +26,8 @@ namespace Core
     private:
         void ProcessAssimpNode( const aiNode* pNode, const aiScene* pScene, BaseEntity* pRootEntity );
         Render::KitStaticMesh* ProcessAssimpMesh( const aiMesh* pMesh, const aiScene* pScene );
-        void ProcessAssimpMaterial( const aiMaterial* pMaterial, const std::string& directory, Render::KitMaterial& kitMaterial );
-        std::vector<std::shared_ptr<Render::KitTexture>> LoadMaterialTextures(const aiMaterial* pMaterial, 
+        void ProcessAssimpMaterial( const aiMaterial* pMaterial, const std::string& directory, Render::KitMaterial* kitMaterial );
+        std::shared_ptr<Render::KitTexture> LoadMaterialTextures(const aiMaterial* pMaterial, 
     aiTextureType type, const std::string& directory);
     };
 }

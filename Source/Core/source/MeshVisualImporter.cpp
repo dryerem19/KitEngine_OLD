@@ -97,7 +97,7 @@ namespace Core
         Render::KitStaticMesh* pMeshVisual = new Render::KitStaticMesh(vertices, indices);
 
         // Создаём новый материал (по умолчанию)
-        Render::KitMaterial material;
+        Render::KitMaterial* pMaterial = new Render::KitMaterial();
 
         // Если на меш назначен материал, загружаем его
         if (pMesh->mMaterialIndex >= 0)
@@ -108,49 +108,39 @@ namespace Core
             
             // Обрабатываем материал
             this->ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], 
-                directory.string(), material);
+                directory.string(), pMaterial);
         }
+
+        pMeshVisual->SetMaterial(pMaterial);
 
         return pMeshVisual;
     }
 
-    void MeshVisualImporter::ProcessAssimpMaterial(const aiMaterial* pMaterial, const std::string& directory, Render::KitMaterial& kitMaterial)
+    void MeshVisualImporter::ProcessAssimpMaterial(const aiMaterial* pMaterial, const std::string& directory, Render::KitMaterial* kitMaterial)
     {
         // Загружаем имя материала
-        kitMaterial.mName = pMaterial->GetName().C_Str();
+        kitMaterial->mName = pMaterial->GetName().C_Str();
 
         // Загружаем diffuse текстуры 
-        kitMaterial.diffuseTextures = this->LoadMaterialTextures(pMaterial, aiTextureType_DIFFUSE, directory);        
+        kitMaterial->mMainDiffuseTexture = this->LoadMaterialTextures(pMaterial, aiTextureType_DIFFUSE, directory);        
     }
 
-    std::vector<std::shared_ptr<Render::KitTexture>> MeshVisualImporter::LoadMaterialTextures(const aiMaterial* pMaterial, 
+    std::shared_ptr<Render::KitTexture> MeshVisualImporter::LoadMaterialTextures(const aiMaterial* pMaterial, 
     aiTextureType type, const std::string& directory)
     {
-        // Создаём вектор под текстуры и резервируем место 
-        std::vector<std::shared_ptr<Render::KitTexture>> textures;
-        textures.reserve(pMaterial->GetTextureCount(type));
+        // Получаем имя текстуры
+        aiString name;
+        pMaterial->GetTexture(type, 0, &name);
 
-        // Обходим все текстуры указанного типа
-        for (uint32_t iTexture = 0; iTexture < pMaterial->GetTextureCount(type); iTexture++)
-        {
-            // Получаем имя текстуры
-            aiString name;
-            pMaterial->GetTexture(type, iTexture, &name);
+        /*
+        * Мы предпологаем, что текстура находится в той же директории, где и модель,
+        * поэтому directory - это директория модели. 
+        * Мы объединяем её с именем текстуры, чтобы получить предпологаемый путь. 
+        */
+        std::filesystem::path filepath = std::filesystem::path(directory);
+        filepath.concat(name.C_Str());
 
-            /*
-            * Мы предпологаем, что текстура находится в той же директории, где и модель,
-            * поэтому directory - это директория модели. 
-            * Мы объединяем её с именем текстуры, чтобы получить предпологаемый путь. 
-            */
-            std::filesystem::path filepath = std::filesystem::path(directory);
-            filepath.concat(name.C_Str());
-
-            // Добавляем текстуру в список текстур
-            textures.emplace_back(std::make_shared<Render::KitTexture>(filepath.string(), 
-                static_cast<Render::KitTextureType>(type)));
-        }
-
-        // Возвращаем список загруженных текстур
-        return textures;        
+        return std::make_shared<Render::KitTexture>(filepath.string(), 
+                static_cast<Render::KitTextureType>(type));
     }
 }

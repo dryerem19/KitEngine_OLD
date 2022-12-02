@@ -140,9 +140,11 @@ namespace Core
         // Если назначен меш
         if (mMesh)
         {
-            pShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, view_matrix);
-            pShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, proj_matrix);            
-            pShader->SetUniformMatrix4fv("uTransform", 1, GL_FALSE, glm::value_ptr(mWorldMatrix));
+            mMesh->mMaterial->mShader->Enable();
+            mMesh->mMaterial->Use();
+            mMesh->mMaterial->mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, view_matrix);
+            mMesh->mMaterial->mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, proj_matrix);            
+            mMesh->mMaterial->mShader->SetUniformMatrix4fv("uTransform", 1, GL_FALSE, glm::value_ptr(mWorldMatrix));
             mMesh->Draw();
         }
 
