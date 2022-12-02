@@ -166,7 +166,7 @@ namespace LevelEditor
         ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.1f, 0.25f, 0.8f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.1f, 0.25f, 0.8f, 1.0f)); 
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.35f, 0.9f, 1.0f)); 
-        if (ImGui::Button("Z ## 3")) { scale_z = 0.0f; }   
+        if (ImGui::Button("Z ## 3")) { scale_z = 1.0f; }   
         ImGui::PopStyleColor(3);
         {
             ImGui::SameLine();                 
