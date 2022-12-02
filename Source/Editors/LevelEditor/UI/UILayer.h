@@ -41,8 +41,6 @@ namespace LevelEditor
         std::unique_ptr<Render::Shader> mShader;
         glm::mat4 mTransform;
 
-        Core::BaseEntity* pEntity;
-
     public:
         UILayer() = default;
 

@@ -3,8 +3,6 @@
 //
 #include "UILayer.h"
 
-#include "MeshVisualImporter.h"
-
 #include "ResourceManager.h"
 #include "Texture.h"
 
@@ -26,12 +24,7 @@ namespace LevelEditor
         auto& app = Core::Application::Instance();
         frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
 
-
-        auto importer = Core::MeshVisualImporter();
-        importer.LoadVisual("../../Resources/models/nanosuit/nanosuit.obj");
-        
-        pEntity = importer.GetRootEntity();
-        Render::World::Get().LinkChild(pEntity);
+        Render::World::Get().SetName("KitScene");
 
     }
 
@@ -60,10 +53,7 @@ namespace LevelEditor
         // mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, EditorCamera::Instance().GetView());
         // mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, EditorCamera::Instance().GetPerspective());
 
-        if (pEntity)
-        {
-            pEntity->UpdateWorldMatrix();
-        }
+        Render::World::Get().UpdateWorldMatrix();
 
         // auto view = scene_manager.GetCurrentScene()->View<Render::KitTransform>();
         // for (auto [entity, transform] : view.each())
@@ -77,10 +67,7 @@ namespace LevelEditor
         frameBuffer.Bind();
         Render::Renderer::Clear();
 
-        if (pEntity)
-        {
-            pEntity->DrawMesh(mShader.get(), EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
-        }
+        Render::World::Get().DrawMesh(mShader.get(), EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
 
         // auto& scene_manager = Render::SceneManager::Instance();
 

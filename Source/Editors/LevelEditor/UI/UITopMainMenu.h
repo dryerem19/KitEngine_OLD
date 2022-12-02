@@ -5,6 +5,7 @@
 
 #include "SceneManager.h"
 #include "UISceneTree.h"
+#include "MeshVisualImporter.h"
 
 namespace LevelEditor
 {
