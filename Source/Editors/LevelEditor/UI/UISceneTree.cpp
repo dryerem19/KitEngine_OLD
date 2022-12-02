@@ -34,14 +34,14 @@ namespace LevelEditor
 
         ImGuiTreeNodeFlags flags = !pEntity->HasChilds() ? ImGuiTreeNodeFlags_Leaf : 0;
         flags |= ImGuiTreeNodeFlags_OpenOnArrow;   
-        flags |= (pEntity == pSelectedEntity) ? ImGuiTreeNodeFlags_Selected : 0;        
+    flags |= (pEntity == Render::World::Get().GetSelectedEntity()) ? ImGuiTreeNodeFlags_Selected : 0;        
 
         bool isNodeOpen = false;
         if (isNodeOpen = ImGui::TreeNodeEx(pEntity->GetName().c_str(), flags))
         {
             if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
             {
-                pSelectedEntity = pEntity;
+                Render::World::Get().SetSelectedEntity(pEntity);
             }
 
             for (uint32_t iChild = 0; iChild < pEntity->GetCountOfChilds(); iChild++)
@@ -54,7 +54,7 @@ namespace LevelEditor
 
         if (!isNodeOpen && ImGui::IsItemClicked(ImGuiMouseButton_Left))
         {
-            pSelectedEntity = pEntity;
+            Render::World::Get().SetSelectedEntity(pEntity);
         }
     }
     // void UISceneTree::DrawNode(Render::KitTransform& tr)

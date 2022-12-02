@@ -10,6 +10,7 @@ namespace LevelEditor
     {
         ImGui::Begin("Object inspector");
         {
+            DrawTransformComponent();
             // auto& scene_manager = Render::SceneManager::Instance();
             // auto selected_object = scene_manager.GetSelectedObject();
             // if (selected_object)
@@ -31,8 +32,26 @@ namespace LevelEditor
     // PRIVATE 
     //----------------------------------------------------------------------------------------
 
-    void Inspector::DrawTransformComponent(Render::KitTransform& transform)
+    void Inspector::DrawTransformComponent()
     {
+        Core::BaseEntity* pSelectedEntity = Render::World::Get().GetSelectedEntity();
+        if (!pSelectedEntity)
+        {
+            return;
+        }
+
+        float position_x = pSelectedEntity->GetPosition().x;
+        float position_y = pSelectedEntity->GetPosition().y;
+        float position_z = pSelectedEntity->GetPosition().z;
+
+        float rotation_x = pSelectedEntity->GetRotation().x;
+        float rotation_y = pSelectedEntity->GetRotation().y;
+        float rotation_z = pSelectedEntity->GetRotation().z;
+
+        float scale_x = pSelectedEntity->GetScale().x;
+        float scale_y = pSelectedEntity->GetScale().y;
+        float scale_z = pSelectedEntity->GetScale().z;
+
         ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(5.0f, 0.0f));
 
@@ -41,11 +60,11 @@ namespace LevelEditor
         ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.8f, 0.1f, 0.15f, 1.0f)); 
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.2f, 0.2f, 1.0f)); 
-        if (ImGui::Button("X ## 1")) { transform.Translation.x = 0.0f; }
+        if (ImGui::Button("X ## 1")) { position_x = 0.0f; }
         ImGui::PopStyleColor(3);
         {
             ImGui::SameLine();
-            ImGui::DragFloat("##x ## 1", &transform.Translation.x, 0.1f);
+            ImGui::DragFloat("##x ## 1", &position_x, 0.1f);
             ImGui::PopItemWidth();
             ImGui::SameLine();
         }
@@ -53,11 +72,11 @@ namespace LevelEditor
         ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.2f, 0.7f, 0.2f, 1.0f)); 
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f)); 
-        if (ImGui::Button("Y ## 1")) { transform.Translation.y = 0.0f; }
+        if (ImGui::Button("Y ## 1")) { position_y = 0.0f; }
         ImGui::PopStyleColor(3);
         {
             ImGui::SameLine();
-            ImGui::DragFloat("##y ## 1", &transform.Translation.y, 0.1f);
+            ImGui::DragFloat("##y ## 1", &position_y, 0.1f);
             ImGui::PopItemWidth();
             ImGui::SameLine();
         }
@@ -65,11 +84,11 @@ namespace LevelEditor
         ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.1f, 0.25f, 0.8f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.1f, 0.25f, 0.8f, 1.0f)); 
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.35f, 0.9f, 1.0f)); 
-        if (ImGui::Button("Z ## 1")) { transform.Translation.z = 0.0f; }   
+        if (ImGui::Button("Z ## 1")) { position_z = 0.0f; }   
         ImGui::PopStyleColor(3);
         {
             ImGui::SameLine();                 
-            ImGui::DragFloat("##z ## 1", &transform.Translation.z, 0.1f);
+            ImGui::DragFloat("##z ## 1", &position_z, 0.1f);
             ImGui::PopItemWidth();
             ImGui::SameLine();
         }
@@ -82,11 +101,11 @@ namespace LevelEditor
         ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.8f, 0.1f, 0.15f, 1.0f)); 
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.2f, 0.2f, 1.0f)); 
-        if (ImGui::Button("X ## 2")) { transform.Rotation.x = 0.0f; }
+        if (ImGui::Button("X ## 2")) { rotation_x = 0.0f; }
         ImGui::PopStyleColor(3);
         {
             ImGui::SameLine();
-            ImGui::DragFloat("##x ## 2", &transform.Rotation.x, 0.1f);
+            ImGui::DragFloat("##x ## 2", &rotation_x, 0.1f);
             ImGui::PopItemWidth();
             ImGui::SameLine();
         }
@@ -94,11 +113,11 @@ namespace LevelEditor
         ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.2f, 0.7f, 0.2f, 1.0f)); 
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f)); 
-        if (ImGui::Button("Y ## 2")) { transform.Rotation.y = 0.0f; }
+        if (ImGui::Button("Y ## 2")) { rotation_y = 0.0f; }
         ImGui::PopStyleColor(3);
         {
             ImGui::SameLine();
-            ImGui::DragFloat("##y ## 2", &transform.Rotation.y, 0.1f);
+            ImGui::DragFloat("##y ## 2", &rotation_y, 0.1f);
             ImGui::PopItemWidth();
             ImGui::SameLine();
         }
@@ -106,11 +125,11 @@ namespace LevelEditor
         ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.1f, 0.25f, 0.8f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.1f, 0.25f, 0.8f, 1.0f)); 
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.35f, 0.9f, 1.0f)); 
-        if (ImGui::Button("Z ## 2")) { transform.Rotation.z = 0.0f; }   
+        if (ImGui::Button("Z ## 2")) { rotation_z = 0.0f; }   
         ImGui::PopStyleColor(3);
         {
             ImGui::SameLine();                 
-            ImGui::DragFloat("##z ## 2", &transform.Rotation.z, 0.1f);
+            ImGui::DragFloat("##z ## 2", &rotation_z, 0.1f);
             ImGui::PopItemWidth();
             ImGui::SameLine();
         }
@@ -123,11 +142,11 @@ namespace LevelEditor
         ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.8f, 0.1f, 0.15f, 1.0f)); 
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.2f, 0.2f, 1.0f)); 
-        if (ImGui::Button("X ## 3")) { transform.Scale.x = 0.0f; }
+        if (ImGui::Button("X ## 3")) { scale_x = 0.0f; }
         ImGui::PopStyleColor(3);
         {
             ImGui::SameLine();
-            ImGui::DragFloat("##x ## 3", &transform.Scale.x, 0.1f);
+            ImGui::DragFloat("##x ## 3", &scale_x, 0.1f);
             ImGui::PopItemWidth();
             ImGui::SameLine();
         }
@@ -135,11 +154,11 @@ namespace LevelEditor
         ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.2f, 0.7f, 0.2f, 1.0f)); 
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f)); 
-        if (ImGui::Button("Y ## 3")) { transform.Scale.y = 0.0f; }
+        if (ImGui::Button("Y ## 3")) { scale_y = 0.0f; }
         ImGui::PopStyleColor(3);
         {
             ImGui::SameLine();
-            ImGui::DragFloat("##y ## 3", &transform.Scale.y, 0.1f);
+            ImGui::DragFloat("##y ## 3", &scale_y, 0.1f);
             ImGui::PopItemWidth();
             ImGui::SameLine();
         }
@@ -147,15 +166,19 @@ namespace LevelEditor
         ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.1f, 0.25f, 0.8f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.1f, 0.25f, 0.8f, 1.0f)); 
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.35f, 0.9f, 1.0f)); 
-        if (ImGui::Button("Z ## 3")) { transform.Scale.z = 0.0f; }   
+        if (ImGui::Button("Z ## 3")) { scale_z = 0.0f; }   
         ImGui::PopStyleColor(3);
         {
             ImGui::SameLine();                 
-            ImGui::DragFloat("##z ## 3", &transform.Scale.z, 0.1f);
+            ImGui::DragFloat("##z ## 3", &scale_z, 0.1f);
             ImGui::PopItemWidth();
             ImGui::SameLine();
         }        
 
         ImGui::PopStyleVar();
+
+        pSelectedEntity->SetPosition(glm::vec3(position_x, position_y, position_z));
+        pSelectedEntity->SetRotationInDegrees(glm::vec3(rotation_x, rotation_y, rotation_z));
+        pSelectedEntity->SetScale(glm::vec3(scale_x, scale_y, scale_z));
     } 
 }

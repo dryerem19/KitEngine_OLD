@@ -10,6 +10,6 @@ namespace LevelEditor
         Inspector() = default;
         void Draw() override final;
     private:
-        void DrawTransformComponent(Render::KitTransform& transform);
+        void DrawTransformComponent();
     };
 }

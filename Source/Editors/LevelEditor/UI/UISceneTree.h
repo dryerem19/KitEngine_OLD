@@ -15,7 +15,6 @@ namespace LevelEditor
         void Draw() override;
         //Render::KitModel mNanoModel;
 
-        Core::BaseEntity* pSelectedEntity;
         bool isModelLoaded = false;
 
         void SceneTree();
