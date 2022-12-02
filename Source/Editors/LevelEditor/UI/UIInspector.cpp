@@ -44,9 +44,9 @@ namespace LevelEditor
         float position_y = pSelectedEntity->GetPosition().y;
         float position_z = pSelectedEntity->GetPosition().z;
 
-        float rotation_x = pSelectedEntity->GetRotation().x;
-        float rotation_y = pSelectedEntity->GetRotation().y;
-        float rotation_z = pSelectedEntity->GetRotation().z;
+        float rotation_x = glm::degrees(pSelectedEntity->GetRotation().x);
+        float rotation_y = glm::degrees(pSelectedEntity->GetRotation().y);
+        float rotation_z = glm::degrees(pSelectedEntity->GetRotation().z);
 
         float scale_x = pSelectedEntity->GetScale().x;
         float scale_y = pSelectedEntity->GetScale().y;

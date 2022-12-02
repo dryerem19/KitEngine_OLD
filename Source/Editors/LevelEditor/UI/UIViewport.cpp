@@ -17,6 +17,8 @@ namespace LevelEditor
             vMax.y += ImGui::GetWindowPos().y;
             ImGui::GetWindowDrawList()->AddImage((ImTextureID)backTexture, vMin, vMax, ImVec2(0,1), ImVec2(1,0));
             // Draw Gizmo
+
+            ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
             ImGuizmo::SetRect(vMin.x, vMin.y, ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
             DrawGizmo();
@@ -27,41 +29,40 @@ namespace LevelEditor
 
     void UIViewport::DrawGizmo()
     {
-        // const auto& scene_manager = Render::SceneManager::Instance();
-        // if (scene_manager.GetSelectedObject() && mOperation != GizmoOperation::NONE)
-        // {
-        //     auto& transform = scene_manager.GetSelectedObject().GetComponent<Render::KitTransform>();
+        const auto& world = Render::World::Get();
+        Core::BaseEntity* pSelectedEntity = world.GetSelectedEntity();
+        if (pSelectedEntity && mOperation != GizmoOperation::NONE)
+        {
+            glm::vec3 position = pSelectedEntity->GetPosition();
+            glm::vec3 rotation = glm::degrees(pSelectedEntity->GetRotation());
+            glm::vec3 scale = pSelectedEntity->GetScale();
 
-        //     /* Build transform matrix */
-        //     float transformMatrix[16];
-        //     ImGuizmo::RecomposeMatrixFromComponents(&transform.Translation.x, &transform.Rotation.x, &transform.Scale.x, transformMatrix);
-        //     ImGuizmo::Manipulate(EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective(), (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, transformMatrix);
+            /* Build transform matrix */
+            float transformMatrix[16];
+            ImGuizmo::RecomposeMatrixFromComponents(&position.x, &rotation.x, &scale.x, transformMatrix);
+            ImGuizmo::Manipulate(EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective(), (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, transformMatrix);
             
-        //     /* If we moved the manipulator */
-        //     if (ImGuizmo::IsUsing())
-        //     {
-        //         /* We get new transformed components */
-        //         float translation[3], rotation[3], scale[3];
-        //         ImGuizmo::DecomposeMatrixToComponents(transformMatrix, translation, rotation, scale);
-
-        //         switch (mOperation)
-        //         {
-        //         case GizmoOperation::TRANSLATE:
-        //             transform.Translation = glm::vec3(translation[0], translation[1], translation[2]);
-        //             break;
-        //         case GizmoOperation::ROTATE:
-        //             {
-        //                 glm::vec3 deltaRotation = glm::vec3(rotation[0], rotation[1], rotation[2]) - transform.Rotation;
-        //                 transform.Rotation += deltaRotation;
-        //             }
-        //             break;
-        //         case GizmoOperation::SCALE:
-        //             transform.Scale = glm::vec3(scale[0], scale[1], scale[2]);
-        //             break;
-        //         default:
-        //             break;
-        //         }
-        //     }
-        // }
+            /* If we moved the manipulator */
+            if (ImGuizmo::IsUsing())
+            {
+                ImGuizmo::DecomposeMatrixToComponents(transformMatrix, &position.x, &rotation.x, &scale.x);
+                switch (mOperation)
+                {
+                case GizmoOperation::TRANSLATE:
+                    pSelectedEntity->SetPosition(position);
+                    break;
+                case GizmoOperation::ROTATE:
+                    {
+                        pSelectedEntity->SetRotationInDegrees(rotation);
+                    }
+                    break;
+                case GizmoOperation::SCALE:
+                    pSelectedEntity->SetScale(scale);
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
     }
 }
