@@ -21,6 +21,8 @@ namespace LevelEditor
         UIContentBrowser();
         void Draw() override;
         void NewFile( bool* close, bool isFolder = false );
+        void DeleteFile( bool* close );
+        void RenameFile( bool* close );
 
     private:
         const std::filesystem::path mProjectDirectory = "project";
@@ -29,8 +31,13 @@ namespace LevelEditor
         ImGuiItemFlags mFlagsButtonBack = 0;
         ImGuiItemFlags mFlagsButtonForward = 0;
         std::string mNameFile = "";
+        std::string mNewNameFile = "";
+        std::string mOldNameFileRename;
+        std::string mNameFileDelete;
 
-        bool mIsCheckOnNewFolder = false;
+        bool mIsCheckNewFile = false;
         bool mIsFolder = false;
+        bool mIsCheckDeleteFile = false;
+        bool mIsCheckRenameFile = false;
     };
 }

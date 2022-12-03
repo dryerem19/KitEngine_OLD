@@ -37,13 +37,13 @@ namespace LevelEditor
             {
                 if(ImGui::Selectable("New Folder"))
                 {
-                    mIsCheckOnNewFolder = true;
+                    mIsCheckNewFile = true;
                     mIsFolder = false;
                 }
                 ImGui::Separator();
                 if(ImGui::Selectable("New File"))
                 {
-                    mIsCheckOnNewFolder = true;
+                    mIsCheckNewFile = true;
                     mIsFolder = true;
                 }
                 ImGui::EndPopup();
@@ -69,7 +69,23 @@ namespace LevelEditor
 
                     }
                 }
+                if(ImGui::BeginPopupContextItem(relative.filename().c_str()))
+                {
+                    if(ImGui::Selectable("Delete"))
+                    {
+                        mNameFileDelete = relative.filename();
+                        mIsCheckDeleteFile = true;
+                    }
+                    ImGui::Separator();
+                    if(ImGui::Selectable("Rename"))
+                    {
+                        mOldNameFileRename = relative.filename();
+                        mIsCheckRenameFile = true;
+                    }
+                    ImGui::EndPopup();
+                }
             }
+            
             if(std::filesystem::is_empty(mCurrentProjectDirectory))
             {
                 ImGui::Text("No Item");
@@ -95,9 +111,17 @@ namespace LevelEditor
         }
         ImGui::End();
 
-        if(mIsCheckOnNewFolder)
+        if(mIsCheckNewFile)
         {
-            NewFile(&mIsCheckOnNewFolder, mIsFolder);
+            NewFile(&mIsCheckNewFile, mIsFolder);
+        }
+        if(mIsCheckDeleteFile)
+        {
+            DeleteFile(&mIsCheckDeleteFile);
+        }
+        if(mIsCheckRenameFile)
+        {
+            RenameFile(&mIsCheckRenameFile);
         }
     }
 
@@ -114,7 +138,7 @@ namespace LevelEditor
                 if(!isFolder)
                 {
                     std::filesystem::create_directories(mCurrentProjectDirectory / mNameFile);
-                    mIsCheckOnNewFolder = false;
+                    mIsCheckNewFile = false;
                     mNameFile.clear();
                 }
                 else
@@ -122,12 +146,56 @@ namespace LevelEditor
                     std::ofstream fstream(mCurrentProjectDirectory / mNameFile);
                     fstream.close();
                     mNameFile.clear();
+                    mIsCheckNewFile = false;
                 }
             }
             ImGui::SameLine();
             if(ImGui::Button("Close"))
             {
-                *close = false;
+                mIsCheckNewFile = false;
+            }
+        }
+        ImGui::End();
+    }
+
+    void UIContentBrowser::DeleteFile(bool* close)
+    {
+        ImGui::Begin("Delete File", close, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoResize);
+        {
+            ImGui::Text("Would you like to delete a file ?");
+            if(ImGui::Button("Yes"))
+            {
+                std::filesystem::remove_all(mCurrentProjectDirectory / mNameFileDelete);
+                mNameFileDelete.clear();
+                mIsCheckDeleteFile = false;
+            }
+            ImGui::SameLine();
+            if(ImGui::Button("No"))
+            {
+                mIsCheckDeleteFile = false;
+            }
+        }
+        ImGui::End();
+    }
+
+    void UIContentBrowser::RenameFile(bool* close)
+    {
+        const char* nameInput = "New Name File";
+        ImGui::SetNextWindowSize(ImVec2(300.0f,100.0f));
+        ImGui::Begin("Rename File", close, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoResize);
+        {
+            ImGui::InputText(nameInput, &mNewNameFile);
+            if(ImGui::Button("Rename"))
+            {
+                std::filesystem::rename(mCurrentProjectDirectory / mOldNameFileRename, mCurrentProjectDirectory / mNewNameFile);
+                mNewNameFile.clear();
+                mOldNameFileRename.clear();
+                mIsCheckRenameFile = false;
+            }
+            ImGui::SameLine();
+            if(ImGui::Button("Cancel"))
+            {
+                mIsCheckRenameFile = false;
             }
         }
         ImGui::End();
