@@ -97,7 +97,7 @@ namespace Core
         Render::KitStaticMesh* pMeshVisual = new Render::KitStaticMesh(vertices, indices);
 
         // Создаём новый материал (по умолчанию)
-        Render::KitMaterial* pMaterial = new Render::KitMaterial();
+        std::shared_ptr<Render::KitMaterial> material = std::make_shared<Render::KitMaterial>();
 
         // Если на меш назначен материал, загружаем его
         if (pMesh->mMaterialIndex >= 0)
@@ -108,10 +108,10 @@ namespace Core
             
             // Обрабатываем материал
             this->ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], 
-                directory.string(), pMaterial);
+                directory.string(), material.get());
         }
 
-        pMeshVisual->SetMaterial(pMaterial);
+        pMeshVisual->SetMaterial(material);
 
         return pMeshVisual;
     }

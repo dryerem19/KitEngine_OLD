@@ -14,7 +14,7 @@ namespace Render
         IndexBuffer  mIndexBuffer;
         
         // Материал сетки
-        KitMaterial* mMaterial;
+        std::shared_ptr<KitMaterial> mMaterial;
 
         KitStaticMesh(const std::vector<KitVertex>& vertices, 
                 const std::vector<uint32_t>&  indices);
@@ -29,11 +29,11 @@ namespace Render
 
         void Draw();
 
-        inline void SetMaterial(KitMaterial* pMaterial)
+        inline void SetMaterial(std::shared_ptr<KitMaterial> material)
         {
-            assert(pMaterial && "Material can't be nullptr!");
+            //assert(pMaterial && "Material can't be nullptr!");
 
-            mMaterial = pMaterial;
+            mMaterial = material;
         }
     };
 }

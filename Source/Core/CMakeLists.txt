@@ -28,7 +28,7 @@ target_link_libraries(${PROJECT_NAME}
         GLEW::GLEW
         glfw
         EnTT::EnTT
-        LinearMath Bullet3Common BulletDynamics BulletSoftBody
+        BulletSoftBody BulletDynamics BulletCollision Bullet3Common LinearMath
         glm::glm
         SAIL::sail
         SAIL::sail-c++

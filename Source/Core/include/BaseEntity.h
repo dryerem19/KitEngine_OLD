@@ -45,7 +45,8 @@ namespace Core
         BaseEntity* mHandle { nullptr };
 
         /* Меш сущности */
-        Render::KitStaticMesh* mMesh { nullptr }; 
+        Render::KitStaticMesh* mMesh { nullptr };
+
 
         /* Материал */
         Render::KitMaterial* mMaterial { nullptr };
