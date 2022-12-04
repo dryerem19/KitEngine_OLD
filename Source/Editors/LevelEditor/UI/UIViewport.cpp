@@ -29,7 +29,7 @@ namespace LevelEditor
 
     void UIViewport::DrawGizmo()
     {
-        const auto& world = Render::World::Get();
+        const auto& world = Render::GameLevel::Get();
         Core::BaseEntity* pSelectedEntity = world.GetSelectedEntity();
         if (pSelectedEntity && mOperation != GizmoOperation::NONE)
         {

@@ -3,7 +3,7 @@
 
 namespace Render
 {
-    World::World()
+    GameLevel::GameLevel()
     {
         mCollisionConfig = std::make_unique<btDefaultCollisionConfiguration>();
         mDispathcer = std::make_unique<btCollisionDispatcher>(mCollisionConfig.get());
@@ -13,7 +13,7 @@ namespace Render
         mDynamicsWorld->setGravity(btVector3(0.f, -9.81f, 0.f));
     }
 
-    void World::Spawn(Core::BaseEntity* pEntity)
+    void GameLevel::Spawn(Core::BaseEntity* pEntity)
     {
         glm::quat qRotation = glm::quat(pEntity->GetRotation());
         glm::vec3 position = pEntity->GetPosition();
@@ -34,9 +34,9 @@ namespace Render
         mDynamicsWorld->addRigidBody(new btRigidBody(rigidBodyCInfo));
     }
 
-    World& World::Get()
+    GameLevel& GameLevel::Get()
     {
-        static World instance;
+        static GameLevel instance;
         return instance;
     }
 }

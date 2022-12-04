@@ -23,8 +23,8 @@ namespace LevelEditor
         //     }
         // }
 
-        auto& world = Render::World::Get();
-        DrawNode(world.GetSelf());
+        auto& level = Render::GameLevel::Get();
+        DrawNode(level.GetSelf());
 
     }
 
@@ -34,7 +34,7 @@ namespace LevelEditor
 
         ImGuiTreeNodeFlags flags = !pEntity->HasChilds() ? ImGuiTreeNodeFlags_Leaf : 0;
         flags |= ImGuiTreeNodeFlags_OpenOnArrow;
-        flags |= (pEntity == Render::World::Get().GetSelectedEntity()) ? ImGuiTreeNodeFlags_Selected : 0;        
+        flags |= (pEntity == Render::GameLevel::Get().GetSelectedEntity()) ? ImGuiTreeNodeFlags_Selected : 0;        
 
         if (mSceneNames.find(pEntity->GetName()) != mSceneNames.end())
         {
@@ -55,7 +55,7 @@ namespace LevelEditor
         {
             if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
             {
-                Render::World::Get().SetSelectedEntity(pEntity);
+                Render::GameLevel::Get().SetSelectedEntity(pEntity);
             }
 
             for (uint32_t iChild = 0; iChild < pEntity->GetCountOfChilds(); iChild++)
@@ -68,7 +68,7 @@ namespace LevelEditor
 
         if (!isNodeOpen && ImGui::IsItemClicked(ImGuiMouseButton_Left))
         {
-            Render::World::Get().SetSelectedEntity(pEntity);
+            Render::GameLevel::Get().SetSelectedEntity(pEntity);
         }
     }
     // void UISceneTree::DrawNode(Render::KitTransform& tr)

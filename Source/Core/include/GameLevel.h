@@ -7,13 +7,13 @@
 
 namespace Render
 {
-    class World : public Core::BaseEntity
+    class GameLevel : public Core::BaseEntity
     {
     private:
-        World();
-        World(const World&) = delete;
-        World& operator=(World&) = delete;
-        ~World() = default;
+        GameLevel();
+        GameLevel(const GameLevel&) = delete;
+        GameLevel& operator=(GameLevel&) = delete;
+        ~GameLevel() = default;
     private:
         std::unique_ptr<btDynamicsWorld> mDynamicsWorld;
         std::unique_ptr<btDispatcher> mDispathcer;
@@ -24,7 +24,7 @@ namespace Render
     private:
         Core::BaseEntity* m_pSelectedEntity { nullptr };
     public:
-        static World& Get();
+        static GameLevel& Get();
 
         void Spawn(Core::BaseEntity* pEntity);
 

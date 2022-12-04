@@ -24,7 +24,7 @@ namespace LevelEditor
         auto& app = Core::Application::Instance();
         frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
 
-        Render::World::Get().SetName("KitScene");
+        Render::GameLevel::Get().SetName("KitScene");
 
     }
 
@@ -53,7 +53,7 @@ namespace LevelEditor
         // mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, EditorCamera::Instance().GetView());
         // mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, EditorCamera::Instance().GetPerspective());
 
-        Render::World::Get().UpdateWorldMatrix();
+        Render::GameLevel::Get().UpdateWorldMatrix();
 
         // auto view = scene_manager.GetCurrentScene()->View<Render::KitTransform>();
         // for (auto [entity, transform] : view.each())
@@ -67,7 +67,7 @@ namespace LevelEditor
         frameBuffer.Bind();
         Render::Renderer::Clear();
 
-        Render::World::Get().DrawMesh(mShader.get(), EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
+        Render::GameLevel::Get().DrawMesh(mShader.get(), EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
 
         // auto& scene_manager = Render::SceneManager::Instance();
 

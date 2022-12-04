@@ -34,7 +34,7 @@ namespace LevelEditor
 
     void Inspector::DrawTransformComponent()
     {
-        Core::BaseEntity* pSelectedEntity = Render::World::Get().GetSelectedEntity();
+        Core::BaseEntity* pSelectedEntity = Render::GameLevel::Get().GetSelectedEntity();
         if (!pSelectedEntity)
         {
             return;
