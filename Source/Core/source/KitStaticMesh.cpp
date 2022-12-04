@@ -29,13 +29,16 @@ void Render::KitStaticMesh::Init(const std::vector<KitVertex>& vertices, const s
 
 void Render::KitStaticMesh::Draw()
 {
-    mVertexArray.Bind();
-    mIndexBuffer.Bind();
+    // mVertexArray.Bind();
+    // mIndexBuffer.Bind();
+
+    RenderBackend::Get().SetVAO(mVertexArray.GetId());
+    RenderBackend::Get().SetIBO(mIndexBuffer.id());
 
     //GLCall(glDrawElements(GL_TRIANGLES, mIndexBuffer.GetCount(), GL_UNSIGNED_INT, nullptr));
     RenderBackend::Get().Render(mIndexBuffer.GetCount());
 
 
-    mVertexArray.Unbind();
-    mIndexBuffer.Unbind();
+    // mVertexArray.Unbind();
+    // mIndexBuffer.Unbind();
 }
