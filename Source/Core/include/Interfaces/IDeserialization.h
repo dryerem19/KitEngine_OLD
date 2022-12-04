@@ -15,5 +15,5 @@ class IDeserialization
 public:
     virtual ~IDeserialization() = default;
 
-    virtual void Deserilize() = 0;
-}
+    virtual void Deserialize(const std::string& filepath) = 0;
+};

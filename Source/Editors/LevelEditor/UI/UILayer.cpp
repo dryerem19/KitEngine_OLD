@@ -6,25 +6,31 @@
 #include "ResourceManager.h"
 #include "Texture.h"
 #include "KitModelFile.h"
-#include <fstream>
 
 namespace LevelEditor
 {
     void UILayer::OnStart()
     {
-        KitModelFile file;
-        file.description.filepath = "../../Resources/test.kmf";
-        file.description.name = "Вася";
+        KitModelFile fileS;
+        fileS.header.version = 1;
+        fileS.description.filepath = "../../Resources/test.kmf";
+        fileS.description.name = "Вася";
 
-        std::ofstream out(file.description.filepath, std::ios::binary);
-        out.write((char*)&file, sizeof(file));
-        out.close();
-
-        std::ifstream input(file.description.filepath, std::ios::binary);
-        KitModelFile infile;
-        input.read((char*)&infile, sizeof(infile));
-        std::cout << infile.description.name << std::endl;
-        input.close();
+        fileS.Serialize();
+        
+        KitModelFile fileD;
+        
+        fileD.Deserialize("../../Resources/test.kmf");
+        if(!fileD.IsValid())
+        {
+            std::cout << "У вас старая версия модели" << std::endl;
+        }
+        else
+        {
+            std::cout << fileD.description.filepath << std::endl;
+            std::cout << fileD.description.name << std::endl;
+        }
+        
         uiViewport      = new UIViewport();
         uiTopBarTools   = new UITopBarTools();
 

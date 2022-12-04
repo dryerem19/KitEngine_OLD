@@ -9,8 +9,8 @@
  * 
  */
 #pragma once
-#include <cstdint>
-
+#include <Interfaces/ISerialization.h>
+#include <Interfaces/IDeserialization.h>
 
 #define KMF_VERSION 1
 
@@ -25,9 +25,16 @@ struct KMFDescription
     std::string name;
 };
 
-struct KitModelFile
+class KitModelFile final : public ISerialization, public IDeserialization
 {
+public:
     KMFHeader header;
     KMFDescription description;
-};
 
+    void Serialize() override;
+    void Deserialize(const std::string& filepath) override; 
+    inline bool IsValid() const { return mIsValid; }
+private:
+    bool mIsValid = false;
+
+};
