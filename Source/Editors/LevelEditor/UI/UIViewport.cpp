@@ -30,7 +30,7 @@ namespace LevelEditor
     void UIViewport::DrawGizmo()
     {
         const auto& world = Render::GameLevel::Get();
-        Core::BaseEntity* pSelectedEntity = world.GetSelectedEntity();
+        GameObject* pSelectedEntity = world.GetSelectedEntity();
         if (pSelectedEntity && mOperation != GizmoOperation::NONE)
         {
             glm::vec3 position = pSelectedEntity->GetPosition();

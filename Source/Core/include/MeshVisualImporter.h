@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseEntity.h"
+#include "GameObject.h"
 
 namespace Core
 {
@@ -7,7 +7,7 @@ namespace Core
     {
     private:
         std::filesystem::path mFilepath;
-        BaseEntity* m_pRootEntity { nullptr };
+        GameObject* m_pRootEntity { nullptr };
     public:
          MeshVisualImporter() = default;
          MeshVisualImporter( const std::filesystem::path& filepath )
@@ -19,12 +19,12 @@ namespace Core
             mFilepath = filepath;
             this->LoadVisual();
         }
-        inline BaseEntity* GetRootEntity() const
+        inline GameObject* GetRootEntity() const
         {
             return m_pRootEntity;
         }
     private:
-        void ProcessAssimpNode( const aiNode* pNode, const aiScene* pScene, BaseEntity* pRootEntity );
+        void ProcessAssimpNode( const aiNode* pNode, const aiScene* pScene, GameObject* pRootEntity );
         Render::KitStaticMesh* ProcessAssimpMesh( const aiMesh* pMesh, const aiScene* pScene );
         void ProcessAssimpMaterial( const aiMaterial* pMaterial, const std::string& directory, Render::KitMaterial* kitMaterial );
         std::shared_ptr<Render::KitTexture> LoadMaterialTextures(const aiMaterial* pMaterial, 

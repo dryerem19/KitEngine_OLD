@@ -26,18 +26,18 @@ namespace Core
                                         .replace_extension( "" )
                                         .string();                                
 
-        m_pRootEntity = new BaseEntity( rootNodeName );
+        m_pRootEntity = new GameObject( rootNodeName );
         this->ProcessAssimpNode( pScene->mRootNode, pScene, m_pRootEntity );        
     }
 
-    void MeshVisualImporter::ProcessAssimpNode( const aiNode* pNode, const aiScene* pScene, BaseEntity* pRootEntity )
+    void MeshVisualImporter::ProcessAssimpNode( const aiNode* pNode, const aiScene* pScene, GameObject* pRootEntity )
     {
         // Обрабатываем все меши ноды
         for (uint32_t iMesh = 0; iMesh < pNode->mNumMeshes; iMesh++)
         {   
             const aiMesh* pMesh = pScene->mMeshes[pNode->mMeshes[iMesh]];
 
-            BaseEntity* pChildEntity = new BaseEntity();
+            GameObject* pChildEntity = new GameObject();
             pChildEntity->SetName(pMesh->mName.C_Str());
             pChildEntity->SetMesh(this->ProcessAssimpMesh(pMesh, pScene));
             pRootEntity->LinkChild(pChildEntity);
@@ -47,7 +47,7 @@ namespace Core
         for (uint32_t iChild = 0; iChild < pNode->mNumChildren; iChild++)
         {
             const aiNode* pChildNode = pNode->mChildren[iChild];
-            BaseEntity* pChildEntity = new BaseEntity(pChildNode->mName.C_Str());
+            GameObject* pChildEntity = new GameObject(pChildNode->mName.C_Str());
             pRootEntity->LinkChild(pChildEntity);
             this->ProcessAssimpNode(pNode->mChildren[iChild], pScene, pChildEntity);
         }        

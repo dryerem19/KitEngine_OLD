@@ -39,7 +39,7 @@ namespace LevelEditor
         auto& app = Core::Application::Instance();
         frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
 
-        Render::GameLevel::Get().SetName("KitScene");
+        //Render::GameLevel::Get().SetName("KitScene");
 
     }
 
@@ -64,17 +64,8 @@ namespace LevelEditor
     {
         // Camera
         EditorCamera::Instance().Update();
+        Render::GameLevel::Get().Update();
         
-        // mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, EditorCamera::Instance().GetView());
-        // mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, EditorCamera::Instance().GetPerspective());
-
-        Render::GameLevel::Get().UpdateWorldMatrix();
-
-        // auto view = scene_manager.GetCurrentScene()->View<Render::KitTransform>();
-        // for (auto [entity, transform] : view.each())
-        // {
-        //     transform.UpdateWorldTransform();
-        // }
     }
 
     void UILayer::OnRender(double dt) 
@@ -82,27 +73,7 @@ namespace LevelEditor
         frameBuffer.Bind();
         Render::Renderer::Clear();
 
-        Render::GameLevel::Get().DrawMesh(mShader.get(), EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
-
-        // auto& scene_manager = Render::SceneManager::Instance();
-
-        // auto view = scene_manager.GetCurrentScene()->View<Render::KitStaticMesh, Render::KitTransform>();
-        // for (auto [entity, mesh, transform] : view.each())
-        // {
-        //     mShader->SetUniform1i("uTextureDiffuse", 0);
-        //     mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
-        //         glm::value_ptr(transform.WorldTransformMatrix));      
-
-        //     if(!mesh.mMaterial.diffuseTextures.empty()) {
-        //         mesh.mMaterial.diffuseTextures[0]->Bind();
-        //     }
-
-        //     Render::Renderer::Draw(mesh.mVertexArray, mesh.mIndexBuffer); 
-
-        //     if(!mesh.mMaterial.diffuseTextures.empty()){
-        //         mesh.mMaterial.diffuseTextures[0]->Unbind();
-        //     }             
-        // }
+        Render::GameLevel::Get().Draw(mShader.get(), EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
 
         frameBuffer.Unbind();
         Render::Renderer::Clear();
