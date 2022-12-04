@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "KitStaticMesh.h"
 
+#include "RenderBackend.h"
+
 Render::KitStaticMesh::KitStaticMesh(const std::vector<KitVertex>& vertices, 
     const std::vector<uint32_t>& indices)
 {
@@ -29,7 +31,11 @@ void Render::KitStaticMesh::Draw()
 {
     mVertexArray.Bind();
     mIndexBuffer.Bind();
-    GLCall(glDrawElements(GL_TRIANGLES, mIndexBuffer.GetCount(), GL_UNSIGNED_INT, nullptr));
+
+    //GLCall(glDrawElements(GL_TRIANGLES, mIndexBuffer.GetCount(), GL_UNSIGNED_INT, nullptr));
+    RenderBackend::Get().Render(mIndexBuffer.GetCount());
+
+
     mVertexArray.Unbind();
     mIndexBuffer.Unbind();
 }
