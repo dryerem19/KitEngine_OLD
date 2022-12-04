@@ -1,5 +1,7 @@
 #include "UIInspector.h"
 
+#include "GameObject.h"
+
 namespace LevelEditor
 {
     //----------------------------------------------------------------------------------------
@@ -34,7 +36,7 @@ namespace LevelEditor
 
     void Inspector::DrawTransformComponent()
     {
-        Core::BaseEntity* pSelectedEntity = Render::GameLevel::Get().GetSelectedEntity();
+        GameObject* pSelectedEntity = Render::GameLevel::Get().GetSelectedEntity();
         if (!pSelectedEntity)
         {
             return;

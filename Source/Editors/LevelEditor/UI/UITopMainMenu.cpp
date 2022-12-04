@@ -71,7 +71,7 @@ namespace LevelEditor
     {
         auto importer = Core::MeshVisualImporter();
         importer.LoadVisual(*filepath);        
-        Render::GameLevel::Get().LinkChild(importer.GetRootEntity());
+        Render::GameLevel::Get().Add(importer.GetRootEntity());
         uiSceneTree->isModelLoaded = true;
     }
 

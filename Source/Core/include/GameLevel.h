@@ -2,12 +2,20 @@
 
 #include <BulletDynamics/btBulletDynamicsCommon.h>
 
-#include "BaseEntity.h"
 
+class GameObject;
+
+// GameObject* Create(const std::string& name);
+
+// GameObject* ObjectList::Create(const std::string& name)
+// {
+//     mObjects.insert({name, std::make_unique<GameObject>()});
+//     return mObjects.at(name).get();
+// }
 
 namespace Render
 {
-    class GameLevel : public Core::BaseEntity
+    class GameLevel
     {
     private:
         GameLevel();
@@ -22,22 +30,62 @@ namespace Render
         std::unique_ptr<btConstraintSolver> mSolver;
         std::vector<btRigidBody*> mBodies;
     private:
-        Core::BaseEntity* m_pSelectedEntity { nullptr };
+        std::unordered_map<std::string, GameObject*> mObjects;
+        GameObject* m_pSelectedEntity { nullptr };     
     public:
-        static GameLevel& Get();
 
-        void Spawn(Core::BaseEntity* pEntity);
+        static GameLevel& Get();
+        
+        void Add(GameObject* pGameObject);
+
+        void Update();
+
+        void Draw(Render::Shader* pShader, const float* view_matrix, float* proj_matrix);
+
+        void Spawn(GameObject* pEntity);
 
         inline void AddRigidBody(btRigidBody* pRigidBody) { mBodies.push_back(pRigidBody); }
 
-        inline void SetSelectedEntity(Core::BaseEntity* pSelectedEntity)
+        inline void SetSelectedEntity(GameObject* pSelectedEntity)
         {
+            mObjects.begin();
             m_pSelectedEntity = pSelectedEntity;
         }
 
-        inline Core::BaseEntity* GetSelectedEntity() const
+        inline GameObject* GetSelectedEntity() const
         {
             return m_pSelectedEntity;
         }
+
+        /**
+         * @brief Поиск объекта по его имени
+         * 
+         * @param name имя объекта
+         * @return GameObject* 
+         */
+        inline GameObject* FindObjectByName(const std::string& name)
+        {
+            return mObjects.find(name) != mObjects.end() ? mObjects[name] : nullptr;
+        }        
+        
+        inline std::unordered_map<std::string, GameObject*>::iterator begin() noexcept
+        {
+            return mObjects.begin();
+        }
+
+        inline std::unordered_map<std::string, GameObject*>::iterator end() noexcept
+        {
+            return mObjects.end();
+        }  
+
+        inline std::unordered_map<std::string, GameObject*>::const_iterator cbegin() const noexcept
+        {
+            return mObjects.cbegin();
+        }
+
+        inline std::unordered_map<std::string, GameObject*>::const_iterator cend() const noexcept
+        {
+            return mObjects.cend();
+        }                
     };
 }

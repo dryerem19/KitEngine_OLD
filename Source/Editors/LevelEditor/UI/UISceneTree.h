@@ -2,6 +2,7 @@
 
 
 #include "Core/KitUI.h"
+#include "GameObject.h"
 #include "GameLevel.h"
 
 namespace LevelEditor
@@ -9,7 +10,7 @@ namespace LevelEditor
     class UISceneTree : public KitUI
     {
     private:
-        std::unordered_map<std::string, std::pair<Core::BaseEntity*, int>> mSceneNames; 
+        std::unordered_map<std::string, std::pair<GameObject*, int>> mSceneNames; 
     public:
         UISceneTree() = default;
         UISceneTree(IController* controller) : KitUI(controller) { }
@@ -18,6 +19,6 @@ namespace LevelEditor
         bool isModelLoaded = false;
 
         void SceneTree();
-        void DrawNode(Core::BaseEntity* pEntity);    
+        void DrawNode(GameObject* pEntity);    
     };
 }

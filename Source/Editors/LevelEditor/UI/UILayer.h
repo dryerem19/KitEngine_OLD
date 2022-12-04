@@ -30,7 +30,7 @@
 #include "UIInspector.h"
 #include "UIBottomMenuBar.h"
 
-#include "BaseEntity.h"
+#include "GameObject.h"
 
 namespace LevelEditor
 {
