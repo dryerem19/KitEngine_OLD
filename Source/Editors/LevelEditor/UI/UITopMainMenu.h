@@ -3,7 +3,7 @@
 #include "Core/KitUI.h"
 #include "UIFileDialog.h"
 
-#include "SceneManager.h"
+#include "GameLevel.h"
 #include "UISceneTree.h"
 #include "MeshVisualImporter.h"
 

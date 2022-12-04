@@ -3,7 +3,7 @@
 #include "Core/KitUI.h"
 #include <Core/EditorCamera.h>
 #include "Core/Events/SelectGizmoEvent.h"
-#include "SceneManager.h"
+#include "GameLevel.h"
 
 namespace LevelEditor
 {

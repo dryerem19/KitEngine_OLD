@@ -25,7 +25,7 @@
 #include "UIToolsTab.h"
 
 #include "UIController.h"
-#include "SceneManager.h"
+#include "GameLevel.h"
 #include "UIToolsTab.h"
 #include "UIInspector.h"
 #include "UIBottomMenuBar.h"

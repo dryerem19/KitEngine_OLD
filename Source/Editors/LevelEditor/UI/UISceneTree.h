@@ -2,7 +2,7 @@
 
 
 #include "Core/KitUI.h"
-#include "SceneManager.h"
+#include "GameLevel.h"
 
 namespace LevelEditor
 {
