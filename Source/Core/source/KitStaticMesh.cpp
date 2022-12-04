@@ -12,7 +12,9 @@ Render::KitStaticMesh::KitStaticMesh(const std::vector<KitVertex>& vertices,
 void Render::KitStaticMesh::Init(const std::vector<KitVertex>& vertices, const std::vector<uint32_t>& indices)
 {
     // Инициализация буфера вершин
-    mVertexBuffer.Init(vertices.data(), vertices.size() * sizeof(vertices[0]));
+    //mVertexBuffer.Init(vertices.data(), vertices.size() * sizeof(vertices[0]));
+
+    geometry.vbo.Init(vertices.data(), vertices.size() * sizeof(vertices[0]));
 
     // Инициализация слоя буфера
     VertexBufferLayout bufferLayout;
@@ -21,10 +23,14 @@ void Render::KitStaticMesh::Init(const std::vector<KitVertex>& vertices, const s
     bufferLayout.AddFloatElement(2);
 
     // Добавляем буфер в буфер вершин
-    mVertexArray.AddBuffer(mVertexBuffer, bufferLayout);
+    //mVertexArray.AddBuffer(mVertexBuffer, bufferLayout);
+
+    geometry.vao.AddBuffer(geometry.vbo, bufferLayout);
 
     // Инициализация буфера индексов
-    mIndexBuffer.Init(indices.data(), indices.size());
+    //mIndexBuffer.Init(indices.data(), indices.size());
+
+    geometry.ibo.Init(indices.data(), indices.size());
 }
 
 void Render::KitStaticMesh::Draw()
@@ -32,11 +38,13 @@ void Render::KitStaticMesh::Draw()
     // mVertexArray.Bind();
     // mIndexBuffer.Bind();
 
-    RenderBackend::Get().SetVAO(mVertexArray.GetId());
-    RenderBackend::Get().SetIBO(mIndexBuffer.id());
+    //RenderBackend::Get().SetVAO(mVertexArray.GetId());
+    //RenderBackend::Get().SetIBO(mIndexBuffer.id());
+
+    RenderBackend::Get().SetGeometry(&geometry);
 
     //GLCall(glDrawElements(GL_TRIANGLES, mIndexBuffer.GetCount(), GL_UNSIGNED_INT, nullptr));
-    RenderBackend::Get().Render(mIndexBuffer.GetCount());
+    RenderBackend::Get().Render(geometry.ibo.GetCount());
 
 
     // mVertexArray.Unbind();

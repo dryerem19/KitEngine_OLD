@@ -1,5 +1,16 @@
+/**
+ * @file RenderBackend.h
+ * @author Denis Eremenko (mamayma8@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-12-04
+ * 
+ * @copyright Copyright Denis Eremenko (c) 2022
+ * 
+ */
 #pragma once
 #include <GL/glew.h>
+#include "Geometry.h"
 
 class RenderBackend final
 {
@@ -24,6 +35,12 @@ public:
     {
         static RenderBackend instance;
         return instance;
+    }
+
+    inline void SetGeometry(Geometry* pGeometry)
+    {
+        SetVAO(pGeometry->vao.GetId());
+        SetIBO(pGeometry->ibo.id());
     }
 
     inline void SetVAO(uint32_t id)

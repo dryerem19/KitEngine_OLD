@@ -4,14 +4,18 @@
 #include "KitMaterial.h"
 #include "KitVertex.h"
 
+#include "Geometry.h"
+
 namespace Render
 {
     class KitStaticMesh
     {
     public:
-        VertexArray  mVertexArray;
-        VertexBuffer mVertexBuffer;
-        IndexBuffer  mIndexBuffer;
+        // VertexArray  mVertexArray;
+        // VertexBuffer mVertexBuffer;
+        // IndexBuffer  mIndexBuffer;
+
+        Geometry geometry;
         
         // Материал сетки
         std::shared_ptr<KitMaterial> mMaterial;
