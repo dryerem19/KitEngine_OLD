@@ -24,13 +24,14 @@ namespace Core
 
         KitModelFile kmfFile;
         kmfFile.root = std::make_unique<KMFNode>();
-        kmfFile.root->name = std::filesystem::path(pScene->mRootNode->mName.C_Str()).replace_extension("").string();                                
+        kmfFile.root->name = mModelName = std::filesystem::path(pScene->mRootNode->mName.C_Str()).replace_extension("").string();                                
 
         this->ProcessAssimpNode(pScene->mRootNode, pScene, kmfFile.root.get());        
 
         kmfFile.header.version = 1;
         kmfFile.description.filepath = "test.kmf";
         kmfFile.Serialize();
+
     }
 
     void MeshVisualImporter::ProcessAssimpNode(const aiNode* pNode, const aiScene* pScene, KMFNode* pKmfNode)
@@ -142,10 +143,26 @@ namespace Core
         * поэтому directory - это директория модели. 
         * Мы объединяем её с именем текстуры, чтобы получить предпологаемый путь. 
         */
-        std::filesystem::path filepath = std::filesystem::path(directory);
-        filepath.concat(name.C_Str());
+        std::filesystem::path texturePath = std::filesystem::path(directory);
+        texturePath.concat(name.C_Str());
 
-        return std::make_shared<Render::KitTexture>(filepath.string(), 
+        /* Если текстура существует */
+        if (std::filesystem::exists(texturePath))
+        {
+            /* Куда скопировать текстуру */
+            std::filesystem::path copy_path("data/Textures/");
+            copy_path.append(name.C_Str());
+
+            /* Если текстура с таким именем уже существует по пути копирования */
+            if (!std::filesystem::exists(copy_path))
+            {
+                // TODO: Сделать пользовательский диалог (окно) ImGui с сообщением о конфликте и предложением переименовать,
+                // TODO: не забудь убрать восклицательный знак в условии
+                std::filesystem::copy(texturePath, std::filesystem::path("data/Textures") / name.C_Str());
+            }
+        }
+
+        return std::make_shared<Render::KitTexture>(texturePath.string(), 
                 static_cast<Render::KitTextureType>(type));
     }
 }

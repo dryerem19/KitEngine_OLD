@@ -10,6 +10,8 @@ namespace Core
     private:
         std::filesystem::path mFilepath;
         GameObject* m_pRootEntity { nullptr };
+
+        std::string mModelName;
     public:
          MeshVisualImporter() = default;
          MeshVisualImporter( const std::filesystem::path& filepath )

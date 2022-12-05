@@ -30,8 +30,16 @@ struct KMFDescription
 
 struct KMFMesh final
 {
+    /* Имя сетки*/
     std::string name;
+
+    /* Путь к материалу сетки */
+    std::string material;
+
+    /* Данные индексов сетки */
     std::vector<uint32_t> indices;
+
+    /* Данные вершин сетки */
     std::vector<Render::KitVertex> vertices;
 };
 
@@ -48,15 +56,15 @@ struct KMFNode final
     ~KMFNode() = default;
 };
 
-class KitModelFile final : public ISerialization, public IDeserialization
+class KitModelFile final : private ISerialization, private IDeserialization
 {
 public:
     KMFHeader header;
     KMFDescription description;
     std::unique_ptr<KMFNode> root;
 
-    void Serialize() override;
-    void Deserialize(const std::string& filepath) override; 
+    void Serialize() override final;
+    void Deserialize(const std::string& filepath) override final; 
     inline bool IsValid() const { return mIsValid; }
 private:
     void WriteMesh(std::ofstream& out, KMFMesh* pKmfMesh);

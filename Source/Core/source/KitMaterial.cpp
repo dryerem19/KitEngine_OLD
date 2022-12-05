@@ -11,10 +11,12 @@ namespace Render
     void KitMaterial::Serialize()
     {
         YAML::Emitter out;
-        out << YAML::Key << "Name";
-        out << YAML::Value << mName;
+        out << YAML::BeginMap;
+        out << YAML::Key << "Name" << YAML::Value << mName;
+        out << YAML::Key << "Diffuse" << YAML::Value << mMainDiffuseTexture->GetPath();        
+        out << YAML::EndMap;
 
-        std::ofstream fout(mName + ".material");
+        std::ofstream fout("data/" + mName + ".material");
         fout << out.c_str();
     }
 
