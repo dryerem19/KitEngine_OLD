@@ -22,44 +22,53 @@ namespace Core
                                 aiProcess_OptimizeMeshes             |
                                 aiProcess_JoinIdenticalVertices      );
 
-        std::string rootNodeName = std::filesystem::path( pScene->mRootNode->mName.C_Str() )
-                                        .replace_extension( "" )
-                                        .string();                                
+        KitModelFile kmfFile;
+        kmfFile.root = std::make_unique<KMFNode>();
+        kmfFile.root->name = std::filesystem::path(pScene->mRootNode->mName.C_Str()).replace_extension("").string();                                
 
-        m_pRootEntity = new GameObject( rootNodeName );
-        this->ProcessAssimpNode( pScene->mRootNode, pScene, m_pRootEntity );        
+        this->ProcessAssimpNode(pScene->mRootNode, pScene, kmfFile.root.get());        
+
+        kmfFile.header.version = 1;
+        kmfFile.description.filepath = "test.kmf";
+        kmfFile.Serialize();
     }
 
-    void MeshVisualImporter::ProcessAssimpNode( const aiNode* pNode, const aiScene* pScene, GameObject* pRootEntity )
+    void MeshVisualImporter::ProcessAssimpNode(const aiNode* pNode, const aiScene* pScene, KMFNode* pKmfNode)
     {
+        if (pNode->mNumMeshes > 0)
+        {
+            pKmfNode->meshes.reserve(pNode->mNumMeshes);
+        }
+
         // Обрабатываем все меши ноды
         for (uint32_t iMesh = 0; iMesh < pNode->mNumMeshes; iMesh++)
         {   
             const aiMesh* pMesh = pScene->mMeshes[pNode->mMeshes[iMesh]];
-
-            GameObject* pChildEntity = new GameObject();
-            pChildEntity->SetName(pMesh->mName.C_Str());
-            pChildEntity->SetMesh(this->ProcessAssimpMesh(pMesh, pScene));
-            pRootEntity->LinkChild(pChildEntity);
+            pKmfNode->meshes.emplace_back(ProcessAssimpMesh(pMesh, pScene));
         }
 
         // Рекурсивно обрабатываем все дочерние ноды
         for (uint32_t iChild = 0; iChild < pNode->mNumChildren; iChild++)
         {
             const aiNode* pChildNode = pNode->mChildren[iChild];
-            GameObject* pChildEntity = new GameObject(pChildNode->mName.C_Str());
-            pRootEntity->LinkChild(pChildEntity);
-            this->ProcessAssimpNode(pNode->mChildren[iChild], pScene, pChildEntity);
+
+            std::shared_ptr<KMFNode> childKmfNode = std::make_shared<KMFNode>();
+            childKmfNode->name = pChildNode->mName.C_Str();
+            childKmfNode->pParent = pKmfNode;
+            pKmfNode->children.emplace_back(childKmfNode);
+
+            this->ProcessAssimpNode(pNode->mChildren[iChild], pScene, childKmfNode.get());
         }        
     }
 
-    Render::KitStaticMesh* MeshVisualImporter::ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene)
+    KMFMesh MeshVisualImporter::ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene)
     {
-        const aiVector3D zero3D(0.0f, 0.0f, 0.0f);
+        KMFMesh kmfMesh;
+        kmfMesh.name = pMesh->mName.C_Str();
+        kmfMesh.vertices.reserve(pMesh->mNumVertices);
+        kmfMesh.indices.reserve(pMesh->mNumFaces * 3);
 
-        // Создаём вектор под вершины и резервируем место
-        std::vector<Render::KitVertex> vertices;
-        vertices.reserve(pMesh->mNumVertices);
+        const aiVector3D zero3D(0.0f, 0.0f, 0.0f);
 
         // Обходим все вершины меша
         for (uint32_t iVertex = 0; iVertex < pMesh->mNumVertices; iVertex++) 
@@ -73,47 +82,41 @@ namespace Core
                 ? pMesh->mTextureCoords[0][iVertex] : zero3D;
 
             // Заносим вершину в вектор
-            vertices.emplace_back(Render::KitVertex{
+            kmfMesh.vertices.emplace_back(Render::KitVertex{
                 glm::vec3(pos.x, pos.y, pos.z),
                 glm::vec3(nor.x, nor.y, nor.z),
                 glm::vec2(tex.x, tex.y)
             });
         }
 
-        // Создаём вектор под индексы и резервируем место
-        std::vector<uint32_t> indices;
-        indices.reserve(pMesh->mNumFaces * 3);
-
         // Обходим все треугольники меша
         for (uint32_t iFace = 0; iFace < pMesh->mNumFaces; iFace++) {
             const aiFace& face = pMesh->mFaces[iFace];
 
             // Записываем индексы треугольника в вектор
-            indices.emplace_back(face.mIndices[0]);
-            indices.emplace_back(face.mIndices[1]);
-            indices.emplace_back(face.mIndices[2]);
+            kmfMesh.indices.emplace_back(face.mIndices[0]);
+            kmfMesh.indices.emplace_back(face.mIndices[1]);
+            kmfMesh.indices.emplace_back(face.mIndices[2]);
         }
-
-        Render::KitStaticMesh* pMeshVisual = new Render::KitStaticMesh(vertices, indices);
 
         // Создаём новый материал (по умолчанию)
-        std::shared_ptr<Render::KitMaterial> material = std::make_shared<Render::KitMaterial>();
+        // std::shared_ptr<Render::KitMaterial> material = std::make_shared<Render::KitMaterial>();
 
-        // Если на меш назначен материал, загружаем его
-        if (pMesh->mMaterialIndex >= 0)
-        {
-            // Удаляем имя файла из пути, чтобы получить директорию
-            std::filesystem::path directory = std::filesystem::path(mFilepath);
-            directory.remove_filename();
+        // // Если на меш назначен материал, загружаем его
+        // if (pMesh->mMaterialIndex >= 0)
+        // {
+        //     // Удаляем имя файла из пути, чтобы получить директорию
+        //     std::filesystem::path directory = std::filesystem::path(mFilepath);
+        //     directory.remove_filename();
             
-            // Обрабатываем материал
-            this->ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], 
-                directory.string(), material.get());
-        }
+        //     // Обрабатываем материал
+        //     this->ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], 
+        //         directory.string(), material.get());
+        // }
 
-        pMeshVisual->SetMaterial(material);
+        // pMeshVisual->SetMaterial(material);
 
-        return pMeshVisual;
+        return kmfMesh;
     }
 
     void MeshVisualImporter::ProcessAssimpMaterial(const aiMaterial* pMaterial, const std::string& directory, Render::KitMaterial* kitMaterial)

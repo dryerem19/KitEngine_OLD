@@ -11,26 +11,9 @@ namespace LevelEditor
 {
     void UILayer::OnStart()
     {
-        KitModelFile fileS;
-        fileS.header.version = 1;
-        fileS.description.filepath = "../../Resources/test.kmf";
-        fileS.description.name = "Вася";
+        KitModelFile file;
+        file.Deserialize("test.kmf");
 
-        fileS.Serialize();
-        
-        KitModelFile fileD;
-        
-        fileD.Deserialize("../../Resources/test.kmf");
-        if(!fileD.IsValid())
-        {
-            std::cout << "У вас старая версия модели" << std::endl;
-        }
-        else
-        {
-            std::cout << fileD.description.filepath << std::endl;
-            std::cout << fileD.description.name << std::endl;
-        }
-        
         uiViewport      = new UIViewport();
         uiTopBarTools   = new UITopBarTools();
 
