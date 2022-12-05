@@ -3,9 +3,12 @@
 #include "Shader.h"
 #include "ResourceManager.h"
 
+#include "Interfaces/ISerialization.h"
+#include "Interfaces/IDeserialization.h"
+
 namespace Render
 {
-    class KitMaterial
+    class KitMaterial : public ISerialization, public IDeserialization
     {
     private:
     public:
@@ -30,6 +33,9 @@ namespace Render
             mShader = shader;
         }
 
+        void Serialize() override;
+        void Deserialize(const std::string& filepath) override;
+        
         // inline void UseMaterial() const
         // {
         //     mShader.get()->Enable();

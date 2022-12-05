@@ -100,19 +100,21 @@ namespace Core
         }
 
         // Создаём новый материал (по умолчанию)
-        // std::shared_ptr<Render::KitMaterial> material = std::make_shared<Render::KitMaterial>();
+        std::shared_ptr<Render::KitMaterial> material = std::make_shared<Render::KitMaterial>();
 
-        // // Если на меш назначен материал, загружаем его
-        // if (pMesh->mMaterialIndex >= 0)
-        // {
-        //     // Удаляем имя файла из пути, чтобы получить директорию
-        //     std::filesystem::path directory = std::filesystem::path(mFilepath);
-        //     directory.remove_filename();
+        // Если на меш назначен материал, загружаем его
+        if (pMesh->mMaterialIndex >= 0)
+        {
+            // Удаляем имя файла из пути, чтобы получить директорию
+            std::filesystem::path directory = std::filesystem::path(mFilepath);
+            directory.remove_filename();
             
-        //     // Обрабатываем материал
-        //     this->ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], 
-        //         directory.string(), material.get());
-        // }
+            // Обрабатываем материал
+            this->ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], 
+                directory.string(), material.get());
+        }
+
+        material->Serialize();
 
         // pMeshVisual->SetMaterial(material);
 

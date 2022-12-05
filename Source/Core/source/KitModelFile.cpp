@@ -56,6 +56,8 @@ void KitModelFile::Deserialize(const std::string& filepath)
     /* Рекурсивно считываем все узлы */
     auto leaf_recurse = [&](KMFNode* pParentKmfNode, auto&& leaf_recurse) -> void
     {
+        assert(pParentKmfNode && "pParentKmfNode can't be a nullptr!");
+
         /* Считываем количетсво дочерних узлов */
         size_t size_children_nodes = 0;
         input.read(reinterpret_cast<char*>(&size_children_nodes), sizeof(size_children_nodes));
@@ -70,7 +72,8 @@ void KitModelFile::Deserialize(const std::string& filepath)
             /* Устанавливаем родственные связи */
             kmfChildNode->pParent = pParentKmfNode;   
             pParentKmfNode->children[iChildNode] = kmfChildNode;     
-                    
+
+            /* Рекурсивно считываем дочерние узлы */                    
             leaf_recurse(kmfChildNode.get(), leaf_recurse);
         }        
     };    
@@ -103,10 +106,12 @@ void KitModelFile::WriteMesh(std::ofstream& out, KMFMesh* pKmfMesh)
 
 void KitModelFile::WriteNode(std::ofstream& out, KMFNode* pParentKmfNode)
 {
+    assert(pParentKmfNode && "pParentKmfNode can't be a nullptr!");
+    
     /* Записываем название узла */
     size_t size_node_name = pParentKmfNode->name.size();
-    out.write((char*)&size_node_name, sizeof(size_node_name));
-    out.write((char*)&pParentKmfNode->name[0], size_node_name);
+    out.write(reinterpret_cast<const char*>(&size_node_name), sizeof(size_node_name));
+    out.write(reinterpret_cast<const char*>(&pParentKmfNode->name[0]), size_node_name);
 
     /* Записываем данные всех сеток */
     size_t size_meshes = pParentKmfNode->meshes.size();
