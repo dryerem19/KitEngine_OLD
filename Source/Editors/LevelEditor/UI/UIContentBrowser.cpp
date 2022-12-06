@@ -56,7 +56,7 @@ namespace LevelEditor
                 
                 if(path.is_directory())
                 {
-                    if(ImGui::Button(relative.filename().c_str()))
+                    if(ImGui::Button(relative.filename().string().c_str()))
                     {
                         mCurrentProjectDirectory /= relative.filename();
                         mLastDirectory = mCurrentProjectDirectory;
@@ -64,22 +64,22 @@ namespace LevelEditor
                 }
                 else
                 {
-                    if(ImGui::Button(relative.filename().c_str()))
+                    if(ImGui::Button(relative.filename().string().c_str()))
                     {
 
                     }
                 }
-                if(ImGui::BeginPopupContextItem(relative.filename().c_str()))
+                if(ImGui::BeginPopupContextItem(relative.filename().string().c_str()))
                 {
                     if(ImGui::Selectable("Delete"))
                     {
-                        mNameFileDelete = relative.filename();
+                        mNameFileDelete = relative.filename().string();
                         mIsCheckDeleteFile = true;
                     }
                     ImGui::Separator();
                     if(ImGui::Selectable("Rename"))
                     {
-                        mOldNameFileRename = relative.filename();
+                        mOldNameFileRename = relative.filename().string();
                         mIsCheckRenameFile = true;
                     }
                     ImGui::EndPopup();

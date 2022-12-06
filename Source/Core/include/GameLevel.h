@@ -23,6 +23,7 @@ namespace Render
         std::vector<btRigidBody*> mBodies;
     private:
         std::unordered_map<std::string, std::unique_ptr<GameObject>> mObjects;
+        std::unordered_map<std::string, uint32_t> mRegistryNames;
         GameObject* m_pSelectedEntity { nullptr };     
     public:
 
@@ -42,7 +43,6 @@ namespace Render
 
         inline void SetSelectedEntity(GameObject* pSelectedEntity)
         {
-            mObjects.begin();
             m_pSelectedEntity = pSelectedEntity;
         }
 

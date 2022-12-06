@@ -42,9 +42,26 @@ namespace Render
 
     GameObject* GameLevel::Create(const std::string& name)
     {
-        mObjects.insert({name, std::make_unique<GameObject>()});
-        GameObject* pObj = mObjects.at(name).get();
-        pObj->SetName(name);
+        GameObject* pObj { nullptr };
+
+        if (mRegistryNames.find(name) != mRegistryNames.end())
+        {
+            mRegistryNames[name]++;
+            std::string new_name = name + "_" + std::to_string(mRegistryNames[name]);
+            mRegistryNames.insert({new_name, mRegistryNames[name]}); 
+
+            mObjects.insert({new_name, std::make_unique<GameObject>()});
+            pObj = mObjects[new_name].get();
+            pObj->SetName(new_name);
+        }
+        else
+        {
+            mObjects.insert({name, std::make_unique<GameObject>()});
+            mRegistryNames.insert({name, 0});
+            pObj = mObjects[name].get();
+            pObj->SetName(name);
+        }
+
         return pObj;
     }
 
