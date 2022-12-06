@@ -64,12 +64,11 @@ namespace Core
         if (!std::filesystem::exists(texture_directory))
         {
             std::filesystem::create_directories(texture_directory);
-        } 
-
-        this->ProcessAssimpNode(pScene->mRootNode, pScene, kmfFile.root.get());      
+        }
 
         kmfFile.header.version = 1;
-        kmfFile.description.filepath = "test.kmf";
+
+        this->ProcessAssimpNode(pScene->mRootNode, pScene, kmfFile.root.get());
         
         std::filesystem::path model_save_path(save_directory);
         model_save_path.append(mModelName).concat(".kmf");

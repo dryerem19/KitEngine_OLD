@@ -11,9 +11,6 @@ namespace LevelEditor
 {
     void UILayer::OnStart()
     {
-        KitModelFile file;
-        file.Deserialize("test.kmf");
-
         uiViewport      = new UIViewport();
         uiTopBarTools   = new UITopBarTools();
 

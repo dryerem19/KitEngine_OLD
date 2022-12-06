@@ -25,9 +25,9 @@ namespace LevelEditor
         void RenameFile( bool* close );
 
     private:
-        const std::filesystem::path mProjectDirectory = "project";
+        const std::filesystem::path mProjectDirectory = "data";
         std::filesystem::path mCurrentProjectDirectory;
-        std::filesystem::path mLastDirectory = "project";
+        std::filesystem::path mLastDirectory = "data";
         ImGuiItemFlags mFlagsButtonBack = 0;
         ImGuiItemFlags mFlagsButtonForward = 0;
         std::string mNameFile = "";

@@ -69,6 +69,8 @@ namespace LevelEditor
 
     void UITopMainMenu::OnLoadModel(std::string* filepath)
     {
+        Core::MeshVisualImporter importer;
+        importer.LoadVisual(*filepath);
         KitModelFile model;
         model.Deserialize("data/nanosuit/nanosuit.kmf");
 
@@ -83,7 +85,7 @@ namespace LevelEditor
 
             for(auto&& child : pNode->children)
             {
-                //GameObject* pChildObj = Render::GameLevel::Get().Create(child->name);
+                
                 GameObject* pChildObj = new GameObject();
                 pChildObj->SetName(child->name);
                 pChildObj->SetParent(pObj);
