@@ -1,6 +1,7 @@
 #pragma once
 #include "Shader.h"
-#include "Texture.h"
+#include "KitTexture.h"
+#include "KitMaterial.h"
 
 namespace Core
 {
@@ -12,7 +13,8 @@ namespace Core
         ResourceManager& operator=(const ResourceManager&) = delete;
     private:
         std::unordered_map<std::string, std::shared_ptr<Render::Shader>> mShaders;
-        std::unordered_map<std::string, std::shared_ptr<Render::Texture>> mTextures;
+        std::unordered_map<std::string, std::shared_ptr<Render::KitMaterial>> mMaterials;
+        std::unordered_map<std::string, std::shared_ptr<Render::KitTexture>> mTextures;
     public:
         inline static ResourceManager& Instance()
         {
@@ -52,7 +54,7 @@ namespace Core
          * @param filepath путь к текстуре
          * @return std::shared_ptr<Render::Texture> 
          */
-        inline std::shared_ptr<Render::Texture> GetTexture(const std::string& filepath)
+        inline std::shared_ptr<Render::KitTexture> GetTexture(const std::string& filepath)
         {
             assert(!filepath.empty() && "Filepath must not be empty!");
 
@@ -64,5 +66,7 @@ namespace Core
 
             return mTextures.at( filepath );
         }
+
+        std::shared_ptr<Render::KitMaterial> GetMaterial(const std::string& filepath);
     };
 }

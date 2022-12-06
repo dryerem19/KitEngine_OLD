@@ -1,6 +1,16 @@
+/**
+ * @file MeshVisualImporter.h
+ * @author Eugeniy Dubasov (dubasov.eugeni@yandex.ru)
+ * @author Denis Eremenko (mamayma8@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-11-27
+ * 
+ * @copyright Copyright Eugeniy Dubasov (c) 2022
+ * @copyright Copyright Denis Eremenko (c) 2022
+ * 
+ */
 #pragma once
-#include "GameObject.h"
-
 #include "KitModelFile.h"
 #include "KitMaterialFile.h"
 
@@ -12,7 +22,7 @@ namespace Core
         std::vector<std::string> mMaterialFilepathCache;
 
         std::filesystem::path mFilepath;
-        GameObject* m_pRootEntity { nullptr };
+        
 
         std::string mModelSaveDirectory;
         std::string mMaterialSavelDirectory;
@@ -30,10 +40,7 @@ namespace Core
             mFilepath = filepath;
             this->LoadVisual();
         }
-        inline GameObject* GetRootEntity() const
-        {
-            return m_pRootEntity;
-        }
+        
     private:
         void ProcessAssimpNode(const aiNode* pNode, const aiScene* pScene, KMFNode* pKmfNode);
         KMFMesh ProcessAssimpMesh( const aiMesh* pMesh, const aiScene* pScene );

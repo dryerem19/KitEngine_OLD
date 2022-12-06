@@ -1,10 +1,16 @@
 #pragma once
+#include "KitMaterialFile.h"
 #include "KitTexture.h"
 #include "Shader.h"
-#include "ResourceManager.h"
+
 
 #include "Interfaces/ISerialization.h"
 #include "Interfaces/IDeserialization.h"
+
+namespace Core 
+{
+    class ResourceManager;
+}
 
 namespace Render
 {
@@ -13,6 +19,7 @@ namespace Render
     private:
     public:
         KitMaterial();
+        KitMaterial(const std::string& filepath);
         std::shared_ptr<Shader> mShader;
 
         std::string mName;

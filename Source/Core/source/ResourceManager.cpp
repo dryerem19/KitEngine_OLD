@@ -14,6 +14,19 @@ namespace Core
     {
         assert(!filepath.empty() && "Filepath must not be empty!");
 
-        mTextures.insert({filepath, std::make_shared<Render::Texture>(filepath)});
+        mTextures.insert({filepath, std::make_shared<Render::KitTexture>(filepath, Render::KitTextureType::Diffuse)});
+    }
+
+    std::shared_ptr<Render::KitMaterial> ResourceManager::GetMaterial( const std::string& filepath )
+    {
+        assert(!filepath.empty() && "Filepath must not be empty!");
+
+        if(mMaterials.find(filepath) != mMaterials.end())
+        {
+            return mMaterials[filepath];
+        }
+        
+        mMaterials.insert({filepath, std::make_shared<Render::KitMaterial>(filepath)});
+        return mMaterials[filepath];
     }
 }

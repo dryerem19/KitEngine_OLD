@@ -136,7 +136,7 @@ void GameObject::DrawMesh(Render::Shader* pShader, const float* view_matrix, flo
     assert(proj_matrix && "proj_matrix can't be nullptr");
 
     // Если назначен меш
-    if (mMesh)
+    if (mMesh && mMesh->mMaterial)
     {
         mMesh->mMaterial->mShader->Enable();
         mMesh->mMaterial->Use();

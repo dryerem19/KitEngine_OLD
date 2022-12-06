@@ -26,6 +26,8 @@ public:
     /* Путь к основной diffuse текстуре */
     std::string diffuse_texture_path;
 
+    KitMaterialFile() = default;
+
     /**
      * @brief Создаёт новый экземпляр файла материала
      * 

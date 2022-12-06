@@ -5,14 +5,6 @@
 
 class GameObject;
 
-// GameObject* Create(const std::string& name);
-
-// GameObject* ObjectList::Create(const std::string& name)
-// {
-//     mObjects.insert({name, std::make_unique<GameObject>()});
-//     return mObjects.at(name).get();
-// }
-
 namespace Render
 {
     class GameLevel
@@ -30,13 +22,15 @@ namespace Render
         std::unique_ptr<btConstraintSolver> mSolver;
         std::vector<btRigidBody*> mBodies;
     private:
-        std::unordered_map<std::string, GameObject*> mObjects;
+        std::unordered_map<std::string, std::unique_ptr<GameObject>> mObjects;
         GameObject* m_pSelectedEntity { nullptr };     
     public:
 
         static GameLevel& Get();
         
-        void Add(GameObject* pGameObject);
+        //void Add(GameObject* pGameObject);
+        
+        GameObject* Create(const std::string& name);
 
         void Update();
 
@@ -65,25 +59,25 @@ namespace Render
          */
         inline GameObject* FindObjectByName(const std::string& name)
         {
-            return mObjects.find(name) != mObjects.end() ? mObjects[name] : nullptr;
+            return mObjects.find(name) != mObjects.end() ? mObjects[name].get() : nullptr;
         }        
         
-        inline std::unordered_map<std::string, GameObject*>::iterator begin() noexcept
+        inline std::unordered_map<std::string, std::unique_ptr<GameObject>>::iterator begin() noexcept
         {
             return mObjects.begin();
         }
 
-        inline std::unordered_map<std::string, GameObject*>::iterator end() noexcept
+        inline std::unordered_map<std::string, std::unique_ptr<GameObject>>::iterator end() noexcept
         {
             return mObjects.end();
         }  
 
-        inline std::unordered_map<std::string, GameObject*>::const_iterator cbegin() const noexcept
+        inline std::unordered_map<std::string, std::unique_ptr<GameObject>>::const_iterator cbegin() const noexcept
         {
             return mObjects.cbegin();
         }
 
-        inline std::unordered_map<std::string, GameObject*>::const_iterator cend() const noexcept
+        inline std::unordered_map<std::string, std::unique_ptr<GameObject>>::const_iterator cend() const noexcept
         {
             return mObjects.cend();
         }                

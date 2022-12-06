@@ -1,7 +1,24 @@
+/**
+ * @file KitStaticMesh.cpp
+ * @author Eugeniy Dubasov (dubasov.eugeni@yandex.ru)
+ * @author Denis Eremenko (mamayma8@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-12-06
+ * 
+ * @copyright Copyright Eugeniy Dubasov (c) 2022
+ * @copyright Copyright Denis Eremenko (c) 2022
+ * 
+ */
 #include "pch.h"
 #include "KitStaticMesh.h"
 
 #include "RenderBackend.h"
+
+Render::KitStaticMesh::KitStaticMesh(const KMFMesh& mesh)
+{
+    this->Init(mesh.vertices,mesh.indices);
+}
 
 Render::KitStaticMesh::KitStaticMesh(const std::vector<KitVertex>& vertices, 
     const std::vector<uint32_t>& indices)

@@ -15,5 +15,10 @@ void KitMaterialFile::Serialize(const std::string& filepath)
 
 void KitMaterialFile::Deserialize(const std::string& filepath)
 {
+    YAML::Node material = YAML::LoadFile(filepath);
 
+    name = material["Name"].as<std::string>();
+    diffuse_texture_path = material["diffuse_texture_path"].as<std::string>();
+
+    this->filepath = filepath;
 }

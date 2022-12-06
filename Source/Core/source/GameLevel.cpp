@@ -30,14 +30,22 @@ namespace Render
         }        
     }
 
-    void GameLevel::Add(GameObject* pGameObject)
-    {
-        if (FindObjectByName(pGameObject->GetName()))
-        {
+    // void GameLevel::Add(GameObject* pGameObject)
+    // {
+    //     if (FindObjectByName(pGameObject->GetName()))
+    //     {
             
-        }
+    //     }
 
-        mObjects.insert({pGameObject->GetName(), pGameObject});
+    //     mObjects.insert({pGameObject->GetName(), pGameObject});
+    // }
+
+    GameObject* GameLevel::Create(const std::string& name)
+    {
+        mObjects.insert({name, std::make_unique<GameObject>()});
+        GameObject* pObj = mObjects.at(name).get();
+        pObj->SetName(name);
+        return pObj;
     }
 
     void GameLevel::Spawn(GameObject* pEntity)
