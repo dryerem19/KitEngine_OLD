@@ -3,6 +3,7 @@
 // STL includes
 #include <filesystem>
 #include <functional>
+#include <exception>
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -13,6 +14,7 @@
 #include <vector>
 #include <string>
 #include <list>
+
 
 // External includes
 #include <glm/glm.hpp>

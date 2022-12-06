@@ -18,6 +18,7 @@
         "compare": "cpp",
         "concepts": "cpp",
         "condition_variable": "cpp",
+        "coroutine": "cpp",
         "cstdarg": "cpp",
         "cstddef": "cpp",
         "cstdint": "cpp",
@@ -42,15 +43,18 @@
         "memory": "cpp",
         "memory_resource": "cpp",
         "numeric": "cpp",
+        "optional": "cpp",
         "random": "cpp",
         "ratio": "cpp",
         "regex": "cpp",
+        "source_location": "cpp",
         "string_view": "cpp",
         "system_error": "cpp",
         "tuple": "cpp",
         "type_traits": "cpp",
         "utility": "cpp",
         "fstream": "cpp",
+        "future": "cpp",
         "initializer_list": "cpp",
         "iomanip": "cpp",
         "iosfwd": "cpp",
@@ -68,11 +72,8 @@
         "stop_token": "cpp",
         "streambuf": "cpp",
         "thread": "cpp",
+        "typeindex": "cpp",
         "typeinfo": "cpp",
-        "variant": "cpp",
-        "optional": "cpp",
-        "source_location": "cpp",
-        "future": "cpp",
         "valarray": "cpp",
         "filesystem": "cpp",
         "format": "cpp",
@@ -100,5 +101,8 @@
         "coroutine": "cpp",
         "typeindex": "cpp",
         "cfloat": "cpp"
+
+        "variant": "cpp"
+
     }
 }

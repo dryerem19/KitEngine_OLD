@@ -8,6 +8,7 @@
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_internal.h>
+#include <imgui_stdlib.h>
 #include <ImGuizmo.h>
 
 #include <ImGuiFileDialog.h>
@@ -17,9 +18,7 @@
 #include "ImGuiLayer.h"
 
 #include <Renderer.h>
-#include <KitModel.h>
 #include <KitTransform.h>
-#include <KitObject.h>
 
 
 namespace LevelEditor

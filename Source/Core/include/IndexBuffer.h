@@ -15,6 +15,8 @@ namespace Render
         IndexBuffer() = default;
         ~IndexBuffer();
 
+        inline uint32_t id() const { return mIndicesBufferId; }
+
         void Init(const uint32_t* src, const uint32_t count);
         void Bind() const;
         void Unbind() const;

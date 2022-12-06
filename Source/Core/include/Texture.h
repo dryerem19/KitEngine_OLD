@@ -14,7 +14,6 @@ namespace Render
     public:
         explicit Texture(std::string  path);
         ~Texture();
-
         void Enable(uint32_t slotNumber = 0) const;
         static void Disable();
     };

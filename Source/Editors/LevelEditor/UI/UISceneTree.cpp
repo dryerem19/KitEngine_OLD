@@ -13,43 +13,55 @@ namespace LevelEditor
 
     void UISceneTree::SceneTree()
     {
-        auto& scene_manager = Render::SceneManager::Instance();
-        auto view = scene_manager.GetCurrentScene()->View<Render::KitTransform>();
-        for (auto [entity, tr] : view.each())
+
+        auto& level = Render::GameLevel::Get();
+        for (auto&& obj : level)
         {
-            if (nullptr == tr.pParent) 
-            {
-                this->DrawNode(tr);
-            }
+            DrawNode(obj.second.get());
         }
     }
 
-    void UISceneTree::DrawNode(Render::KitTransform& tr)
+    void UISceneTree::DrawNode(GameObject* pEntity)
     {
-        auto& scene_manager = Render::SceneManager::Instance();
-        auto obj = scene_manager.GetCurrentScene()->GetObject(tr);
-        auto& tc = obj.GetComponent<Render::KitTag>();
+        assert( pEntity && "Entity must not be nullptr!" );
 
-        ImGuiTreeNodeFlags flags = tr.mChildren.empty() 
-                ? ImGuiTreeNodeFlags_Leaf : 0;
-        flags |= ImGuiTreeNodeFlags_OpenOnArrow;   
-        flags |= (obj == scene_manager.GetSelectedObject()) ? ImGuiTreeNodeFlags_Selected : 0;
+        ImGuiTreeNodeFlags flags = !pEntity->HasChilds() ? ImGuiTreeNodeFlags_Leaf : 0;
+        flags |= ImGuiTreeNodeFlags_OpenOnArrow;
+        flags |= (pEntity == Render::GameLevel::Get().GetSelectedEntity()) ? ImGuiTreeNodeFlags_Selected : 0;        
 
-        if (ImGui::TreeNodeEx(tc.Tag.c_str(), flags))
+        // if (mSceneNames.find(pEntity->GetName()) != mSceneNames.end())
+        // {
+        //     auto& value = mSceneNames[pEntity->GetName()];
+        //     if (value.first != pEntity)
+        //     {
+        //         value.second++;
+        //         pEntity->SetName(pEntity->GetName() + "_" + std::to_string(value.second));
+        //     }
+        // }
+        // else
+        // {
+        //     mSceneNames.insert({pEntity->GetName(), std::make_pair(pEntity, 0)});
+        // }
+
+        bool isNodeOpen = false;
+        if (isNodeOpen = ImGui::TreeNodeEx(pEntity->GetName().c_str(), flags))
         {
-            for (auto&& child : tr.mChildren)
+            if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
             {
-                this->DrawNode(*child);
+                Render::GameLevel::Get().SetSelectedEntity(pEntity);
             }
 
+            for (uint32_t iChild = 0; iChild < pEntity->GetCountOfChilds(); iChild++)
+            {
+                DrawNode(pEntity->GetChildByIndex(iChild));
+            }
+            
             ImGui::TreePop();
         }
 
-        // Проверяем нажатие на элемент дерева
-        if (ImGui::IsItemClicked())
+        if (!isNodeOpen && ImGui::IsItemClicked(ImGuiMouseButton_Left))
         {
-            // Устанавливаем выбранный объект текущей сцены
-            scene_manager.SetSelectedObject(obj);
+            Render::GameLevel::Get().SetSelectedEntity(pEntity);
         }
     }
 }
