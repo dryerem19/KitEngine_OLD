@@ -2,9 +2,9 @@
 #include "KitModelFile.h"
 
 
-void KitModelFile::Serialize()
+void KitModelFile::Serialize(const std::string& filepath)
 {
-    std::ofstream out(description.filepath, std::ios::binary);
+    std::ofstream out(filepath, std::ios::binary);
     out.write((char*)&header, sizeof(header));
 
     size_t size_filepath = description.filepath.size();

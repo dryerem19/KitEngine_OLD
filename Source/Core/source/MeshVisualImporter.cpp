@@ -5,7 +5,7 @@ namespace Core
 {
     void MeshVisualImporter::LoadVisual( void )
     {
-        assert(!mFilepath.empty());
+        assert(!mFilepath.empty());       
 
         // Создаём объект импортера данных assimp'а
         Assimp::Importer importer;
@@ -26,13 +26,44 @@ namespace Core
         kmfFile.root = std::make_unique<KMFNode>();
         kmfFile.root->name = mModelName = std::filesystem::path(pScene->mRootNode->mName.C_Str()).replace_extension("").string();                                
 
-        this->ProcessAssimpNode(pScene->mRootNode, pScene, kmfFile.root.get());        
+        /* Cоздаём папки для сохранения */
+        std::filesystem::path save_directory("data");
+        save_directory.append(mModelName);
+        mModelSaveDirectory = save_directory.string();
+
+        std::filesystem::path material_directory(save_directory);
+        material_directory.append("materials");
+        mMaterialSavelDirectory = material_directory.string();
+
+        std::filesystem::path texture_directory(save_directory);
+        texture_directory.append("textures"); 
+        mTextureSaveDirectory = texture_directory.string();
+
+        if (!std::filesystem::exists(save_directory))
+        {
+            std::filesystem::create_directories(save_directory);
+        }
+        
+        if (!std::filesystem::exists(material_directory))
+        {
+            std::filesystem::create_directories(material_directory);
+        }
+
+        if (!std::filesystem::exists(texture_directory))
+        {
+            std::filesystem::create_directories(texture_directory);
+        } 
+
+        this->ProcessAssimpNode(pScene->mRootNode, pScene, kmfFile.root.get());      
 
         kmfFile.header.version = 1;
         kmfFile.description.filepath = "test.kmf";
-        kmfFile.Serialize();
+        
+        std::filesystem::path model_save_path(save_directory);
+        model_save_path.append(mModelName).concat(".kmf");
+        kmfFile.Serialize(model_save_path.string());
 
-    }
+     }
 
     void MeshVisualImporter::ProcessAssimpNode(const aiNode* pNode, const aiScene* pScene, KMFNode* pKmfNode)
     {
@@ -100,9 +131,6 @@ namespace Core
             kmfMesh.indices.emplace_back(face.mIndices[2]);
         }
 
-        // Создаём новый материал (по умолчанию)
-        std::shared_ptr<Render::KitMaterial> material = std::make_shared<Render::KitMaterial>();
-
         // Если на меш назначен материал, загружаем его
         if (pMesh->mMaterialIndex >= 0)
         {
@@ -110,59 +138,50 @@ namespace Core
             std::filesystem::path directory = std::filesystem::path(mFilepath);
             directory.remove_filename();
             
-            // Обрабатываем материал
-            this->ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], 
-                directory.string(), material.get());
+            kmfMesh.material = ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], 
+                directory.string());
         }
-
-        material->Serialize();
-
-        // pMeshVisual->SetMaterial(material);
 
         return kmfMesh;
     }
 
-    void MeshVisualImporter::ProcessAssimpMaterial(const aiMaterial* pMaterial, const std::string& directory, Render::KitMaterial* kitMaterial)
+    std::string MeshVisualImporter::ProcessAssimpMaterial(const aiMaterial* pMaterial, const std::string& directory)
     {
-        // Загружаем имя материала
-        kitMaterial->mName = pMaterial->GetName().C_Str();
+        assert(pMaterial && "pMaterial should not be empty!");
+        std::string material_name(pMaterial->GetName().C_Str());
 
-        // Загружаем diffuse текстуры 
-        kitMaterial->mMainDiffuseTexture = this->LoadMaterialTextures(pMaterial, aiTextureType_DIFFUSE, directory);        
-    }
+        aiString texture_name;
+        aiReturn aiResult = pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texture_name);
 
-    std::shared_ptr<Render::KitTexture> MeshVisualImporter::LoadMaterialTextures(const aiMaterial* pMaterial, 
-    aiTextureType type, const std::string& directory)
-    {
-        // Получаем имя текстуры
-        aiString name;
-        pMaterial->GetTexture(type, 0, &name);
-
-        /*
-        * Мы предпологаем, что текстура находится в той же директории, где и модель,
-        * поэтому directory - это директория модели. 
-        * Мы объединяем её с именем текстуры, чтобы получить предпологаемый путь. 
-        */
-        std::filesystem::path texturePath = std::filesystem::path(directory);
-        texturePath.concat(name.C_Str());
-
-        /* Если текстура существует */
-        if (std::filesystem::exists(texturePath))
+        /**
+         * Assimp может хранить путь к текстуре или имя текстуры, которое также может быть относительным путём.
+         * Мы проверяем этот факт в условии и если текстуры по такому пути не существует, то предпологаем, что
+         * текстура лежит в директории модели
+         */
+        std::filesystem::path diffuse_texture_path(texture_name.C_Str());
+        if (!std::filesystem::exists(diffuse_texture_path))
         {
-            /* Куда скопировать текстуру */
-            std::filesystem::path copy_path("data/Textures/");
-            copy_path.append(name.C_Str());
+            diffuse_texture_path.clear();
+            diffuse_texture_path.append(directory).append(texture_name.C_Str());
 
-            /* Если текстура с таким именем уже существует по пути копирования */
-            if (!std::filesystem::exists(copy_path))
+            std::filesystem::path diffuse_texture_save_path(mTextureSaveDirectory);
+            diffuse_texture_save_path.append(texture_name.C_Str());
+            if (std::filesystem::exists(diffuse_texture_path) && !std::filesystem::exists(diffuse_texture_save_path))
             {
-                // TODO: Сделать пользовательский диалог (окно) ImGui с сообщением о конфликте и предложением переименовать,
-                // TODO: не забудь убрать восклицательный знак в условии
-                std::filesystem::copy(texturePath, std::filesystem::path("data/Textures") / name.C_Str());
-            }
+                std::filesystem::copy_file(diffuse_texture_path, diffuse_texture_save_path);
+            }           
+        }
+        std::filesystem::path material_save_path(mMaterialSavelDirectory);
+        material_save_path.append(material_name).concat(".material");
+ 
+        if (std::find(mMaterialFilepathCache.begin(), mMaterialFilepathCache.end(), material_save_path) != mMaterialFilepathCache.end())
+        {
+            return material_save_path.string();
         }
 
-        return std::make_shared<Render::KitTexture>(texturePath.string(), 
-                static_cast<Render::KitTextureType>(type));
+        mMaterialFilepathCache.emplace_back(material_save_path.string());
+        KitMaterialFile material(material_name, diffuse_texture_path.string());
+        material.Serialize(material_save_path.string());  
+        return material_save_path.string();      
     }
 }

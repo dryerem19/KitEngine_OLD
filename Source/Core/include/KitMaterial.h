@@ -33,7 +33,7 @@ namespace Render
             mShader = shader;
         }
 
-        void Serialize() override;
+        void Serialize(const std::string& filepath) override;
         void Deserialize(const std::string& filepath) override;
         
         // inline void UseMaterial() const

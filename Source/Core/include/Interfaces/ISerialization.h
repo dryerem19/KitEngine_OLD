@@ -12,10 +12,19 @@
  */
 #pragma once
 
+/**
+ * @brief Интерфейс класса сериализации
+ * 
+ */
 class ISerialization
 {
 public:
     virtual ~ISerialization() = default;
 
-    virtual void Serialize() = 0;
+    /**
+     * @brief Сериализовать класс в файл
+     * 
+     * @param filepath путь, куда сериализовать
+     */
+    virtual void Serialize(const std::string& filepath) = 0;
 };

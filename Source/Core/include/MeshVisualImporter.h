@@ -2,14 +2,21 @@
 #include "GameObject.h"
 
 #include "KitModelFile.h"
+#include "KitMaterialFile.h"
 
 namespace Core
 {
     class MeshVisualImporter
     {
-    private:
+    public:
+        std::vector<std::string> mMaterialFilepathCache;
+
         std::filesystem::path mFilepath;
         GameObject* m_pRootEntity { nullptr };
+
+        std::string mModelSaveDirectory;
+        std::string mMaterialSavelDirectory;
+        std::string mTextureSaveDirectory;
 
         std::string mModelName;
     public:
@@ -30,8 +37,6 @@ namespace Core
     private:
         void ProcessAssimpNode(const aiNode* pNode, const aiScene* pScene, KMFNode* pKmfNode);
         KMFMesh ProcessAssimpMesh( const aiMesh* pMesh, const aiScene* pScene );
-        void ProcessAssimpMaterial( const aiMaterial* pMaterial, const std::string& directory, Render::KitMaterial* kitMaterial );
-        std::shared_ptr<Render::KitTexture> LoadMaterialTextures(const aiMaterial* pMaterial, 
-    aiTextureType type, const std::string& directory);
+        std::string ProcessAssimpMaterial( const aiMaterial* pMaterial, const std::string& directory);
     };
 }
