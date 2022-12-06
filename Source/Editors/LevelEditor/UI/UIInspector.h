@@ -1,6 +1,6 @@
 #pragma once
 #include "Core/KitUI.h"
-#include "SceneManager.h"
+#include "GameLevel.h"
 
 namespace LevelEditor
 {
@@ -10,6 +10,6 @@ namespace LevelEditor
         Inspector() = default;
         void Draw() override final;
     private:
-        void DrawTransformComponent(Render::KitTransform& transform);
+        void DrawTransformComponent();
     };
 }

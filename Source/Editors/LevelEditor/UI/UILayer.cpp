@@ -3,10 +3,17 @@
 //
 #include "UILayer.h"
 
+#include "ResourceManager.h"
+#include "Texture.h"
+#include "KitModelFile.h"
+
 namespace LevelEditor
 {
     void UILayer::OnStart()
     {
+        KitModelFile file;
+        file.Deserialize("test.kmf");
+
         uiViewport      = new UIViewport();
         uiTopBarTools   = new UITopBarTools();
 
@@ -14,15 +21,14 @@ namespace LevelEditor
 
         uiViewport->frameBuffer = &frameBuffer;
         uiTopMainMenu.uiSceneTree = &uiSceneTree;
-        mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
-        mShader->Enable();
+        //mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
+        //mShader->Enable();
         mTransform = glm::mat4(1.0f);
 
         auto& app = Core::Application::Instance();
         frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
 
-        auto& scene_manager = Render::SceneManager::Instance();
-        scene_manager.CreateScene("test");
+        //Render::GameLevel::Get().SetName("KitScene");
 
     }
 
@@ -45,22 +51,10 @@ namespace LevelEditor
 
     void UILayer::OnUpdate()
     {
-        auto& scene_manager = Render::SceneManager::Instance();
-
         // Camera
         EditorCamera::Instance().Update();
+        Render::GameLevel::Get().Update();
         
-        if(uiSceneTree.isModelLoaded == true)
-        {
-            mShader->SetUniformMatrix4fv("uView"      , 1, GL_FALSE, EditorCamera::Instance().GetView());
-            mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, EditorCamera::Instance().GetPerspective());
-        }
-
-        auto view = scene_manager.GetCurrentScene()->View<Render::KitTransform>();
-        for (auto [entity, transform] : view.each())
-        {
-            transform.UpdateWorldTransform();
-        }
     }
 
     void UILayer::OnRender(double dt) 
@@ -68,25 +62,7 @@ namespace LevelEditor
         frameBuffer.Bind();
         Render::Renderer::Clear();
 
-        auto& scene_manager = Render::SceneManager::Instance();
-
-        auto view = scene_manager.GetCurrentScene()->View<Render::KitStaticMesh, Render::KitTransform>();
-        for (auto [entity, mesh, transform] : view.each())
-        {
-            mShader->SetUniform1i("uTextureDiffuse", 0);
-            mShader->SetUniformMatrix4fv("uTransform",1, GL_FALSE,
-                glm::value_ptr(transform.WorldTransformMatrix));      
-
-            if(!mesh.mMaterial.diffuseTextures.empty()) {
-                mesh.mMaterial.diffuseTextures[0]->Bind();
-            }
-
-            Render::Renderer::Draw(mesh.mVertexArray, mesh.mIndexBuffer); 
-
-            if(!mesh.mMaterial.diffuseTextures.empty()){
-                mesh.mMaterial.diffuseTextures[0]->Unbind();
-            }             
-        }
+        Render::GameLevel::Get().Draw(mShader.get(), EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
 
         frameBuffer.Unbind();
         Render::Renderer::Clear();

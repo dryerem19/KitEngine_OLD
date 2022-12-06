@@ -69,8 +69,31 @@ namespace LevelEditor
 
     void UITopMainMenu::OnLoadModel(std::string* filepath)
     {
-        const auto& scene_manager = Render::SceneManager::Instance();
-        Render::KitModel model(scene_manager.GetCurrentScene(), *filepath);
+        KitModelFile model;
+        model.Deserialize("data/nanosuit/nanosuit.kmf");
+
+        auto leaf_recurse = [](KMFNode* pNode, GameObject* pObj ,auto&& leaf_recurse) -> void
+        {
+            for(auto&& mesh : pNode->meshes)
+            {
+                Render::KitStaticMesh* pMesh = new Render::KitStaticMesh(mesh);
+                pMesh->SetMaterial(Core::ResourceManager::Instance().GetMaterial(mesh.material));
+                pObj->SetMesh(pMesh);
+            }
+
+            for(auto&& child : pNode->children)
+            {
+                //GameObject* pChildObj = Render::GameLevel::Get().Create(child->name);
+                GameObject* pChildObj = new GameObject();
+                pChildObj->SetName(child->name);
+                pChildObj->SetParent(pObj);
+                pObj->LinkChild(pChildObj);
+
+                leaf_recurse(child.get(), pChildObj, leaf_recurse);
+            }
+        };
+        GameObject* pObj = Render::GameLevel::Get().Create(model.root->name);
+        leaf_recurse(model.root.get(), pObj, leaf_recurse);
         uiSceneTree->isModelLoaded = true;
     }
 

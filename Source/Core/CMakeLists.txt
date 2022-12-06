@@ -11,32 +11,31 @@ target_include_directories(${PROJECT_NAME}
         "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
 
-#find_package(GLEW CONFIG REQUIRED)
+find_package(GLEW CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(EnTT CONFIG REQUIRED)
 find_package(Bullet CONFIG REQUIRED)
-#find_package(glm CONFIG REQUIRED)
-#find_package(SailC++ CONFIG REQUIRED)
+find_package(EnTT CONFIG REQUIRED)
+find_package(assimp CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
+find_package(Sail CONFIG REQUIRED)
+find_package(SailC++ CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
-
-target_link_libraries(${PROJECT_NAME}
-        LINK_PUBLIC
-        ModelLoader)
-target_include_directories(${PROJECT_NAME} PRIVATE {CMAKE_SOURCE_DIR}/Source/Utils/ModelLoader/include)
-
-target_link_libraries(${PROJECT_NAME}
-        LINK_PUBLIC
-        Render
-)
-target_include_directories(${PROJECT_NAME} PRIVATE {CMAKE_SOURCE_DIR}/Source/Render/include)
+find_package(yaml-cpp CONFIG REQUIRED)
 
 target_link_libraries(${PROJECT_NAME}
         PUBLIC
-#        GLEW::GLEW
+        GLEW::GLEW
         glfw
         EnTT::EnTT
-        LinearMath Bullet3Common BulletDynamics BulletSoftBody
-#        glm::glm
-#        SAIL::sail-c++
+        BulletSoftBody BulletDynamics BulletCollision Bullet3Common LinearMath
+        glm::glm
+        SAIL::sail
+        SAIL::sail-c++
         spdlog::spdlog spdlog::spdlog_header_only
+        yaml-cpp
+        EnTT::EnTT
+        assimp::assimp
 )
+
+target_precompile_headers(${PROJECT_NAME} PUBLIC "include/pch.h")

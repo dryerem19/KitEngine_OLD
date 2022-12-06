@@ -25,13 +25,13 @@
 #include "UIToolsTab.h"
 
 #include "UIController.h"
-#include "KitScene.h"
-#include "SceneManager.h"
+#include "GameLevel.h"
 #include "UIToolsTab.h"
 #include "UIInspector.h"
 #include "UIBottomMenuBar.h"
 #include "UIContentBrowser.h"
 
+#include "GameObject.h"
 
 namespace LevelEditor
 {

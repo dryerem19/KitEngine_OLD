@@ -3,8 +3,11 @@
 #include "Core/KitUI.h"
 #include "UIFileDialog.h"
 
-#include "SceneManager.h"
+#include "GameLevel.h"
+#include "GameObject.h"
 #include "UISceneTree.h"
+#include "ResourceManager.h"
+#include "MeshVisualImporter.h"
 
 namespace LevelEditor
 {

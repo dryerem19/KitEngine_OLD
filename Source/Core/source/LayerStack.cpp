@@ -1,6 +1,7 @@
 //
 // Created by Denis on 01.11.2022.
 //
+#include "pch.h"
 #include "LayerStack.h"
 
 Core::LayerStack::~LayerStack() {

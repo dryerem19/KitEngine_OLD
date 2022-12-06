@@ -1,11 +1,8 @@
 //
 // Created by dryerem19 on 10/28/22.
 //
+#include "pch.h"
 #include "Application.h"
-#include "Input.h"
-#include "Logger.h"
-
-#include <Renderer.h>
 
 //------------------------------------------------------------------------------------
 // PUBLIC SECTION
@@ -123,8 +120,9 @@ void Core::Application::Close() {
 }
 
 Core::Application::Application()
-    : mIsRunning(false), mPreviousTime(0) {
-
+    : mIsRunning(false), mPreviousTime(0) 
+{
+    mWorkingDirectory = std::filesystem::current_path();
 }
 
 

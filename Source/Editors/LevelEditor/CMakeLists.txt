@@ -11,20 +11,19 @@ target_link_libraries(${PROJECT_NAME}
         PUBLIC
         Core)
 
-target_link_libraries(${PROJECT_NAME}
-        LINK_PUBLIC
-        ModelLoader)
-
 find_package(imgui CONFIG REQUIRED)
 find_package(imguizmo CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME}
-        PRIVATE
+        PUBLIC
         imgui::imgui
         imguizmo::imguizmo
 )
 
+target_link_libraries(${PROJECT_NAME} PUBLIC ImGuiFileDialog)
+
 target_include_directories(${PROJECT_NAME}
-        PRIVATE
+        PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/Source/Core/include
-        ${CMAKE_SOURCE_DIR}/Source/Utils/ModelLoader/include)
+        
+        ${CMAKE_SOURCE_DIR}/Source/External/ImGuiFileDialog)

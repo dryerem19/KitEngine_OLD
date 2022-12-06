@@ -6,7 +6,7 @@ namespace LevelEditor
 {
     enum class GizmoOperation
     {
-        NONE             = -1,
+        NONE             = 0,
         TRANSLATE_X      = (1u << 0),
         TRANSLATE_Y      = (1u << 1),
         TRANSLATE_Z      = (1u << 2),

@@ -10,15 +10,15 @@
 #include <imgui_internal.h>
 #include <imgui_stdlib.h>
 #include <ImGuizmo.h>
-#include "3rdparty/ImGuiFileDialog/ImGuiFileDialog.h"
+
+#include <ImGuiFileDialog.h>
+
 #include "3rdparty/IconsFontAwesome6.h"
 
 #include "ImGuiLayer.h"
 
 #include <Renderer.h>
-#include <KitModel.h>
 #include <KitTransform.h>
-#include <KitObject.h>
 
 
 namespace LevelEditor
