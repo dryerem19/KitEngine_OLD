@@ -29,6 +29,7 @@
 #include "UIToolsTab.h"
 #include "UIInspector.h"
 #include "UIBottomMenuBar.h"
+#include "UIContentBrowser.h"
 
 #include "GameObject.h"
 
@@ -62,6 +63,7 @@ namespace LevelEditor
         ToolsTab        mToolsTab;
         BottomMenuBar mBottombar;
         Inspector mInspector;
+        UIContentBrowser mUIContentBrowser;
         void Docking();
     };
 }
