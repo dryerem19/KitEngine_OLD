@@ -11,9 +11,6 @@ namespace Render
     class KitStaticMesh
     {
     public:
-        // VertexArray  mVertexArray;
-        // VertexBuffer mVertexBuffer;
-        // IndexBuffer  mIndexBuffer;
 
         Geometry geometry;
         

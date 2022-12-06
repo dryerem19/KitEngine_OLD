@@ -169,7 +169,8 @@ namespace Core
             if (std::filesystem::exists(diffuse_texture_path) && !std::filesystem::exists(diffuse_texture_save_path))
             {
                 std::filesystem::copy_file(diffuse_texture_path, diffuse_texture_save_path);
-            }           
+            }
+            diffuse_texture_path = diffuse_texture_save_path;
         }
         std::filesystem::path material_save_path(mMaterialSavelDirectory);
         material_save_path.append(material_name).concat(".material");

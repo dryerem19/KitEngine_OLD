@@ -93,6 +93,11 @@ void KitModelFile::WriteMesh(std::ofstream& out, KMFMesh* pKmfMesh)
     out.write(reinterpret_cast<const char*>(&size_mesh_name), sizeof(size_mesh_name));
     out.write(reinterpret_cast<const char*>(&pKmfMesh->name[0]), size_mesh_name);
 
+    /* Записываем путь к материалу */
+    size_t size_material_name = pKmfMesh->material.size();
+    out.write(reinterpret_cast<const char*>(&size_material_name), sizeof(size_material_name));
+    out.write(reinterpret_cast<const char*>(&pKmfMesh->material[0]), size_material_name);
+
     /* Записываем данные индексов */
     size_t indices_size = pKmfMesh->indices.size();
     out.write(reinterpret_cast<const char*>(&indices_size), sizeof(indices_size));
@@ -143,6 +148,12 @@ void KitModelFile::ReadNodeMeshes(std::ifstream& input, KMFNode* pParentKmfNode)
         input.read(reinterpret_cast<char*>(&size_mesh_name), sizeof(size_mesh_name));
         pParentKmfNode->meshes[iMesh].name.resize(size_mesh_name);
         input.read(reinterpret_cast<char*>(&pParentKmfNode->meshes[iMesh].name[0]), size_mesh_name);
+
+        /* Считываем путь материала */
+        size_t size_material_name = 0;
+        input.read(reinterpret_cast<char*>(&size_material_name), sizeof(size_material_name));
+        pParentKmfNode->meshes[iMesh].material.resize(size_material_name);
+        input.read(reinterpret_cast<char*>(&pParentKmfNode->meshes[iMesh].material[0]), size_material_name);
 
         /* Считываем индексы сетки */
         size_t indices_size = 0;
