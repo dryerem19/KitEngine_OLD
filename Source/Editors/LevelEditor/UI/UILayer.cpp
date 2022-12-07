@@ -18,15 +18,9 @@ namespace LevelEditor
 
         uiViewport->frameBuffer = &frameBuffer;
         uiTopMainMenu.uiSceneTree = &uiSceneTree;
-        //mShader = std::make_unique<Render::Shader>("../../Resources/shaders/glsl/transform_test.glsl");
-        //mShader->Enable();
-        mTransform = glm::mat4(1.0f);
-
+        
         auto& app = Core::Application::Instance();
         frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
-
-        //Render::GameLevel::Get().SetName("KitScene");
-
     }
 
     void UILayer::EventHandler(const Core::Event& event)
@@ -59,7 +53,7 @@ namespace LevelEditor
         frameBuffer.Bind();
         Render::Renderer::Clear();
 
-        Render::GameLevel::Get().Draw(mShader.get(), EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
+        Render::GameLevel::Get().Draw(EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
 
         frameBuffer.Unbind();
         Render::Renderer::Clear();

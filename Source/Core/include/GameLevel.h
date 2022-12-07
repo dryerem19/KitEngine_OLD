@@ -29,13 +29,11 @@ namespace Render
 
         static GameLevel& Get();
         
-        //void Add(GameObject* pGameObject);
-        
         GameObject* Create(const std::string& name);
 
         void Update();
 
-        void Draw(Render::Shader* pShader, const float* view_matrix, float* proj_matrix);
+        void Draw(const float* view_matrix, float* proj_matrix);
 
         void Spawn(GameObject* pEntity);
 

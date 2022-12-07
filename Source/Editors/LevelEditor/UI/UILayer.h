@@ -37,11 +37,6 @@ namespace LevelEditor
 {
     class UILayer : public Core::BaseLayer
     {
-    private:
-          
-        std::unique_ptr<Render::Shader> mShader;
-        glm::mat4 mTransform;
-
     public:
         UILayer() = default;
 

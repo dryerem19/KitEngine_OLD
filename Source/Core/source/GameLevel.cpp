@@ -22,23 +22,13 @@ namespace Render
         }
     }
 
-    void GameLevel::Draw(Render::Shader* pShader, const float* view_matrix, float* proj_matrix)
+    void GameLevel::Draw(const float* view_matrix, float* proj_matrix)
     {
         for (auto&& object : mObjects)
         {
-            object.second->DrawMesh(pShader, view_matrix, proj_matrix);
+            object.second->DrawMesh(view_matrix, proj_matrix);
         }        
     }
-
-    // void GameLevel::Add(GameObject* pGameObject)
-    // {
-    //     if (FindObjectByName(pGameObject->GetName()))
-    //     {
-            
-    //     }
-
-    //     mObjects.insert({pGameObject->GetName(), pGameObject});
-    // }
 
     GameObject* GameLevel::Create(const std::string& name)
     {

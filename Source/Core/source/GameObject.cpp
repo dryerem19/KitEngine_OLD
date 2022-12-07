@@ -130,7 +130,7 @@ void GameObject::UpdateWorldMatrix()
     }
 }
 
-void GameObject::DrawMesh(Render::Shader* pShader, const float* view_matrix, float* proj_matrix) const
+void GameObject::DrawMesh(const float* view_matrix, float* proj_matrix) const
 {
     assert(view_matrix && "view_matrix can't be nullptr");
     assert(proj_matrix && "proj_matrix can't be nullptr");
@@ -149,6 +149,6 @@ void GameObject::DrawMesh(Render::Shader* pShader, const float* view_matrix, flo
     // Рисуем меши дочерних объектов
     for (auto&& child : mChildren)
     {
-        child->DrawMesh(pShader, view_matrix, proj_matrix);
+        child->DrawMesh(view_matrix, proj_matrix);
     }
 }
