@@ -78,9 +78,12 @@ namespace LevelEditor
         {
             for(auto&& mesh : pNode->meshes)
             {
+                GameObject* pChildObj = new GameObject();
+                pChildObj->SetName(mesh.name);
                 Render::KitStaticMesh* pMesh = new Render::KitStaticMesh(mesh);
                 pMesh->SetMaterial(Core::ResourceManager::Instance().GetMaterial(mesh.material));
-                pObj->SetMesh(pMesh);
+                pChildObj->SetMesh(pMesh);
+                pObj->LinkChild(pChildObj);
             }
 
             for(auto&& child : pNode->children)
@@ -88,7 +91,6 @@ namespace LevelEditor
                 
                 GameObject* pChildObj = new GameObject();
                 pChildObj->SetName(child->name);
-                pChildObj->SetParent(pObj);
                 pObj->LinkChild(pChildObj);
 
                 leaf_recurse(child.get(), pChildObj, leaf_recurse);
