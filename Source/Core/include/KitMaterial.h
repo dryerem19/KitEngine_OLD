@@ -18,7 +18,6 @@ namespace Render
     {
     private:
     public:
-        KitMaterial();
         KitMaterial(const std::string& filepath);
         std::shared_ptr<Shader> mShader;
 

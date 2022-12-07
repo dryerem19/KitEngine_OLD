@@ -13,21 +13,13 @@ namespace LevelEditor
         ImGui::Begin("Object inspector");
         {
             DrawTransformComponent();
-            // auto& scene_manager = Render::SceneManager::Instance();
-            // auto selected_object = scene_manager.GetSelectedObject();
-            // if (selected_object)
-            // {
-            //     auto& tag = selected_object.GetComponent<Render::KitTag>();
-            //     ImGui::Text("Name: %s", tag.Tag.c_str());
-
-            //     auto& transform = selected_object.GetComponent<Render::KitTransform>();
-            //     if (ImGui::CollapsingHeader("Transform"))
-            //     {
-            //         this->DrawTransformComponent(transform);
-            //     }
-            // }
         }
         ImGui::End();
+    }
+
+    void Inspector::DrawMaterial()
+    {
+
     }
 
     //----------------------------------------------------------------------------------------
