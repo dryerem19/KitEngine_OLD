@@ -10,6 +10,7 @@ namespace LevelEditor
         Inspector() = default;
         void Draw() override final;
     private:
+        void DrawMaterial();
         void DrawTransformComponent();
     };
 }

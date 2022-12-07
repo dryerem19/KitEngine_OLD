@@ -4,18 +4,13 @@
 
 namespace Render
 {
-    KitMaterial::KitMaterial()
-    {
-        mShader = Core::ResourceManager::Instance().GetShader("../../Resources/shaders/glsl/transform_test.glsl");
-    }
-
     KitMaterial::KitMaterial(const std::string& filepath)
     {
         KitMaterialFile file;
         file.Deserialize(filepath);
         mName = file.name;
         mMainDiffuseTexture = Core::ResourceManager::Instance().GetTexture(file.diffuse_texture_path);
-        mShader = Core::ResourceManager::Instance().GetShader("../../Resources/shaders/glsl/transform_test.glsl");
+        mShader = Core::ResourceManager::Instance().GetShader(file.shader_path);
     }
 
     void KitMaterial::Serialize(const std::string& filepath)
