@@ -31,17 +31,12 @@
 #include "UIBottomMenuBar.h"
 #include "UIContentBrowser.h"
 
-#include "GameObject.h"
+#include "Entity.h"
 
 namespace LevelEditor
 {
     class UILayer : public Core::BaseLayer
     {
-    private:
-          
-        std::unique_ptr<Render::Shader> mShader;
-        glm::mat4 mTransform;
-
     public:
         UILayer() = default;
 

@@ -11,6 +11,7 @@
 #pragma once
 #include <GL/glew.h>
 #include "Geometry.h"
+#include "Shader.h"
 
 class RenderBackend final
 {
@@ -30,6 +31,10 @@ public:
         uint32_t vao;
         uint32_t ibo;
     } stat;
+private:
+    Geometry* m_pGeometry = nullptr;
+
+public:
 
     inline static RenderBackend& Get()
     {
@@ -39,8 +44,7 @@ public:
 
     inline void SetGeometry(Geometry* pGeometry)
     {
-        SetVAO(pGeometry->vao.GetId());
-        SetIBO(pGeometry->ibo.id());
+        m_pGeometry = pGeometry;
     }
 
     inline void SetVAO(uint32_t id)
@@ -56,5 +60,5 @@ public:
     }
 
     void Render(uint32_t count, uint32_t baseVertex, uint32_t baseIndex);
-    void Render(uint32_t count);
+    void Render();
 };

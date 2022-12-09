@@ -26,6 +26,9 @@ public:
     /* Путь к основной diffuse текстуре */
     std::string diffuse_texture_path;
 
+    /* Путь к шейдеру */
+    std::string shader_path = "../../Resources/shaders/glsl/default.shader";
+
     KitMaterialFile() = default;
 
     /**

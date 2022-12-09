@@ -13,55 +13,24 @@ namespace LevelEditor
 
     void UISceneTree::SceneTree()
     {
-
         auto& level = Render::GameLevel::Get();
-        for (auto&& obj : level)
+        if (ImGui::TreeNodeEx("Entities", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow))
         {
-            DrawNode(obj.second.get());
-        }
-    }
-
-    void UISceneTree::DrawNode(GameObject* pEntity)
-    {
-        assert( pEntity && "Entity must not be nullptr!" );
-
-        ImGuiTreeNodeFlags flags = !pEntity->HasChilds() ? ImGuiTreeNodeFlags_Leaf : 0;
-        flags |= ImGuiTreeNodeFlags_OpenOnArrow;
-        flags |= (pEntity == Render::GameLevel::Get().GetSelectedEntity()) ? ImGuiTreeNodeFlags_Selected : 0;        
-
-        // if (mSceneNames.find(pEntity->GetName()) != mSceneNames.end())
-        // {
-        //     auto& value = mSceneNames[pEntity->GetName()];
-        //     if (value.first != pEntity)
-        //     {
-        //         value.second++;
-        //         pEntity->SetName(pEntity->GetName() + "_" + std::to_string(value.second));
-        //     }
-        // }
-        // else
-        // {
-        //     mSceneNames.insert({pEntity->GetName(), std::make_pair(pEntity, 0)});
-        // }
-
-        bool isNodeOpen = false;
-        if (isNodeOpen = ImGui::TreeNodeEx(pEntity->GetName().c_str(), flags))
-        {
-            if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
+            for (auto& entity : level.mEntities)
             {
-                Render::GameLevel::Get().SetSelectedEntity(pEntity);
+                ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
+                flags |= Render::GameLevel::Get().GetSelectedEntity() == entity
+                    ? ImGuiTreeNodeFlags_Selected : 0;
+                if (ImGui::TreeNodeEx(entity->GetModel()->mName.c_str(), flags))
+                {
+                    if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
+                    {
+                        Render::GameLevel::Get().SetSelectedEntity(entity);
+                    }
+                    ImGui::TreePop();
+                }
             }
-
-            for (uint32_t iChild = 0; iChild < pEntity->GetCountOfChilds(); iChild++)
-            {
-                DrawNode(pEntity->GetChildByIndex(iChild));
-            }
-            
             ImGui::TreePop();
-        }
-
-        if (!isNodeOpen && ImGui::IsItemClicked(ImGuiMouseButton_Left))
-        {
-            Render::GameLevel::Get().SetSelectedEntity(pEntity);
         }
     }
 }

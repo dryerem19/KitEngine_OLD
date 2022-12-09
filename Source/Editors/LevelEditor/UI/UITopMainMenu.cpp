@@ -1,5 +1,7 @@
 #include "UITopMainMenu.h"
 
+#include "Model.h"
+
 namespace LevelEditor
 {
     void UITopMainMenu::Draw()
@@ -9,10 +11,11 @@ namespace LevelEditor
             if(ImGui::BeginMenu(ICON_FA_FILE " File"))
             {
                 if(ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open Scene")){
-
+                    Render::GameLevel::Get().Deserialize("test.level");
                 }
-                if(ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save Scene")){
-
+                if(ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save Scene"))
+                {
+                    Render::GameLevel::Get().Serialize("test");
                 }
                 if(ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save Scene As..")){
                 
@@ -71,31 +74,11 @@ namespace LevelEditor
     {
         Core::MeshVisualImporter importer;
         importer.LoadVisual(*filepath);
-        KitModelFile model;
-        model.Deserialize("data/nanosuit/nanosuit.kmf");
 
-        auto leaf_recurse = [](KMFNode* pNode, GameObject* pObj ,auto&& leaf_recurse) -> void
-        {
-            for(auto&& mesh : pNode->meshes)
-            {
-                Render::KitStaticMesh* pMesh = new Render::KitStaticMesh(mesh);
-                pMesh->SetMaterial(Core::ResourceManager::Instance().GetMaterial(mesh.material));
-                pObj->SetMesh(pMesh);
-            }
+        auto entity = std::make_shared<Entity>();
+        entity->SetModel(Core::ResourceManager::Instance().GetModel("data/nanosuit/nanosuit.kmf"));
+        entity->Spawn();
 
-            for(auto&& child : pNode->children)
-            {
-                
-                GameObject* pChildObj = new GameObject();
-                pChildObj->SetName(child->name);
-                pChildObj->SetParent(pObj);
-                pObj->LinkChild(pChildObj);
-
-                leaf_recurse(child.get(), pChildObj, leaf_recurse);
-            }
-        };
-        GameObject* pObj = Render::GameLevel::Get().Create(model.root->name);
-        leaf_recurse(model.root.get(), pObj, leaf_recurse);
         uiSceneTree->isModelLoaded = true;
     }
 

@@ -1,6 +1,6 @@
 #include "UIInspector.h"
 
-#include "GameObject.h"
+#include "Entity.h"
 
 namespace LevelEditor
 {
@@ -13,21 +13,13 @@ namespace LevelEditor
         ImGui::Begin("Object inspector");
         {
             DrawTransformComponent();
-            // auto& scene_manager = Render::SceneManager::Instance();
-            // auto selected_object = scene_manager.GetSelectedObject();
-            // if (selected_object)
-            // {
-            //     auto& tag = selected_object.GetComponent<Render::KitTag>();
-            //     ImGui::Text("Name: %s", tag.Tag.c_str());
-
-            //     auto& transform = selected_object.GetComponent<Render::KitTransform>();
-            //     if (ImGui::CollapsingHeader("Transform"))
-            //     {
-            //         this->DrawTransformComponent(transform);
-            //     }
-            // }
         }
         ImGui::End();
+    }
+
+    void Inspector::DrawMaterial()
+    {
+
     }
 
     //----------------------------------------------------------------------------------------
@@ -36,23 +28,24 @@ namespace LevelEditor
 
     void Inspector::DrawTransformComponent()
     {
-        GameObject* pSelectedEntity = Render::GameLevel::Get().GetSelectedEntity();
-        if (!pSelectedEntity)
+        auto selected = Render::GameLevel::Get().GetSelectedEntity();
+        if (!selected)
         {
             return;
         }
+        auto& tr = selected->GetTransform();
 
-        float position_x = pSelectedEntity->GetPosition().x;
-        float position_y = pSelectedEntity->GetPosition().y;
-        float position_z = pSelectedEntity->GetPosition().z;
+        float position_x = tr.GetPosition().x;
+        float position_y = tr.GetPosition().y;
+        float position_z = tr.GetPosition().z;
 
-        float rotation_x = glm::degrees(pSelectedEntity->GetRotation().x);
-        float rotation_y = glm::degrees(pSelectedEntity->GetRotation().y);
-        float rotation_z = glm::degrees(pSelectedEntity->GetRotation().z);
+        float rotation_x = glm::degrees(tr.GetRotation().x);
+        float rotation_y = glm::degrees(tr.GetRotation().y);
+        float rotation_z = glm::degrees(tr.GetRotation().z);
 
-        float scale_x = pSelectedEntity->GetScale().x;
-        float scale_y = pSelectedEntity->GetScale().y;
-        float scale_z = pSelectedEntity->GetScale().z;
+        float scale_x = tr.GetScale().x;
+        float scale_y = tr.GetScale().y;
+        float scale_z = tr.GetScale().z;
 
         ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(5.0f, 0.0f));
@@ -179,8 +172,8 @@ namespace LevelEditor
 
         ImGui::PopStyleVar();
 
-        pSelectedEntity->SetPosition(glm::vec3(position_x, position_y, position_z));
-        pSelectedEntity->SetRotationInDegrees(glm::vec3(rotation_x, rotation_y, rotation_z));
-        pSelectedEntity->SetScale(glm::vec3(scale_x, scale_y, scale_z));
+        tr.SetPosition(glm::vec3(position_x, position_y, position_z));
+        tr.SetRotation(glm::radians(glm::vec3(rotation_x, rotation_y, rotation_z)));
+        tr.SetScale(glm::vec3(scale_x, scale_y, scale_z));
     } 
 }

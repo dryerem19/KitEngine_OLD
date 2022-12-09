@@ -15,15 +15,29 @@
 
 #include "RenderBackend.h"
 
-Render::KitStaticMesh::KitStaticMesh(const KMFMesh& mesh)
-{
-    this->Init(mesh.vertices,mesh.indices);
-}
+#include "ResourceManager.h"
 
 Render::KitStaticMesh::KitStaticMesh(const std::vector<KitVertex>& vertices, 
     const std::vector<uint32_t>& indices)
 {
     this->Init(vertices, indices);
+}
+
+Render::KitStaticMesh::KitStaticMesh(const void* vertices, const uint32_t size,
+            const uint32_t* indices, const uint32_t count)
+{
+    geometry.vbo.Init(vertices, size * sizeof(Render::KitVertex));
+
+    // Инициализация слоя буфера
+    VertexBufferLayout bufferLayout;
+    bufferLayout.AddFloatElement(3);
+    bufferLayout.AddFloatElement(3);
+    bufferLayout.AddFloatElement(2);
+
+
+    geometry.vao.AddBuffer(geometry.vbo, bufferLayout);
+
+    geometry.ibo.Init(indices, count); 
 }
 
 void Render::KitStaticMesh::Init(const std::vector<KitVertex>& vertices, const std::vector<uint32_t>& indices)
@@ -48,22 +62,9 @@ void Render::KitStaticMesh::Init(const std::vector<KitVertex>& vertices, const s
     //mIndexBuffer.Init(indices.data(), indices.size());
 
     geometry.ibo.Init(indices.data(), indices.size());
-}
+} 
 
-void Render::KitStaticMesh::Draw()
+void Render::KitStaticMesh::SetMaterial(const std::string& filepath)
 {
-    // mVertexArray.Bind();
-    // mIndexBuffer.Bind();
-
-    //RenderBackend::Get().SetVAO(mVertexArray.GetId());
-    //RenderBackend::Get().SetIBO(mIndexBuffer.id());
-
-    RenderBackend::Get().SetGeometry(&geometry);
-
-    //GLCall(glDrawElements(GL_TRIANGLES, mIndexBuffer.GetCount(), GL_UNSIGNED_INT, nullptr));
-    RenderBackend::Get().Render(geometry.ibo.GetCount());
-
-
-    // mVertexArray.Unbind();
-    // mIndexBuffer.Unbind();
+    mMaterial = Core::ResourceManager::Instance().GetMaterial(filepath);
 }
