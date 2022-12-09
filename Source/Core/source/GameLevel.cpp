@@ -16,12 +16,67 @@ namespace Render
 
     void GameLevel::Serialize(const std::string& filepath)
     {
-        
+        YAML::Emitter out;
+        out << YAML::BeginMap;
+        out << YAML::Key << "Entity";
+        out << YAML::Value << YAML::BeginSeq;
+
+        for (auto& entity : mEntities)
+        {
+            auto& tr = entity->GetTransform();
+
+            out << YAML::Key << "position";
+            out << YAML::Flow;
+            out << YAML::BeginSeq;
+            out << tr.GetPosition().x;
+            out << tr.GetPosition().y;
+            out << tr.GetPosition().z;
+            out << YAML::EndSeq;
+
+            out << YAML::Key << "rotation";
+            out << YAML::Flow;
+            out << YAML::BeginSeq;
+            out << tr.GetRotation().x;
+            out << tr.GetRotation().y;
+            out << tr.GetRotation().z;
+            out << YAML::EndSeq;    
+
+            out << YAML::Key << "scale";
+            out << YAML::Flow;
+            out << YAML::BeginSeq;
+            out << tr.GetScale().x;
+            out << tr.GetScale().y;
+            out << tr.GetScale().z;
+            out << YAML::EndSeq;    
+
+            out << YAML::Key << "library";
+            out << YAML::Value << entity->GetModel()->mFilepath;
+            out << YAML::EndMap;
+        }
+
+        out << YAML::EndSeq;
+        std::ofstream fout(std::filesystem::path(filepath).concat(".level").string());
+        fout << out.c_str();
     }
 
     void GameLevel::Deserialize(const std::string& filepath)
     {
+        Clear();
 
+        // YAML::Node level = YAML::LoadFile(filepath);
+        // for (auto&& entity : level["Entity"].begin())
+        // {
+
+        // }
+
+        // name = material["name"].as<std::string>();
+        // diffuse_texture_path = material["diffuse_texture_path"].as<std::string>();
+        // shader_path = material["shader_path"].as<std::string>();
+    }
+
+    void GameLevel::Clear()
+    {
+        mEntities.clear();
     }
 
     Entity* GameLevel::Create(const std::string& name)

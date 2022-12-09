@@ -38,6 +38,8 @@ namespace Render
         void Serialize(const std::string& filepath) override final;
         void Deserialize(const std::string& filepath) override final;
 
+        void Clear();
+
         void Update();
 
         void Draw(const float* view_matrix, float* proj_matrix);
