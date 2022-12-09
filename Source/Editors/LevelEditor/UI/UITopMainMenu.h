@@ -4,7 +4,7 @@
 #include "UIFileDialog.h"
 
 #include "GameLevel.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "UISceneTree.h"
 #include "ResourceManager.h"
 #include "MeshVisualImporter.h"

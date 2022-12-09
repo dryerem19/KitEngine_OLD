@@ -42,8 +42,7 @@ namespace Core
         }
         
     private:
-        void ProcessAssimpNode(const aiNode* pNode, const aiScene* pScene, KMFNode* pKmfNode);
-        KMFMesh ProcessAssimpMesh( const aiMesh* pMesh, const aiScene* pScene );
+        void ParseMeshes(const aiScene* pScene, KitModelFile& kmf);
         std::string ProcessAssimpMaterial( const aiMaterial* pMaterial, const std::string& directory);
     };
 }

@@ -2,7 +2,7 @@
 
 
 #include "Core/KitUI.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "GameLevel.h"
 
 namespace LevelEditor
@@ -17,6 +17,5 @@ namespace LevelEditor
         bool isModelLoaded = false;
 
         void SceneTree();
-        void DrawNode(GameObject* pEntity);    
     };
 }

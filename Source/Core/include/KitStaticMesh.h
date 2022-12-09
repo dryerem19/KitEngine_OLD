@@ -11,9 +11,9 @@
  * 
  */
 #pragma once
-#include "KitModelFile.h"
 #include "KitMaterial.h"
 #include "KitVertex.h"
+
 
 #include "Geometry.h"
 
@@ -23,6 +23,7 @@ namespace Render
     {
     public:
         
+        std::string name;
 
         // Буфер вершин и индексов
         Geometry geometry;
@@ -30,10 +31,12 @@ namespace Render
         // Материал сетки
         std::shared_ptr<KitMaterial> mMaterial;
 
-        KitStaticMesh(const KMFMesh& mesh);
-
         KitStaticMesh(const std::vector<KitVertex>& vertices, 
                 const std::vector<uint32_t>&  indices);
+
+
+        KitStaticMesh(const void* vertices, const uint32_t size,
+            const uint32_t* indices, const uint32_t count);
 
         /*
         @brief Метод инициализация сетки 
@@ -43,7 +46,10 @@ namespace Render
         void Init(const std::vector<KitVertex>& vertices, 
                 const std::vector<uint32_t>&  indices);
 
-        void Draw();
+        std::shared_ptr<KitMaterial> GetMaterial() const
+        {
+            return mMaterial;
+        }
 
         inline void SetMaterial(std::shared_ptr<KitMaterial> material)
         {
@@ -51,5 +57,7 @@ namespace Render
 
             mMaterial = material;
         }
+
+        void SetMaterial(const std::string& filepath);
     };
 }

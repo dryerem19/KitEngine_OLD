@@ -35,8 +35,7 @@ namespace Core
                                 aiProcess_JoinIdenticalVertices      );
 
         KitModelFile kmfFile;
-        kmfFile.root = std::make_unique<KMFNode>();
-        kmfFile.root->name = mModelName = std::filesystem::path(pScene->mRootNode->mName.C_Str()).replace_extension("").string();                                
+        kmfFile.name = mModelName = std::filesystem::path(pScene->mRootNode->mName.C_Str()).replace_extension("").string();                                
 
         /* Cоздаём папки для сохранения */
         std::filesystem::path save_directory("data");
@@ -66,9 +65,9 @@ namespace Core
             std::filesystem::create_directories(texture_directory);
         }
 
-        kmfFile.header.version = 1;
+        this->ParseMeshes(pScene, kmfFile);
 
-        this->ProcessAssimpNode(pScene->mRootNode, pScene, kmfFile.root.get());
+
         
         std::filesystem::path model_save_path(save_directory);
         model_save_path.append(mModelName).concat(".kmf");
@@ -76,85 +75,61 @@ namespace Core
 
      }
 
-    void MeshVisualImporter::ProcessAssimpNode(const aiNode* pNode, const aiScene* pScene, KMFNode* pKmfNode)
-    {
-        if (pNode->mNumMeshes > 0)
+     void MeshVisualImporter::ParseMeshes(const aiScene* pScene, KitModelFile& kmf)
+     {
+        kmf.meshes.reserve(pScene->mNumMeshes);
+        for (uint32_t iMesh = 0; iMesh < pScene->mNumMeshes; iMesh++)
         {
-            pKmfNode->meshes.reserve(pNode->mNumMeshes);
+            kmf.meshes.emplace_back(std::make_unique<KMFMesh>());
+
+            const aiMesh* pMesh = pScene->mMeshes[iMesh];
+            const aiVector3D zero3D(0.0f, 0.0f, 0.0f);
+
+            kmf.meshes[iMesh]->name = pMesh->mName.C_Str();
+            kmf.meshes[iMesh]->vertices.reserve(pMesh->mNumVertices);
+            kmf.meshes[iMesh]->indices.reserve(pMesh->mNumFaces * 3);
+
+            // Обходим все вершины меша
+            for (uint32_t iVertex = 0; iVertex < pMesh->mNumVertices; iVertex++) 
+            {
+                // Получаем позицию, нормаль и текстурную координату вершины
+                const aiVector3D& pos = pMesh->mVertices[iVertex];
+                const aiVector3D& nor = pMesh->mNormals[iVertex];
+
+                // Если у меша нет текстурных координат, назначаем нулевые текстурные координаты
+                const aiVector3D& tex = pMesh->HasTextureCoords(0) 
+                    ? pMesh->mTextureCoords[0][iVertex] : zero3D;
+
+                // Заносим вершину в вектор
+                kmf.meshes[iMesh]->vertices.emplace_back(Render::KitVertex{
+                    glm::vec3(pos.x, pos.y, pos.z),
+                    glm::vec3(nor.x, nor.y, nor.z),
+                    glm::vec2(tex.x, tex.y)
+                });
+            }
+
+            // Обходим все треугольники меша
+            for (uint32_t iFace = 0; iFace < pMesh->mNumFaces; iFace++) {
+                const aiFace& face = pMesh->mFaces[iFace];
+
+                // Записываем индексы треугольника в вектор
+                kmf.meshes[iMesh]->indices.emplace_back(face.mIndices[0]);
+                kmf.meshes[iMesh]->indices.emplace_back(face.mIndices[1]);
+                kmf.meshes[iMesh]->indices.emplace_back(face.mIndices[2]);
+            }
+
+            // Если на меш назначен материал, загружаем его
+            if (pMesh->mMaterialIndex >= 0)
+            {
+                // Удаляем имя файла из пути, чтобы получить директорию
+                std::filesystem::path directory = std::filesystem::path(mFilepath);
+                directory.remove_filename();
+                
+                kmf.meshes[iMesh]->material = ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], 
+                    directory.string());
+            }            
         }
-
-        // Обрабатываем все меши ноды
-        for (uint32_t iMesh = 0; iMesh < pNode->mNumMeshes; iMesh++)
-        {   
-            const aiMesh* pMesh = pScene->mMeshes[pNode->mMeshes[iMesh]];
-            pKmfNode->meshes.emplace_back(ProcessAssimpMesh(pMesh, pScene));
-        }
-
-        // Рекурсивно обрабатываем все дочерние ноды
-        for (uint32_t iChild = 0; iChild < pNode->mNumChildren; iChild++)
-        {
-            const aiNode* pChildNode = pNode->mChildren[iChild];
-
-            std::shared_ptr<KMFNode> childKmfNode = std::make_shared<KMFNode>();
-            childKmfNode->name = pChildNode->mName.C_Str();
-            childKmfNode->pParent = pKmfNode;
-            pKmfNode->children.emplace_back(childKmfNode);
-
-            this->ProcessAssimpNode(pNode->mChildren[iChild], pScene, childKmfNode.get());
-        }        
-    }
-
-    KMFMesh MeshVisualImporter::ProcessAssimpMesh(const aiMesh* pMesh, const aiScene* pScene)
-    {
-        KMFMesh kmfMesh;
-        kmfMesh.name = pMesh->mName.C_Str();
-        kmfMesh.vertices.reserve(pMesh->mNumVertices);
-        kmfMesh.indices.reserve(pMesh->mNumFaces * 3);
-
-        const aiVector3D zero3D(0.0f, 0.0f, 0.0f);
-
-        // Обходим все вершины меша
-        for (uint32_t iVertex = 0; iVertex < pMesh->mNumVertices; iVertex++) 
-        {
-            // Получаем позицию, нормаль и текстурную координату вершины
-            const aiVector3D& pos = pMesh->mVertices[iVertex];
-            const aiVector3D& nor = pMesh->mNormals[iVertex];
-
-            // Если у меша нет текстурных координат, назначаем нулевые текстурные координаты
-            const aiVector3D& tex = pMesh->HasTextureCoords(0) 
-                ? pMesh->mTextureCoords[0][iVertex] : zero3D;
-
-            // Заносим вершину в вектор
-            kmfMesh.vertices.emplace_back(Render::KitVertex{
-                glm::vec3(pos.x, pos.y, pos.z),
-                glm::vec3(nor.x, nor.y, nor.z),
-                glm::vec2(tex.x, tex.y)
-            });
-        }
-
-        // Обходим все треугольники меша
-        for (uint32_t iFace = 0; iFace < pMesh->mNumFaces; iFace++) {
-            const aiFace& face = pMesh->mFaces[iFace];
-
-            // Записываем индексы треугольника в вектор
-            kmfMesh.indices.emplace_back(face.mIndices[0]);
-            kmfMesh.indices.emplace_back(face.mIndices[1]);
-            kmfMesh.indices.emplace_back(face.mIndices[2]);
-        }
-
-        // Если на меш назначен материал, загружаем его
-        if (pMesh->mMaterialIndex >= 0)
-        {
-            // Удаляем имя файла из пути, чтобы получить директорию
-            std::filesystem::path directory = std::filesystem::path(mFilepath);
-            directory.remove_filename();
-            
-            kmfMesh.material = ProcessAssimpMaterial(pScene->mMaterials[pMesh->mMaterialIndex], 
-                directory.string());
-        }
-
-        return kmfMesh;
-    }
+     }
 
     std::string MeshVisualImporter::ProcessAssimpMaterial(const aiMaterial* pMaterial, const std::string& directory)
     {

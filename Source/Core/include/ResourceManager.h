@@ -3,6 +3,8 @@
 #include "KitTexture.h"
 #include "KitMaterial.h"
 
+#include "Model.h"
+
 namespace Core
 {
     class ResourceManager
@@ -15,6 +17,9 @@ namespace Core
         std::unordered_map<std::string, std::shared_ptr<Render::Shader>> mShaders;
         std::unordered_map<std::string, std::shared_ptr<Render::KitMaterial>> mMaterials;
         std::unordered_map<std::string, std::shared_ptr<Render::KitTexture>> mTextures;
+
+        std::unordered_map<std::string, std::shared_ptr<Model>> mModels;
+ 
     public:
         inline static ResourceManager& Instance()
         {
@@ -68,5 +73,23 @@ namespace Core
         }
 
         std::shared_ptr<Render::KitMaterial> GetMaterial(const std::string& filepath);
+
+
+        std::shared_ptr<Model> GetModel(const std::string& filepath)
+        {
+            std::shared_ptr<Model> model;
+            if (mModels.find(filepath) != mModels.end())
+            {
+                model = mModels[filepath];
+            }
+            else
+            {
+                model = std::make_shared<Model>();
+                model->Deserialize(filepath);
+                mModels.insert({filepath, model});
+            }
+
+            return model;
+        }
     };
 }

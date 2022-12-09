@@ -13,10 +13,10 @@ void Core::BaseCamera::SetLookAt(glm::vec3 eye, glm::vec3 center, glm::vec3 up) 
     mView = glm::lookAt(eye,center,up);
 }
 
-float* Core::BaseCamera::GetView() {
+const float* Core::BaseCamera::GetView() const {
     return glm::value_ptr(mView);
 }
 
-float* Core::BaseCamera::GetPerspective() {
+const float* Core::BaseCamera::GetPerspective() const {
     return glm::value_ptr(mProjection);
 }

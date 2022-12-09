@@ -29,13 +29,15 @@ namespace LevelEditor
 
     void UIViewport::DrawGizmo()
     {
-        const auto& world = Render::GameLevel::Get();
-        GameObject* pSelectedEntity = world.GetSelectedEntity();
-        if (pSelectedEntity && mOperation != GizmoOperation::NONE)
+        const auto& level = Render::GameLevel::Get();
+        auto selected = level.GetSelectedEntity();
+        if (selected && mOperation != GizmoOperation::NONE)
         {
-            glm::vec3 position = pSelectedEntity->GetPosition();
-            glm::vec3 rotation = glm::degrees(pSelectedEntity->GetRotation());
-            glm::vec3 scale = pSelectedEntity->GetScale();
+            Transform& transform = selected->GetTransform();
+
+            glm::vec3 position = transform.GetPosition();
+            glm::vec3 rotation = glm::degrees(transform.GetRotation());
+            glm::vec3 scale = transform.GetScale();
 
             /* Build transform matrix */
             float transformMatrix[16];
@@ -49,15 +51,15 @@ namespace LevelEditor
                 switch (mOperation)
                 {
                 case GizmoOperation::TRANSLATE:
-                    pSelectedEntity->SetPosition(position);
+                    transform.SetPosition(position);
                     break;
                 case GizmoOperation::ROTATE:
                     {
-                        pSelectedEntity->SetRotationInDegrees(rotation);
+                        transform.SetRotation(glm::radians(rotation));
                     }
                     break;
                 case GizmoOperation::SCALE:
-                    pSelectedEntity->SetScale(scale);
+                    transform.SetScale(scale);
                     break;
                 default:
                     break;

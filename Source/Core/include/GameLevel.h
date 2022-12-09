@@ -1,13 +1,15 @@
 #pragma once
+#include "Entity.h"
+
+#include "Interfaces/IDeserialization.h"
+#include "Interfaces/ISerialization.h"
 
 #include <BulletDynamics/btBulletDynamicsCommon.h>
 
 
-class GameObject;
-
 namespace Render
 {
-    class GameLevel
+    class GameLevel : public ISerialization, public IDeserialization
     {
     private:
         GameLevel();
@@ -22,62 +24,67 @@ namespace Render
         std::unique_ptr<btConstraintSolver> mSolver;
         std::vector<btRigidBody*> mBodies;
     private:
-        std::unordered_map<std::string, std::unique_ptr<GameObject>> mObjects;
+        std::unordered_map<std::string, std::unique_ptr<Entity>> mObjects;
         std::unordered_map<std::string, uint32_t> mRegistryNames;
-        GameObject* m_pSelectedEntity { nullptr };     
+        std::shared_ptr<Entity> mSelectedEntity; 
     public:
+        std::vector<std::shared_ptr<Entity>> mEntities;
+
 
         static GameLevel& Get();
         
-        GameObject* Create(const std::string& name);
+        Entity* Create(const std::string& name);
+
+        void Serialize(const std::string& filepath) override final;
+        void Deserialize(const std::string& filepath) override final;
+
+        void Clear();
 
         void Update();
 
         void Draw(const float* view_matrix, float* proj_matrix);
 
-        void Spawn(GameObject* pEntity);
-
         inline void AddRigidBody(btRigidBody* pRigidBody) { mBodies.push_back(pRigidBody); }
 
-        inline void SetSelectedEntity(GameObject* pSelectedEntity)
+        inline void SetSelectedEntity(std::shared_ptr<Entity> entity)
         {
-            m_pSelectedEntity = pSelectedEntity;
+            mSelectedEntity = entity;
         }
 
-        inline GameObject* GetSelectedEntity() const
+        inline std::shared_ptr<Entity> GetSelectedEntity() const
         {
-            return m_pSelectedEntity;
+            return mSelectedEntity;
         }
 
         /**
          * @brief Поиск объекта по его имени
          * 
          * @param name имя объекта
-         * @return GameObject* 
+         * @return Entity* 
          */
-        inline GameObject* FindObjectByName(const std::string& name)
+        inline Entity* FindObjectByName(const std::string& name)
         {
             return mObjects.find(name) != mObjects.end() ? mObjects[name].get() : nullptr;
         }        
         
-        inline std::unordered_map<std::string, std::unique_ptr<GameObject>>::iterator begin() noexcept
-        {
-            return mObjects.begin();
-        }
+        // inline std::unordered_map<std::string, std::unique_ptr<Entity>>::iterator begin() noexcept
+        // {
+        //     return mObjects.begin();
+        // }
 
-        inline std::unordered_map<std::string, std::unique_ptr<GameObject>>::iterator end() noexcept
-        {
-            return mObjects.end();
-        }  
+        // inline std::unordered_map<std::string, std::unique_ptr<Entity>>::iterator end() noexcept
+        // {
+        //     return mObjects.end();
+        // }  
 
-        inline std::unordered_map<std::string, std::unique_ptr<GameObject>>::const_iterator cbegin() const noexcept
-        {
-            return mObjects.cbegin();
-        }
+        // inline std::unordered_map<std::string, std::unique_ptr<Entity>>::const_iterator cbegin() const noexcept
+        // {
+        //     return mObjects.cbegin();
+        // }
 
-        inline std::unordered_map<std::string, std::unique_ptr<GameObject>>::const_iterator cend() const noexcept
-        {
-            return mObjects.cend();
-        }                
+        // inline std::unordered_map<std::string, std::unique_ptr<Entity>>::const_iterator cend() const noexcept
+        // {
+        //     return mObjects.cend();
+        // }                
     };
 }
