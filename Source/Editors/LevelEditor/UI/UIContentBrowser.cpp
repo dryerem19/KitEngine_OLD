@@ -69,6 +69,15 @@ namespace LevelEditor
 
                     }
                 }
+
+                if(ImGui::BeginDragDropSource())
+                {
+                    std::string item = relative.filename().string();
+                    ImGui::SetDragDropPayload("Item_content_browser", (wchar_t*)item.c_str(), wcslen((wchar_t*)item.c_str()) * sizeof(wchar_t));
+                    ImGui::EndDragDropSource();
+                }
+
+
                 if(ImGui::BeginPopupContextItem(relative.filename().c_str()))
                 {
                     if(ImGui::Selectable("Delete"))

@@ -6,7 +6,8 @@ namespace LevelEditor
     {
         uint32_t backTexture = frameBuffer->GetTextureRenderID();
 
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0,0));
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(3.0f,3.0f));
+        
         ImGui::Begin("Viewport");
         {
             ImVec2 vMin = ImGui::GetWindowContentRegionMin();
@@ -15,12 +16,23 @@ namespace LevelEditor
             vMin.y += ImGui::GetWindowPos().y;
             vMax.x += ImGui::GetWindowPos().x;
             vMax.y += ImGui::GetWindowPos().y;
-            ImGui::GetWindowDrawList()->AddImage((ImTextureID)backTexture, vMin, vMax, ImVec2(0,1), ImVec2(1,0));
+            //ImGui::GetWindowDrawList()->AddImage((ImTextureID)backTexture, vMin, vMax, ImVec2(0,1), ImVec2(1,0));
+            ImGui::Image((ImTextureID)backTexture, ImGui::GetContentRegionAvail(), ImVec2(0,1), ImVec2(1,0));
+
+            if(ImGui::BeginDragDropTarget())
+            {
+                if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Item_content_browser"))
+                {
+                    const wchar_t* path = (const wchar_t*)payload->Data;
+                }
+                ImGui::EndDragDropTarget();
+            }
+
             // Draw Gizmo
 
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
-            ImGuizmo::SetRect(vMin.x, vMin.y, ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
+            ImGuizmo::SetRect(vMin.x, vMin.y, vMax.x - vMin.x, vMax.y - vMin.y);
             DrawGizmo();
         } 
         ImGui::End();
