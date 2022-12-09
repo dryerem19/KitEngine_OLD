@@ -2,6 +2,8 @@
 #include "Entity.h"
 #include "GameLevel.h"
 
+#include "ResourceManager.h"
+
 namespace Render
 {
     GameLevel::GameLevel()
@@ -25,6 +27,7 @@ namespace Render
         {
             auto& tr = entity->GetTransform();
 
+            out << YAML::BeginMap;
             out << YAML::Key << "position";
             out << YAML::Flow;
             out << YAML::BeginSeq;
@@ -55,6 +58,7 @@ namespace Render
         }
 
         out << YAML::EndSeq;
+        out << YAML::EndMap;
         std::ofstream fout(std::filesystem::path(filepath).concat(".level").string());
         fout << out.c_str();
     }
@@ -63,15 +67,19 @@ namespace Render
     {
         Clear();
 
-        // YAML::Node level = YAML::LoadFile(filepath);
-        // for (auto&& entity : level["Entity"].begin())
-        // {
-
-        // }
-
-        // name = material["name"].as<std::string>();
-        // diffuse_texture_path = material["diffuse_texture_path"].as<std::string>();
-        // shader_path = material["shader_path"].as<std::string>();
+        YAML::Node level = YAML::LoadFile(filepath);
+        for (auto&& entity : level["Entity"])
+        {
+            auto ent = std::make_shared<Entity>();
+            ent->GetTransform().SetPosition(entity["position"][0].as<float>(),
+                entity["position"][1].as<float>(), entity["position"][2].as<float>());
+            ent->GetTransform().SetRotation(entity["rotation"][0].as<float>(),
+                entity["rotation"][1].as<float>(), entity["rotation"][2].as<float>());
+            ent->GetTransform().SetScale(entity["scale"][0].as<float>(),
+                entity["scale"][1].as<float>(), entity["scale"][2].as<float>());
+            ent->SetModel(Core::ResourceManager::Instance().GetModel(entity["library"].as<std::string>()));
+            mEntities.emplace_back(ent);
+        }
     }
 
     void GameLevel::Clear()
