@@ -5,7 +5,7 @@
 class GameLayer : public Core::BaseLayer
 {
 private:
-    GameObject* pRootEntity;
+    Entity* pRootEntity;
 public:
     GameLayer() = default;
     void OnStart() override;

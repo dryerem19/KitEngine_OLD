@@ -31,7 +31,7 @@
 #include "UIBottomMenuBar.h"
 #include "UIContentBrowser.h"
 
-#include "GameObject.h"
+#include "Entity.h"
 
 namespace LevelEditor
 {
