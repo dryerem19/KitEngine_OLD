@@ -36,6 +36,7 @@ public:
     void SetRotation(const float& x, const float& y, const float& z);
     void SetScale(const glm::vec3& s);
     void SetScale(const float& x, const float& y, const float& z);
+    void SetModelMatrix(const float* matrix);
 
     const glm::vec3& GetPosition() const;
     const glm::vec3& GetRotation() const;

@@ -40,4 +40,6 @@
 #include <yaml-cpp/yaml.h>
 #include <entt/entt.hpp>
 
+#include <BulletDynamics/btBulletDynamicsCommon.h>
+
 #include "Helpers.h"

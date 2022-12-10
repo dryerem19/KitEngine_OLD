@@ -47,7 +47,12 @@ namespace LevelEditor
     {
         // Camera
         EditorCamera::Instance().Update();
-        //Render::GameLevel::Get().Update();
+
+        for (auto& entity : Render::GameLevel::Get().mEntities)
+        {
+            entity->Update();
+        }
+        Render::GameLevel::Get().mDynamicsWorld->stepSimulation(1.f / 60.f);
         
     }
 

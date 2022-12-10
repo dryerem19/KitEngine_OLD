@@ -12,6 +12,10 @@
 #include "Model.h"
 #include "Transform.h"
 
+#include <BulletDynamics/btBulletDynamicsCommon.h>
+
+#include "Physics/RigidBody.h"
+
 namespace Render
 {
     class GameLevel;
@@ -34,6 +38,8 @@ protected:
 
     Transform mTransform;
 
+    btRigidBody* body;
+
 public:
     /**
      * @brief Конструктор узла
@@ -55,6 +61,7 @@ public:
     }
 
     void Spawn();
+    void Update();
 
     Transform& GetTransform()
     {

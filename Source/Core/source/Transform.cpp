@@ -74,6 +74,14 @@ const glm::vec3& Transform::GetScale() const
     return mScale;
 }
 
+void Transform::SetModelMatrix(const float* matrix)
+{
+    if (!matrix)
+        return;
+
+    memcpy(&mModelMatrix, matrix, 16);
+}
+
 const float* Transform::GetModelMatrix()
 {
     if (mDirty)

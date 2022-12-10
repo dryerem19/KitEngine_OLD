@@ -17,12 +17,10 @@ namespace Render
         GameLevel& operator=(GameLevel&) = delete;
         ~GameLevel() = default;
     private:
-        std::unique_ptr<btDynamicsWorld> mDynamicsWorld;
         std::unique_ptr<btDispatcher> mDispathcer;
         std::unique_ptr<btCollisionConfiguration> mCollisionConfig;
         std::unique_ptr<btBroadphaseInterface> mBroadphase;
         std::unique_ptr<btConstraintSolver> mSolver;
-        std::vector<btRigidBody*> mBodies;
     private:
         std::unordered_map<std::string, std::unique_ptr<Entity>> mObjects;
         std::unordered_map<std::string, uint32_t> mRegistryNames;
@@ -30,6 +28,9 @@ namespace Render
     public:
         std::vector<std::shared_ptr<Entity>> mEntities;
 
+        std::unique_ptr<btDynamicsWorld> mDynamicsWorld;
+        btAlignedObjectArray<btCollisionShape*> collisionShapes;
+        std::vector<btRigidBody*> mBodies;
 
         static GameLevel& Get();
         

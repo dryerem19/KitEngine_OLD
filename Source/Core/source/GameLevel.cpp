@@ -14,6 +14,30 @@ namespace Render
         mSolver = std::make_unique<btSequentialImpulseConstraintSolver>();
         mDynamicsWorld = std::make_unique<btDiscreteDynamicsWorld>(mDispathcer.get(), mBroadphase.get(), mSolver.get(), mCollisionConfig.get());
         mDynamicsWorld->setGravity(btVector3(0.f, -9.81f, 0.f));
+
+        btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(50.), btScalar(50.), btScalar(50.)));
+        collisionShapes.push_back(groundShape);
+
+        btTransform groundTransform;
+		groundTransform.setIdentity();
+		groundTransform.setOrigin(btVector3(0, -56, 0));
+
+		btScalar mass(0.);
+    
+		//rigidbody is dynamic if and only if mass is non zero, otherwise static
+		bool isDynamic = (mass != 0.f);
+
+		btVector3 localInertia(0, 0, 0);
+		if (isDynamic)
+			groundShape->calculateLocalInertia(mass, localInertia);
+
+		//using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
+		btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
+		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, groundShape, localInertia);
+		btRigidBody* body = new btRigidBody(rbInfo);
+
+		//add the body to the dynamics world
+		mDynamicsWorld->addRigidBody(body);    
     }
 
     void GameLevel::Serialize(const std::string& filepath)
@@ -110,6 +134,7 @@ namespace Render
         // }
 
         // return pObj;
+        return nullptr;
     }
 
     GameLevel& GameLevel::Get()
