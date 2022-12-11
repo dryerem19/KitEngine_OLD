@@ -43,6 +43,8 @@ void SkyBox::Deserialize(const std::string& filepath)
     mShader = Core::ResourceManager::Instance().GetShader(skybox["shader"].as<std::string>());
     
     mSkyBox.InitCubeMap(texturesPath);
+
+    mPath = filepath;
 }
 
 void SkyBox::Render(const Core::BaseCamera& camera)
