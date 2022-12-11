@@ -51,14 +51,14 @@ void SkyBox::Render(const Core::BaseCamera& camera)
     {
         return;
     }
-    glDepthFunc(GL_LEQUAL);
+    glDepthMask(GL_FALSE);
     auto& backend = RenderBackend::Get();
     backend.SetGeometry(&geometry);
     mShader->Enable();
-    mShader->SetUniformMatrix4fv("uView", 1, GL_FALSE, camera.GetView());
+    mShader->SetUniformMatrix4fv("uView", 1, GL_FALSE, glm::value_ptr(glm::mat4(glm::mat3(camera.GetGlmView()))));
     mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, camera.GetPerspective());
 
     mSkyBox.Enable();
     backend.Render();
-    glDepthFunc(GL_LESS);
+    glDepthMask(GL_TRUE);
 }
