@@ -56,6 +56,8 @@ namespace Core
         glfwSetWindowSizeCallback(m_pWindow, OnResizeCallback);       
         glfwSetFramebufferSizeCallback(m_pWindow, OnFrameBufferResizeCallback);  
 
+        glViewport(0, 0, mWidth, mHeight);
+
         // int init_framebuffer_width, init_framebuffer_height;
         // glfwGetFramebufferSize(m_pWindow, &init_framebuffer_width, &init_framebuffer_height);       
         // if (eventHandlerCallback)
@@ -107,7 +109,7 @@ namespace Core
     void Window::OnFrameBufferResizeCallback(GLFWwindow* window, int width, int height)
     {
         auto& handle   = *(Window*)glfwGetWindowUserPointer(window);
-
+       
         if (handle.eventHandlerCallback)
         {
             FrameBufferResizeEvent event(width, height);
