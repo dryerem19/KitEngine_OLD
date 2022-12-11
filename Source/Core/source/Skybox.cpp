@@ -53,7 +53,8 @@ void SkyBox::Render(const Core::BaseCamera& camera)
     {
         return;
     }
-    glDepthMask(GL_FALSE);
+    //glDepthMask(GL_FALSE);
+    glDepthFunc(GL_LEQUAL);
     auto& backend = RenderBackend::Get();
     backend.SetGeometry(&geometry);
     mShader->Enable();
@@ -62,5 +63,6 @@ void SkyBox::Render(const Core::BaseCamera& camera)
 
     mSkyBox.Enable();
     backend.Render();
-    glDepthMask(GL_TRUE);
+    //glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LESS);
 }
