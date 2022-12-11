@@ -58,6 +58,8 @@ namespace Render
         }
 
         out << YAML::EndSeq;
+        out << YAML::Key << "Skybox";
+        out << YAML::Value << mSkyBox.GetPath();
         out << YAML::EndMap;
         std::ofstream fout(std::filesystem::path(filepath).concat(".level").string());
         fout << out.c_str();
@@ -80,6 +82,8 @@ namespace Render
             ent->SetModel(Core::ResourceManager::Instance().GetModel(entity["library"].as<std::string>()));
             mEntities.emplace_back(ent);
         }
+
+        mSkyBox.Deserialize(level["Skybox"].as<std::string>());
     }
 
     void GameLevel::InitSkybox(const std::string& filepath)

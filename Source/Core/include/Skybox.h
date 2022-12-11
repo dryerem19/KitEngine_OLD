@@ -60,9 +60,11 @@ private:
     Geometry geometry;
     Render::Texture mSkyBox;
     std::shared_ptr<Render::Shader> mShader;
+    std::string mPath;
 public:
     SkyBox();
     void Serialize(const std::string& filepath) override final;
     void Deserialize(const std::string& filepath) override final;
     void Render(const Core::BaseCamera& camera);
+    const std::string& GetPath() const { return mPath; }
 };

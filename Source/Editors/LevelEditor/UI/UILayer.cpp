@@ -28,7 +28,7 @@ namespace LevelEditor
         EditorCamera::Instance().SetPerspective(45.0f, app.GetWindow()->GetWidth()
              / app.GetWindow()->GetHeight(), 0.1f, 100.0f);
 
-        Render::GameLevel::Get().InitSkybox("data/skybox/default.skybox");
+        //Render::GameLevel::Get().InitSkybox("data/skybox/default.skybox");
     }
 
     void UILayer::EventHandler(const Core::Event& event)
