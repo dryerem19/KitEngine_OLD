@@ -4,7 +4,7 @@ void GameLayer::OnStart()
 {
     auto pWindow = Core::Application::Instance().GetWindow().get();
     camera.SetPerspective(45.0f, pWindow->GetWidth() / pWindow->GetHeight(), 0.1f, 100.0f);
-    Render::GameLevel::Get().Deserialize("/home/dryerem19/CLionProjects/KitEngine/bin/Debug/test.level");
+    Render::GameLevel::Get().Deserialize("test.level");
 }
 
 void GameLayer::EventHandler(const Core::Event& event)
