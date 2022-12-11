@@ -41,7 +41,7 @@ namespace LevelEditor
 
     void UIViewport::DrawGizmo()
     {
-        const auto& level = Render::GameLevel::Get();
+        const auto& level = GameLevel::Get();
         auto selected = level.GetSelectedEntity();
         if (selected && mOperation != GizmoOperation::NONE)
         {

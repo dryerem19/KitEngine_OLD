@@ -5,7 +5,7 @@
 
 void Entity::Spawn()
 {
-    Render::GameLevel::Get().mEntities.push_back(shared_from_this());
+    GameLevel::Get().mEntities.push_back(shared_from_this());
 }
 
 

@@ -11,11 +11,11 @@ namespace LevelEditor
             if(ImGui::BeginMenu(ICON_FA_FILE " File"))
             {
                 if(ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open Scene")){
-                    Render::GameLevel::Get().Deserialize("test.level");
+                    GameLevel::Get().Deserialize("test.level");
                 }
                 if(ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save Scene"))
                 {
-                    Render::GameLevel::Get().Serialize("test");
+                    GameLevel::Get().Serialize("test");
                 }
                 if(ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save Scene As..")){
                 

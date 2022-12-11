@@ -29,7 +29,7 @@ public:
 
     void Render(const Core::BaseCamera& camera)
     {
-        auto& level = Render::GameLevel::Get();
+        auto& level = GameLevel::Get();
         auto& backend = RenderBackend::Get();
         backend.Clear();
         for (auto& entity : level.mEntities)

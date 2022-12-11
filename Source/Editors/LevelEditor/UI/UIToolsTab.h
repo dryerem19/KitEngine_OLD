@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/KitUI.h"
 #include "KitLight.h"
+#include "GameLevel.h"
 
 #include <ImGuiFileDialog.h>
 

@@ -28,7 +28,7 @@ namespace LevelEditor
 
     void Inspector::DrawTransformComponent()
     {
-        auto selected = Render::GameLevel::Get().GetSelectedEntity();
+        auto selected = GameLevel::Get().GetSelectedEntity();
         if (!selected)
         {
             return;
