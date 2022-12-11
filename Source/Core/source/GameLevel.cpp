@@ -82,6 +82,11 @@ namespace Render
         }
     }
 
+    void GameLevel::InitSkybox(const std::string& filepath)
+    {
+        mSkyBox.Deserialize(filepath);
+    }
+
     void GameLevel::Clear()
     {
         mEntities.clear();

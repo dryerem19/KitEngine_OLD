@@ -17,6 +17,13 @@ namespace Core
         mTextures.insert({filepath, std::make_shared<Render::KitTexture>(filepath, Render::KitTextureType::Diffuse)});
     }
 
+    // std::shared_ptr<Render::Texture> ResourceManager::GetCubemap(const std::string& tx1, const std::string& tx2, 
+    //                                                              const std::string& tx3, const std::string& tx4,
+    //                                                              const std::string& tx5, const std::string& tx6)
+    // {
+        
+    // }
+
     std::shared_ptr<Render::KitMaterial> ResourceManager::GetMaterial( const std::string& filepath )
     {
         assert(!filepath.empty() && "Filepath must not be empty!");
