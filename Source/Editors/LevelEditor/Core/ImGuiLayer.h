@@ -9,6 +9,7 @@
 #include <Application.h>
 #include "KitUI.h"
 
+extern ImFont* g_pFontContentBrowser;
 
 namespace LevelEditor
 {

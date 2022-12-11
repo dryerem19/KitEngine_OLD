@@ -2,6 +2,9 @@
 // Created by Denis on 01.11.2022.
 //
 #include "ImGuiLayer.h"
+
+ImFont* g_pFontContentBrowser = nullptr;
+
 namespace LevelEditor
 {
     ImGuiLayer::ImGuiLayer()
@@ -16,17 +19,17 @@ namespace LevelEditor
         ImGuiIO& io = ImGui::GetIO();
         // Enable docking window
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        //io.Fonts->AddFontDefault();
 
-
-        io.Fonts->AddFontFromFileTTF("../../Resources/fonts/Roboto-Bold.ttf", 14, nullptr,
+        io.Fonts->AddFontFromFileTTF("../../Resources/fonts/Roboto-Bold.ttf", 14.0f, nullptr,
                                     io.Fonts->GetGlyphRangesCyrillic());
         // merge in icons from Font Awesome
         static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
         ImFontConfig icons_config;
         icons_config.MergeMode = true;
         icons_config.PixelSnapH = true;
-        io.Fonts->AddFontFromFileTTF( "../../Resources/fonts/fa-solid-900.ttf", 14.0f, &icons_config, icons_ranges );
-
+        io.Fonts->AddFontFromFileTTF( "../../Resources/fonts/fa-solid-900.ttf", 14.0f, &icons_config, icons_ranges); 
+        g_pFontContentBrowser = io.Fonts->AddFontFromFileTTF( "../../Resources/fonts/test.ttf", 50.0f, nullptr, icons_ranges);
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();

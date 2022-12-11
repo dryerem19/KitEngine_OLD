@@ -20,7 +20,7 @@ namespace LevelEditor
     {
         ImGui::Begin("Content Browser");
         {
-            if(ImGui::ButtonEx("<-", ImVec2(0.0f, 0.0f), mFlagsButtonBack))
+            if(ImGui::ButtonEx(ICON_FA_ARROW_LEFT, ImVec2(0.0f, 0.0f), mFlagsButtonBack))
             {
                 if(mCurrentProjectDirectory != mProjectDirectory)
                 {
@@ -29,7 +29,7 @@ namespace LevelEditor
                 mCurrentProjectDirectory = mCurrentProjectDirectory.parent_path();
             }
             ImGui::SameLine();
-            if(ImGui::ButtonEx("->", ImVec2(0.0f, 0.0f), mFlagsButtonForward))
+            if(ImGui::ButtonEx(ICON_FA_ARROW_RIGHT, ImVec2(0.0f, 0.0f), mFlagsButtonForward))
             {
                 mCurrentProjectDirectory = mLastDirectory;
             }
@@ -48,35 +48,57 @@ namespace LevelEditor
                 }
                 ImGui::EndPopup();
             }
+            float size = mIconsSize + mPaddingFiles;
+            float panelWidth = ImGui::GetContentRegionAvail().x;
+            int countCol = (int)(panelWidth / size);
             ImGui::Separator();
-            
+            if(countCol >= 1)
+                ImGui::Columns(countCol, 0, false);
+            static ImVec4 button_color = ImVec4(0.0,0.0,0.0,0);
+            ImGui::PushStyleColor(ImGuiCol_Button, button_color);
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.0f,0.0f,0.0f,0.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.27,0.27,0.27,1));
+            static std::string selected_filepath; 
             for(auto&& path : std::filesystem::directory_iterator(mCurrentProjectDirectory))
             {
                 auto relative = std::filesystem::relative(path.path(), mProjectDirectory);
-                
+                // if(selected_filepath == relative.filename().string())
+                // {
+                //     button_color = ImVec4(0.73, 0.09, 0.09, 1);
+                // }
+                // else
+                // {
+                //     button_color = ImVec4(0.0f,0.0f,0.0f,0.0f);
+                // }
                 if(path.is_directory())
                 {
-                    if(ImGui::Button(relative.filename().string().c_str()))
+                    ImGui::PushFont(g_pFontContentBrowser);
+                    ImGui::Button(ICON_FA_FOLDER_OPEN, ImVec2(mIconsSize,mIconsSize));
+                    
+                    ImGui::PopFont();
+                    if(ImGui::IsItemHovered())
                     {
-                        mCurrentProjectDirectory /= relative.filename();
-                        mLastDirectory = mCurrentProjectDirectory;
+                        // if(ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+                        // {
+                        //     selected_filepath = relative.filename().string();
+                        // }
+                        if(ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+                        {
+                            mCurrentProjectDirectory /= relative.filename();
+                            mLastDirectory = mCurrentProjectDirectory;
+                        }
                     }
+
                 }
                 else
                 {
-                    if(ImGui::Button(relative.filename().string().c_str()))
+                    ImGui::PushFont(g_pFontContentBrowser);
+                    if(ImGui::Button(ICON_FA_FILE,ImVec2(mIconsSize,mIconsSize)) && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
                     {
 
                     }
+                    ImGui::PopFont();
                 }
-
-                if(ImGui::BeginDragDropSource())
-                {
-                    std::string item = relative.filename().string();
-                    ImGui::SetDragDropPayload("Item_content_browser", (wchar_t*)item.c_str(), wcslen((wchar_t*)item.c_str()) * sizeof(wchar_t));
-                    ImGui::EndDragDropSource();
-                }
-
                 if(ImGui::BeginPopupContextItem(relative.filename().string().c_str()))
                 {
                     if(ImGui::Selectable("Delete"))
@@ -92,7 +114,20 @@ namespace LevelEditor
                     }
                     ImGui::EndPopup();
                 }
+
+                ImGui::Text(relative.filename().string().c_str());
+
+                ImGui::NextColumn();
+                // if(ImGui::BeginDragDropSource())
+                // {
+                //     std::string item = relative.filename().string();
+                //     ImGui::SetDragDropPayload("Item_content_browser", (wchar_t*)item.c_str(), wcslen((wchar_t*)item.c_str()) * sizeof(wchar_t));
+                //     ImGui::EndDragDropSource();
+                // }
+
             }
+            ImGui::PopStyleColor(3);
+            ImGui::Columns(1);
             
             if(std::filesystem::is_empty(mCurrentProjectDirectory))
             {

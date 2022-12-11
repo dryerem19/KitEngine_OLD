@@ -34,6 +34,9 @@ namespace LevelEditor
         std::string mNewNameFile = "";
         std::string mOldNameFileRename;
         std::string mNameFileDelete;
+        float mIconsSize = 100.0f;
+        float mPaddingFiles = 5.0f;
+        ImFont* fontIcons = nullptr;
 
         bool mIsCheckNewFile = false;
         bool mIsFolder = false;
