@@ -3,6 +3,7 @@
 
 #include "Interfaces/IDeserialization.h"
 #include "Interfaces/ISerialization.h"
+#include "Skybox.h"
 
 #include <BulletDynamics/btBulletDynamicsCommon.h>
 
@@ -27,6 +28,7 @@ namespace Render
         std::unordered_map<std::string, std::unique_ptr<Entity>> mObjects;
         std::unordered_map<std::string, uint32_t> mRegistryNames;
         std::shared_ptr<Entity> mSelectedEntity; 
+        SkyBox mSkyBox;
     public:
         std::vector<std::shared_ptr<Entity>> mEntities;
 
@@ -43,6 +45,10 @@ namespace Render
         void Update();
 
         void Draw(const float* view_matrix, float* proj_matrix);
+
+        void InitSkybox(const std::string& filepath);
+
+        SkyBox& GetSkybox() { return mSkyBox; } 
 
         inline void AddRigidBody(btRigidBody* pRigidBody) { mBodies.push_back(pRigidBody); }
 

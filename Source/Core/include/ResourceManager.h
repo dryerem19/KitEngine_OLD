@@ -1,7 +1,8 @@
 #pragma once
 #include "Shader.h"
-#include "KitTexture.h"
+#include "Texture.h"
 #include "KitMaterial.h"
+#include "Skybox.h"
 
 #include "Model.h"
 
@@ -49,6 +50,10 @@ namespace Core
          * @return std::shared_ptr<Render::Texture> 
          */
         void LoadTexture(const std::string& filepath);
+        
+        // std::shared_ptr<Render::Texture> GetCubemap(const std::string& tx1, const std::string& tx2, 
+        //                                             const std::string& tx3, const std::string& tx4,
+        //                                             const std::string& tx5, const std::string& tx6);
 
         /**
          * @brief Возвращает кэшированную текстуру, если она загружена, 
