@@ -31,6 +31,8 @@ public:
     {
         auto& level = Render::GameLevel::Get();
         auto& backend = RenderBackend::Get();
+        backend.Clear();
+
         for (auto& entity : level.mEntities)
         {
             auto model = entity->GetModel();

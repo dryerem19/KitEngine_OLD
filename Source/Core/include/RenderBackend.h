@@ -53,6 +53,13 @@ public:
         stat.vao++;
     }
 
+    void Clear()
+    {
+        float color = 85.0f/255.0f;
+        glClearColor(color, color, color, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
     inline void SetIBO(uint32_t id)
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);

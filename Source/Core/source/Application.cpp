@@ -88,12 +88,16 @@ void Core::Application::Start() {
         }
 
         // Render UI
-        mLayerStack.GetOverlay()->OnBegin();
+        Core::BaseLayer* pOverlay = mLayerStack.GetOverlay();
+        if (pOverlay)
+            pOverlay->OnBegin();
+
         for (auto* pLayer : mLayerStack.GetLayers()) {
 
             pLayer->OnUIRender();
         }
-        mLayerStack.GetOverlay()->OnEnd();
+        if (pOverlay)
+            pOverlay->OnEnd();
 
         mWindow->SwapBuffers();
         mWindow->Update();

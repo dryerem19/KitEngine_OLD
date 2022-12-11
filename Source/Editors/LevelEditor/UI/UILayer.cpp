@@ -24,6 +24,9 @@ namespace LevelEditor
         
         auto& app = Core::Application::Instance();
         frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
+
+        EditorCamera::Instance().SetPerspective(45.0f, app.GetWindow()->GetWidth()
+             / app.GetWindow()->GetHeight(), 0.1f, 100.0f);
     }
 
     void UILayer::EventHandler(const Core::Event& event)
@@ -37,7 +40,6 @@ namespace LevelEditor
             frameBuffer.Init(e.GetWidth(), e.GetHeight());
 
             EditorCamera::Instance().SetPerspective(45.0f, (float)e.GetWidth() / e.GetHeight(), 0.1f, 100.0f);
-            glViewport(0, 0, e.GetWidth(), e.GetHeight());
         }
 
         std::cout << event.ToString() << std::endl;
