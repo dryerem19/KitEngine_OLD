@@ -16,6 +16,8 @@
     "bullet3",
     "assimp",
     "spdlog",
-    "yaml-cpp"
+    "yaml-cpp",
+    "openal-soft",
+    "libsndfile"
   ]
 }

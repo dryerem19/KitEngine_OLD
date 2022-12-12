@@ -33,6 +33,12 @@
 
 #include "Entity.h"
 
+
+#include "SoundManager.h"
+#include "SoundBuffer.h"
+#include "SoundSource.h"
+
+
 namespace LevelEditor
 {
     class UILayer : public Core::BaseLayer
