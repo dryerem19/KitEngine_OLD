@@ -67,6 +67,16 @@ void Render::Shader::SetUniform4f(const std::string &uniformName, float x, float
 }
 
 //-------------------------------------------------------------------------------------------
+// Установка вектора (vec3) униформ переменной
+//-------------------------------------------------------------------------------------------
+void Render::Shader::SetUniform3f(const std::string &uniformName, float x, float y, float z) const {
+
+    const GLint location = this->GetUniformLocation(uniformName);
+    GLCall(glUniform3f(location, x, y, z));
+
+}
+
+//-------------------------------------------------------------------------------------------
 // Установка float значения
 //-------------------------------------------------------------------------------------------
 void Render::Shader::SetUniform1f(const std::string &uniformName, float value)

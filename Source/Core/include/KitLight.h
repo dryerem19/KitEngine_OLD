@@ -30,7 +30,7 @@ public:
         SetName("light");
     }
 
-    glm::vec4 mColorAmbient = glm::vec4(1.f, 1.f, 1.f, 1.f);
+    glm::vec4 mColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
     float mAmbientStrength = 1.f;
 };
 

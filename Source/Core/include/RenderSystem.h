@@ -58,8 +58,10 @@ public:
                     material->Use();
                     if(light)
                     {
-                        material->mShader->SetUniform4f("uAmbientColor", light->mColorAmbient[0], light->mColorAmbient[1], 
-                                                                         light->mColorAmbient[2], light->mColorAmbient[3]);
+                        material->mShader->SetUniform3f("uLigthPos", light->transform.GetPosition().x,light->transform.GetPosition().y,
+                                                                     light->transform.GetPosition().z);
+                        material->mShader->SetUniform4f("uLightColor", light->mColor[0], light->mColor[1], 
+                                                                         light->mColor[2], light->mColor[3]);
                         material->mShader->SetUniform1f("uAmbientStrength", light->mAmbientStrength);
                     }
                     material->mShader->SetUniformMatrix4fv("uView", 1, GL_FALSE, camera.GetView());

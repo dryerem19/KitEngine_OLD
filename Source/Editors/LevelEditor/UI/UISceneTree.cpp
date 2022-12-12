@@ -37,13 +37,13 @@ namespace LevelEditor
             for (auto& light : level._lights)
             {
                 ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
-                //flags |= GameLevel::Get().GetSelectedEntity() == light
-                //    ? ImGuiTreeNodeFlags_Selected : 0;
+                flags |= GameLevel::Get().GetSelectedObject() == light.get()
+                   ? ImGuiTreeNodeFlags_Selected : 0;
                 if (ImGui::TreeNodeEx(light->GetName().c_str(), flags))
                 {
                     if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
                     {
-                        //GameLevel::Get().SetSelectedEntity(light);
+                        GameLevel::Get().SetSelectedObject(light.get());
                     }
                     ImGui::TreePop();
                 }

@@ -13,11 +13,15 @@ uniform mat4 uView;
 uniform mat4 uProjection;
 
 out vec2 vTexcoord;
+out vec3 Normal;
+out vec3 FragPos;
 
 void main()
 {
     vTexcoord = texcoord;
     gl_Position = uProjection * uView * uTransform * vec4(position, 1.0);
+    FragPos = vec3(uTransform * vec4(position, 1.0));
+    Normal = mat3(transpose(inverse(uTransform))) * normal;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -29,15 +33,20 @@ void main()
 layout(location = 0) out vec4 OutColor;
 
 uniform sampler2D uTextureDiffuse;
-uniform vec4 uAmbientColor;
+uniform vec4 uLightColor;
 uniform float uAmbientStrength;
+uniform vec3 uLigthPos;
 
 in vec2 vTexcoord;
+in vec3 Normal;
+in vec3 FragPos;
 
 void main()
 {
-    
-    vec4 ambient = uAmbientStrength * uAmbientColor;
-    OutColor = ambient * texture(uTextureDiffuse, vTexcoord);
-
+    vec3 normal = normalize(Normal);
+    vec3 lightDir = normalize(uLigthPos - FragPos);
+    float diff = max(dot(normal, lightDir), 0.0);
+    vec4 diffuse = diff * uLightColor;
+    vec4 ambient = uAmbientStrength * uLightColor;
+    OutColor = (ambient + diffuse) * texture(uTextureDiffuse, vTexcoord);
 }
