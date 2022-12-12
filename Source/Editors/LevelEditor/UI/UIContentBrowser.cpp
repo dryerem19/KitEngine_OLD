@@ -13,26 +13,30 @@ namespace LevelEditor
 {
     UIContentBrowser::UIContentBrowser() : mCurrentProjectDirectory(mProjectDirectory)
     {
-
+        _currentDirectory = "data";
+        _historyDirectory.push_back(_currentDirectory);
+        _currentDirectoryId = 0;
     }
 
     void UIContentBrowser::Draw()
     {
         ImGui::Begin("Content Browser");
         {
-            if(ImGui::ButtonEx(ICON_FA_ARROW_LEFT, ImVec2(0.0f, 0.0f), mFlagsButtonBack))
-            {
-                if(mCurrentProjectDirectory != mProjectDirectory)
-                {
-                    mLastDirectory = mCurrentProjectDirectory;
-                }
-                mCurrentProjectDirectory = mCurrentProjectDirectory.parent_path();
+            if(ImGui::ButtonEx(ICON_FA_ARROW_LEFT, ImVec2(0.0f, 0.0f), mFlagsButtonBack)) {
+                if (_currentDirectory.has_parent_path())
+                    _currentDirectory = _currentDirectory.parent_path();
+                else _forwardDirectory.clear();
             }
+
             ImGui::SameLine();
-            if(ImGui::ButtonEx(ICON_FA_ARROW_RIGHT, ImVec2(0.0f, 0.0f), mFlagsButtonForward))
-            {
-                mCurrentProjectDirectory = mLastDirectory;
+            if(ImGui::ButtonEx(ICON_FA_ARROW_RIGHT, ImVec2(0.0f, 0.0f), mFlagsButtonForward)) {
+                // _currentDirectoryId++;
+                // if (_currentDirectoryId >= _historyDirectory.size())
+                //     _currentDirectoryId = _historyDirectory.size() - 1;
+                
+                _currentDirectory = _forwardDirectory[_currentDirectoryId];
             }
+
             if(ImGui::BeginPopupContextWindow("Content Browser"))
             {
                 if(ImGui::Selectable("New Folder"))
@@ -54,68 +58,92 @@ namespace LevelEditor
             ImGui::Separator();
             if(countCol >= 1)
                 ImGui::Columns(countCol, 0, false);
-            static ImVec4 button_color = ImVec4(0.0,0.0,0.0,0);
-            ImGui::PushStyleColor(ImGuiCol_Button, button_color);
-            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.0f,0.0f,0.0f,0.0f));
-            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.27,0.27,0.27,1));
+            
+            static ImVec4 btn_primary_color = ImVec4(0.f, 0.f, 0.f, 0.f);
+            static ImVec4 btn_hovered_color = ImVec4(0.f, 0.f, 0.f, 0.f);
+            static ImVec4 btn_actived_color = ImVec4(0.f, 0.f, 0.f, 0.f);
+            
             static std::string selected_filepath; 
-            for(auto&& path : std::filesystem::directory_iterator(mCurrentProjectDirectory))
+            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+                selected_filepath.clear();
+  
+            for(auto&& path : std::filesystem::directory_iterator(_currentDirectory))
             {
                 auto relative = std::filesystem::relative(path.path(), mProjectDirectory);
-                // if(selected_filepath == relative.filename().string())
-                // {
-                //     button_color = ImVec4(0.73, 0.09, 0.09, 1);
-                // }
-                // else
-                // {
-                //     button_color = ImVec4(0.0f,0.0f,0.0f,0.0f);
-                // }
-                if(path.is_directory())
-                {
-                    ImGui::PushFont(g_pFontContentBrowser);
-                    ImGui::Button(ICON_FA_FOLDER_OPEN, ImVec2(mIconsSize,mIconsSize));
-                    
-                    ImGui::PopFont();
-                    if(ImGui::IsItemHovered())
+                auto filename = relative.filename().string();
+                auto filepath = relative.string();
+                
+                bool selected = selected_filepath == relative.string();
+                btn_primary_color = selected ? ImVec4(0.2f, 0.2f, 0.2f, 1.f) : ImVec4(0.f, 0.f, 0.f, 0.f);
+                btn_hovered_color = selected ? btn_primary_color : ImVec4(0.15f, 0.15f, 0.15f, 1);
+                btn_actived_color = btn_hovered_color;
+                                
+                ImGui::PushStyleColor(ImGuiCol_Button, btn_primary_color);
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, btn_hovered_color);
+                ImGui::PushStyleColor(ImGuiCol_ButtonActive, btn_actived_color);
+
+                const char* icon = path.is_directory() ? ICON_FA_FOLDER_OPEN : ICON_FA_FILE; 
+                ImGui::PushFont(g_pFontContentBrowser);
+                ImGui::Button(icon, ImVec2(mIconsSize, mIconsSize));
+                ImGui::PopFont();
+                ImGui::PopStyleColor(3);
+
+                if (ImGui::IsItemHovered()) {
+                    if(ImGui::IsMouseClicked(ImGuiMouseButton_Left) && 
+                        !ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                        selected_filepath = filepath;
+                    }
+
+                    else if(ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)
+                        && path.is_directory()) 
                     {
-                        // if(ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+                        _currentDirectory.append(filename);
+                        _forwardDirectory.push_back(_currentDirectory);
+                        _currentDirectoryId = _historyDirectory.size() - 1;
+
+                        //_currentDirectory.append(filename);
+                        //_stackDirectory.push(_currentDirectory);
+                        // std::filesystem::path p(_currentDirectory);
+                        // p.append(filename);
+                        // if (_historyDirectory.empty() || _historyDirectory.size() > 0)
                         // {
-                        //     selected_filepath = relative.filename().string();
+                        //     if (_historyDirectory.size() > 0)
+                        //     {
+                        //         if (_historyDirectory[_historyDirectory.size() - 1] 
+                        //             != p)
+                        //         {
+                        //             _currentDirectory.append(filename);
+                        //             _historyDirectory.push_back(_currentDirectory);
+                        //             _currentDirectoryId = _historyDirectory.size() - 1;
+                        //         }
+                        //     }
+                        //     else
+                        //     {
+                        //         _currentDirectory.append(filename);
+                        //         _historyDirectory.push_back(_currentDirectory);
+                        //         _currentDirectoryId = _historyDirectory.size() - 1;
+                        //     }
                         // }
-                        if(ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
-                        {
-                            mCurrentProjectDirectory /= relative.filename();
-                            mLastDirectory = mCurrentProjectDirectory;
-                        }
-                    }
-
+                    }                    
                 }
-                else
-                {
-                    ImGui::PushFont(g_pFontContentBrowser);
-                    if(ImGui::Button(ICON_FA_FILE,ImVec2(mIconsSize,mIconsSize)) && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
-                    {
 
-                    }
-                    ImGui::PopFont();
-                }
-                if(ImGui::BeginPopupContextItem(relative.filename().string().c_str()))
+                if(ImGui::BeginPopupContextItem(filename.c_str()))
                 {
                     if(ImGui::Selectable("Delete"))
                     {
-                        mNameFileDelete = relative.filename().string();
+                        mNameFileDelete = filename;
                         mIsCheckDeleteFile = true;
                     }
                     ImGui::Separator();
                     if(ImGui::Selectable("Rename"))
                     {
-                        mOldNameFileRename = relative.filename().string();
+                        mOldNameFileRename = filename;
                         mIsCheckRenameFile = true;
                     }
                     ImGui::EndPopup();
                 }
 
-                ImGui::Text(relative.filename().string().c_str());
+                ImGui::Text(filename.c_str());
 
                 ImGui::NextColumn();
                 // if(ImGui::BeginDragDropSource())
@@ -126,31 +154,30 @@ namespace LevelEditor
                 // }
 
             }
-            ImGui::PopStyleColor(3);
             ImGui::Columns(1);
             
-            if(std::filesystem::is_empty(mCurrentProjectDirectory))
-            {
-                ImGui::Text("No Item");
-            }
+            // if(std::filesystem::is_empty(mCurrentProjectDirectory))
+            // {
+            //     ImGui::Text("No Item");
+            // }
 
-            if(mCurrentProjectDirectory != mProjectDirectory)
-            {
-                mFlagsButtonBack = 0;
-            }
-            else
-            {
-                mFlagsButtonBack = ImGuiItemFlags_Disabled;
-            }
+            // if(mCurrentProjectDirectory != mProjectDirectory)
+            // {
+            //     mFlagsButtonBack = 0;
+            // }
+            // else
+            // {
+            //     mFlagsButtonBack = ImGuiItemFlags_Disabled;
+            // }
             
-            if(mCurrentProjectDirectory != mLastDirectory)
-            {
-                mFlagsButtonForward = 0;
-            }
-            else
-            {
-                mFlagsButtonForward = ImGuiItemFlags_Disabled;
-            }
+            // if(mCurrentProjectDirectory != mLastDirectory)
+            // {
+            //     mFlagsButtonForward = 0;
+            // }
+            // else
+            // {
+            //     mFlagsButtonForward = ImGuiItemFlags_Disabled;
+            // }
         }
         ImGui::End();
 

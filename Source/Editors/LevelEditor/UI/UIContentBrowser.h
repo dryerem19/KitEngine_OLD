@@ -12,6 +12,7 @@
 #include "Core/KitUI.h"
 #include <filesystem>
 #include <fstream>
+#include <stack>
 
 namespace LevelEditor
 {
@@ -37,6 +38,21 @@ namespace LevelEditor
         float mIconsSize = 100.0f;
         float mPaddingFiles = 5.0f;
         ImFont* fontIcons = nullptr;
+
+        std::vector<std::filesystem::path> _historyDirectory;
+        std::string _projectDirectory;
+
+
+        std::filesystem::path _startDirectory;
+        std::filesystem::path _currentDirectory;
+        std::filesystem::path _endDirectory;
+
+        std::filesystem::path _lastDirectory;
+
+        std::vector<std::filesystem::path> _forwardDirectory;
+        
+
+        int _currentDirectoryId;
 
         bool mIsCheckNewFile = false;
         bool mIsFolder = false;
