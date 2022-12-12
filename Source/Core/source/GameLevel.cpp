@@ -119,6 +119,8 @@ namespace Render
         // }
 
         // return pObj;
+
+        return nullptr;
     }
 
     GameLevel& GameLevel::Get()
