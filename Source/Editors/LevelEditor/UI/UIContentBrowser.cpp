@@ -14,7 +14,7 @@ namespace LevelEditor
     UIContentBrowser::UIContentBrowser() : mCurrentProjectDirectory(mProjectDirectory)
     {
         _currentDirectory = "data";
-        _historyDirectory.push_back(_currentDirectory);
+        _forwardDirectory.push_back(_currentDirectory);
         _currentDirectoryId = 0;
     }
 
@@ -22,19 +22,26 @@ namespace LevelEditor
     {
         ImGui::Begin("Content Browser");
         {
-            if(ImGui::ButtonEx(ICON_FA_ARROW_LEFT, ImVec2(0.0f, 0.0f), mFlagsButtonBack)) {
+            if(ImGui::Button(ICON_FA_ARROW_LEFT, ImVec2(0.0f, 0.0f))) {
+                if(!(_currentDirectory == _forwardDirectory[0]))
+                    _currentDirectoryId--;
+                if(_currentDirectoryId < 0)
+                    _currentDirectoryId = 0;
                 if (_currentDirectory.has_parent_path())
                     _currentDirectory = _currentDirectory.parent_path();
-                else _forwardDirectory.clear();
+                std::cout << "back: " << _currentDirectoryId << "\n";
+                std::cout << "folder: " << _currentDirectory << "\n";
             }
 
             ImGui::SameLine();
-            if(ImGui::ButtonEx(ICON_FA_ARROW_RIGHT, ImVec2(0.0f, 0.0f), mFlagsButtonForward)) {
-                // _currentDirectoryId++;
-                // if (_currentDirectoryId >= _historyDirectory.size())
-                //     _currentDirectoryId = _historyDirectory.size() - 1;
+            if(ImGui::Button(ICON_FA_ARROW_RIGHT, ImVec2(0.0f, 0.0f))) {
+                _currentDirectoryId++;
+                if (_currentDirectoryId >= _forwardDirectory.size())
+                    _currentDirectoryId = _forwardDirectory.size() - 1;
                 
                 _currentDirectory = _forwardDirectory[_currentDirectoryId];
+                std::cout << "forward: " << _currentDirectoryId << "\n";
+                std::cout << "folder: " << _currentDirectory << "\n";
             }
 
             if(ImGui::BeginPopupContextWindow("Content Browser"))
@@ -98,32 +105,11 @@ namespace LevelEditor
                         && path.is_directory()) 
                     {
                         _currentDirectory.append(filename);
-                        _forwardDirectory.push_back(_currentDirectory);
-                        _currentDirectoryId = _historyDirectory.size() - 1;
-
-                        //_currentDirectory.append(filename);
-                        //_stackDirectory.push(_currentDirectory);
-                        // std::filesystem::path p(_currentDirectory);
-                        // p.append(filename);
-                        // if (_historyDirectory.empty() || _historyDirectory.size() > 0)
-                        // {
-                        //     if (_historyDirectory.size() > 0)
-                        //     {
-                        //         if (_historyDirectory[_historyDirectory.size() - 1] 
-                        //             != p)
-                        //         {
-                        //             _currentDirectory.append(filename);
-                        //             _historyDirectory.push_back(_currentDirectory);
-                        //             _currentDirectoryId = _historyDirectory.size() - 1;
-                        //         }
-                        //     }
-                        //     else
-                        //     {
-                        //         _currentDirectory.append(filename);
-                        //         _historyDirectory.push_back(_currentDirectory);
-                        //         _currentDirectoryId = _historyDirectory.size() - 1;
-                        //     }
-                        // }
+                        if(_forwardDirectory.back() != _currentDirectory) 
+                        {
+                            _forwardDirectory.push_back(_currentDirectory);
+                            _currentDirectoryId = _forwardDirectory.size() - 1;
+                        }
                     }                    
                 }
 
@@ -156,28 +142,10 @@ namespace LevelEditor
             }
             ImGui::Columns(1);
             
-            // if(std::filesystem::is_empty(mCurrentProjectDirectory))
-            // {
-            //     ImGui::Text("No Item");
-            // }
-
-            // if(mCurrentProjectDirectory != mProjectDirectory)
-            // {
-            //     mFlagsButtonBack = 0;
-            // }
-            // else
-            // {
-            //     mFlagsButtonBack = ImGuiItemFlags_Disabled;
-            // }
-            
-            // if(mCurrentProjectDirectory != mLastDirectory)
-            // {
-            //     mFlagsButtonForward = 0;
-            // }
-            // else
-            // {
-            //     mFlagsButtonForward = ImGuiItemFlags_Disabled;
-            // }
+            if(std::filesystem::is_empty(_currentDirectory))
+            {
+                ImGui::Text("No Item");
+            }
         }
         ImGui::End();
 
