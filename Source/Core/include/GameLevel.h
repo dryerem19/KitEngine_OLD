@@ -26,21 +26,19 @@ private:
 private:
     std::unordered_map<std::string, std::unique_ptr<Entity>> mObjects;
     std::unordered_map<std::string, uint32_t> mRegistryNames;
-    std::shared_ptr<Entity> mSelectedEntity; 
+    KitObject* mSelectedObject = nullptr; 
     SkyBox mSkyBox;
 public:
-    std::vector<KitLight> mKitLights;
-    std::vector<std::shared_ptr<Entity>> mEntities;
-
+    std::vector<std::unique_ptr<KitLight>> _lights;
+    //std::vector<std::shared_ptr<Entity>> mEntities;
+    std::vector<std::unique_ptr<KitObject>> _objects; 
 
     static GameLevel& Get();
-    
-    Entity* Create(const std::string& name);
+
+    void Clear();
 
     void Serialize(const std::string& filepath) override final;
     void Deserialize(const std::string& filepath) override final;
-
-    void Clear();
 
     void Update();
 
@@ -50,20 +48,22 @@ public:
 
     SkyBox& GetSkybox() { return mSkyBox; }
 
-    KitLight& CreateLigth();
+    KitLight* CreateLigth();
 
     void DeleteLight();
 
+    Entity* CreateEntity();
+
     inline void AddRigidBody(btRigidBody* pRigidBody) { mBodies.push_back(pRigidBody); }
 
-    inline void SetSelectedEntity(std::shared_ptr<Entity> entity)
+    inline void SetSelectedObject(KitObject* object)
     {
-        mSelectedEntity = entity;
+        mSelectedObject = object;
     }
 
-    inline std::shared_ptr<Entity> GetSelectedEntity() const
+    inline KitObject* GetSelectedObject() const
     {
-        return mSelectedEntity;
+        return mSelectedObject;
     }
 
     /**

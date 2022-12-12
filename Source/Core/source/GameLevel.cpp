@@ -21,38 +21,42 @@ void GameLevel::Serialize(const std::string& filepath)
     out << YAML::Key << "Entity";
     out << YAML::Value << YAML::BeginSeq;
 
-    for (auto& entity : mEntities)
+    for (auto& object : _objects)
     {
-        auto& tr = entity->GetTransform();
+        if(object->Type() == KIT_OBJECT_ENTITY)
+        {
+            auto& tr = object->transform;
 
-        out << YAML::BeginMap;
-        out << YAML::Key << "position";
-        out << YAML::Flow;
-        out << YAML::BeginSeq;
-        out << tr.GetPosition().x;
-        out << tr.GetPosition().y;
-        out << tr.GetPosition().z;
-        out << YAML::EndSeq;
+            out << YAML::BeginMap;
+            out << YAML::Key << "position";
+            out << YAML::Flow;
+            out << YAML::BeginSeq;
+            out << tr.GetPosition().x;
+            out << tr.GetPosition().y;
+            out << tr.GetPosition().z;
+            out << YAML::EndSeq;
 
-        out << YAML::Key << "rotation";
-        out << YAML::Flow;
-        out << YAML::BeginSeq;
-        out << tr.GetRotation().x;
-        out << tr.GetRotation().y;
-        out << tr.GetRotation().z;
-        out << YAML::EndSeq;    
+            out << YAML::Key << "rotation";
+            out << YAML::Flow;
+            out << YAML::BeginSeq;
+            out << tr.GetRotation().x;
+            out << tr.GetRotation().y;
+            out << tr.GetRotation().z;
+            out << YAML::EndSeq;    
 
-        out << YAML::Key << "scale";
-        out << YAML::Flow;
-        out << YAML::BeginSeq;
-        out << tr.GetScale().x;
-        out << tr.GetScale().y;
-        out << tr.GetScale().z;
-        out << YAML::EndSeq;    
+            out << YAML::Key << "scale";
+            out << YAML::Flow;
+            out << YAML::BeginSeq;
+            out << tr.GetScale().x;
+            out << tr.GetScale().y;
+            out << tr.GetScale().z;
+            out << YAML::EndSeq;    
 
-        out << YAML::Key << "library";
-        out << YAML::Value << entity->GetModel()->mFilepath;
-        out << YAML::EndMap;
+            out << YAML::Key << "library";
+            out << YAML::Value << object->dnm_cast_entity()->GetModel()->mFilepath;
+            out << YAML::EndMap;
+        }
+        
     }
 
     out << YAML::EndSeq;
@@ -70,15 +74,15 @@ void GameLevel::Deserialize(const std::string& filepath)
     YAML::Node level = YAML::LoadFile(filepath);
     for (auto&& entity : level["Entity"])
     {
-        auto ent = std::make_shared<Entity>();
-        ent->GetTransform().SetPosition(entity["position"][0].as<float>(),
+        auto ent = CreateEntity();
+        ent->transform.SetPosition(entity["position"][0].as<float>(),
             entity["position"][1].as<float>(), entity["position"][2].as<float>());
-        ent->GetTransform().SetRotation(entity["rotation"][0].as<float>(),
+        ent->transform.SetRotation(entity["rotation"][0].as<float>(),
             entity["rotation"][1].as<float>(), entity["rotation"][2].as<float>());
-        ent->GetTransform().SetScale(entity["scale"][0].as<float>(),
+        ent->transform.SetScale(entity["scale"][0].as<float>(),
             entity["scale"][1].as<float>(), entity["scale"][2].as<float>());
         ent->SetModel(Core::ResourceManager::Instance().GetModel(entity["library"].as<std::string>()));
-        mEntities.emplace_back(ent);
+        ent->SetName(ent->GetModel()->mName);
     }
 
     mSkyBox.Deserialize(level["Skybox"].as<std::string>());
@@ -89,11 +93,11 @@ void GameLevel::InitSkybox(const std::string& filepath)
     mSkyBox.Deserialize(filepath);
 }
 
-KitLight& GameLevel::CreateLigth()
+KitLight* GameLevel::CreateLigth()
 {
-    mKitLights.emplace_back();
-    mKitLights.back().SetID(mKitLights.size() - 1);
-    return mKitLights.back();
+    _lights.emplace_back(std::make_unique<KitLight>());
+    _lights.back()->SetID(_lights.size() - 1);
+    return _lights.back().get();
 }
 
 void GameLevel::DeleteLight()
@@ -101,38 +105,20 @@ void GameLevel::DeleteLight()
     
 }
 
-void GameLevel::Clear()
+Entity* GameLevel::CreateEntity()
 {
-    mEntities.clear();
-}
-
-Entity* GameLevel::Create(const std::string& name)
-{
-    // Entity* pObj { nullptr };
-
-    // if (mRegistryNames.find(name) != mRegistryNames.end())
-    // {
-    //     mRegistryNames[name]++;
-    //     std::string new_name = name + "_" + std::to_string(mRegistryNames[name]);
-    //     mRegistryNames.insert({new_name, mRegistryNames[name]}); 
-
-    //     mObjects.insert({new_name, std::make_unique<Entity>()});
-    //     pObj = mObjects[new_name].get();
-    //     pObj->SetName(new_name);
-    // }
-    // else
-    // {
-    //     mObjects.insert({name, std::make_unique<Entity>()});
-    //     mRegistryNames.insert({name, 0});
-    //     pObj = mObjects[name].get();
-    //     pObj->SetName(name);
-    // }
-
-    // return pObj;
+    _objects.emplace_back(std::make_unique<Entity>());
+    _objects.back()->SetID(_objects.size() - 1);
+    return _objects.back().get()->dnm_cast_entity();
 }
 
 GameLevel& GameLevel::Get()
 {
     static GameLevel instance;
     return instance;
+}
+
+void GameLevel::Clear()
+{
+    _objects.clear();
 }

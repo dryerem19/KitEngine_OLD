@@ -12,6 +12,7 @@
 #include "KitTransform.h"
 #include "KitObject.h"
 
+
 enum class LightType
 {
     None = 0,
@@ -24,5 +25,13 @@ class KitLight : public KitObject
 {
 public:
     Render::KitTransform mTransform;
-    
+    KitLight() : KitObject(KIT_OBJECT_LIGHT)
+    {
+        SetName("light");
+    }
+
+    glm::vec4 mColorAmbient = glm::vec4(1.f, 1.f, 1.f, 1.f);
+    float mAmbientStrength = 1.f;
 };
+
+KitLight* dnm_cast_light(KitObject* object);

@@ -14,18 +14,18 @@ namespace LevelEditor
     void UISceneTree::SceneTree()
     {
         auto& level = GameLevel::Get();
-        if (ImGui::TreeNodeEx("Entities", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow))
+        if (ImGui::TreeNodeEx("Objects", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow))
         {
-            for (auto& entity : level.mEntities)
+            for (auto& object : level._objects)
             {
                 ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
-                flags |= GameLevel::Get().GetSelectedEntity() == entity
+                flags |= GameLevel::Get().GetSelectedObject() == object.get()
                     ? ImGuiTreeNodeFlags_Selected : 0;
-                if (ImGui::TreeNodeEx(entity->GetModel()->mName.c_str(), flags))
+                if (ImGui::TreeNodeEx(object->GetName().c_str(), flags))
                 {
                     if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
                     {
-                        GameLevel::Get().SetSelectedEntity(entity);
+                        GameLevel::Get().SetSelectedObject(object.get());
                     }
                     ImGui::TreePop();
                 }
@@ -34,12 +34,12 @@ namespace LevelEditor
         }
         if(ImGui::TreeNodeEx("Lights", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow))
         {
-            for (auto& light : level.mKitLights)
+            for (auto& light : level._lights)
             {
                 ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
                 //flags |= GameLevel::Get().GetSelectedEntity() == light
                 //    ? ImGuiTreeNodeFlags_Selected : 0;
-                if (ImGui::TreeNodeEx("light", flags))
+                if (ImGui::TreeNodeEx(light->GetName().c_str(), flags))
                 {
                     if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
                     {

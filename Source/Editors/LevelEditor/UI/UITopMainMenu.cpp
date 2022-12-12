@@ -75,9 +75,10 @@ namespace LevelEditor
         Core::MeshVisualImporter importer;
         importer.LoadVisual(*filepath);
 
-        auto entity = std::make_shared<Entity>();
+        auto entity = GameLevel::Get().CreateEntity();
         entity->SetModel(Core::ResourceManager::Instance().GetModel("data/nanosuit/nanosuit.kmf"));
-        entity->Spawn();
+        entity->SetName(entity->GetModel()->mName);
+        //entity->Spawn();
 
         uiSceneTree->isModelLoaded = true;
     }

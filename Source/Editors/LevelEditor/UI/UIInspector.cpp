@@ -28,12 +28,12 @@ namespace LevelEditor
 
     void Inspector::DrawTransformComponent()
     {
-        auto selected = GameLevel::Get().GetSelectedEntity();
+        auto selected = GameLevel::Get().GetSelectedObject();
         if (!selected)
         {
             return;
         }
-        auto& tr = selected->GetTransform();
+        auto& tr = selected->transform;
 
         float position_x = tr.GetPosition().x;
         float position_y = tr.GetPosition().y;

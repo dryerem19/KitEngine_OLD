@@ -29,10 +29,15 @@ void main()
 layout(location = 0) out vec4 OutColor;
 
 uniform sampler2D uTextureDiffuse;
+uniform vec4 uAmbientColor;
+uniform float uAmbientStrength;
 
 in vec2 vTexcoord;
 
 void main()
 {
-    OutColor = texture(uTextureDiffuse, vTexcoord);
+    
+    vec4 ambient = uAmbientStrength * uAmbientColor;
+    OutColor = ambient * texture(uTextureDiffuse, vTexcoord);
+
 }

@@ -67,6 +67,14 @@ void Render::Shader::SetUniform4f(const std::string &uniformName, float x, float
 }
 
 //-------------------------------------------------------------------------------------------
+// Установка float значения
+//-------------------------------------------------------------------------------------------
+void Render::Shader::SetUniform1f(const std::string &uniformName, float value)
+{
+    GLCall(glUniform1f(this->GetUniformLocation(uniformName), value));
+}
+
+//-------------------------------------------------------------------------------------------
 // Получение местоположения униформ переменной
 // const std::string &uniformName - имя униформ переменной
 // returned: местоположение переменной
@@ -191,4 +199,3 @@ void Render::Shader::SetUniform1i(const std::string &uniformName, int value) {
     GLCall(glUniform1i(this->GetUniformLocation(uniformName), value));
 
 }
-
