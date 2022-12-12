@@ -29,8 +29,8 @@ namespace LevelEditor
              / app.GetWindow()->GetHeight(), 0.1f, 100.0f);
 
         auto& sDevice = SoundManager::Instance();
-        //uint32_t soundId = SoundBuffer::Instance().Add("/run/media/dryerem19/98D20AD9D20ABB8E/xray2/xr2-build-dsgn/xr2-dsgn/resources/sources/sounds/single/stereo_test/rain_stereo.ogg");
-        uint32_t soundId = SoundBuffer::Instance().Add("test.mp3");
+        uint32_t soundId = SoundBuffer::Instance().Add("/run/media/dryerem19/98D20AD9D20ABB8E/xray2/xr2-build-dsgn/xr2-dsgn/resources/sources/sounds/single/stereo_test/rain_stereo.ogg");
+       // uint32_t soundId = SoundBuffer::Instance().Add("iamtheprotectorofthissystem.wav");
    
         SoundSource speaker;
         speaker.Play(soundId);

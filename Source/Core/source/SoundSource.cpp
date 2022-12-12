@@ -18,8 +18,8 @@ SoundSource::SoundSource()
     alSourcef(_source, AL_GAIN, _gain);
     alSource3f(_source, AL_POSITION, 0, 0, 0);
     alSource3f(_source, AL_VELOCITY, 0, 0, 0);
-    alSourcei(_source, AL_LOOPING, true);
-    alSourcef(_source, AL_BUFFER, _bufferId);
+    alSourcei(_source, AL_LOOPING, false);
+    //alSourcef(_source, AL_BUFFER, _bufferId);
 }
 
 SoundSource::~SoundSource()
