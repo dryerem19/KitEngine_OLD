@@ -94,33 +94,6 @@ void GameLevel::InitSkybox(const std::string& filepath)
     mSkyBox.Deserialize(filepath);
 }
 
-    Entity* GameLevel::Create(const std::string& name)
-    {
-        // Entity* pObj { nullptr };
-
-        // if (mRegistryNames.find(name) != mRegistryNames.end())
-        // {
-        //     mRegistryNames[name]++;
-        //     std::string new_name = name + "_" + std::to_string(mRegistryNames[name]);
-        //     mRegistryNames.insert({new_name, mRegistryNames[name]}); 
-
-        //     mObjects.insert({new_name, std::make_unique<Entity>()});
-        //     pObj = mObjects[new_name].get();
-        //     pObj->SetName(new_name);
-        // }
-        // else
-        // {
-        //     mObjects.insert({name, std::make_unique<Entity>()});
-        //     mRegistryNames.insert({name, 0});
-        //     pObj = mObjects[name].get();
-        //     pObj->SetName(name);
-        // }
-
-        // return pObj;
-
-        return nullptr;
-    }
-
 KitLight* GameLevel::CreateLigth()
 {
     _lights.emplace_back(std::make_unique<KitLight>());
@@ -138,6 +111,13 @@ Entity* GameLevel::CreateEntity()
     _objects.emplace_back(std::make_unique<Entity>());
     _objects.back()->SetID(_objects.size() - 1);
     return _objects.back().get()->dnm_cast_entity();
+}
+
+SoundBuffer *GameLevel::CreateSound()
+{
+    _soundsources.emplace_back(std::make_unique<SoundBuffer>());
+    _soundsources.back()->SetID(_objects.size() - 1);
+    return _soundsources.back().get();
 }
 
 GameLevel& GameLevel::Get()

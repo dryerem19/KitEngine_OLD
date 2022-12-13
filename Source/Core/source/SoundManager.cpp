@@ -29,6 +29,10 @@ SoundManager::SoundManager()
 
     if (!pName || alcGetError(pAlcDevice) != AL_NO_ERROR)
         pName = alcGetString(pAlcDevice, ALC_DEVICE_SPECIFIER);
+
+    // Setup model audio
+    alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
+    alListener3f(AL_POSITION, 0, 0, 0);
 }
 
 SoundManager::~SoundManager()

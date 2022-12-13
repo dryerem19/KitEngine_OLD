@@ -6,6 +6,8 @@
 #include "Skybox.h"
 #include "KitLight.h"
 
+#include "SoundBuffer.h"
+
 #include <BulletDynamics/btBulletDynamicsCommon.h>
 
 
@@ -33,6 +35,8 @@ public:
     //std::vector<std::shared_ptr<Entity>> mEntities;
     std::vector<std::unique_ptr<KitObject>> _objects; 
 
+    std::vector<std::unique_ptr<SoundBuffer>> _soundsources; 
+
     static GameLevel& Get();
 
     void Clear();
@@ -53,6 +57,8 @@ public:
     void DeleteLight();
 
     Entity* CreateEntity();
+
+    SoundBuffer* CreateSound();
 
     inline void AddRigidBody(btRigidBody* pRigidBody) { mBodies.push_back(pRigidBody); }
 

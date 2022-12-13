@@ -10,9 +10,26 @@ namespace LevelEditor
 
     void Inspector::Draw()
     {
+        auto& level = GameLevel::Get();
+        auto* pSelectedObject = level.GetSelectedObject();
+
         ImGui::Begin("Object inspector");
         {
-            DrawTransformComponent();
+            if (!pSelectedObject) {
+                ImGui::End();
+                return;
+            }
+
+            if (ImGui::CollapsingHeader("Transform")) {
+                DrawTransformComponent();
+            }
+
+            if (pSelectedObject->Type() == KIT_OBJECT_SOUND) {
+               if (ImGui::CollapsingHeader("Sound source")) {
+                 UISoundSource(cast_object_to_sound_source(pSelectedObject));
+               }
+            }
+
         }
         ImGui::End();
     }
@@ -167,7 +184,6 @@ namespace LevelEditor
             ImGui::SameLine();                 
             ImGui::DragFloat("##z ## 3", &scale_z, 0.1f);
             ImGui::PopItemWidth();
-            ImGui::SameLine();
         }        
 
         ImGui::PopStyleVar();
@@ -175,5 +191,31 @@ namespace LevelEditor
         tr.SetPosition(glm::vec3(position_x, position_y, position_z));
         tr.SetRotation(glm::radians(glm::vec3(rotation_x, rotation_y, rotation_z)));
         tr.SetScale(glm::vec3(scale_x, scale_y, scale_z));
-    } 
+    }
+
+    void Inspector::UISoundSource(SoundBuffer* pSoundSource)
+    {
+        if (!pSoundSource)
+            return;
+
+        static float volume = pSoundSource->GetVolume();
+        if (ImGui::SliderFloat("Volume", &volume, 0.f, 1.0f, "%.2f")) {
+            pSoundSource->SetVolume(volume);
+        }
+        
+        static float pitch = pSoundSource->GetPitch();
+        if (ImGui::SliderFloat("Pitch", &pitch, 0.5f, 2.0f, "%.2f")) {
+            pSoundSource->SetPitch(pitch);
+        }
+
+        static bool mute = pSoundSource->IsMute();
+        if (ImGui::Checkbox("Mute", &mute)) {
+            pSoundSource->SetMute(mute);
+        }
+
+        static bool loop = pSoundSource->IsLoop();
+        if (ImGui::Checkbox("Loop", &loop)) {
+            pSoundSource->SetLoop(loop);
+        }
+    }
 }

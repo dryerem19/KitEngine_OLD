@@ -2,11 +2,18 @@
 #include "SoundBuffer.h"
 
 SoundBuffer::SoundBuffer()
+    : KitObject(KIT_OBJECT_SOUND)
 {
     _format = AL_NONE;
     _pMembuf = nullptr;
     _pSndfile = nullptr;
     _state = AL_STOPPED;
+    _volume = 1.f;
+    _pitch = 1.f;
+    _mute = false;
+    _loop = false;
+
+    SetName("Sound");
 }
 
 void SoundBuffer::Init(const char* pFilename)
@@ -19,6 +26,10 @@ void SoundBuffer::Init(const char* pFilename)
 
     alGenSources(1, &_source);
     alGenBuffers(NUM_BUFFERS, _buffers);
+
+    alSourcef(_source, AL_ROLLOFF_FACTOR, 1.0f);
+    alSourcef(_source, AL_REFERENCE_DISTANCE, 6);
+    alSourcef(_source, AL_MAX_DISTANCE, 15);
 
     /* Open the audio file and check that it's usable. */
     _pSndfile = sf_open(pFilename, SFM_READ, &_sfinfo);
@@ -109,6 +120,11 @@ void SoundBuffer::Update()
     assert(_pSndfile && "pSndfile nullptr!");
     assert(_pMembuf && "pMembuf nullptr!");
 
+    // Set current position
+    alSource3f(_source, AL_POSITION, transform.GetPosition().x,
+                                     transform.GetPosition().y,
+                                     transform.GetPosition().z);
+
     // Clear all errors
     alGetError();
 
@@ -164,6 +180,39 @@ void SoundBuffer::Update()
     }
 }
 
+void SoundBuffer::SetVolume(float value)
+{
+    assert((value >= 0 && value <= 1) && "acceptable range [0.0...1.0]");
+    alSourcef(_source, AL_GAIN, value);
+    _volume = value;
+}
+
+void SoundBuffer::SetPitch(float pitch)
+{
+    assert((pitch >= 0.5 && pitch <= 2.0) && "acceptable range [0.5...2.0]");
+    alSourcef(_source, AL_PITCH, pitch);
+    _pitch = pitch;
+}
+
+void SoundBuffer::SetMute(bool mute)
+{
+    _mute = mute;
+
+    if (mute) {
+        alSourcef(_source, AL_GAIN, 0.0f);
+        return;
+    }
+
+    alSourcef(_source, AL_GAIN, _volume);
+}
+
+void SoundBuffer::SetLoop(bool loop)
+{
+    _loop = loop;
+
+    alSourcei(_source, AL_LOOPING, loop);
+}
+
 bool SoundBuffer::IsPlaying() const
 {
     return _state == AL_PLAYING;
@@ -200,4 +249,12 @@ void SoundBuffer::Release()
 SoundBuffer::~SoundBuffer()
 {
     Release();
+}
+
+SoundBuffer* cast_object_to_sound_source(KitObject* pObject) 
+{
+    if (!pObject || pObject->Type() != KIT_OBJECT_SOUND)
+        return nullptr;       
+
+    return dynamic_cast<SoundBuffer*>(pObject); 
 }

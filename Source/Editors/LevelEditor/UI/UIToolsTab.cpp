@@ -4,6 +4,8 @@ namespace LevelEditor
 {
     void ToolsTab::Draw()
     {
+        auto& level = GameLevel::Get();
+
         ImGui::Begin("ToolsTab");
         ImGui::BeginTabBar("ToolsTab##TabBar");
         {
@@ -14,6 +16,14 @@ namespace LevelEditor
             }
         }
         ImGui::EndTabBar();
+
+
+        if (ImGui::Button("Add sound")) {
+            auto* pSound = level.CreateSound();
+            pSound->Init("../../Resources/sound/test.mp3");
+            pSound->Play();
+        }
+
         ImGui::End();
     }
 
