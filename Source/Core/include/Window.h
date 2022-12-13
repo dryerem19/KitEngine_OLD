@@ -6,6 +6,7 @@
 #include "Logger.h"
 #include "Events/WindowResizeEvent.h"
 #include "Events/FrameBufferResizeEvent.h"
+#include "Events/WindowCloseEvent.h"
 
 namespace Core
 {
@@ -37,6 +38,7 @@ namespace Core
         static void OnErrorCallback(int codeError, const char* descriptionError);        
         static void OnResizeCallback(GLFWwindow* window, int width, int height);
         static void OnFrameBufferResizeCallback(GLFWwindow* window, int width, int height);
+        static void OnWindowCloseCallback(GLFWwindow* window);
     public:
         explicit Window(const WindowProps& windowProps);
         ~Window();
