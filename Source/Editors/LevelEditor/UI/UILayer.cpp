@@ -30,7 +30,7 @@ namespace LevelEditor
 
         auto& sDevice = SoundManager::Instance();
     
-        sound.Init("test.mp3");
+        sound.Init("../../Resources/sound/test.mp3");
         sound.Play();
        
        // uint32_t soundId = SoundBuffer::Instance().Add("iamtheprotectorofthissystem.wav");
