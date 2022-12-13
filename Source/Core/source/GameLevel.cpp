@@ -88,10 +88,38 @@ void GameLevel::Deserialize(const std::string& filepath)
     mSkyBox.Deserialize(level["Skybox"].as<std::string>());
 }
 
+
 void GameLevel::InitSkybox(const std::string& filepath)
 {
     mSkyBox.Deserialize(filepath);
 }
+
+    Entity* GameLevel::Create(const std::string& name)
+    {
+        // Entity* pObj { nullptr };
+
+        // if (mRegistryNames.find(name) != mRegistryNames.end())
+        // {
+        //     mRegistryNames[name]++;
+        //     std::string new_name = name + "_" + std::to_string(mRegistryNames[name]);
+        //     mRegistryNames.insert({new_name, mRegistryNames[name]}); 
+
+        //     mObjects.insert({new_name, std::make_unique<Entity>()});
+        //     pObj = mObjects[new_name].get();
+        //     pObj->SetName(new_name);
+        // }
+        // else
+        // {
+        //     mObjects.insert({name, std::make_unique<Entity>()});
+        //     mRegistryNames.insert({name, 0});
+        //     pObj = mObjects[name].get();
+        //     pObj->SetName(name);
+        // }
+
+        // return pObj;
+
+        return nullptr;
+    }
 
 KitLight* GameLevel::CreateLigth()
 {

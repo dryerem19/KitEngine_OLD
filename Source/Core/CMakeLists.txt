@@ -23,6 +23,12 @@ find_package(SailC++ CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
 
+# For play sound files
+find_package(OpenAL CONFIG REQUIRED)
+
+# For read/write sound files
+find_package(SndFile CONFIG REQUIRED)
+
 target_link_libraries(${PROJECT_NAME}
         PUBLIC
         GLEW::GLEW
@@ -36,6 +42,8 @@ target_link_libraries(${PROJECT_NAME}
         yaml-cpp
         EnTT::EnTT
         assimp::assimp
+        OpenAL::OpenAL
+        SndFile::sndfile
 )
 
 target_precompile_headers(${PROJECT_NAME} PUBLIC "include/pch.h")

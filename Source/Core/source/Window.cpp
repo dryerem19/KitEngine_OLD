@@ -55,16 +55,9 @@ namespace Core
         glfwSetWindowUserPointer(m_pWindow, this);
         glfwSetWindowSizeCallback(m_pWindow, OnResizeCallback);       
         glfwSetFramebufferSizeCallback(m_pWindow, OnFrameBufferResizeCallback);  
+        glfwSetWindowCloseCallback(m_pWindow, OnWindowCloseCallback);
 
         glViewport(0, 0, mWidth, mHeight);
-
-        // int init_framebuffer_width, init_framebuffer_height;
-        // glfwGetFramebufferSize(m_pWindow, &init_framebuffer_width, &init_framebuffer_height);       
-        // if (eventHandlerCallback)
-        // {
-        //     FrameBufferResizeEvent event(init_framebuffer_width, init_framebuffer_height);
-        //     eventHandlerCallback(event);
-        // }
     }
 
     bool Window::Exec()
@@ -117,11 +110,20 @@ namespace Core
             handle.eventHandlerCallback(event);
         }        
     }
+
+    void Window::OnWindowCloseCallback(GLFWwindow *window)
+    {
+        auto& handle   = *(Window*)glfwGetWindowUserPointer(window);
+        if (!handle.eventHandlerCallback)
+            return;
+
+        WindowCloseEvent event;
+        handle.eventHandlerCallback(event);
+
+        if (event.close) {
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
+        } else {
+            glfwSetWindowShouldClose(window, GLFW_FALSE);
+        }
+    }
 }
-
-
-
-
-
-
-
