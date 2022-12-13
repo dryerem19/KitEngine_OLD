@@ -56,6 +56,9 @@ namespace LevelEditor
         Render::FrameBuffer frameBuffer;
         
         UIController* mUIController;
+
+        SoundBuffer sound;
+
         // UI Window
         UITopMainMenu uiTopMainMenu;
         UITopBarTools* uiTopBarTools;

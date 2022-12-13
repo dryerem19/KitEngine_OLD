@@ -12,7 +12,7 @@
 #include "SoundManager.h"
 
 SoundManager::SoundManager()
-    : pAlcDevice(nullptr), pAlcContext(nullptr)
+    : pAlcDevice(nullptr), pAlcContext(nullptr), _release(false)
 {
     pAlcDevice = alcOpenDevice(nullptr);
     assert(pAlcDevice && "Failed to get sound device");
@@ -33,6 +33,20 @@ SoundManager::SoundManager()
 
 SoundManager::~SoundManager()
 {
+    Release();
+}
+
+SoundManager& SoundManager::Instance()
+{
+    static SoundManager instance;
+    return instance;
+}
+
+void SoundManager::Release()
+{
+    if (_release)
+        return;
+
     ALCboolean result = alcMakeContextCurrent(nullptr);
     assert(result && "Failed to set sound context to nullptr");
 
@@ -41,10 +55,6 @@ SoundManager::~SoundManager()
 
     result = alcCloseDevice(pAlcDevice);
     assert(result && "Failed to close sound device");
-}
 
-SoundManager& SoundManager::Instance()
-{
-    static SoundManager instance;
-    return instance;
+    _release = true;
 }

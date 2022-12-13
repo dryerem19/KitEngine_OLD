@@ -14,14 +14,22 @@
 class SoundBuffer
 {
 private:
-    SoundBuffer();
-    SoundBuffer(const SoundBuffer&) = delete;
-    SoundBuffer& operator=(const SoundBuffer&) = delete;
-    ~SoundBuffer();
-private:
-    std::vector<ALuint> buffers;
+    static const uint32_t BUFFER_SAMPLES = 8192;
+    static const uint32_t NUM_BUFFERS = 4;
+    ALuint _source;
+    ALuint _buffers[NUM_BUFFERS];
+    SF_INFO _sfinfo;
+    ALenum _format;
+    short* _pMembuf;
+    SNDFILE* _pSndfile;
+    ALint _state;
 public:
-    static SoundBuffer& Instance();
-    ALuint Add(const char* pFilename);
-    bool Remove(const ALuint& buffer);
+    SoundBuffer();
+    ~SoundBuffer();
+    void Init(const char* pFilename);
+    void Play();
+    void Update();
+    bool IsPlaying() const;
+    ALint GetState() const;
+    void Release();
 };

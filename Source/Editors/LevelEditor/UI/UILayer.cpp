@@ -29,11 +29,14 @@ namespace LevelEditor
              / app.GetWindow()->GetHeight(), 0.1f, 100.0f);
 
         auto& sDevice = SoundManager::Instance();
-        uint32_t soundId = SoundBuffer::Instance().Add("/run/media/dryerem19/98D20AD9D20ABB8E/xray2/xr2-build-dsgn/xr2-dsgn/resources/sources/sounds/single/stereo_test/rain_stereo.ogg");
+    
+        sound.Init("test.mp3");
+        sound.Play();
+       
        // uint32_t soundId = SoundBuffer::Instance().Add("iamtheprotectorofthissystem.wav");
    
-        SoundSource speaker;
-        speaker.Play(soundId);
+        //SoundSource speaker;
+        //speaker.Play(soundId);
     }
 
     void UILayer::EventHandler(const Core::Event& event)
@@ -48,6 +51,12 @@ namespace LevelEditor
 
             EditorCamera::Instance().SetPerspective(45.0f, (float)e.GetWidth() / e.GetHeight(), 0.1f, 100.0f);
         }
+        else if (type == Core::EventType::WindowCloseEvent)
+        {
+           auto& sDevice = SoundManager::Instance(); 
+           sound.Release();
+           sDevice.Release();
+        }
 
         std::cout << event.ToString() << std::endl;
     }
@@ -57,6 +66,9 @@ namespace LevelEditor
         // Camera
         EditorCamera::Instance().Update();
         //Render::GameLevel::Get().Update();
+
+        if (sound.IsPlaying())
+            sound.Update();
         
     }
 

@@ -18,8 +18,11 @@ private:
     SoundManager& operator=(const SoundManager&) = delete;
     ~SoundManager();
 private:
+    bool _release;
+private:
     ALCdevice* pAlcDevice;
     ALCcontext* pAlcContext;
 public:
     static SoundManager& Instance();
+    void Release();
 };

@@ -6,7 +6,8 @@ namespace Core
     {
         None = 0,
         WindowResizeEvent,
-        FrameBufferResizeEvent
+        FrameBufferResizeEvent,
+        WindowCloseEvent
     };
 
     class Event
