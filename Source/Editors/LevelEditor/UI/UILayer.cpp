@@ -28,6 +28,9 @@ namespace LevelEditor
         EditorCamera::Instance().SetPerspective(45.0f, app.GetWindow()->GetWidth()
              / app.GetWindow()->GetHeight(), 0.1f, 100.0f);
 
+
+        //GameLevel::Get().InitSkybox("data/skybox/default.skybox");
+
         auto& sDevice = SoundManager::Instance();
     
         sound.Init("../../Resources/sound/test.mp3");
@@ -38,6 +41,7 @@ namespace LevelEditor
         //SoundSource speaker;
         //speaker.Play(soundId);
         //Render::GameLevel::Get().InitSkybox("data/skybox/default.skybox");
+
     }
 
     void UILayer::EventHandler(const Core::Event& event)
@@ -66,10 +70,14 @@ namespace LevelEditor
     {
         // Camera
         EditorCamera::Instance().Update();
+
+        //GameLevel::Get().Update();
+
         //Render::GameLevel::Get().Update();
 
         if (sound.IsPlaying())
             sound.Update();
+
         
     }
 
@@ -80,7 +88,7 @@ namespace LevelEditor
 
         RenderSystem::Instance().Render(EditorCamera::Instance());
 
-        //Render::GameLevel::Get().Draw(EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
+        //GameLevel::Get().Draw(EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
 
         frameBuffer.Unbind();
         Render::Renderer::Clear();

@@ -1,11 +1,10 @@
 #include "pch.h"
-#include "GameLevel.h"
 #include "Entity.h"
 
 
 void Entity::Spawn()
 {
-    Render::GameLevel::Get().mEntities.push_back(shared_from_this());
+    //GameLevel::Get().mEntities.push_back(shared_from_this());
 }
 
 
@@ -18,7 +17,7 @@ void Entity::SetModel(std::shared_ptr<Model> model)
 }
 
 
-Entity::Entity(const std::string& name /* = Root */)
+Entity::Entity(const std::string& name /* = Root */) : KitObject(KIT_OBJECT_ENTITY)
 {
-    mId++;
+    
 }

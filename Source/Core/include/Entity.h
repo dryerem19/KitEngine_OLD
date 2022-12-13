@@ -10,29 +10,20 @@
  */
 #pragma once
 #include "Model.h"
-#include "Transform.h"
+#include "KitObject.h"
 
-namespace Render
-{
-    class GameLevel;
-}
 
 /**
  * @brief Базовая игровая сущность
  */
-class Entity : public std::enable_shared_from_this<Entity>
+class Entity : public std::enable_shared_from_this<Entity>, public KitObject
 {
-private:
-    inline static uint32_t mId = 0;
-
 protected:
     
     /* Грязный флаг, отвечает за то, была ли изменена сущность */
     bool mIsDirty = true;    
 
     std::shared_ptr<Model> mModel;
-
-    Transform mTransform;
 
 public:
     /**
@@ -47,17 +38,10 @@ public:
 
     std::shared_ptr<Model> GetModel() const { return mModel; }
 
-    inline uint32_t GetId() const { return mId; }
-
-    inline Entity* GetSelf()
+    Entity* dnm_cast_entity() override
     {
-        return this;
+        return dynamic_cast<Entity*>(this);
     }
 
     void Spawn();
-
-    Transform& GetTransform()
-    {
-        return mTransform;
-    }
 };

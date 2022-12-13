@@ -41,11 +41,11 @@ namespace LevelEditor
 
     void UIViewport::DrawGizmo()
     {
-        const auto& level = Render::GameLevel::Get();
-        auto selected = level.GetSelectedEntity();
+        const auto& level = GameLevel::Get();
+        auto selected = level.GetSelectedObject();
         if (selected && mOperation != GizmoOperation::NONE)
         {
-            Transform& transform = selected->GetTransform();
+            Transform& transform = selected->transform;
 
             glm::vec3 position = transform.GetPosition();
             glm::vec3 rotation = glm::degrees(transform.GetRotation());

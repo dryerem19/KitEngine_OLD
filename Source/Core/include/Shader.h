@@ -28,7 +28,9 @@ namespace Render
         void Enable() const;
         void Disable();
         void SetUniform1i(const std::string& uniformName, int value);
+        void SetUniform1f(const std::string& uniformName, float value);
         void SetUniform4f(const std::string& uniformName, float x, float y, float z, float w) const;
+        void SetUniform3f(const std::string &uniformName, float x, float y, float z) const;
         void SetUniformMatrix4fv(const std::string& uniformName, GLsizei count, GLboolean transpose,
                                  const GLfloat *value) const;
     private:

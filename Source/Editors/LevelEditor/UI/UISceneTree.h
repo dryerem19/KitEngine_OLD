@@ -4,6 +4,7 @@
 #include "Core/KitUI.h"
 #include "Entity.h"
 #include "GameLevel.h"
+#include "KitLight.h"
 
 namespace LevelEditor
 {
