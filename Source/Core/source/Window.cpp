@@ -102,7 +102,8 @@ namespace Core
     void Window::OnFrameBufferResizeCallback(GLFWwindow* window, int width, int height)
     {
         auto& handle   = *(Window*)glfwGetWindowUserPointer(window);
-       
+        glViewport(0, 0, width, height);
+        
         if (handle.eventHandlerCallback)
         {
             FrameBufferResizeEvent event(width, height);

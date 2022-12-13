@@ -37,6 +37,7 @@ namespace LevelEditor
    
         //SoundSource speaker;
         //speaker.Play(soundId);
+        //Render::GameLevel::Get().InitSkybox("data/skybox/default.skybox");
     }
 
     void UILayer::EventHandler(const Core::Event& event)

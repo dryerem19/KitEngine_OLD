@@ -54,6 +54,7 @@ namespace LevelEditor
         void OnFinish() override;
 
         Render::FrameBuffer frameBuffer;
+
         
         UIController* mUIController;
 

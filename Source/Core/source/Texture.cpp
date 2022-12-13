@@ -4,16 +4,25 @@
 #include "pch.h"
 #include "Texture.h"
 
-Render::Texture::Texture(std::string path)
-    : mTextureId(0), mPath(std::move(path)) {
+Render::Texture::Texture(TextureType type) {
+    mType = type;
+}
 
-    if (mPath.empty()) {
+Render::Texture::~Texture() {
+
+    GLCall(glDeleteTextures(1, &mTextureId));
+
+}
+
+void Render::Texture::Init2D(const std::string& path)
+{
+    if (path.empty()) {
         std::runtime_error("The path to the texture file cannot be empty");
     }
 
     // Load image
     sail::image image;
-    image.load(mPath);
+    image.load(path);
 
     // Check on valid
     if (!image.is_valid()) {
@@ -47,21 +56,65 @@ Render::Texture::Texture(std::string path)
     GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-Render::Texture::~Texture() {
+void Render::Texture::InitCubeMap(std::string* pPath)
+{
+    mType = TextureType::TextureCubeMap;
+    assert(pPath && "The path to the texture file cannot be empty");
 
-    GLCall(glDeleteTextures(1, &mTextureId));
+    // Create new texture
+    GLCall(glGenTextures(1, &mTextureId));
 
+    // Use this texture now
+    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureId));
+
+    // Setup filters
+    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
+    
+    std::string* path = pPath;
+
+    // Load source image
+    for(uint8_t i = 0; i < 6; i++)
+    {
+        // Load image
+        sail::image image;
+        image.load(*path);
+
+        // Check on valid
+        if (!image.is_valid()) {
+            std::runtime_error("Error broken image");
+        }
+
+        // Convert to RGBA
+        if (SAIL_OK != image.convert(SAIL_PIXEL_FORMAT_BPP32_RGBA)) {
+            std::runtime_error("Cannot convert to rgba");
+        }
+
+        GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA8, static_cast<GLsizei>(image.width()),
+                   static_cast<GLsizei>(image.height()), 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                   image.pixels()));
+        path++;
+    }
+
+    // NOT use this texture now
+
+    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
 }
 
 void Render::Texture::Enable(uint32_t slotNumber /* = 0 */) const {
 
+    uint32_t type = mType == TextureType::Texture2D ? GL_TEXTURE_2D :  GL_TEXTURE_CUBE_MAP;
     GLCall(glActiveTexture(GL_TEXTURE0 + slotNumber));
-    GLCall(glBindTexture(GL_TEXTURE_2D, mTextureId));
+    GLCall(glBindTexture(type, mTextureId));
 
 }
 
 void Render::Texture::Disable() {
 
-    GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+    uint32_t type = mType == TextureType::Texture2D ? GL_TEXTURE_2D :  GL_TEXTURE_CUBE_MAP;
+    GLCall(glBindTexture(type, 0));
 
 }
