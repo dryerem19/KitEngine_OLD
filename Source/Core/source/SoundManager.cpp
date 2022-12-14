@@ -20,8 +20,14 @@ SoundManager::SoundManager()
     pAlcContext = alcCreateContext(pAlcDevice, nullptr);
     assert(pAlcContext && "Failed to set sound context");
 
+    /* Set active context */
     ALCboolean result = alcMakeContextCurrent(pAlcContext);
     assert(result && "Failed to make current ALC context");
+
+    /* Initialize listener */
+    alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
+    alListener3f(AL_VELOCITY, 0.0f, 0.0f, 0.0f);
+    alListenerf(AL_GAIN, 1.0f);
 
     const ALCchar* pName = nullptr;
     if (alcIsExtensionPresent(pAlcDevice, "ALC_ENUMERATE_ALL_EXT"))
@@ -51,14 +57,21 @@ void SoundManager::Release()
     if (_release)
         return;
 
+    /* Reset to current context to NULL */
     ALCboolean result = alcMakeContextCurrent(nullptr);
     assert(result && "Failed to set sound context to nullptr");
 
-    alcDestroyContext(pAlcContext);
-    assert(pAlcContext && "Failed to destroy sound context");
+    /* Destroy the context */
+    if (pAlcContext) {
+        alcDestroyContext(pAlcContext);
+        pAlcContext = nullptr;
+    }
 
-    result = alcCloseDevice(pAlcDevice);
-    assert(result && "Failed to close sound device");
+    /* Close the device */
+    if (pAlcDevice) {
+        result = alcCloseDevice(pAlcDevice);
+        pAlcDevice = nullptr;
+    }
 
     _release = true;
 }

@@ -89,6 +89,16 @@ const float* Transform::GetModelMatrix()
     return glm::value_ptr(mModelMatrix);
 }
 
+std::string Transform::DebugString() const
+{
+    std::stringstream ss;
+    ss << "[TRANSFORM INFO]\n" 
+       << "[POSITION] - {x: " << mTranslation.x << ", y: " << mTranslation.y << ", z: " << mTranslation.z << " }"
+       << "[ROTATION] - {x: " << mRotation.x << ", y: " << mRotation.y << ", z: " << mRotation.z << " }"
+       << "[SCALED]   - {x: " << mScale.x << ", y: " << mScale.y << ", z: " << mScale.z << " }\n";
+    return ss.str();
+}
+
 bool Transform::IsDirty() const
 {
     return mDirty;

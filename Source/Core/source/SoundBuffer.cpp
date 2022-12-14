@@ -125,6 +125,10 @@ void SoundBuffer::Update()
                                      transform.GetPosition().y,
                                      transform.GetPosition().z);
 
+    if (transform.IsDirty()) {
+        std::cout << transform.DebugString() << std::endl;
+    }                                     
+
     // Clear all errors
     alGetError();
 
