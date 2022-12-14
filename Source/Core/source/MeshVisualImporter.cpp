@@ -12,6 +12,7 @@
  */
 #include "pch.h"
 #include "MeshVisualImporter.h"
+#include "Logger.h"
 
 namespace Core
 {
@@ -33,6 +34,11 @@ namespace Core
                                 aiProcess_Triangulate                |
                                 aiProcess_OptimizeMeshes             |
                                 aiProcess_JoinIdenticalVertices      );
+
+        if (!pScene) {
+            Core::Log::Error("Assimp error: {} - {}", mFilepath.c_str(), importer.GetErrorString());
+            return;
+        }
 
         KitModelFile kmfFile;
         kmfFile.name = mModelName = std::filesystem::path(pScene->mRootNode->mName.C_Str()).replace_extension("").string();                                
