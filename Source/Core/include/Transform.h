@@ -42,5 +42,7 @@ public:
     const glm::vec3& GetScale() const;
     const float* GetModelMatrix();
 
+    std::string DebugString() const;
+
     bool IsDirty() const;
 };

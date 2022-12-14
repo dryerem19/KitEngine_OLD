@@ -2,6 +2,8 @@
 #include "Core/KitUI.h"
 #include "GameLevel.h"
 
+
+
 namespace LevelEditor
 {
     class Inspector final : public KitUI
@@ -12,5 +14,7 @@ namespace LevelEditor
     private:
         void DrawMaterial();
         void DrawTransformComponent();
+
+        void UISoundSource(SoundBuffer* pSoundSource);
     };
 }

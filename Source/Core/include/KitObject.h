@@ -11,9 +11,10 @@
 #pragma once
 #include "Transform.h"
 
-#define KIT_OBJECT_NONE 0
-#define KIT_OBJECT_ENTITY 1
-#define KIT_OBJECT_LIGHT 2
+#define KIT_OBJECT_NONE     0
+#define KIT_OBJECT_ENTITY   1
+#define KIT_OBJECT_LIGHT    2
+#define KIT_OBJECT_SOUND    3
 
 class GameLevel;
 

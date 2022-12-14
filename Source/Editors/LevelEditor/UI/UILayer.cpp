@@ -33,8 +33,8 @@ namespace LevelEditor
 
         auto& sDevice = SoundManager::Instance();
     
-        sound.Init("../../Resources/sound/test.mp3");
-        sound.Play();
+        // sound.Init("../../Resources/sound/test.mp3");
+        // sound.Play();
        
        // uint32_t soundId = SoundBuffer::Instance().Add("iamtheprotectorofthissystem.wav");
    
@@ -59,7 +59,7 @@ namespace LevelEditor
         else if (type == Core::EventType::WindowCloseEvent)
         {
            auto& sDevice = SoundManager::Instance(); 
-           sound.Release();
+           //sound.Release();
            sDevice.Release();
         }
 
@@ -71,14 +71,21 @@ namespace LevelEditor
         // Camera
         EditorCamera::Instance().Update();
 
+        auto& level = GameLevel::Get();
+
         //GameLevel::Get().Update();
 
         //Render::GameLevel::Get().Update();
 
-        if (sound.IsPlaying())
-            sound.Update();
+        // if (sound.IsPlaying())
+        //     sound.Update();
 
-        
+        for (auto& sound : level._soundsources) 
+        {
+            if (sound->IsPlaying()) {
+                sound->Update();
+            }
+        }
     }
 
     void UILayer::OnRender(double dt) 
