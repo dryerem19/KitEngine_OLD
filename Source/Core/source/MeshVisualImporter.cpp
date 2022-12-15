@@ -36,7 +36,7 @@ namespace Core
                                 aiProcess_JoinIdenticalVertices      );
 
         if (!pScene) {
-            Core::Log::Error("Assimp error: {} - {}", mFilepath.c_str(), importer.GetErrorString());
+            Core::Log::Error("Assimp error: {} - {}", mFilepath.string().c_str(), importer.GetErrorString());
             return;
         }
 
