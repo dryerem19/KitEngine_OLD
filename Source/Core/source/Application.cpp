@@ -3,6 +3,7 @@
 //
 #include "pch.h"
 #include "Application.h"
+#include "KitCore.h"
 
 //------------------------------------------------------------------------------------
 // PUBLIC SECTION

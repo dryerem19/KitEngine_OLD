@@ -3,6 +3,7 @@ project(KitEngine VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 if (WIN32)
     set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake
@@ -26,6 +27,8 @@ set(CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY ${COMPILE_OUTPUT_FOLDER})
 
 add_subdirectory(Source)
 add_subdirectory(Resources)
+
+#add_compile_options("$<$<CONFIG:DEBUG>:-DDEBUG>")
 
 #target_include_directories(LevelEditor PUBLIC KitEngine/include)
 #target_link_libraries(LevelEditor PRIVATE KitEngine kitModelLoader LevelEditor)
