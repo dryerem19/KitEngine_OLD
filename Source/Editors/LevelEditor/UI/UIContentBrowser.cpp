@@ -43,6 +43,8 @@ namespace LevelEditor
                 std::cout << "forward: " << _currentDirectoryId << "\n";
                 std::cout << "folder: " << _currentDirectory << "\n";
             }
+            ImGui::SameLine();
+            ImGui::Text(_currentDirectory.filename().string().c_str());
 
             if(ImGui::BeginPopupContextWindow("Content Browser"))
             {
