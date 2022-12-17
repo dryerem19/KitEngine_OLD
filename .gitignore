@@ -2,6 +2,8 @@
 !3rdparty
 
 # Ignore
+CMakeFiles/
+CMakeCache.txt
 build/
 cmake-build-debug-visual-studio/
 cmake-build-debug/
