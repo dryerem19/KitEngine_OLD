@@ -76,7 +76,8 @@ namespace LevelEditor
         if(!GameLevel::Get()._lights.empty())
         {
             ImGui::ColorPicker4("Picker", &GameLevel::Get()._lights[0]->mColor.x);
-            ImGui::DragFloat("Intensity", &GameLevel::Get()._lights[0]->mAmbientStrength, 0.01f, 0.0f, 50.0f);
+            ImGui::DragFloat("Intensity\nAmbient", &GameLevel::Get()._lights[0]->mAmbientStrength, 0.01f, 0.0f, 50.0f);
+            ImGui::DragFloat("Intensity\nSpecular", &GameLevel::Get()._lights[0]->mSpecularStrength, 0.01f, 0.0f, 10.0f);
         }
 
     }

@@ -35,7 +35,9 @@ layout(location = 0) out vec4 OutColor;
 uniform sampler2D uTextureDiffuse;
 uniform vec4 uLightColor;
 uniform float uAmbientStrength;
+uniform float uSpecularStrength;
 uniform vec3 uLigthPos;
+uniform vec3 uViewPos;
 
 in vec2 vTexcoord;
 in vec3 Normal;
@@ -48,5 +50,11 @@ void main()
     float diff = max(dot(normal, lightDir), 0.0);
     vec4 diffuse = diff * uLightColor;
     vec4 ambient = uAmbientStrength * uLightColor;
-    OutColor = (ambient + diffuse) * texture(uTextureDiffuse, vTexcoord);
+
+    vec3 viewDir = normalize(uViewPos - FragPos);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    vec4 specular = uSpecularStrength * spec * uLightColor;
+    
+    OutColor = (ambient + diffuse + specular) * texture(uTextureDiffuse, vTexcoord);
 }
