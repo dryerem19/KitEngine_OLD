@@ -32,6 +32,7 @@ public:
 
     glm::vec4 mColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
     float mAmbientStrength = 1.f;
+    float mSpecularStrength = 0.5f;
 };
 
 KitLight* dnm_cast_light(KitObject* object);

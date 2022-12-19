@@ -63,6 +63,8 @@ public:
                         material->mShader->SetUniform4f("uLightColor", light->mColor[0], light->mColor[1], 
                                                                          light->mColor[2], light->mColor[3]);
                         material->mShader->SetUniform1f("uAmbientStrength", light->mAmbientStrength);
+                        material->mShader->SetUniform1f("uSpecularStrength", light->mSpecularStrength);
+                        material->mShader->SetUniform3f("uViewPos", camera.GetPos().x, camera.GetPos().y, camera.GetPos().z);
                     }
                     material->mShader->SetUniformMatrix4fv("uView", 1, GL_FALSE, camera.GetView());
                     material->mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, camera.GetPerspective()); 
