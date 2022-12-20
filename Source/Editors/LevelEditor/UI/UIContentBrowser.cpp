@@ -46,6 +46,8 @@ namespace LevelEditor
             ImGui::SameLine();
             ImGui::Text(_currentDirectory.filename().string().c_str());
 
+            
+
             if(ImGui::BeginPopupContextWindow("Content Browser"))
             {
                 if(ImGui::Selectable("New Folder"))

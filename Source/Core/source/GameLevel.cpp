@@ -85,7 +85,10 @@ void GameLevel::Deserialize(const std::string& filepath)
         ent->SetName(ent->GetModel()->mName);
     }
 
-    mSkyBox.Deserialize(level["Skybox"].as<std::string>());
+    std::string skybox_path = level["Skybox"].as<std::string>();
+    if (std::filesystem::exists(skybox_path)) {
+        mSkyBox.Deserialize(level["Skybox"].as<std::string>());
+    }
 }
 
 
