@@ -11,6 +11,9 @@
 #pragma once
 #include "Core/KitUI.h"
 #include "MeshVisualImporter.h"
+
+#include "Tools/ModelImportTool.h"
+
 #include <filesystem>
 #include <fstream>
 #include <stack>
@@ -51,5 +54,6 @@ namespace LevelEditor
         bool mMeshImportModel;
         std::string mModelValidExtensionList;
         std::filesystem::path mImportFilePath;
+        std::string mModelImportTextureDirectory;
     };
 }

@@ -62,6 +62,7 @@ namespace LevelEditor
                         mImportFilePath = ImGuiFileDialog::Instance()->GetFilePathName();
                         std::string extension = mImportFilePath.extension().string();
                         if (mModelValidExtensionList.find(extension) != std::string::npos) {
+                            mModelImportTextureDirectory = mImportFilePath.parent_path().string();
                             mMeshImportModel = true;
                         }
                         mImportWindowOpen = false;
@@ -71,24 +72,27 @@ namespace LevelEditor
             }
 
             if (mMeshImportModel) {
-                ImGui::Begin("Mesh import", &mMeshImportModel);
+                ImGui::Begin("Model import", &mMeshImportModel);
                 {
                     ImGui::Text("Path: ");
                     ImGui::SameLine();
                     ImGui::Text(mImportFilePath.string().c_str());
 
-                    std::string textureDirectory = mImportFilePath.parent_path().string();
                     ImGui::Text("Texture directory: ");
                     ImGui::SameLine();
-                    ImGui::InputText("##TextureDirectory", &textureDirectory);  
+                    ImGui::InputText("##TextureDirectory", &mModelImportTextureDirectory);  
 
                     if (ImGui::Button("Import")) {
-                        Core::MeshVisualImporter imp;
-                        imp.mTextureDirectory = textureDirectory;
-                        imp.LoadVisual(mImportFilePath);
+                        ModelImportTool importTool;
+                        importTool.mModelFilepath = mImportFilePath;
+                        importTool.mTextureDirectory = mModelImportTextureDirectory;
+                        if (importTool.Import()) {
+                            importTool.Save();
+                        }
+                        std::cout << importTool.mLogList.str() << std::endl;
                     }
                 }
-                ImGui::End();                
+                ImGui::End();
             }
 
             if(ImGui::BeginPopupContextWindow("Content Browser"))
