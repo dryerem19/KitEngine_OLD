@@ -145,16 +145,19 @@ namespace Core
         aiString texture_name;
         aiReturn aiResult = pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texture_name);
 
+
         /**
          * Assimp может хранить путь к текстуре или имя текстуры, которое также может быть относительным путём.
          * Мы проверяем этот факт в условии и если текстуры по такому пути не существует, то предпологаем, что
          * текстура лежит в директории модели
          */
         std::filesystem::path diffuse_texture_path(texture_name.C_Str());
+        std::cout << diffuse_texture_path.string() << std::endl;
         if (!std::filesystem::exists(diffuse_texture_path))
         {
             diffuse_texture_path.clear();
-            diffuse_texture_path.append(directory).append(texture_name.C_Str());
+            //diffuse_texture_path.append(directory).append(texture_name.C_Str());
+            diffuse_texture_path.append(mTextureDirectory).append(texture_name.C_Str());
 
             std::filesystem::path diffuse_texture_save_path(mTextureSaveDirectory);
             diffuse_texture_save_path.append(texture_name.C_Str());

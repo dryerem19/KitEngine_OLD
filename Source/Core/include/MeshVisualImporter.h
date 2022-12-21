@@ -13,6 +13,7 @@
 #pragma once
 #include "KitModelFile.h"
 #include "KitMaterialFile.h"
+#include "KitCore.h"
 
 namespace Core
 {
@@ -27,8 +28,10 @@ namespace Core
         std::string mModelSaveDirectory;
         std::string mMaterialSavelDirectory;
         std::string mTextureSaveDirectory;
-
         std::string mModelName;
+
+        std::string mTextureDirectory;
+
     public:
          MeshVisualImporter() = default;
          MeshVisualImporter( const std::filesystem::path& filepath )

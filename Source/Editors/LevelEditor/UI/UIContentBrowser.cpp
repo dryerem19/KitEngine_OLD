@@ -16,6 +16,9 @@ namespace LevelEditor
         _currentDirectory = "data";
         _forwardDirectory.push_back(_currentDirectory);
         _currentDirectoryId = 0;
+
+        Assimp::Importer importer;
+        importer.GetExtensionList(mModelValidExtensionList);        
     }
 
     void UIContentBrowser::Draw()
@@ -46,7 +49,47 @@ namespace LevelEditor
             ImGui::SameLine();
             ImGui::Text(_currentDirectory.filename().string().c_str());
 
-            
+            ImGui::SameLine();
+            if (ImGui::Button("Import")) 
+            {
+                mImportWindowOpen = true;
+            }
+
+            if (mImportWindowOpen) {
+                ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".*", ".");
+                if(ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+                    if(ImGuiFileDialog::Instance()->IsOk()) {
+                        mImportFilePath = ImGuiFileDialog::Instance()->GetFilePathName();
+                        std::string extension = mImportFilePath.extension().string();
+                        if (mModelValidExtensionList.find(extension) != std::string::npos) {
+                            mMeshImportModel = true;
+                        }
+                        mImportWindowOpen = false;
+                    }
+                    ImGuiFileDialog::Instance()->Close();
+                }
+            }
+
+            if (mMeshImportModel) {
+                ImGui::Begin("Mesh import", &mMeshImportModel);
+                {
+                    ImGui::Text("Path: ");
+                    ImGui::SameLine();
+                    ImGui::Text(mImportFilePath.string().c_str());
+
+                    std::string textureDirectory = mImportFilePath.parent_path().string();
+                    ImGui::Text("Texture directory: ");
+                    ImGui::SameLine();
+                    ImGui::InputText("##TextureDirectory", &textureDirectory);  
+
+                    if (ImGui::Button("Import")) {
+                        Core::MeshVisualImporter imp;
+                        imp.mTextureDirectory = textureDirectory;
+                        imp.LoadVisual(mImportFilePath);
+                    }
+                }
+                ImGui::End();                
+            }
 
             if(ImGui::BeginPopupContextWindow("Content Browser"))
             {
