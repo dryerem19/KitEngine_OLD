@@ -14,6 +14,9 @@
 
 #include "Tools/ModelImportTool.h"
 
+#include "ResourceManager.h"
+#include "GameLevel.h"
+
 #include <filesystem>
 #include <fstream>
 #include <stack>
