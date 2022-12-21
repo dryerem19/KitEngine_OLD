@@ -49,15 +49,28 @@ namespace Core
             // TODO: assert
             glfwTerminate();
             exit(1); 
-        }  
+        }
 
         glfwMakeContextCurrent(m_pWindow);
+
+        GLFWimage image[1];
+        sail::image icon("16x16.png");
+        
+        image[0].pixels = reinterpret_cast<unsigned char*>(icon.pixels());
+        image[0].width = icon.width();
+        image[0].height = icon.height();
+
+        glfwSetWindowIcon(m_pWindow, 1, image);
+
         glfwSetWindowUserPointer(m_pWindow, this);
         glfwSetWindowSizeCallback(m_pWindow, OnResizeCallback);       
         glfwSetFramebufferSizeCallback(m_pWindow, OnFrameBufferResizeCallback);  
         glfwSetWindowCloseCallback(m_pWindow, OnWindowCloseCallback);
 
         glViewport(0, 0, mWidth, mHeight);
+        
+
+
     }
 
     bool Window::Exec()
