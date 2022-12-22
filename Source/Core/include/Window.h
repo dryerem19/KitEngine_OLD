@@ -35,6 +35,8 @@ namespace Core
         GLFWwindow* m_pWindow = nullptr;
         std::function<void(Event&)> eventHandlerCallback;
 
+        glm::vec2 mFrameBufferSize;
+
         static void OnErrorCallback(int codeError, const char* descriptionError);        
         static void OnResizeCallback(GLFWwindow* window, int width, int height);
         static void OnFrameBufferResizeCallback(GLFWwindow* window, int width, int height);
@@ -55,5 +57,7 @@ namespace Core
         inline uint32_t GetHeight() const { return mHeight; }
         inline std::string GetTitle() const { return mTitle; }
         inline GLFWwindow* GetWindowPointer() const { return m_pWindow; }
+
+        const glm::vec2& GetFrameBufferSize() const { return mFrameBufferSize; }
     };
 }

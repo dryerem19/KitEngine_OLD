@@ -103,6 +103,9 @@ namespace Core
     {
         auto& handle   = *(Window*)glfwGetWindowUserPointer(window);
         glViewport(0, 0, width, height);
+
+        handle.mFrameBufferSize.x = width;
+        handle.mFrameBufferSize.y = height;
         
         if (handle.eventHandlerCallback)
         {
