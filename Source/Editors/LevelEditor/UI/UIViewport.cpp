@@ -19,10 +19,8 @@ namespace LevelEditor
             if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
                 auto pos = RenderBackend::Get().GetCursor3d().GetPickPoint(EditorCamera::Instance(), 
                     glm::vec2(mWidth, mHeight));
-                DEBUG_MSG("x: %.3f, y: %.3f, z: %.3f", pos.x, pos.y, pos.z);
+                DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", pos.x, pos.y, pos.z);
             }
-
-            ImGuiIO& io = ImGui::GetIO();
 
             // Если размеры вьюпорта изменились, меняем размеры буфера кадра
             int width  = vMax.x - vMin.x;
@@ -34,11 +32,20 @@ namespace LevelEditor
                 EditorCamera::Instance().UpdateAspect((float)mWidth / mHeight);
             }
 
-            if(ImGui::BeginDragDropTarget())
-            {
-                if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Item_content_browser"))
-                {
-                    const wchar_t* path = (const wchar_t*)payload->Data;
+            if(ImGui::BeginDragDropTarget()) {
+                auto payload = ImGui::AcceptDragDropPayload("Item_content_browser");
+                if (payload != nullptr) {
+                    std::string* filepath = (std::string*)payload->Data;
+                    if (filepath != nullptr) {
+                        glm::vec3 pos = RenderBackend::Get().GetCursor3d().GetPickPoint(EditorCamera::Instance(), 
+                            glm::vec2(mWidth, mHeight));
+                        
+                        std::cout << (*filepath).c_str() << std::endl;
+                        Entity* pEntity = GameLevel::Get().CreateEntity();
+                        pEntity->SetModel(Core::ResourceManager::Instance().GetModel(*filepath));
+                        pEntity->SetName(pEntity->GetModel()->mName);
+                        pEntity->transform.SetPosition(pos);
+                    }
                 }
                 ImGui::EndDragDropTarget();
             }

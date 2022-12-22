@@ -58,5 +58,7 @@ namespace LevelEditor
         std::string mModelValidExtensionList;
         std::filesystem::path mImportFilePath;
         std::string mModelImportTextureDirectory;
+
+        std::string mSelectedFilepath;
     };
 }
