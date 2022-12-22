@@ -19,11 +19,11 @@ namespace LevelEditor
 
         mUIController   = new UIController(uiTopBarTools, uiViewport);
 
-        uiViewport->frameBuffer = &frameBuffer;
+        //uiViewport->frameBuffer = &frameBuffer;
         uiTopMainMenu.uiSceneTree = &uiSceneTree;
         
         auto& app = Core::Application::Instance();
-        frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
+        //frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
 
         EditorCamera::Instance().SetPerspective(45.0f, app.GetWindow()->GetWidth()
              / app.GetWindow()->GetHeight(), 0.1f, 100.0f);
@@ -51,10 +51,10 @@ namespace LevelEditor
         {
             auto& e = (Core::FrameBufferResizeEvent&)event;
 
-            frameBuffer.Delete();
-            frameBuffer.Init(e.GetWidth(), e.GetHeight());
+            //frameBuffer.Delete();
+            //frameBuffer.Init(e.GetWidth(), e.GetHeight());
 
-            EditorCamera::Instance().SetPerspective(45.0f, (float)e.GetWidth() / e.GetHeight(), 0.1f, 100.0f);
+            //EditorCamera::Instance().SetPerspective(45.0f, (float)e.GetWidth() / e.GetHeight(), 0.1f, 100.0f);
         }
         else if (type == Core::EventType::WindowCloseEvent)
         {
@@ -90,14 +90,17 @@ namespace LevelEditor
 
     void UILayer::OnRender(double dt) 
     {
-        frameBuffer.Bind();
+        //frameBuffer.Bind();
+
+        RenderBackend::Get().BeginFrame();
         Render::Renderer::Clear();
 
         RenderSystem::Instance().Render(EditorCamera::Instance());
 
         //GameLevel::Get().Draw(EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
 
-        frameBuffer.Unbind();
+        //frameBuffer.Unbind();
+        RenderBackend::Get().EndFrame();
         Render::Renderer::Clear();
     }
 

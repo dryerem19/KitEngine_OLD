@@ -13,10 +13,13 @@
 #include "Geometry.h"
 #include "Shader.h"
 
+#include "FrameBuffer.h"
+#include "Cursor3D.h"
+
 class RenderBackend final
 {
 private:
-    RenderBackend() = default;
+    RenderBackend();
     RenderBackend(const RenderBackend&) = delete;
     RenderBackend& operator=(const RenderBackend&) = delete;
 public:
@@ -34,6 +37,9 @@ public:
 private:
     Geometry* m_pGeometry = nullptr;
 
+    Render::FrameBuffer mFrameBuffer;
+    Cursor3D mCursor3d;
+
 public:
 
     inline static RenderBackend& Get()
@@ -41,6 +47,13 @@ public:
         static RenderBackend instance;
         return instance;
     }
+
+    void BeginFrame();
+    void EndFrame();
+    void Resize(const int& width, const int& height);
+    void* GetFrame() const { return reinterpret_cast<void*>(mFrameBuffer.GetTextureRenderID()); }
+
+    Cursor3D& GetCursor3d() { return mCursor3d; }
 
     inline void SetGeometry(Geometry* pGeometry)
     {

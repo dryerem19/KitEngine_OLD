@@ -5,7 +5,12 @@
 #include "BaseCamera.h"
 
 
-void Core::BaseCamera::SetPerspective(float fovy, float aspect, float zNear, float zFar) {
+void Core::BaseCamera::SetPerspective(float fovy, float aspect, float zNear, float zFar) 
+{
+    mFovy = fovy;
+    mAspect = aspect;
+    mZNear = zNear;
+    mZFar = zFar;
     mProjection = glm::perspective(fovy, aspect, zNear, zFar);
 }
 
@@ -19,4 +24,10 @@ const float* Core::BaseCamera::GetView() const {
 
 const float* Core::BaseCamera::GetPerspective() const {
     return glm::value_ptr(mProjection);
+}
+
+void Core::BaseCamera::UpdateAspect(const float &aspect)
+{
+    mAspect = aspect;
+    SetPerspective(mFovy, mAspect, mZNear, mZFar);
 }

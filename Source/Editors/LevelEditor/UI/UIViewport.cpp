@@ -4,11 +4,9 @@ namespace LevelEditor
 {
     void UIViewport::Draw()
     {
-        uint32_t backTexture = frameBuffer->GetTextureRenderID();
-
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(3.0f,3.0f));
         
-        ImGui::Begin("Viewport");
+        ImGui::Begin("Viewport", 0, ImGuiWindowFlags_NoScrollbar);
         {
             ImVec2 vMin = ImGui::GetWindowContentRegionMin();
             ImVec2 vMax = ImGui::GetWindowContentRegionMax();
@@ -16,8 +14,25 @@ namespace LevelEditor
             vMin.y += ImGui::GetWindowPos().y;
             vMax.x += ImGui::GetWindowPos().x;
             vMax.y += ImGui::GetWindowPos().y;
-            //ImGui::GetWindowDrawList()->AddImage((ImTextureID)backTexture, vMin, vMax, ImVec2(0,1), ImVec2(1,0));
-            ImGui::Image((ImTextureID)backTexture, ImGui::GetContentRegionAvail(), ImVec2(0,1), ImVec2(1,0));
+
+            ImGui::Image(RenderBackend::Get().GetFrame(), ImVec2(mWidth, mHeight), ImVec2(0,1), ImVec2(1,0));
+            if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+                auto pos = RenderBackend::Get().GetCursor3d().GetPickPoint(EditorCamera::Instance(), 
+                    glm::vec2(mWidth, mHeight));
+                DEBUG_MSG("x: %.3f, y: %.3f, z: %.3f", pos.x, pos.y, pos.z);
+            }
+
+            ImGuiIO& io = ImGui::GetIO();
+
+            // Если размеры вьюпорта изменились, меняем размеры буфера кадра
+            int width  = vMax.x - vMin.x;
+            int height = vMax.y - vMin.y;
+            if (mWidth != width || mHeight != height) {
+                mWidth = width;
+                mHeight = height;
+                RenderBackend::Get().Resize(mWidth, mHeight);
+                EditorCamera::Instance().UpdateAspect((float)mWidth / mHeight);
+            }
 
             if(ImGui::BeginDragDropTarget())
             {
@@ -32,7 +47,7 @@ namespace LevelEditor
 
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
-            ImGuizmo::SetRect(vMin.x, vMin.y, vMax.x - vMin.x, vMax.y - vMin.y);
+            ImGuizmo::SetRect(vMin.x, vMin.y, mWidth, mHeight);
             DrawGizmo();
         } 
         ImGui::End();

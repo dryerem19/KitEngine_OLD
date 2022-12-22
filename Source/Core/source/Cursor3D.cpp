@@ -11,32 +11,47 @@
 #include "pch.h"
 #include "Cursor3D.h"
 
-glm::vec3 Cursor3D::GetPickPoint(const Core::BaseCamera& camera)
+glm::vec3 Cursor3D::GetPickPoint(const Core::BaseCamera& camera, const glm::vec2& viewport)
 {
     auto& app = Core::Application::Instance();
-    const glm::vec2& frameBufferSize = app.GetWindow()->GetFrameBufferSize();
+    
+    float mouseX = Core::Input::mousePosition.x;
+    float mouseY = Core::Input::mousePosition.y;
 
-    // Step 1 - Viewport to NDC
-    const glm::vec2 mp = Core::Input::mousePosition;
-    glm::vec2 ndc {
-        (2.0f * mp.x) / frameBufferSize.x - 1.0f,
-        1.0f - (2.0f * mp.y) / frameBufferSize.y
-    }; 
+    glm::vec2 normalizedCoords = GetNormalizedDeviceCoords(mouseX, mouseY);
+    glm::vec4 clipCoords = glm::vec4(normalizedCoords.x, normalizedCoords.y, -1.0f, 1.0f);
+    glm::vec4 eyeCoords = ToEyeCoords(clipCoords, camera);
+    glm::vec3 worldRay = ToWorldCoords(eyeCoords, camera);
 
-    // Step 2 - NDC to view
-    glm::vec4 ray_clip { ndc.x, ndc.y, -1.0, 1.0 };
+    return worldRay;
+}
 
-    // Step 3 - 3D Camera coordinates
+glm::vec3 Cursor3D::ToWorldCoords(const glm::vec4 &eyeCoords, const Core::BaseCamera &camera)
+{
+    glm::mat4 invertedView = glm::inverse(camera.GetGlmView());
+    glm::vec4 rayWorld = invertedView * eyeCoords;
+    glm::vec3 mouseRay = glm::vec3(rayWorld.x, rayWorld.y, rayWorld.z);
+    mouseRay = glm::normalize(mouseRay);
+    return mouseRay;
+}
+
+glm::vec4 Cursor3D::ToEyeCoords(const glm::vec4 &clipCoords, const Core::BaseCamera &camera)
+{
     const glm::mat4& proj = camera.GetProj();
     glm::mat4 projInv = glm::inverse(proj);
-    glm::vec4 ray_eye = projInv * ray_clip;
-    ray_eye = glm::vec4(ray_eye.x, ray_eye.y, -1.0, 0.0);
 
-    // Step 4 - 4D World coordinates
-    const glm::mat4& view = camera.GetGlmView();
-    glm::vec4 ray_world_4d = glm::inverse(view) * ray_eye;
-    glm::vec3 ray_world { ray_world_4d.x, ray_world_4d.y, ray_world_4d.z };
-    ray_world = glm::normalize(ray_world);
+    glm::vec4 eyeCoords = projInv * clipCoords;
+    return glm::vec4(eyeCoords.x, eyeCoords.y, -1.0f, 1.0f);
+}
 
-    return ray_world;
+glm::vec2 Cursor3D::GetNormalizedDeviceCoords(const float &mouseX, const float &mouseY)
+{
+    auto& app = Core::Application::Instance();
+    float width = app.GetWindow()->GetWidth();
+    float height = app.GetWindow()->GetHeight();
+
+    float x = (2.0f * mouseX) / width - 1.0f;
+    float y = (2.0f * mouseY) / height - 1.0f;
+
+    return glm::vec2(x, y);
 }

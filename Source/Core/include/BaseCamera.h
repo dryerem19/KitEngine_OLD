@@ -9,6 +9,12 @@ namespace Core
 {
     class BaseCamera
     {
+    private:
+        float mFovy;
+        float mAspect;
+        float mZNear;
+        float mZFar;
+
     public:
         BaseCamera() = default;
         ~BaseCamera() = default;
@@ -22,6 +28,7 @@ namespace Core
         glm::vec3 GetFront() const { return cameraFront; };
         glm::vec3 GetUp() const { return cameraUp; };
 
+        void UpdateAspect(const float& aspect);
         const glm::mat4& GetProj() const { return mProjection; }
 
     protected:

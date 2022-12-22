@@ -6,12 +6,18 @@
 #include "Entity.h"
 #include "GameLevel.h"
 
+#include "KitCore.h"
+
 namespace LevelEditor
 {
     class UIViewport : public KitUI
     {
     private:
         GizmoOperation mOperation;
+
+        int mWidth;
+        int mHeight;
+
     public:
         UIViewport() = default;
         UIViewport(IController* controller) : KitUI(controller) { }

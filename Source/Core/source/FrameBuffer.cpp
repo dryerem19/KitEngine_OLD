@@ -10,7 +10,7 @@ Render::FrameBuffer::~FrameBuffer() {
 }
 
 Render::FrameBuffer::FrameBuffer()
- {
+{
 
 }
 
