@@ -10,6 +10,13 @@
  */
 #pragma once
 #include "Core/KitUI.h"
+#include "MeshVisualImporter.h"
+
+#include "Tools/ModelImportTool.h"
+
+#include "ResourceManager.h"
+#include "GameLevel.h"
+
 #include <filesystem>
 #include <fstream>
 #include <stack>
@@ -45,5 +52,13 @@ namespace LevelEditor
         bool mIsFolder = false;
         bool mIsCheckDeleteFile = false;
         bool mIsCheckRenameFile = false;
+
+        bool mImportWindowOpen;
+        bool mMeshImportModel;
+        std::string mModelValidExtensionList;
+        std::filesystem::path mImportFilePath;
+        std::string mModelImportTextureDirectory;
+
+        std::string mSelectedFilepath;
     };
 }

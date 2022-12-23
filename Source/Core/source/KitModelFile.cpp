@@ -15,7 +15,7 @@
 
 void KitModelFile::Serialize(const std::string& filepath)
 {
-    std::ofstream out(filepath, std::ios::binary);
+    std::ofstream out(filepath + ".kmf", std::ios::binary);
 
     out.write(reinterpret_cast<const char*>(&version), sizeof(version));
     

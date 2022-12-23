@@ -80,7 +80,7 @@ namespace Core
 
     void Window::Update()
     {
-        glfwPollEvents();    
+        glfwPollEvents();
     }
 
     void Window::SwapBuffers()
@@ -115,7 +115,11 @@ namespace Core
     void Window::OnFrameBufferResizeCallback(GLFWwindow* window, int width, int height)
     {
         auto& handle   = *(Window*)glfwGetWindowUserPointer(window);
-        glViewport(0, 0, width, height);
+        //glViewport(0, 0, width, height);
+
+
+        handle.clientArea.x = width;
+        handle.clientArea.y = height;
         
         if (handle.eventHandlerCallback)
         {

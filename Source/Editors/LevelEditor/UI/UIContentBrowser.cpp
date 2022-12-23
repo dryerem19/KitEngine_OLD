@@ -16,6 +16,9 @@ namespace LevelEditor
         _currentDirectory = "data";
         _forwardDirectory.push_back(_currentDirectory);
         _currentDirectoryId = 0;
+
+        Assimp::Importer importer;
+        importer.GetExtensionList(mModelValidExtensionList);        
     }
 
     void UIContentBrowser::Draw()
@@ -46,7 +49,55 @@ namespace LevelEditor
             ImGui::SameLine();
             ImGui::Text(_currentDirectory.filename().string().c_str());
 
-            
+            ImGui::SameLine();
+            if (ImGui::Button("Import")) 
+            {
+                mImportWindowOpen = true;
+            }
+
+            if (mImportWindowOpen) {
+                ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".*", ".");
+                if(ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+                    if(ImGuiFileDialog::Instance()->IsOk()) {
+                        mImportFilePath = ImGuiFileDialog::Instance()->GetFilePathName();
+                        std::string extension = mImportFilePath.extension().string();
+                        if (mModelValidExtensionList.find(extension) != std::string::npos) {
+                            mModelImportTextureDirectory = mImportFilePath.parent_path().string();
+                            mMeshImportModel = true;
+                        }
+                        mImportWindowOpen = false;
+                    }
+                    ImGuiFileDialog::Instance()->Close();
+                }
+            }
+
+            if (mMeshImportModel) {
+                ImGui::Begin("Model import", &mMeshImportModel);
+                {
+                    ImGui::Text("Path: ");
+                    ImGui::SameLine();
+                    ImGui::Text(mImportFilePath.string().c_str());
+
+                    ImGui::Text("Texture directory: ");
+                    ImGui::SameLine();
+                    ImGui::InputText("##TextureDirectory", &mModelImportTextureDirectory);  
+
+                    if (ImGui::Button("Import")) {
+                        ModelImportTool importTool;
+                        importTool.mModelFilepath = mImportFilePath;
+                        importTool.mTextureDirectory = mModelImportTextureDirectory;
+                        if (importTool.Import()) {
+                            importTool.Save();
+                        }
+                        // TO FIX <----------TO FIX
+                        auto entity = GameLevel::Get().CreateEntity();
+                        entity->SetModel(Core::ResourceManager::Instance().GetModel(importTool.mSaveDirectory.append(importTool.mKmfFile.name + ".kmf").string()));
+                        entity->SetName(entity->GetModel()->mName);
+                        std::cout << importTool.mLogList.str() << std::endl;
+                    }
+                }
+                ImGui::End();
+            }
 
             if(ImGui::BeginPopupContextWindow("Content Browser"))
             {
@@ -74,17 +125,15 @@ namespace LevelEditor
             static ImVec4 btn_hovered_color = ImVec4(0.f, 0.f, 0.f, 0.f);
             static ImVec4 btn_actived_color = ImVec4(0.f, 0.f, 0.f, 0.f);
             
-            static std::string selected_filepath; 
             if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-                selected_filepath.clear();
+                mSelectedFilepath.clear();
   
             for(auto&& path : std::filesystem::directory_iterator(_currentDirectory))
             {
-                auto relative = std::filesystem::relative(path.path(), mProjectDirectory);
-                auto filename = relative.filename().string();
-                auto filepath = relative.string();
+                auto filename = path.path().filename().string();
+                auto filepath = path.path().string();
                 
-                bool selected = selected_filepath == relative.string();
+                bool selected = mSelectedFilepath == path.path().string();
                 btn_primary_color = selected ? ImVec4(0.2f, 0.2f, 0.2f, 1.f) : ImVec4(0.f, 0.f, 0.f, 0.f);
                 btn_hovered_color = selected ? btn_primary_color : ImVec4(0.15f, 0.15f, 0.15f, 1);
                 btn_actived_color = btn_hovered_color;
@@ -99,10 +148,17 @@ namespace LevelEditor
                 ImGui::PopFont();
                 ImGui::PopStyleColor(3);
 
+                if(ImGui::BeginDragDropSource()) {
+                    ImGui::SetDragDropPayload("Item_content_browser", 
+                        &mSelectedFilepath, mSelectedFilepath.size(), ImGuiCond_Once);
+                    ImGui::Text("DRAG DROP");
+                    ImGui::EndDragDropSource();
+                }                
+
                 if (ImGui::IsItemHovered()) {
                     if(ImGui::IsMouseClicked(ImGuiMouseButton_Left) && 
                         !ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-                        selected_filepath = filepath;
+                        mSelectedFilepath = filepath;
                     }
 
                     else if(ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)
@@ -136,12 +192,6 @@ namespace LevelEditor
                 ImGui::Text(filename.c_str());
 
                 ImGui::NextColumn();
-                // if(ImGui::BeginDragDropSource())
-                // {
-                //     std::string item = relative.filename().string();
-                //     ImGui::SetDragDropPayload("Item_content_browser", (wchar_t*)item.c_str(), wcslen((wchar_t*)item.c_str()) * sizeof(wchar_t));
-                //     ImGui::EndDragDropSource();
-                // }
 
             }
             ImGui::Columns(1);

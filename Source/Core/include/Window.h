@@ -35,10 +35,11 @@ namespace Core
         GLFWwindow* m_pWindow = nullptr;
         std::function<void(Event&)> eventHandlerCallback;
 
-        static void OnErrorCallback(int codeError, const char* descriptionError);        
+        static void OnErrorCallback(int codeError, const char* descriptionError);
         static void OnResizeCallback(GLFWwindow* window, int width, int height);
         static void OnFrameBufferResizeCallback(GLFWwindow* window, int width, int height);
         static void OnWindowCloseCallback(GLFWwindow* window);
+
     public:
         explicit Window(const WindowProps& windowProps);
         ~Window();
@@ -46,6 +47,8 @@ namespace Core
         bool Exec();
         void Update();
         void SwapBuffers();
+
+        glm::vec2 clientArea;
 
         void SetWindowTitle(const std::string& title);
     

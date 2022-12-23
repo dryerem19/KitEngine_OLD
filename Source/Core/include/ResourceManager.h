@@ -28,6 +28,8 @@ namespace Core
             return instance;
         }
 
+        bool IsModelLoaded(const std::string& filepath);
+
         void LoadShader(const std::string& filepath);
 
         inline std::shared_ptr<Render::Shader> GetShader(const std::string& filepath)
