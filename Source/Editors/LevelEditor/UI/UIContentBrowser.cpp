@@ -57,7 +57,7 @@ namespace LevelEditor
 
             if (mImportWindowOpen) {
                 ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".*", ".");
-                if(ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+                if(ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey",ImGuiWindowFlags_NoDocking)) {
                     if(ImGuiFileDialog::Instance()->IsOk()) {
                         mImportFilePath = ImGuiFileDialog::Instance()->GetFilePathName();
                         std::string extension = mImportFilePath.extension().string();
@@ -65,6 +65,9 @@ namespace LevelEditor
                             mModelImportTextureDirectory = mImportFilePath.parent_path().string();
                             mMeshImportModel = true;
                         }
+                        mImportWindowOpen = false;
+                    }
+                    else{
                         mImportWindowOpen = false;
                     }
                     ImGuiFileDialog::Instance()->Close();
@@ -89,10 +92,6 @@ namespace LevelEditor
                         if (importTool.Import()) {
                             importTool.Save();
                         }
-                        // TO FIX <----------TO FIX
-                        auto entity = GameLevel::Get().CreateEntity();
-                        entity->SetModel(Core::ResourceManager::Instance().GetModel(importTool.mSaveDirectory.append(importTool.mKmfFile.name + ".kmf").string()));
-                        entity->SetName(entity->GetModel()->mName);
                         std::cout << importTool.mLogList.str() << std::endl;
                     }
                 }
@@ -149,8 +148,11 @@ namespace LevelEditor
                 ImGui::PopStyleColor(3);
 
                 if(ImGui::BeginDragDropSource()) {
-                    ImGui::SetDragDropPayload("Item_content_browser", 
+                    if(mSelectedFilepath.size() > 0)
+                    {
+                        ImGui::SetDragDropPayload("Item_content_browser", 
                         &mSelectedFilepath, mSelectedFilepath.size(), ImGuiCond_Once);
+                    }
                     ImGui::Text("DRAG DROP");
                     ImGui::EndDragDropSource();
                 }                

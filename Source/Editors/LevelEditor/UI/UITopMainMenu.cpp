@@ -31,20 +31,6 @@ namespace LevelEditor
 
                 }
                 ImGui::Separator();
-                if(ImGui::BeginMenu("Import Model"))
-                {
-                    if(ImGui::MenuItem("Нано-костюм")){
-                        std::string filepath = "../../Resources/models/nanosuit/nanosuit.obj";
-                        OnLoadModel(&filepath);
-                    }
-                    ImGui::Separator();
-                    if(ImGui::MenuItem(ICON_FA_FILE_IMPORT " Open Model"))
-                    {
-                        isCheckFileDialog = true;
-                    }
-                                    
-                    ImGui::EndMenu();
-                }
                 if(ImGui::MenuItem(ICON_FA_RIGHT_FROM_BRACKET " Exit"))
                 {
                     Core::Application::Instance().Close();
@@ -61,26 +47,6 @@ namespace LevelEditor
 
         }
         ImGui::EndMainMenuBar();
-
-        if(isCheckFileDialog){
-            std::string filepath = UIFileDialog::OpenFile(".*, .fbx, .obj, .stl", &isCheckFileDialog);
-            if(!filepath.empty()){
-                OnLoadModel(&filepath);
-            }
-        }
-    }
-
-    void UITopMainMenu::OnLoadModel(std::string* filepath)
-    {
-        Core::MeshVisualImporter importer;
-        importer.LoadVisual(*filepath);
-
-        auto entity = GameLevel::Get().CreateEntity();
-        entity->SetModel(Core::ResourceManager::Instance().GetModel("data/nanosuit/nanosuit.kmf"));
-        entity->SetName(entity->GetModel()->mName);
-        //entity->Spawn();
-
-        uiSceneTree->isModelLoaded = true;
     }
 
     void UITopMainMenu::ShowAbout(bool* close)

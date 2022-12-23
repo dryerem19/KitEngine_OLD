@@ -49,7 +49,7 @@ bool ModelImportTool::Import()
 
     if (!fs::exists(mSaveDirectory) || !fs::is_directory(mSaveDirectory)) {
         mLogList << "[WARNING] - The save directory not found or uncorrect, we use the relative executable path\n";
-        mSaveDirectory = "imported";
+        mSaveDirectory = "data"; // TODO: edit filedirectory project
     }
     mSaveDirectory.append(name);
 

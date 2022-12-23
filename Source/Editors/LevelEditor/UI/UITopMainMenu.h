@@ -14,7 +14,6 @@ namespace LevelEditor
     class UITopMainMenu : public KitUI
     {
     public:
-        bool isCheckFileDialog = false;
         UITopMainMenu() = default;
         UITopMainMenu(IController* controller) : KitUI(controller) { }
         void Draw() override;
