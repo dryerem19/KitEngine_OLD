@@ -11,7 +11,7 @@
 #include "pch.h"
 #include "Cursor3D.h"
 
-glm::vec3 Cursor3D::GetPickPoint(const Core::BaseCamera& camera, const glm::vec2& viewport)
+glm::vec3 Cursor3D::GetPickRay(const Core::BaseCamera& camera, const glm::vec2& viewport)
 {
     auto& app = Core::Application::Instance();
     
@@ -41,7 +41,7 @@ glm::vec4 Cursor3D::ToEyeCoords(const glm::vec4 &clipCoords, const Core::BaseCam
     glm::mat4 projInv = glm::inverse(proj);
 
     glm::vec4 eyeCoords = projInv * clipCoords;
-    return glm::vec4(eyeCoords.x, eyeCoords.y, -1.0f, 1.0f);
+    return glm::vec4(eyeCoords.x, eyeCoords.y, -1.0f, 0.0f);
 }
 
 glm::vec2 Cursor3D::GetNormalizedDeviceCoords(const float &mouseX, const float &mouseY)
@@ -51,7 +51,7 @@ glm::vec2 Cursor3D::GetNormalizedDeviceCoords(const float &mouseX, const float &
     float height = app.GetWindow()->GetHeight();
 
     float x = (2.0f * mouseX) / width - 1.0f;
-    float y = (2.0f * mouseY) / height - 1.0f;
+    float y = 1.0f - (2.0f * mouseY) / height;
 
     return glm::vec2(x, y);
 }

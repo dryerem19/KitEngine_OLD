@@ -104,6 +104,7 @@ namespace Core
         auto& handle   = *(Window*)glfwGetWindowUserPointer(window);
         //glViewport(0, 0, width, height);
 
+
         handle.clientArea.x = width;
         handle.clientArea.y = height;
         

@@ -17,6 +17,14 @@ namespace LevelEditor
 
         int mWidth;
         int mHeight;
+        float mCameraMouseDistance = 10;
+
+        bool mIsFirstDelivery = true;
+        Entity* pDeliveryEntity = nullptr;
+        float mMoveSpeed = 0.2f;
+
+        glm::vec2 mOldMouseOffset;
+        glm::vec3 mMousePickRay;        
 
     public:
         UIViewport() = default;

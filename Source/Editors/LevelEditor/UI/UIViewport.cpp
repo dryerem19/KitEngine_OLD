@@ -16,11 +16,11 @@ namespace LevelEditor
             vMax.y += ImGui::GetWindowPos().y;
 
             ImGui::Image(RenderBackend::Get().GetFrame(), ImVec2(mWidth, mHeight), ImVec2(0,1), ImVec2(1,0));
-            if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
-                auto pos = RenderBackend::Get().GetCursor3d().GetPickPoint(EditorCamera::Instance(), 
-                    glm::vec2(mWidth, mHeight));
-                DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", pos.x, pos.y, pos.z);
-            }
+            // if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+            //     auto pos = RenderBackend::Get().GetCursor3d().GetPickPoint(EditorCamera::Instance(), 
+            //         glm::vec2(mWidth, mHeight));
+            //     DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", pos.x, pos.y, pos.z);
+            // }
 
             // Если размеры вьюпорта изменились, меняем размеры буфера кадра
             int width  = vMax.x - vMin.x;
@@ -32,19 +32,43 @@ namespace LevelEditor
                 EditorCamera::Instance().UpdateAspect((float)mWidth / mHeight);
             }
 
+            // Принимаем данные, которые пользователь перетащил на вьюпорт
             if(ImGui::BeginDragDropTarget()) {
-                auto payload = ImGui::AcceptDragDropPayload("Item_content_browser");
+                auto payload = ImGui::AcceptDragDropPayload("Item_content_browser", 
+                    ImGuiDragDropFlags_AcceptBeforeDelivery);
+
                 if (payload != nullptr) {
                     std::string* filepath = (std::string*)payload->Data;
                     if (filepath != nullptr) {
-                        glm::vec3 pos = RenderBackend::Get().GetCursor3d().GetPickPoint(EditorCamera::Instance(), 
+
+                        glm::vec3 pickRay = RenderBackend::Get().GetCursor3d().GetPickRay(EditorCamera::Instance(), 
                             glm::vec2(mWidth, mHeight));
-                        
-                        std::cout << (*filepath).c_str() << std::endl;
-                        Entity* pEntity = GameLevel::Get().CreateEntity();
-                        pEntity->SetModel(Core::ResourceManager::Instance().GetModel(*filepath));
-                        pEntity->SetName(pEntity->GetModel()->mName);
-                        pEntity->transform.SetPosition(pos);
+                        glm::vec3 cameraPos = EditorCamera::Instance().GetPos();
+
+                        if (mIsFirstDelivery) {
+                            pDeliveryEntity = GameLevel::Get().CreateEntity();
+                            pDeliveryEntity->SetModel(Core::ResourceManager::Instance().GetModel(*filepath));
+                            pDeliveryEntity->SetName(pDeliveryEntity->GetModel()->mName);
+
+                            cameraPos += pickRay * mCameraMouseDistance;
+                            pDeliveryEntity->transform.SetPosition(cameraPos);
+                            mIsFirstDelivery = false;
+                        } else {
+                            if (pDeliveryEntity != nullptr && mMousePickRay != pickRay) {
+                                mMousePickRay = pickRay;
+
+                                const glm::vec2& mouseOffset = Core::Input::mouseOffset;
+                                glm::vec3 entityPos = pDeliveryEntity->transform.GetPosition();
+                                entityPos.x += mouseOffset.x * mMoveSpeed;
+                                entityPos.z += mouseOffset.y * mMoveSpeed;
+                                pDeliveryEntity->transform.SetPosition(entityPos);
+                            }
+                        }
+
+                        if (payload->IsDelivery()) {
+                            mMousePickRay.x = mMousePickRay.y = mMousePickRay.z = 0;
+                            mIsFirstDelivery = true;
+                        }
                     }
                 }
                 ImGui::EndDragDropTarget();

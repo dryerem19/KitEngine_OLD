@@ -23,7 +23,8 @@ public:
      * @param camera Камера игрока
      * @return glm::vec3 Точка в пространстве
      */
-    glm::vec3 GetPickPoint(const Core::BaseCamera& camera, const glm::vec2& viewport);
+    
+    glm::vec3 GetPickRay(const Core::BaseCamera& camera, const glm::vec2& viewport);
     glm::vec3 ToWorldCoords(const glm::vec4& eyeCoords, const Core::BaseCamera& camera);
     glm::vec4 ToEyeCoords(const glm::vec4& clipCoords, const Core::BaseCamera& camera);
     glm::vec2 GetNormalizedDeviceCoords(const float& mouseX, const float& mouseY);

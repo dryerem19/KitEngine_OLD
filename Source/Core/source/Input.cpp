@@ -56,6 +56,9 @@ void Core::Input::OnMouseButtonCallback(GLFWwindow *window, int button, int acti
 }
 
 void Core::Input::OnCursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {
+    
+    mouseOffset.x = mousePosition.x - xpos;
+    mouseOffset.y = mousePosition.y - ypos;
 
     mousePosition.x = (float)xpos;
     mousePosition.y = (float)ypos;

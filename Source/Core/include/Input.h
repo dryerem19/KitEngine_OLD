@@ -159,6 +159,7 @@ namespace Core
     public:
         inline static glm::vec2 mousePosition       = glm::vec2(0.0f, 0.0f);
         inline static glm::vec2 mouseScrollDelta    = glm::vec2(0.0f, 0.0f);
+        inline static glm::vec2 mouseOffset         = glm::vec2(0.0f, 0.0f);
 
         static void Initialize(GLFWwindow* pWindow);
         static bool GetKey(KeyCode keyCode);

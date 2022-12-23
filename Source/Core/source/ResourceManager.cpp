@@ -3,6 +3,16 @@
 
 namespace Core
 {
+    bool ResourceManager::IsModelLoaded(const std::string& filepath)
+    {
+        if(mModels.find(filepath) != mModels.end())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     void ResourceManager::LoadShader( const std::string& filepath )
     {
         assert(!filepath.empty() && "Filepath must not be empty!");

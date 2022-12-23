@@ -33,7 +33,7 @@ private:
 public:
     std::vector<std::unique_ptr<KitLight>> _lights;
     //std::vector<std::shared_ptr<Entity>> mEntities;
-    std::vector<std::unique_ptr<KitObject>> _objects; 
+    std::vector<std::unique_ptr<Entity>> _objects; 
 
     std::vector<std::unique_ptr<SoundBuffer>> _soundsources; 
 
@@ -79,7 +79,15 @@ public:
      */
     inline Entity* FindObjectByName(const std::string& name)
     {
-        return mObjects.find(name) != mObjects.end() ? mObjects[name].get() : nullptr;
+        Entity* pEntity = nullptr;
+        for (auto& entity : _objects) {
+            if (entity->GetName() == name) {
+                pEntity = entity.get();
+                break;
+            }
+        }
+
+        return pEntity;
     }        
     
     // inline std::unordered_map<std::string, std::unique_ptr<Entity>>::iterator begin() noexcept
