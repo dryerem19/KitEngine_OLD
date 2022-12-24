@@ -6,12 +6,7 @@
 
 GameLevel::GameLevel()
 {
-    mCollisionConfig = std::make_unique<btDefaultCollisionConfiguration>();
-    mDispathcer = std::make_unique<btCollisionDispatcher>(mCollisionConfig.get());
-    mBroadphase = std::make_unique<btDbvtBroadphase>();
-    mSolver = std::make_unique<btSequentialImpulseConstraintSolver>();
-    mDynamicsWorld = std::make_unique<btDiscreteDynamicsWorld>(mDispathcer.get(), mBroadphase.get(), mSolver.get(), mCollisionConfig.get());
-    mDynamicsWorld->setGravity(btVector3(0.f, -9.81f, 0.f));
+
 }
 
 void GameLevel::Serialize(const std::string& filepath)

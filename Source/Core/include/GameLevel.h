@@ -19,13 +19,6 @@ private:
     GameLevel& operator=(GameLevel&) = delete;
     ~GameLevel() = default;
 private:
-    std::unique_ptr<btDynamicsWorld> mDynamicsWorld;
-    std::unique_ptr<btDispatcher> mDispathcer;
-    std::unique_ptr<btCollisionConfiguration> mCollisionConfig;
-    std::unique_ptr<btBroadphaseInterface> mBroadphase;
-    std::unique_ptr<btConstraintSolver> mSolver;
-    std::vector<btRigidBody*> mBodies;
-private:
     std::unordered_map<std::string, std::unique_ptr<Entity>> mObjects;
     std::unordered_map<std::string, uint32_t> mRegistryNames;
     KitObject* mSelectedObject = nullptr; 
@@ -58,8 +51,6 @@ public:
     Entity* CreateEntity();
 
     SoundBuffer* CreateSound();
-
-    inline void AddRigidBody(btRigidBody* pRigidBody) { mBodies.push_back(pRigidBody); }
 
     inline void SetSelectedObject(KitObject* object)
     {

@@ -27,6 +27,19 @@ namespace Core
         glm::vec3 GetPos() const { return cameraPos; };
         glm::vec3 GetFront() const { return cameraFront; };
         glm::vec3 GetUp() const { return cameraUp; };
+        
+        /**
+         * @brief Преобразует точку из экранного пространства в мировое
+         * 
+         * @param position Координаты мыши в пикселях
+         * @param screen Размеры экранной области в пикселях
+         * @param outOrigin Начало луча
+         * * Начинается с ближней плоскости, поэтому если вы хотите, чтобы луч начинался с положения камеры, игнорируйте этот параметр
+         * @param outDirection Направление луча в мировом пространсве, который проходит через мышь
+         */
+        void ScreenToWorldPoint(const glm::vec2& position, const glm::vec2& screen, glm::vec3& outOrigin, glm::vec3& outDirection);
+
+        float& GetZNear();
 
         void UpdateAspect(const float& aspect);
         const glm::mat4& GetProj() const { return mProjection; }

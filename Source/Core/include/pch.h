@@ -44,4 +44,6 @@
 #include <AL/alext.h>
 #include <sndfile.h>
 
+#include <BulletDynamics/btBulletDynamicsCommon.h>
+
 #include "Helpers.h"

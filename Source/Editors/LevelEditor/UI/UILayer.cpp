@@ -29,6 +29,11 @@ namespace LevelEditor
              / app.GetWindow()->GetHeight(), 0.1f, 100.0f);
 
 
+        // Инициализация физического мира
+        PhysicSystem::Instance();
+
+
+
         //GameLevel::Get().InitSkybox("data/skybox/default.skybox");
 
         auto& sDevice = SoundManager::Instance();

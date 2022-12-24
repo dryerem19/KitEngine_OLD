@@ -12,6 +12,7 @@
 #include "Model.h"
 #include "KitObject.h"
 
+#include "PhysicSystem.h"
 
 /**
  * @brief Базовая игровая сущность

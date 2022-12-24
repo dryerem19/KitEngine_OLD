@@ -38,6 +38,8 @@
 #include "SoundBuffer.h"
 #include "SoundSource.h"
 
+#include "PhysicSystem.h"
+
 
 namespace LevelEditor
 {

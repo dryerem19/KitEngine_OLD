@@ -15,12 +15,65 @@ namespace LevelEditor
             vMax.x += ImGui::GetWindowPos().x;
             vMax.y += ImGui::GetWindowPos().y;
 
-            ImGui::Image(RenderBackend::Get().GetFrame(), ImVec2(mWidth, mHeight), ImVec2(0,1), ImVec2(1,0));
-            // if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
-            //     auto pos = RenderBackend::Get().GetCursor3d().GetPickPoint(EditorCamera::Instance(), 
-            //         glm::vec2(mWidth, mHeight));
-            //     DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", pos.x, pos.y, pos.z);
+            // Проверяем, что мышка попадает в область вьюпорта
+            const glm::vec2& mousePosition = Core::Input::mousePosition;
+            if (mousePosition.x >= vMin.x && mousePosition.x <= vMax.x
+                && mousePosition.y >= vMin.y && mousePosition.y <= vMax.y)
+            {
+                // Если была нажата левая кнопка мыши
+                if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) 
+                {
+                    // Получаем координаты курсора относительно вьюпорта
+                    glm::vec2 relative_mouse_position(
+                        mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
+                        mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
+                    );
+
+                    // Переводим экранные координаты в мировые координаты
+                    glm::vec3 origin, direction;
+                    EditorCamera::Instance().ScreenToWorldPoint(relative_mouse_position, glm::vec2(mWidth, mHeight), origin, direction);
+                    origin = EditorCamera::Instance().GetPos();
+                    
+                    glm::vec3 end = origin + direction * 1000.0f;
+                    btRigidBody* pRigidBody = PhysicSystem::Instance().GetPickBody(origin, end);
+                    if (pRigidBody != nullptr) {
+                        std::cout << "SELECTED OBJECT\n"; 
+                    }
+                    DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", end.x, end.y, end.z); 
+                }
+            }
+
+            // // Проверяем клик
+            // if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+            //     // Получаем координаты курсора относительно вьюпорта
+            //     glm::vec2 relative_mouse_position(
+            //         Core::Input::mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
+            //         Core::Input::mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
+            //     );
+            //     DEBUG_MSG("Pre - x: %.3f, y: %.3f", relative_mouse_position.x, relative_mouse_position.y);                
             // }
+
+            ImGui::Image(RenderBackend::Get().GetFrame(), ImVec2(mWidth, mHeight), ImVec2(0,1), ImVec2(1,0));
+            if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+                
+                // // Получаем координаты курсора относительно вьюпорта
+                // glm::vec2 relative_mouse_position(
+                //     Core::Input::mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
+                //     Core::Input::mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
+                // );
+                // DEBUG_MSG("Pre - x: %.3f, y: %.3f", relative_mouse_position.x, relative_mouse_position.y);
+
+                // // Переводим экранные координаты курсора в мировые координаты
+                // glm::vec3 origin, direction;
+                // EditorCamera::Instance().ScreenToWorldPoint(relative_mouse_position, glm::vec2(mWidth, mHeight), origin, direction);
+
+                // glm::vec3 end = origin + direction * 1000.0f;
+                // btRigidBody* pRigidBody = PhysicSystem::Instance().GetPickBody(origin, end);
+                // if (pRigidBody != nullptr) {
+                //     std::cout << "SELECTED OBJECT\n"; 
+                // }
+                // DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", origin.x, origin.y, origin.z);
+            }
 
             // Если размеры вьюпорта изменились, меняем размеры буфера кадра
             int width  = vMax.x - vMin.x;
