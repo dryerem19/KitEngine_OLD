@@ -50,7 +50,7 @@ public:
 
     void BeginFrame();
     void EndFrame();
-    void Resize(const int& width, const int& height);
+    void Resize(const int& width, const int& height, const int& x = 0, const int& y = 0);
     void* GetFrame() const { return reinterpret_cast<void*>(mFrameBuffer.GetTextureRenderID()); }
 
     Cursor3D& GetCursor3d() { return mCursor3d; }

@@ -15,9 +15,9 @@ void RenderBackend::EndFrame()
     mFrameBuffer.Unbind();
 }
 
-void RenderBackend::Resize(const int &width, const int &height)
+void RenderBackend::Resize(const int &width, const int &height, const int& x /* = 0 */, const int& y /* = 0 */)
 {
-    glViewport(0, 0, width, height);
+    glViewport(x, y, width, height);
     mFrameBuffer.Delete();
     mFrameBuffer.Init(width, height);
 }

@@ -81,7 +81,7 @@ namespace LevelEditor
             if (mWidth != width || mHeight != height) {
                 mWidth = width;
                 mHeight = height;
-                RenderBackend::Get().Resize(mWidth, mHeight);
+                RenderBackend::Get().Resize(mWidth, mHeight, ImGui::GetCursorScreenPos().x - 200, ImGui::GetCursorScreenPos().y);
                 EditorCamera::Instance().UpdateAspect((float)mWidth / mHeight);
             }
 
