@@ -12,6 +12,7 @@
 #include "RenderBackend.h"
 #include "BaseCamera.h"
 #include "GameLevel.h"
+#include "PhysicSystem.h"
 
 class RenderSystem
 {
@@ -75,6 +76,15 @@ public:
                 }
             }
         }
-        level.GetSkybox().Render(camera);
+        //level.GetSkybox().Render(camera);
+
+        glm::mat4 mvp = camera.GetProj() * camera.GetGlmView();
+
+        static Line line(glm::vec3(0, 0, 0), glm::vec3(1, 1, 50));
+        line.SetMVP(mvp);
+        line.SetColor(glm::vec3(1, 1, 1));
+        line.Draw();
+
+        //PhysicSystem::Instance().DebugDrawWorld();
     }
 };

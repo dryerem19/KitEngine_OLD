@@ -9,6 +9,7 @@
  * 
  */
 #pragma once
+#include "Physics/GLDebugDrawer.h"
 
 btVector3 TobtVector3(const glm::vec3& vec);
 
@@ -25,10 +26,24 @@ private:
     btConstraintSolver* m_pSolver;
     btCollisionConfiguration* m_pCollisionConfig;
     btDiscreteDynamicsWorld* m_pDynamicsWorld;
+    GLDebugDrawer* m_pDebugDrawer;
 public:
     static PhysicSystem& Instance();
     btDiscreteDynamicsWorld* GetDynamicsWorld();
     btBoxShape* CreateBoxShape(const btVector3& halfExtents);
     btRigidBody* CreateRigidBody(const float& mass, const btTransform& transform, btCollisionShape* pShape);
     btRigidBody* GetPickBody(const glm::vec3& origin, const glm::vec3& end);
+
+    /**
+     * @brief Нарисовать физический мир в режиме отладки
+     * Вызывайте после того, как был нарисован основной мир
+     */
+    void DebugDrawWorld() const;
+    
+    GLDebugDrawer* GetDebugDrawer() const;
+
+    /**
+     * @brief Изменить режим отладки
+     */
+    void SetDebugMode(int mode);
 };

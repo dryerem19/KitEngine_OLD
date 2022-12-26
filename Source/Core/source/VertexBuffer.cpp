@@ -4,6 +4,10 @@
 #include "pch.h"
 #include "VertexBuffer.h"
 
+Render::VertexBuffer::VertexBuffer(const void *src, const uint32_t size)
+{
+    Init(src, size);
+}
 
 //-------------------------------------------------------------------------------------------
 // Деструктор вершинного буфера, уничтожает буфер
@@ -17,13 +21,11 @@ Render::VertexBuffer::~VertexBuffer() {
 
 void Render::VertexBuffer::Init(const void* src, const uint32_t size)
 {
-    // Создать новый буфер
+    /* Создаём объект вершинного буфера, который будет хранить вершины в видеопамяти */
     GLCall(glGenBuffers(1, &mVertexBufferId));
 
-    // Использовать буфер
+    /* Выделяем место и загружаем данные вершин из CPU в GPU */
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId));
-
-    // Скопировать данные в буфер
     GLCall(glBufferData(GL_ARRAY_BUFFER, size, src, GL_STATIC_DRAW));
 }
 

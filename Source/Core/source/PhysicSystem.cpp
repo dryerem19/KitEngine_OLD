@@ -21,7 +21,8 @@ PhysicSystem::PhysicSystem()
       m_pDispathcer(nullptr),
       m_pSolver(nullptr),
       m_pCollisionConfig(nullptr),
-      m_pDynamicsWorld(nullptr)
+      m_pDynamicsWorld(nullptr),
+      m_pDebugDrawer(nullptr)
 {
     // Set up the collision configuration and dispatcher
     m_pCollisionConfig  = new btDefaultCollisionConfiguration();
@@ -36,6 +37,15 @@ PhysicSystem::PhysicSystem()
     // The world
     m_pDynamicsWorld    = new btDiscreteDynamicsWorld(m_pDispathcer, m_pBroadphase, m_pSolver, m_pCollisionConfig);
     m_pDynamicsWorld->setGravity(btVector3(0.f, -10.0f, 0.f));
+
+    // Create the debug drawer
+    m_pDebugDrawer      = new GLDebugDrawer();
+
+    // Set the initial debug level
+    m_pDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+
+    // Add the debug drawer to the world
+    m_pDynamicsWorld->setDebugDrawer(m_pDebugDrawer);
 }
 
 PhysicSystem::~PhysicSystem()
@@ -127,4 +137,27 @@ btRigidBody* PhysicSystem::GetPickBody(const glm::vec3 &origin, const glm::vec3 
     }
 
     return nullptr;
+}
+
+void PhysicSystem::DebugDrawWorld() const
+{
+    if (!m_pDebugDrawer) {
+        return;
+    }
+
+    m_pDynamicsWorld->debugDrawWorld();
+}
+
+GLDebugDrawer* PhysicSystem::GetDebugDrawer() const
+{
+    return m_pDebugDrawer;
+}
+
+void PhysicSystem::SetDebugMode(int mode)
+{
+    if (!m_pDebugDrawer) {
+        return;
+    }
+
+    m_pDebugDrawer->setDebugMode(mode);
 }

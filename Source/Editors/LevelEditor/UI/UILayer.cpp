@@ -30,7 +30,8 @@ namespace LevelEditor
 
 
         // Инициализация физического мира
-        PhysicSystem::Instance();
+        auto& physics = PhysicSystem::Instance();
+        //physics.SetDebugMode(btIDebugDraw::DBG_DrawAabb);
 
 
 
@@ -75,6 +76,11 @@ namespace LevelEditor
     {
         // Camera
         EditorCamera::Instance().Update();
+
+        glm::mat4 mvp = EditorCamera::Instance().GetGlmView() * EditorCamera::Instance().GetProj();
+
+        auto& physics = PhysicSystem::Instance();
+        physics.GetDebugDrawer()->SetMVP(mvp);
 
         auto& level = GameLevel::Get();
 

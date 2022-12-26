@@ -45,5 +45,6 @@
 #include <sndfile.h>
 
 #include <BulletDynamics/btBulletDynamicsCommon.h>
+#include <LinearMath/btIDebugDraw.h>
 
 #include "Helpers.h"

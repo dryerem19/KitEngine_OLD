@@ -81,7 +81,7 @@ namespace LevelEditor
             if (mWidth != width || mHeight != height) {
                 mWidth = width;
                 mHeight = height;
-                RenderBackend::Get().Resize(mWidth, mHeight, ImGui::GetCursorScreenPos().x - 200, ImGui::GetCursorScreenPos().y);
+                RenderBackend::Get().Resize(mWidth, mHeight, 0, 0);
                 EditorCamera::Instance().UpdateAspect((float)mWidth / mHeight);
             }
 
@@ -98,29 +98,33 @@ namespace LevelEditor
                             glm::vec2(mWidth, mHeight));
                         glm::vec3 cameraPos = EditorCamera::Instance().GetPos();
 
-                        if (mIsFirstDelivery) {
-                            pDeliveryEntity = GameLevel::Get().CreateEntity();
-                            pDeliveryEntity->SetModel(Core::ResourceManager::Instance().GetModel(*filepath));
-                            pDeliveryEntity->SetName(pDeliveryEntity->GetModel()->mName);
+                        // if (mIsFirstDelivery) {
+                        //     pDeliveryEntity = GameLevel::Get().CreateEntity();
+                        //     pDeliveryEntity->SetModel(Core::ResourceManager::Instance().GetModel(filepath->c_str()));
+                        //     pDeliveryEntity->SetName(pDeliveryEntity->GetModel()->mName);
 
-                            cameraPos += pickRay * mCameraMouseDistance;
-                            pDeliveryEntity->transform.SetPosition(cameraPos);
-                            mIsFirstDelivery = false;
-                        } else {
-                            if (pDeliveryEntity != nullptr && mMousePickRay != pickRay) {
-                                mMousePickRay = pickRay;
+                        //     cameraPos += pickRay * mCameraMouseDistance;
+                        //     pDeliveryEntity->transform.SetPosition(cameraPos);
+                        //     mIsFirstDelivery = false;
+                        // } else {
+                        //     if (pDeliveryEntity != nullptr && mMousePickRay != pickRay) {
+                        //         mMousePickRay = pickRay;
 
-                                const glm::vec2& mouseOffset = Core::Input::mouseOffset;
-                                glm::vec3 entityPos = pDeliveryEntity->transform.GetPosition();
-                                entityPos.x += mouseOffset.x * mMoveSpeed;
-                                entityPos.z += mouseOffset.y * mMoveSpeed;
-                                pDeliveryEntity->transform.SetPosition(entityPos);
-                            }
-                        }
+                        //         const glm::vec2& mouseOffset = Core::Input::mouseOffset;
+                        //         glm::vec3 entityPos = pDeliveryEntity->transform.GetPosition();
+                        //         entityPos.x += mouseOffset.x * mMoveSpeed;
+                        //         entityPos.z += mouseOffset.y * mMoveSpeed;
+                        //         pDeliveryEntity->transform.SetPosition(entityPos);
+                        //     }
+                        // }
 
                         if (payload->IsDelivery()) {
                             mMousePickRay.x = mMousePickRay.y = mMousePickRay.z = 0;
                             mIsFirstDelivery = true;
+
+                            pDeliveryEntity = GameLevel::Get().CreateEntity();
+                            pDeliveryEntity->SetModel(Core::ResourceManager::Instance().GetModel(filepath->c_str()));
+                            pDeliveryEntity->SetName(pDeliveryEntity->GetModel()->mName);                            
                         }
                     }
                 }
