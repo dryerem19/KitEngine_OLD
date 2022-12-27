@@ -76,6 +76,11 @@ void Core::BaseCamera::ScreenToWorldPoint(const glm::vec2 &position, const glm::
     outDirection = rayDirWorld;
 }
 
+void Core::BaseCamera::Update()
+{
+    mViewProjection = mView * mProjection;
+}
+
 float &Core::BaseCamera::GetZNear()
 {
     return mZNear;

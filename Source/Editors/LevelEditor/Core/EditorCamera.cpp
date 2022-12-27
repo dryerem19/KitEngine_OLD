@@ -68,5 +68,7 @@ namespace LevelEditor
             Core::Input::mousePosition.x = lastX;
             Core::Input::mousePosition.y = lastY;
         }
+
+        Core::BaseCamera::Update();
     }
 }

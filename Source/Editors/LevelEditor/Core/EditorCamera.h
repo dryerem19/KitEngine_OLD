@@ -29,6 +29,6 @@ namespace LevelEditor
             return instance;
         }
 
-        void Update();
+        void Update() override final;
     };
 }

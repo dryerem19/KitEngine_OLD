@@ -38,11 +38,11 @@ void Line::SetMVP(const glm::mat4 &mvp)
 void Line::Draw() const 
 {
     mShader->Enable();
-    mShader->SetUniformMatrix4fv("MVP", 1, GL_FALSE, &mMvp[0][0]);
+    mShader->SetUniformMatrix4fv("MVP", 1, GL_FALSE, glm::value_ptr(mMvp));
     mShader->SetUniform3f("color", mColor.x, mColor.y, mColor.z);
 
     mVertexArray.Bind();
-    GLCall(glDrawArrays(GL_LINES, 0, 2));
+    GLCall(glDrawArrays(GL_LINE_STRIP, 0, 2));
     //mVertexArray.Unbind();
 
     //mShader->Disable();

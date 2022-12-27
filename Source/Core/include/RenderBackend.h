@@ -16,6 +16,9 @@
 #include "FrameBuffer.h"
 #include "Cursor3D.h"
 
+#include "BaseCamera.h"
+#include "ResourceManager.h"
+
 class RenderBackend final
 {
 private:
@@ -40,6 +43,8 @@ private:
     Render::FrameBuffer mFrameBuffer;
     Cursor3D mCursor3d;
 
+    Core::BaseCamera* m_pRenderCamera;
+
 public:
 
     inline static RenderBackend& Get()
@@ -48,12 +53,16 @@ public:
         return instance;
     }
 
+    void SetRenderCamera(Core::BaseCamera* pRenderCamera);
+
     void BeginFrame();
     void EndFrame();
     void Resize(const int& width, const int& height, const int& x = 0, const int& y = 0);
     void* GetFrame() const { return reinterpret_cast<void*>(mFrameBuffer.GetTextureRenderID()); }
 
     Cursor3D& GetCursor3d() { return mCursor3d; }
+
+    void DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color);
 
     inline void SetGeometry(Geometry* pGeometry)
     {

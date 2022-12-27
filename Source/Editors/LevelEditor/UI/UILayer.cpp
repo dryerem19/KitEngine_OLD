@@ -33,6 +33,7 @@ namespace LevelEditor
         auto& physics = PhysicSystem::Instance();
         //physics.SetDebugMode(btIDebugDraw::DBG_DrawAabb);
 
+        RenderBackend::Get().SetRenderCamera(&EditorCamera::Instance());
 
 
         //GameLevel::Get().InitSkybox("data/skybox/default.skybox");

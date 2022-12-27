@@ -78,12 +78,14 @@ public:
         }
         //level.GetSkybox().Render(camera);
 
-        glm::mat4 mvp = camera.GetProj() * camera.GetGlmView();
+        //glm::mat4 mvp = camera.GetProj() * camera.GetGlmView();
 
-        static Line line(glm::vec3(0, 0, 0), glm::vec3(1, 1, 50));
-        line.SetMVP(mvp);
-        line.SetColor(glm::vec3(1, 1, 1));
-        line.Draw();
+        // static Line line(glm::vec3(0, 0, 0), glm::vec3(1, 1, 50));
+        // line.SetMVP(mvp);
+        // line.SetColor(glm::vec3(1, 1, 1));
+        // line.Draw();
+
+        backend.DrawLine(glm::vec3(0, 0, 0), glm::vec3(1, 1, 50), glm::vec4(1, 1, 1, 1));
 
         //PhysicSystem::Instance().DebugDrawWorld();
     }

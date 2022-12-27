@@ -39,10 +39,14 @@ namespace Core
          */
         void ScreenToWorldPoint(const glm::vec2& position, const glm::vec2& screen, glm::vec3& outOrigin, glm::vec3& outDirection);
 
+        virtual void Update();
+
         float& GetZNear();
 
         void UpdateAspect(const float& aspect);
         const glm::mat4& GetProj() const { return mProjection; }
+
+        const glm::mat4& GetViewProjection() const { return mViewProjection; }
 
     protected:
         glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
@@ -52,6 +56,8 @@ namespace Core
         glm::mat4 mTransform = glm::mat4(1.0f);
         glm::mat4 mView = glm::mat4(1.0f);
         glm::mat4 mProjection = glm::mat4(1.0f);
+
+        glm::mat4 mViewProjection = glm::mat4(1.0f);
     };
 }
 
