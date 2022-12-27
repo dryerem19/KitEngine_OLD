@@ -85,7 +85,7 @@ public:
         // line.SetColor(glm::vec3(1, 1, 1));
         // line.Draw();
 
-        backend.DrawLine(glm::vec3(0, 0, 0), glm::vec3(1, 1, 50), glm::vec4(1, 1, 1, 1));
+        backend.DrawLine(camera.GetPos(), glm::vec3(camera.GetPos().x, camera.GetPos().y, camera.GetPos().z + 100), glm::vec4(1, 1, 1, 1));
 
         //PhysicSystem::Instance().DebugDrawWorld();
     }
