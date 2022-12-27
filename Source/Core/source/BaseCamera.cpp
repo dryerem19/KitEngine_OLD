@@ -78,7 +78,7 @@ void Core::BaseCamera::ScreenToWorldPoint(const glm::vec2 &position, const glm::
 
 void Core::BaseCamera::Update()
 {
-    mViewProjection = mView * mProjection;
+    mViewProjection = mProjection * mView;
 }
 
 float &Core::BaseCamera::GetZNear()

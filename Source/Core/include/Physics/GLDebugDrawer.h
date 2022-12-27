@@ -9,13 +9,12 @@
  * 
  */
 #pragma once
-#include "Primitives/Line.h"
+#include "RenderBackend.h"
 
 class GLDebugDrawer final : public btIDebugDraw 
 {
 private:
     int mDebugMode;
-    glm::mat4 mMvp;
 public:
 	virtual void setDebugMode(int debugMode) override final { mDebugMode = debugMode; }
 	virtual int getDebugMode() const override final { return mDebugMode; }
@@ -29,6 +28,4 @@ public:
 	virtual void  reportErrorWarning(const char* warningString) override {}
     // unused
 	virtual void  draw3dText(const btVector3 &location,const char* textString) override {}   
-
-    void SetMVP(const glm::mat4& mvp); 
 };

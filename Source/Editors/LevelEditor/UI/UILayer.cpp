@@ -78,10 +78,7 @@ namespace LevelEditor
         // Camera
         EditorCamera::Instance().Update();
 
-        glm::mat4 mvp = EditorCamera::Instance().GetGlmView() * EditorCamera::Instance().GetProj();
-
         auto& physics = PhysicSystem::Instance();
-        physics.GetDebugDrawer()->SetMVP(mvp);
 
         auto& level = GameLevel::Get();
 

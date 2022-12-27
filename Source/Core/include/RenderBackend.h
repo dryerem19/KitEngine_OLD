@@ -62,7 +62,15 @@ public:
 
     Cursor3D& GetCursor3d() { return mCursor3d; }
 
-    void DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color);
+    /**
+     * @brief Метод рисования линии.
+     * Внимание! Этот метод очень медленный и использует GL_DYNAMIC_DRAW. 
+     * Рассмотрите возможность использования класса Line с GL_STATIC_DRAW.
+     * @param start Начало линии 
+     * @param end Конец линии
+     * @param color Цвет линии
+     */
+    void DebugDrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color);
 
     inline void SetGeometry(Geometry* pGeometry)
     {
