@@ -17,6 +17,7 @@ void Model::Deserialize(const std::string& filepath)
     kmf.Deserialize(filepath);
 
     mName = kmf.name;
+    mAabb = kmf.mAABB;
     mFilepath = kmf.filepath;
 
     mMeshes.reserve(kmf.meshes.size());

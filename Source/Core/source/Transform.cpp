@@ -1,22 +1,30 @@
 /**
  * @file Transform.cpp
- * @author your name (you@domain.com)
- * @brief 
+ * @author Denis Eremenko (mamayma8@gmail.com)
+ * @brief Object transformation
  * @version 0.1
  * @date 2022-12-09
  * 
- * @copyright Copyright (c) 2022
+ * @copyright Copyright Denis Eremenko (c) 2022
  * 
  */
 #include "pch.h"
 #include "Transform.h"
 
-void Transform::SetPosition(const glm::vec3& p)
+Transform::Transform()
+    : m_pRigidBody(nullptr)
+{
+
+}
+
+void Transform::SetPosition(const glm::vec3 &p)
 {
     mTranslation.x = p.x;
     mTranslation.y = p.y;
     mTranslation.z = p.z;
     mDirty = true;
+
+    UpdateRigidBodyPosition();
 }
 
 void Transform::SetPosition(const float& x, const float& y, const float& z)
@@ -25,6 +33,8 @@ void Transform::SetPosition(const float& x, const float& y, const float& z)
     mTranslation.y = y;
     mTranslation.z = z;
     mDirty = true;
+
+    UpdateRigidBodyPosition();
 }
 
 void Transform::SetRotation(const glm::vec3& r)
@@ -33,6 +43,8 @@ void Transform::SetRotation(const glm::vec3& r)
     mRotation.y = r.y;
     mRotation.z = r.z;
     mDirty = true;
+
+    UpdateRigidBodyRotation();
 }
 
 void Transform::SetRotation(const float& x, const float& y, const float& z)
@@ -41,6 +53,8 @@ void Transform::SetRotation(const float& x, const float& y, const float& z)
     mRotation.y = y;
     mRotation.z = z;
     mDirty = true;
+
+    UpdateRigidBodyRotation();
 }
 
 void Transform::SetScale(const glm::vec3& s)
@@ -57,6 +71,11 @@ void Transform::SetScale(const float& x, const float& y, const float& z)
     mScale.y = y;
     mScale.z = z;
     mDirty = true;
+}
+
+void Transform::SetRigidBody(btRigidBody *pRigidBody)
+{
+    m_pRigidBody = pRigidBody;
 }
 
 const glm::vec3& Transform::GetPosition() const
@@ -102,4 +121,31 @@ std::string Transform::DebugString() const
 bool Transform::IsDirty() const
 {
     return mDirty;
+}
+
+void Transform::UpdateRigidBodyPosition()
+{
+    if (!m_pRigidBody) {
+        return;
+    }
+
+    const btTransform& rigidBodyTransform = m_pRigidBody->getWorldTransform();
+    m_pRigidBody->setWorldTransform(btTransform(
+        rigidBodyTransform.getRotation(),
+        btVector3(mTranslation.x, mTranslation.y, mTranslation.z)
+    ));
+}
+
+void Transform::UpdateRigidBodyRotation()
+{
+    if (!m_pRigidBody) {
+        return;
+    }
+
+    const glm::quat q = glm::quat(mRotation);
+    const btTransform& rigidBodyTransform = m_pRigidBody->getWorldTransform();
+    m_pRigidBody->setWorldTransform(btTransform(
+        btQuaternion(q.x, q.y, q.z, q.w),
+        rigidBodyTransform.getOrigin()
+    ));    
 }

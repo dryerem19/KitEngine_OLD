@@ -1,11 +1,11 @@
 /**
  * @file Transform.h
- * @author your name (you@domain.com)
- * @brief 
+ * @author Denis Eremenko (mamayma8@gmail.com)
+ * @brief Object transformation
  * @version 0.1
  * @date 2022-12-09
  * 
- * @copyright Copyright (c) 2022
+ * @copyright Copyright Denis Eremenko (c) 2022
  * 
  */
 #pragma once
@@ -25,8 +25,10 @@ private:
     /* Грязный флаг */
     bool mDirty = true;
 
+    btRigidBody* m_pRigidBody;
+
 public:
-    Transform() = default;
+    Transform();
     Transform(const glm::vec3& p, const glm::vec3& r, const glm::vec3& s)
         : mTranslation(p), mRotation(r), mScale(s) { }
 
@@ -37,6 +39,8 @@ public:
     void SetScale(const glm::vec3& s);
     void SetScale(const float& x, const float& y, const float& z);
 
+    void SetRigidBody(btRigidBody* pRigidBody);
+
     const glm::vec3& GetPosition() const;
     const glm::vec3& GetRotation() const;
     const glm::vec3& GetScale() const;
@@ -45,4 +49,7 @@ public:
     std::string DebugString() const;
 
     bool IsDirty() const;
+private:
+    void UpdateRigidBodyPosition();
+    void UpdateRigidBodyRotation();
 };

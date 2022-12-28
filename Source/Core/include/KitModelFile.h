@@ -15,6 +15,18 @@
 #include "Interfaces/IDeserialization.h"
 #include "KitVertex.h"
 
+struct KMFAABB final
+{
+    glm::vec3 mMin;
+    glm::vec3 mMax;
+
+    KMFAABB() 
+    {
+        mMin.x = mMin.y = mMin.z = FLT_MAX;
+        mMax.x = mMax.y = mMax.z = -FLT_MAX;
+    }
+};
+
 struct KMFMesh final
 {
     /* Имя сетки*/
@@ -33,8 +45,18 @@ struct KMFMesh final
 class KitModelFile final : private ISerialization, private IDeserialization
 {
 public:
+    /**
+     * Версия 1 - Состоит из набора мешей, которые, в свою очередь, состоят из набора вершин и индексов, 
+     * хранят путь к материалу и имя сетки. Модель также имеет имя. 
+     * 
+     * Версия 2 - Модель хранит параметры ограничивающего объёма.
+     */
     const uint8_t version = 1;
     std::string name;
+
+    /* Ограничивающий объём */
+    KMFAABB mAABB;
+
     std::vector<std::unique_ptr<KMFMesh>> meshes;
     std::string filepath;
     

@@ -18,6 +18,7 @@ public:
     std::vector<std::unique_ptr<Render::KitStaticMesh>> mMeshes;
     std::string mFilepath;
     std::string mName;
+    KMFAABB mAabb;
 public:
     void Deserialize(const std::string& filepath);
 };

@@ -26,6 +26,9 @@ protected:
 
     std::shared_ptr<Model> mModel;
 
+    btBoxShape* m_pShape;
+    btRigidBody* m_pRigidBody; 
+
 public:
     /**
      * @brief Конструктор узла
@@ -33,6 +36,8 @@ public:
      * @param name имя узла
      */
     Entity(const std::string& name = "Root");
+
+    Entity(const std::shared_ptr<Model>& model);
 
 
     void SetModel(std::shared_ptr<Model> model);

@@ -42,7 +42,7 @@ PhysicSystem::PhysicSystem()
     m_pDebugDrawer      = new GLDebugDrawer();
 
     // Set the initial debug level
-    m_pDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+    m_pDebugDrawer->setDebugMode(btIDebugDraw::DBG_DrawAabb);
 
     // Add the debug drawer to the world
     m_pDynamicsWorld->setDebugDrawer(m_pDebugDrawer);

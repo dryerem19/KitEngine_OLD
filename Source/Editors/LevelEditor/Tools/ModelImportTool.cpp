@@ -32,7 +32,8 @@ bool ModelImportTool::Import()
                             aiProcess_GenUVCoords                |
                             aiProcess_Triangulate                |
                             aiProcess_OptimizeMeshes             |
-                            aiProcess_JoinIdenticalVertices      );
+                            aiProcess_JoinIdenticalVertices      |
+                            aiProcess_GenBoundingBoxes           );
 
     if (!pScene) {
         mLogList << "[ASSIMP ERROR] - " << importer.GetErrorString() << "\n";
@@ -97,6 +98,22 @@ void ModelImportTool::ParseMeshes(const aiScene *pScene)
 
         const aiMesh* pMesh = pScene->mMeshes[iMesh];
         const aiVector3D zero3D(0.0f, 0.0f, 0.0f);
+
+        if (mKmfFile.mAABB.mMin.x > pMesh->mAABB.mMin.x ||
+            mKmfFile.mAABB.mMin.y > pMesh->mAABB.mMin.y ||
+            mKmfFile.mAABB.mMin.z > pMesh->mAABB.mMin.z) {
+                mKmfFile.mAABB.mMin.x = pMesh->mAABB.mMin.x;
+                mKmfFile.mAABB.mMin.y = pMesh->mAABB.mMin.y;
+                mKmfFile.mAABB.mMin.z = pMesh->mAABB.mMin.z;
+        }
+
+        if (mKmfFile.mAABB.mMax.x < pMesh->mAABB.mMax.x ||
+            mKmfFile.mAABB.mMax.y < pMesh->mAABB.mMax.y ||
+            mKmfFile.mAABB.mMax.z < pMesh->mAABB.mMax.z) {
+                mKmfFile.mAABB.mMax.x = pMesh->mAABB.mMax.x;
+                mKmfFile.mAABB.mMax.y = pMesh->mAABB.mMax.y;
+                mKmfFile.mAABB.mMax.z = pMesh->mAABB.mMax.z;
+        }        
 
         mKmfFile.meshes[iMesh]->name = pMesh->mName.C_Str();
         mKmfFile.meshes[iMesh]->vertices.reserve(pMesh->mNumVertices);

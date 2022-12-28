@@ -23,6 +23,9 @@ void KitModelFile::Serialize(const std::string& filepath)
     out.write(reinterpret_cast<const char*>(&name_size), sizeof(name_size));
     out.write(reinterpret_cast<const char*>(&name[0]), name_size);
 
+    /* Записываем ограничивающий объём */
+    out.write(reinterpret_cast<const char*>(&mAABB), sizeof(mAABB));    
+
     size_t size_meshes = meshes.size();
     out.write(reinterpret_cast<const char*>(&size_meshes), sizeof(size_meshes));
     for (auto& mesh : meshes)
@@ -67,6 +70,9 @@ void KitModelFile::Deserialize(const std::string& filepath)
     input.read((char*)&name_size, sizeof(name_size));
     name.resize(name_size);
     input.read((char*)&name[0], name_size);
+
+    /* Считываем ограничивающий объём */
+    input.read((char*)&mAABB, sizeof(mAABB));    
 
     size_t size_meshes = 0;
     input.read((char*)&size_meshes, sizeof(size_meshes));
