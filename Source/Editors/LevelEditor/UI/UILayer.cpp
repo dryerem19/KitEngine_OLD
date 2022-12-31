@@ -58,9 +58,17 @@ namespace LevelEditor
         }
         else if (type == Core::EventType::WindowCloseEvent)
         {
-           auto& sDevice = SoundManager::Instance(); 
-           //sound.Release();
-           sDevice.Release();
+            auto& eventClose = (Core::WindowCloseEvent&)event;
+            eventClose.close = false;
+
+            // auto& sDevice = SoundManager::Instance(); 
+            // //sound.Release();
+            // sDevice.Release();
+
+            mUISaveClose.mIsCheckClose = true;
+            // auto& sDevice = SoundManager::Instance();
+            // //sound.Release();
+            // sDevice.Release();
         }
 
         std::cout << event.ToString() << std::endl;
@@ -114,6 +122,10 @@ namespace LevelEditor
         mInspector.Draw();
         mBottombar.Draw();
         mUIContentBrowser.Draw();
+        if(mUISaveClose.mIsCheckClose == true)
+        {
+            mUISaveClose.Draw();
+        }
     }
 
     void UILayer::OnFinish()

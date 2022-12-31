@@ -30,6 +30,7 @@
 #include "UIInspector.h"
 #include "UIBottomMenuBar.h"
 #include "UIContentBrowser.h"
+#include "UISaveClose.h"
 
 #include "Entity.h"
 
@@ -59,6 +60,7 @@ namespace LevelEditor
         UIController* mUIController;
 
         SoundBuffer sound;
+        
 
         // UI Window
         UITopMainMenu uiTopMainMenu;
@@ -69,6 +71,7 @@ namespace LevelEditor
         BottomMenuBar mBottombar;
         Inspector mInspector;
         UIContentBrowser mUIContentBrowser;
+        UISaveClose mUISaveClose;
         void Docking();
     };
 }
