@@ -19,7 +19,7 @@ namespace LevelEditor
             ImGui::BeginMenuBar();
             {
                 ImGuiIO& io = ImGui::GetIO();
-                const auto& camera_pos = EditorCamera::Instance().GetPos();
+                const auto& camera_pos = EditorCamera::Instance().GetPosition();
                 ImGui::Text("Cam: [ x: %.3f, y: %.3f, z: %.3f ]", camera_pos.x, camera_pos.y, camera_pos.z);
                 ImGui::Separator();
                 ImGui::Text("Cur: [ x: %d, y: %d ]", (uint32_t)io.MousePos.x, (uint32_t)io.MousePos.y);

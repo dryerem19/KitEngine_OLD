@@ -19,6 +19,7 @@ public:
     std::string mFilepath;
     std::string mName;
     KMFAABB mAabb;
+    btTriangleMesh* pTempMesh = nullptr;
 public:
     void Deserialize(const std::string& filepath);
 };

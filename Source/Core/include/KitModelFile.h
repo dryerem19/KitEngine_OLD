@@ -15,10 +15,14 @@
 #include "Interfaces/IDeserialization.h"
 #include "KitVertex.h"
 
+#define INCORRECT_FILE 0x0
+
 struct KMFAABB final
 {
     glm::vec3 mMin;
     glm::vec3 mMax;
+    glm::vec3 mCenter;
+    glm::vec3 mExtents;
 
     KMFAABB() 
     {
@@ -51,7 +55,7 @@ public:
      * 
      * Версия 2 - Модель хранит параметры ограничивающего объёма.
      */
-    const uint8_t version = 1;
+    const uint8_t version = 2;
     std::string name;
 
     /* Ограничивающий объём */

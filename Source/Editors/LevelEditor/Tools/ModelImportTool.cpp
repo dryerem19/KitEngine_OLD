@@ -99,21 +99,23 @@ void ModelImportTool::ParseMeshes(const aiScene *pScene)
         const aiMesh* pMesh = pScene->mMeshes[iMesh];
         const aiVector3D zero3D(0.0f, 0.0f, 0.0f);
 
-        if (mKmfFile.mAABB.mMin.x > pMesh->mAABB.mMin.x ||
-            mKmfFile.mAABB.mMin.y > pMesh->mAABB.mMin.y ||
-            mKmfFile.mAABB.mMin.z > pMesh->mAABB.mMin.z) {
-                mKmfFile.mAABB.mMin.x = pMesh->mAABB.mMin.x;
-                mKmfFile.mAABB.mMin.y = pMesh->mAABB.mMin.y;
-                mKmfFile.mAABB.mMin.z = pMesh->mAABB.mMin.z;
-        }
+        // if (mKmfFile.mAABB.mMin.x > pMesh->mAABB.mMin.x ||
+        //     mKmfFile.mAABB.mMin.y > pMesh->mAABB.mMin.y ||
+        //     mKmfFile.mAABB.mMin.z > pMesh->mAABB.mMin.z) {
+        //         mKmfFile.mAABB.mMin.x = pMesh->mAABB.mMin.x;
+        //         mKmfFile.mAABB.mMin.y = pMesh->mAABB.mMin.y;
+        //         mKmfFile.mAABB.mMin.z = pMesh->mAABB.mMin.z;
+        // }
 
-        if (mKmfFile.mAABB.mMax.x < pMesh->mAABB.mMax.x ||
-            mKmfFile.mAABB.mMax.y < pMesh->mAABB.mMax.y ||
-            mKmfFile.mAABB.mMax.z < pMesh->mAABB.mMax.z) {
-                mKmfFile.mAABB.mMax.x = pMesh->mAABB.mMax.x;
-                mKmfFile.mAABB.mMax.y = pMesh->mAABB.mMax.y;
-                mKmfFile.mAABB.mMax.z = pMesh->mAABB.mMax.z;
-        }        
+        // if (mKmfFile.mAABB.mMax.x < pMesh->mAABB.mMax.x ||
+        //     mKmfFile.mAABB.mMax.y < pMesh->mAABB.mMax.y ||
+        //     mKmfFile.mAABB.mMax.z < pMesh->mAABB.mMax.z) {
+        //         mKmfFile.mAABB.mMax.x = pMesh->mAABB.mMax.x;
+        //         mKmfFile.mAABB.mMax.y = pMesh->mAABB.mMax.y;
+        //         mKmfFile.mAABB.mMax.z = pMesh->mAABB.mMax.z;
+        // }        
+        // mKmfFile.mAABB.mCenter = 0.5f * (mKmfFile.mAABB.mMin + mKmfFile.mAABB.mMax);
+        // mKmfFile.mAABB.mExtents = 0.5f * (mKmfFile.mAABB.mMax + mKmfFile.mAABB.mMin);
 
         mKmfFile.meshes[iMesh]->name = pMesh->mName.C_Str();
         mKmfFile.meshes[iMesh]->vertices.reserve(pMesh->mNumVertices);
@@ -129,6 +131,9 @@ void ModelImportTool::ParseMeshes(const aiScene *pScene)
             // Если у меша нет текстурных координат, назначаем нулевые текстурные координаты
             const aiVector3D& tex = pMesh->HasTextureCoords(0) 
                 ? pMesh->mTextureCoords[0][iVertex] : zero3D;
+
+            mKmfFile.mAABB.mMin = glm::min(mKmfFile.mAABB.mMin, glm::vec3(pos.x, pos.y, pos.z));
+            mKmfFile.mAABB.mMax = glm::max(mKmfFile.mAABB.mMax, glm::vec3(pos.x, pos.y, pos.z));
 
             // Заносим вершину в вектор
             mKmfFile.meshes[iMesh]->vertices.emplace_back(Render::KitVertex{
@@ -181,7 +186,7 @@ std::string ModelImportTool::ProcessAssimpMaterial(const aiMaterial *pMaterial)
 
     fs::path new_texture_path(mTextureSaveDirectory);
     new_texture_path.append(diffuse_texture_name.C_Str());
-    if (!fs::exists(new_texture_path)) {
+    if (!fs::exists(new_texture_path) && fs::exists(diffuse_texture_path)) {
         fs::copy_file(diffuse_texture_path, new_texture_path);
         mLogList << "[INFO] - The texture was copied to: " << new_texture_path.string() << "\n";
     }

@@ -9,15 +9,16 @@
  * 
  */
 #pragma once
-#include <GL/glew.h>
 #include "Geometry.h"
-#include "Shader.h"
+//#include "Shader.h"
 
 #include "FrameBuffer.h"
 #include "Cursor3D.h"
 
 #include "BaseCamera.h"
-#include "ResourceManager.h"
+//#include "ResourceManager.h"
+
+#include "RenderDebug.h"
 
 class RenderBackend final
 {
@@ -46,6 +47,8 @@ private:
     Core::BaseCamera* m_pRenderCamera;
 
 public:
+    //RenderDebug mRenderDebug;
+
 
     inline static RenderBackend& Get()
     {
@@ -58,7 +61,13 @@ public:
     void BeginFrame();
     void EndFrame();
     void Resize(const int& width, const int& height, const int& x = 0, const int& y = 0);
-    void* GetFrame() const { return reinterpret_cast<void*>(mFrameBuffer.GetTextureRenderID()); }
+
+
+    uint32_t* GetFrame() 
+    {
+        uintptr_t renderTargetId = mFrameBuffer.GetTextureRenderID();
+        return reinterpret_cast<uint32_t*>(renderTargetId); 
+    }  
 
     Cursor3D& GetCursor3d() { return mCursor3d; }
 
@@ -71,6 +80,21 @@ public:
      * @param color Цвет линии
      */
     void DebugDrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color);
+
+    
+    glm::vec3 dbg_st_line, dbg_en_line;
+    glm::vec4 dbg_col_line;
+    void SetDebugDrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color)
+    {
+        dbg_st_line = start;
+        dbg_en_line = end;
+        dbg_col_line = color;
+    }
+    
+    void _DebugDrawLine()
+    {
+        DebugDrawLine(dbg_st_line, dbg_en_line, dbg_col_line);
+    }
 
     inline void SetGeometry(Geometry* pGeometry)
     {

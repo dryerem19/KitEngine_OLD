@@ -8,8 +8,6 @@ Render::KitTexture::KitTexture(const std::string& path, KitTextureType type)
         std::runtime_error("The path to the texture file cannot be empty");
     }
 
-    // TODO: Проверять путь к текстуре!!!!!
-
     // Load image
     sail::image image;
     image.load(mPath);

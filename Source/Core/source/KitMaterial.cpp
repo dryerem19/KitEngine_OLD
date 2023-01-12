@@ -8,8 +8,14 @@ namespace Render
     {
         KitMaterialFile file;
         file.Deserialize(filepath);
+
         mName = file.name;
-        mMainDiffuseTexture = Core::ResourceManager::Instance().GetTexture(file.diffuse_texture_path);
+        
+        if (std::filesystem::exists(file.diffuse_texture_path)) 
+        {
+            mMainDiffuseTexture = Core::ResourceManager::Instance().GetTexture(file.diffuse_texture_path);
+        }
+        
         mShader = Core::ResourceManager::Instance().GetShader(file.shader_path);
     }
 

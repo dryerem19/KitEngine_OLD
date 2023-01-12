@@ -30,6 +30,7 @@ private:
 public:
     static PhysicSystem& Instance();
     btDiscreteDynamicsWorld* GetDynamicsWorld();
+    void Update(float deltaTime);
     btBoxShape* CreateBoxShape(const btVector3& halfExtents);
     btRigidBody* CreateRigidBody(const float& mass, const btTransform& transform, btCollisionShape* pShape);
     btRigidBody* GetPickBody(const glm::vec3& origin, const glm::vec3& end);

@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "RenderBackend.h"
 
 RenderBackend::RenderBackend()
@@ -46,13 +47,14 @@ void RenderBackend::DebugDrawLine(const glm::vec3 &start, const glm::vec3 &end, 
     GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
     GLCall(glEnableVertexAttribArray(0));
 
-    const auto& shader = Core::ResourceManager::Instance().GetShader("../../Resources/shaders/line.glsl");
+    auto shader = Core::ResourceManager::Instance().GetShader("../../Resources/shaders/line.glsl");
     shader->Enable();
     shader->SetUniformMatrix4fv("MVP", 1, GL_FALSE, glm::value_ptr(m_pRenderCamera->GetViewProjection()));
     shader->SetUniform3f("color", color.x, color.y, color.z);  
 
     GLCall(glDrawArrays(GL_LINE_STRIP, 0, 2));
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GLCall(glDeleteBuffers(1, &lineVBO));
     GLCall(glBindVertexArray(0));
     shader->Disable();
 }

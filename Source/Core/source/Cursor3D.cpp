@@ -28,7 +28,7 @@ glm::vec3 Cursor3D::GetPickRay(const Core::BaseCamera& camera, const glm::vec2& 
 
 glm::vec3 Cursor3D::ToWorldCoords(const glm::vec4 &eyeCoords, const Core::BaseCamera &camera)
 {
-    glm::mat4 invertedView = glm::inverse(camera.GetGlmView());
+    glm::mat4 invertedView = glm::inverse(camera.GetView());
     glm::vec4 rayWorld = invertedView * eyeCoords;
     glm::vec3 mouseRay = glm::vec3(rayWorld.x, rayWorld.y, rayWorld.z);
     mouseRay = glm::normalize(mouseRay);
@@ -37,7 +37,7 @@ glm::vec3 Cursor3D::ToWorldCoords(const glm::vec4 &eyeCoords, const Core::BaseCa
 
 glm::vec4 Cursor3D::ToEyeCoords(const glm::vec4 &clipCoords, const Core::BaseCamera &camera)
 {
-    const glm::mat4& proj = camera.GetProj();
+    const glm::mat4& proj = camera.GetProjection();
     glm::mat4 projInv = glm::inverse(proj);
 
     glm::vec4 eyeCoords = projInv * clipCoords;

@@ -4,27 +4,35 @@
 #include "pch.h"
 #include "BaseCamera.h"
 
+// Modify dryerem19 30.12.2022
 
-void Core::BaseCamera::SetPerspective(float fovy, float aspect, float zNear, float zFar) 
+Core::BaseCamera::BaseCamera()
+    : mFov(45),
+      mAspect(1.778f), // 1280 / 720
+      mNearClip(0.1f),
+      mFarClip(1000.0f),
+      mPosition(0.0f),
+      mProjection(1.0f),
+      mViewProjection(1.0f),
+      mView(1.0f)
 {
-    mFovy = fovy;
-    mAspect = aspect;
-    mZNear = zNear;
-    mZFar = zFar;
-    mProjection = glm::perspective(fovy, aspect, zNear, zFar);
+    SetProjection(glm::radians(mFov), mAspect, mNearClip, mFarClip);
+    UpdateView();
 }
 
-void Core::BaseCamera::SetLookAt(glm::vec3 eye, glm::vec3 center, glm::vec3 up) {
-    mView = glm::lookAt(eye,center,up);
-}
-
-const float* Core::BaseCamera::GetView() const {
-    return glm::value_ptr(mView);
-}
-
-const float* Core::BaseCamera::GetPerspective() const {
-    return glm::value_ptr(mProjection);
-}
+Core::BaseCamera::BaseCamera(const float &fov, const float &aspect, const float &near, const float &far)
+    : mFov(fov),
+      mAspect(aspect),
+      mNearClip(near),
+      mFarClip(far),
+      mPosition(0.0f),
+      mProjection(1.0f),
+      mViewProjection(1.0f),
+      mView(1.0f)
+{
+    SetProjection(glm::radians(mFov), mAspect, mNearClip, mFarClip);
+    UpdateView();
+}      
 
 void Core::BaseCamera::ScreenToWorldPoint(const glm::vec2 &position, const glm::vec2& screen, glm::vec3& outOrigin, glm::vec3& outDirection)
 {
@@ -76,18 +84,46 @@ void Core::BaseCamera::ScreenToWorldPoint(const glm::vec2 &position, const glm::
     outDirection = rayDirWorld;
 }
 
-void Core::BaseCamera::Update()
+void Core::BaseCamera::OnUpdate()
 {
+    UpdateView();
     mViewProjection = mProjection * mView;
 }
 
-float &Core::BaseCamera::GetZNear()
+glm::vec3 Core::BaseCamera::GetUp() const
 {
-    return mZNear;
+    return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
-void Core::BaseCamera::UpdateAspect(const float &aspect)
+glm::vec3 Core::BaseCamera::GetRight() const
 {
-    mAspect = aspect;
-    SetPerspective(mFovy, mAspect, mZNear, mZFar);
+    return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
+}
+
+glm::vec3 Core::BaseCamera::GetForward() const
+{
+    return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
+}
+
+glm::quat Core::BaseCamera::GetOrientation() const
+{
+    return glm::quat(glm::vec3(-mPitch, -mYaw, 0.0f));
+}
+
+void Core::BaseCamera::SetProjection(const float& fov, const float& aspect, const float& near, const float& far)
+{
+    mProjection = glm::perspective(glm::radians(mFov), mAspect, mNearClip, mFarClip);
+}
+
+void Core::BaseCamera::UpdateProjection()
+{
+    mAspect = mViewportWidth / mViewportHeight;
+    SetProjection(glm::radians(mFov), mAspect, mNearClip, mFarClip);
+}
+
+void Core::BaseCamera::UpdateView()
+{
+    glm::quat orientation = GetOrientation();
+    mView = glm::translate(glm::mat4(1.0f), mPosition) * glm::toMat4(orientation);
+    mView = glm::inverse(mView);
 }

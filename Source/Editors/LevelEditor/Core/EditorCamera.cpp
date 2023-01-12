@@ -2,73 +2,126 @@
 
 namespace LevelEditor
 {
-    void EditorCamera::Update()
+    EditorCamera::EditorCamera()
+        : BaseCamera()
     {
-        SetLookAt(cameraPos,cameraPos + cameraFront, cameraUp);
 
-        //GLfloat cameraSpeed = 0.30f;
-        if (Core::Input::GetKey(Core::KeyCode::W))
-        {
-            cameraPos += cameraSpeed * cameraFront;
-        }
-        if (Core::Input::GetKey(Core::KeyCode::S))
-        {
-            cameraPos -= cameraSpeed * cameraFront;
-        }
-        if (Core::Input::GetKey(Core::KeyCode::A))
-        {
-            cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-        }
-        if (Core::Input::GetKey(Core::KeyCode::D))
-        {
-            cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-        }
+    }
 
-        if(Core::Input::GetMouseButton(Core::MouseButton::MouseButtonRight))
+    void EditorCamera::OnUpdate()
+    {
+        if (Core::Input::GetMouseButton(Core::MouseButton::MouseButtonRight)) 
         {
             Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorDisabled);
-            
-            GLfloat xoffset = Core::Input::mousePosition.x - lastX;
-            GLfloat yoffset = lastY - Core::Input::mousePosition.y;
 
-            // Установка курсора на последнее подложение камеры
-            if(isCheckMouse)
-            {
-                Core::Input::SetCursorPos(lastX, lastY);
-                isCheckMouse = false;
-            }
-
-            lastX = Core::Input::mousePosition.x;
-            lastY = Core::Input::mousePosition.y;
-            
-            GLfloat sensitivity = 0.05;
-            xoffset *= sensitivity;
-            yoffset *= sensitivity;
-
-            yaw   += xoffset;
-            pitch += yoffset;
-
-            if(pitch > 89.0f)
-                pitch = 89.0f;
-            if(pitch < -89.0f)
-                pitch = -89.0f;
-
-            glm::vec3 front;
-            front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-            front.y = sin(glm::radians(pitch));
-            front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-            cameraFront = glm::normalize(front);
-
+            const glm::vec2 mousePosition = Core::Input::mousePosition;
+            glm::vec2 delta = (mousePosition - mOldMousePosition) * 0.003f;
+            mOldMousePosition = mousePosition;
+            CameraMove();
+            CameraRotate(delta);
         }
-        if(Core::Input::GetMouseUp(Core::MouseButton::MouseButtonRight))
-        {
+
+        if(Core::Input::GetMouseUp(Core::MouseButton::MouseButtonRight)) {
             Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorNormal);
-            isCheckMouse = true;
-            // Установка последних координт камеры на позицию мыши
-            Core::Input::mousePosition.x = lastX;
-            Core::Input::mousePosition.y = lastY;
-        }
+        }         
 
-        Core::BaseCamera::Update();
+        BaseCamera::OnUpdate();
+
+        // SetLookAt(cameraPos,cameraPos + cameraFront, cameraUp);
+
+        // //GLfloat cameraSpeed = 0.30f;
+        // if (Core::Input::GetKey(Core::KeyCode::W))
+        // {
+        //     cameraPos += cameraSpeed * cameraFront;
+        // }
+        // if (Core::Input::GetKey(Core::KeyCode::S))
+        // {
+        //     cameraPos -= cameraSpeed * cameraFront;
+        // }
+        // if (Core::Input::GetKey(Core::KeyCode::A))
+        // {
+        //     cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        // }
+        // if (Core::Input::GetKey(Core::KeyCode::D))
+        // {
+        //     cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        // }
+
+        // if(Core::Input::GetMouseButton(Core::MouseButton::MouseButtonRight))
+        // {
+        //     Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorDisabled);
+            
+        //     GLfloat xoffset = Core::Input::mousePosition.x - lastX;
+        //     GLfloat yoffset = lastY - Core::Input::mousePosition.y;
+
+        //     // Установка курсора на последнее подложение камеры
+        //     if(isCheckMouse)
+        //     {
+        //         Core::Input::SetCursorPos(lastX, lastY);
+        //         isCheckMouse = false;
+        //     }
+
+        //     lastX = Core::Input::mousePosition.x;
+        //     lastY = Core::Input::mousePosition.y;
+            
+        //     GLfloat sensitivity = 0.05;
+        //     xoffset *= sensitivity;
+        //     yoffset *= sensitivity;
+
+        //     yaw   += xoffset;
+        //     pitch += yoffset;
+
+        //     if(pitch > 89.0f)
+        //         pitch = 89.0f;
+        //     if(pitch < -89.0f)
+        //         pitch = -89.0f;
+
+        //     glm::vec3 front;
+        //     front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+        //     front.y = sin(glm::radians(pitch));
+        //     front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+        //     cameraFront = glm::normalize(front);
+
+        // }
+        // if(Core::Input::GetMouseUp(Core::MouseButton::MouseButtonRight))
+        // {
+        //     Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorNormal);
+        //     isCheckMouse = true;
+        //     // Установка последних координт камеры на позицию мыши
+        //     Core::Input::mousePosition.x = lastX;
+        //     Core::Input::mousePosition.y = lastY;
+        // }
+
+        // Core::BaseCamera::Update();
+    }
+
+    void EditorCamera::CameraMove()
+    {
+        if (Core::Input::GetKey(Core::KeyCode::W))
+        {
+            mPosition += cameraSpeed * GetForward();
+        }
+        
+        if (Core::Input::GetKey(Core::KeyCode::S))
+        {
+            mPosition -= cameraSpeed * GetForward();
+        }
+        
+        if (Core::Input::GetKey(Core::KeyCode::A))
+        {
+            mPosition -= GetRight() * cameraSpeed;
+        }
+        
+        if (Core::Input::GetKey(Core::KeyCode::D))
+        {
+            mPosition += GetRight() * cameraSpeed;
+        } 
+    }
+
+    void EditorCamera::CameraRotate(const glm::vec2& delta)
+    {
+        float yawSign = GetUp().y < 0 ? -1.0f : 1.0f;
+		mYaw += yawSign * delta.x * mRotationSpeed;
+		mPitch += delta.y * mRotationSpeed;        
     }
 }

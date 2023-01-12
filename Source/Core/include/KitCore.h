@@ -20,7 +20,7 @@
 #define DEBUG_MSG(fmt, ...)                                                 \
     do {                                                                    \
         if (DEBUG_ENABLE) {                                                 \
-            fprintf(stdout, "[DEBUG-MSG] - %d:%s(): " fmt,                  \
+            fprintf(stdout, "[DEBUG] - %d:%s(): " fmt,                      \
                     __LINE__, __func__, __VA_ARGS__);                       \
             putchar('\n');                                                  \
         }                                                                   \

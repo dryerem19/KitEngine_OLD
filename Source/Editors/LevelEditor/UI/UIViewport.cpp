@@ -15,33 +15,83 @@ namespace LevelEditor
             vMax.x += ImGui::GetWindowPos().x;
             vMax.y += ImGui::GetWindowPos().y;
 
-            // Проверяем, что мышка попадает в область вьюпорта
-            const glm::vec2& mousePosition = Core::Input::mousePosition;
-            if (mousePosition.x >= vMin.x && mousePosition.x <= vMax.x
-                && mousePosition.y >= vMin.y && mousePosition.y <= vMax.y)
-            {
-                // Если была нажата левая кнопка мыши
-                if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) 
-                {
-                    // Получаем координаты курсора относительно вьюпорта
-                    glm::vec2 relative_mouse_position(
-                        mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
-                        mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
-                    );
+            ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 
-                    // Переводим экранные координаты в мировые координаты
+            const glm::vec2& mousePosition = Core::Input::mousePosition;
+            glm::vec2 relative_mouse_position(
+                mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
+                mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
+            );            
+            if (ImGui::IsWindowHovered())
+            {
+                if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+                {
                     glm::vec3 origin, direction;
                     EditorCamera::Instance().ScreenToWorldPoint(relative_mouse_position, glm::vec2(mWidth, mHeight), origin, direction);
-                    origin = EditorCamera::Instance().GetPos();
-                    
-                    glm::vec3 end = origin + direction * 1000.0f;
+                    origin = EditorCamera::Instance().GetPosition();        
+
+                    glm::vec3 end = origin + direction * 1000.0f;        
+
                     btRigidBody* pRigidBody = PhysicSystem::Instance().GetPickBody(origin, end);
                     if (pRigidBody != nullptr) {
                         std::cout << "SELECTED OBJECT\n"; 
                     }
-                    DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", end.x, end.y, end.z); 
+                    //DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", end.x, end.y, end.z);                          
                 }
             }
+
+
+
+            // // Проверяем, что мышка попадает в область вьюпорта
+
+            //     // Получаем координаты курсора относительно вьюпорта
+            //     glm::vec2 relative_mouse_position(
+            //         mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
+            //         mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
+            //     );
+
+            //     // Переводим экранные координаты в мировые координаты
+            //     glm::vec3 origin, direction;
+            //     EditorCamera::Instance().ScreenToWorldPoint(relative_mouse_position, glm::vec2(mWidth, mHeight), origin, direction);
+            //     origin = EditorCamera::Instance().GetPosition();
+                
+            //     glm::vec3 end = origin + direction * 1000.0f;
+
+
+            //     RenderBackend::Get().SetDebugDrawLine(origin, end, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));            
+            
+            // if (mousePosition.x >= vMin.x && mousePosition.x <= vMax.x
+            //     && mousePosition.y >= vMin.y && mousePosition.y <= vMax.y)
+            // {
+            //     // Если была нажата левая кнопка мыши
+            //     if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) 
+            //     {
+            //         // Получаем координаты курсора относительно вьюпорта
+            //         glm::vec2 relative_mouse_position(
+            //             mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
+            //             mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
+            //         );
+
+            //         // Переводим экранные координаты в мировые координаты
+            //         glm::vec3 origin, direction;
+            //         EditorCamera::Instance().ScreenToWorldPoint(relative_mouse_position, glm::vec2(mWidth, mHeight), origin, direction);
+            //         origin = EditorCamera::Instance().GetPosition();
+                    
+            //         glm::vec3 end = origin + direction * 1000.0f;
+
+
+            //         RenderBackend::Get().SetDebugDrawLine(origin, end, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+
+
+            //         //RenderBackend::Get().mRenderDebug.AddLine(origin, end, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+
+            //         btRigidBody* pRigidBody = PhysicSystem::Instance().GetPickBody(origin, end);
+            //         if (pRigidBody != nullptr) {
+            //             std::cout << "SELECTED OBJECT\n"; 
+            //         }
+            //         DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", end.x, end.y, end.z); 
+            //     }
+            // }
 
             // // Проверяем клик
             // if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
@@ -53,8 +103,8 @@ namespace LevelEditor
             //     DEBUG_MSG("Pre - x: %.3f, y: %.3f", relative_mouse_position.x, relative_mouse_position.y);                
             // }
 
-            ImGui::Image(RenderBackend::Get().GetFrame(), ImVec2(mWidth, mHeight), ImVec2(0,1), ImVec2(1,0));
-            if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+            ImGui::Image(RenderBackend::Get().GetFrame(), viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+            //if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
                 
                 // // Получаем координаты курсора относительно вьюпорта
                 // glm::vec2 relative_mouse_position(
@@ -73,7 +123,7 @@ namespace LevelEditor
                 //     std::cout << "SELECTED OBJECT\n"; 
                 // }
                 // DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", origin.x, origin.y, origin.z);
-            }
+            //}
 
             // Если размеры вьюпорта изменились, меняем размеры буфера кадра
             int width  = vMax.x - vMin.x;
@@ -82,7 +132,7 @@ namespace LevelEditor
                 mWidth = width;
                 mHeight = height;
                 RenderBackend::Get().Resize(mWidth, mHeight, 0, 0);
-                EditorCamera::Instance().UpdateAspect((float)mWidth / mHeight);
+                EditorCamera::Instance().SetViewportSize(mWidth, mHeight);
             }
 
             // Принимаем данные, которые пользователь перетащил на вьюпорт
@@ -96,7 +146,7 @@ namespace LevelEditor
 
                         glm::vec3 pickRay = RenderBackend::Get().GetCursor3d().GetPickRay(EditorCamera::Instance(), 
                             glm::vec2(mWidth, mHeight));
-                        glm::vec3 cameraPos = EditorCamera::Instance().GetPos();
+                        glm::vec3 cameraPos = EditorCamera::Instance().GetPosition();
 
                         // if (mIsFirstDelivery) {
                         //     pDeliveryEntity = GameLevel::Get().CreateEntity();
@@ -135,7 +185,7 @@ namespace LevelEditor
 
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
-            ImGuizmo::SetRect(vMin.x, vMin.y, mWidth, mHeight);
+            ImGuizmo::SetRect(vMin.x, vMin.y, viewportSize.x, viewportSize.y);
             DrawGizmo();
         } 
         ImGui::End();
@@ -155,14 +205,23 @@ namespace LevelEditor
             glm::vec3 scale = transform.GetScale();
 
             /* Build transform matrix */
-            float transformMatrix[16];
-            ImGuizmo::RecomposeMatrixFromComponents(&position.x, &rotation.x, &scale.x, transformMatrix);
-            ImGuizmo::Manipulate(EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective(), (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, transformMatrix);
+            // float transformMatrix[16];
+            // ImGuizmo::RecomposeMatrixFromComponents(&position.x, &rotation.x, &scale.x, transformMatrix);
+
+            glm::mat4 view = EditorCamera::Instance().GetView();
+            const glm::mat4& proj = EditorCamera::Instance().GetProjection();
+            glm::mat4 model = transform.GetModelMatrix();
+
+            glm::mat4 pivot = transform.GetPivot();
+            ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, 
+                glm::value_ptr(pivot));
             
+            //view *= view;
+
             /* If we moved the manipulator */
             if (ImGuizmo::IsUsing())
             {
-                ImGuizmo::DecomposeMatrixToComponents(transformMatrix, &position.x, &rotation.x, &scale.x);
+                ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(model), &position.x, &rotation.x, &scale.x);
                 switch (mOperation)
                 {
                 case GizmoOperation::TRANSLATE:

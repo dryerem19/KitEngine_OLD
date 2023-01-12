@@ -5,6 +5,16 @@ file(GLOB_RECURSE SOURCE "source/*.cpp")
 set(SRC_FILES ${INCLUDE} ${SOURCE})
 source_group(SRC_FILES)
 
+# if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+#   # using Clang
+# elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+#   # using GCC
+# elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+#   # using Intel C++
+# elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+#     target_compile_definitions(${PROJECT_NAME} PRIVATE MSVC)
+# endif()
+
 #add_library(${PROJECT_NAME} SHARED ${SRC_FILES})
 add_library(${PROJECT_NAME} STATIC ${SRC_FILES})
 target_include_directories(${PROJECT_NAME}

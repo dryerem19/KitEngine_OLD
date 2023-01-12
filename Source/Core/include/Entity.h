@@ -26,8 +26,11 @@ protected:
 
     std::shared_ptr<Model> mModel;
 
-    btBoxShape* m_pShape;
+    btCollisionShape* m_pShape;
     btRigidBody* m_pRigidBody; 
+
+
+    btTransform mTransform;
 
 public:
     /**

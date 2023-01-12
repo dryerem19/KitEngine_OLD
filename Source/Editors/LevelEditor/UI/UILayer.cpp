@@ -25,8 +25,7 @@ namespace LevelEditor
         auto& app = Core::Application::Instance();
         //frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
 
-        EditorCamera::Instance().SetPerspective(45.0f, app.GetWindow()->GetWidth()
-             / app.GetWindow()->GetHeight(), 0.1f, 100.0f);
+        EditorCamera::Instance().SetViewportSize(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
 
 
         // Инициализация физического мира
@@ -76,7 +75,7 @@ namespace LevelEditor
     void UILayer::OnUpdate()
     {
         // Camera
-        EditorCamera::Instance().Update();
+        EditorCamera::Instance().OnUpdate();
 
         auto& physics = PhysicSystem::Instance();
 

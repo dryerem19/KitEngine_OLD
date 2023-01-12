@@ -18,9 +18,10 @@
 
 // External includes
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -48,3 +49,4 @@
 #include <LinearMath/btIDebugDraw.h>
 
 #include "Helpers.h"
+#include "KitCore.h"

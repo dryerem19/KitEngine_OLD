@@ -21,9 +21,9 @@ namespace Render
         void Unbind() const;
         void GetFlipTexture();
 
-        inline uint32_t GetTextureRenderID() const { return mTextureId; }
+        inline GLuint GetTextureRenderID() const { return mTextureId; }
     private:
-        uint32_t mFrameBufferId;
+        GLuint mFrameBufferId;
         uint32_t mTextureId;
         uint32_t mDepthId;
 

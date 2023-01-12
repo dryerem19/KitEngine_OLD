@@ -9,25 +9,9 @@ namespace Core
 {
     class BaseCamera
     {
-    private:
-        float mFovy;
-        float mAspect;
-        float mZNear;
-        float mZFar;
-
     public:
-        BaseCamera() = default;
-        ~BaseCamera() = default;
-
-        void SetPerspective(float fovy, float aspect, float zNear, float zFar);
-        void SetLookAt(glm::vec3 eye, glm::vec3 center, glm::vec3 up);
-        const float* GetView() const;
-        const glm::mat4& GetGlmView() const { return mView;}
-        const float* GetPerspective() const;
-        glm::vec3 GetPos() const { return cameraPos; };
-        glm::vec3 GetFront() const { return cameraFront; };
-        glm::vec3 GetUp() const { return cameraUp; };
-        
+        BaseCamera();
+        BaseCamera(const float& fov, const float& aspect, const float& near, const float& far);        
         /**
          * @brief Преобразует точку из экранного пространства в мировое
          * 
@@ -39,25 +23,40 @@ namespace Core
          */
         void ScreenToWorldPoint(const glm::vec2& position, const glm::vec2& screen, glm::vec3& outOrigin, glm::vec3& outDirection);
 
-        virtual void Update();
-
-        float& GetZNear();
-
-        void UpdateAspect(const float& aspect);
-        const glm::mat4& GetProj() const { return mProjection; }
-
-        const glm::mat4& GetViewProjection() const { return mViewProjection; }
-
+        virtual void OnUpdate();
+        inline const glm::mat4& GetProjection() const { return mProjection; }
+        inline const glm::mat4& GetViewProjection() const { return mViewProjection; }
+        inline const glm::mat4& GetView() const { return mView; }
+        inline float GetYaw() const { return mYaw; }
+        inline float GetPitch() const { return mPitch; }
+        inline float GetFov() const { return mFov; }
+        inline float GetAspect() const { return mAspect; }
+        inline float GetNear() const { return mNearClip; }
+        inline float GetFar() const { return mFarClip; }
+        inline void SetViewportSize(const float& width, const float& height) { mViewportWidth = width; mViewportHeight = height; UpdateProjection(); }
+        glm::vec3 GetUp() const;
+        glm::vec3 GetRight() const;
+        glm::vec3 GetForward() const;
+        inline const glm::vec3& GetPosition() const { return mPosition; } 
+        glm::quat GetOrientation() const;
+    private:
+        void SetProjection(const float& fov, const float& aspect, const float& near, const float& far);
+        void UpdateProjection();
+        void UpdateView();
     protected:
-        glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
-        glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-        glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
+        glm::vec3 mPosition;
+        glm::mat4 mProjection;
+        glm::mat4 mViewProjection;
+        glm::mat4 mView;
 
-        glm::mat4 mTransform = glm::mat4(1.0f);
-        glm::mat4 mView = glm::mat4(1.0f);
-        glm::mat4 mProjection = glm::mat4(1.0f);
-
-        glm::mat4 mViewProjection = glm::mat4(1.0f);
+        float mYaw;
+        float mPitch;
+        float mFov;
+        float mAspect;
+        float mNearClip;
+        float mFarClip;    
+        float mViewportWidth;
+        float mViewportHeight;    
     };
 }
 
