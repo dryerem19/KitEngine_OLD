@@ -121,11 +121,6 @@ bool Transform::IsDirty() const
     return mDirty;
 }
 
-void Transform::ComputeCenter()
-{
-    //mCenter = mCenter * glm::translate(glm::mat4(1.0f), mTranslation) * glm::scale(glm::mat4(1.0f), mScale);
-}
-
 void Transform::UpdateRigidBodyPosition()
 {
     if (!m_pRigidBody) {

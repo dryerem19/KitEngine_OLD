@@ -22,7 +22,8 @@ namespace Core
          * @param outDirection Направление луча в мировом пространсве, который проходит через мышь
          */
         void ScreenToWorldPoint(const glm::vec2& position, const glm::vec2& screen, glm::vec3& outOrigin, glm::vec3& outDirection);
-
+        glm::vec3 ScreenToWorldToPoint(const glm::vec2 &position, const glm::vec2& screen);
+        glm::vec3 CreateRay(const glm::vec2 &mousePosition, const glm::vec2& screenSize);
         virtual void OnUpdate();
         inline const glm::mat4& GetProjection() const { return mProjection; }
         inline const glm::mat4& GetViewProjection() const { return mViewProjection; }

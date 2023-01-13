@@ -84,6 +84,29 @@ void Core::BaseCamera::ScreenToWorldPoint(const glm::vec2 &position, const glm::
     outDirection = rayDirWorld;
 }
 
+glm::vec3 Core::BaseCamera::ScreenToWorldToPoint(const glm::vec2 &position, const glm::vec2& screen)
+{
+    glm::vec4 viewport = glm::vec4(0, 0, screen.x, screen.y);
+    glm::vec3 wincoord = glm::vec3(position.x, screen.y - position.y - 1, mNearClip);
+    glm::vec3 objcoord = glm::unProject(wincoord, mView, mProjection, viewport);
+    return objcoord;
+}
+
+glm::vec3 Core::BaseCamera::CreateRay(const glm::vec2 &mousePosition, const glm::vec2 &screenSize)
+{
+    // Translation of coordinates from the display range to the normalized OpenGL range [-1; 1]
+    float mouseX = mousePosition.x / (screenSize.x * 0.5f) - 1.0f;
+    float mouseY = mousePosition.y / (screenSize.y * 0.5f) - 1.0f;
+
+    // Matrix of the view-projection in the space of the world
+    glm::mat4 invertViewProjection = glm::inverse(mProjection * mView);
+    glm::vec4 screenPosition = glm::vec4(mouseX, -mouseY, 1.0f, 1.0f);
+    glm::vec3 worldPosition = invertViewProjection * screenPosition;
+
+    glm::vec3 direction = glm::normalize(glm::vec3(worldPosition));
+    return direction;  
+}
+
 void Core::BaseCamera::OnUpdate()
 {
     UpdateView();

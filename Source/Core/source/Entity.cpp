@@ -36,7 +36,7 @@ void Entity::SetModel(std::shared_ptr<Model> model)
         glm::vec3 aabb_center = 0.5f * (model->mAabb.mMin + model->mAabb.mMax);
         
         glm::mat4 center_pivot = glm::translate(glm::mat4(1.0f), aabb_center) * glm::scale(glm::mat4(1.0f), aabb_size);
-        transform.SetPivot(center_pivot);
+        transform.SetPivotPosition(center_pivot[3]);
 
         glm::vec3 pivot_pos(center_pivot[3]);
 

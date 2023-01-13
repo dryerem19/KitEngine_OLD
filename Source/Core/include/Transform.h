@@ -18,8 +18,7 @@ private:
     glm::vec3 mTranslation   = { 0.0f, 0.0f, 0.0f };
     glm::vec3 mRotation      = { 0.0f, 0.0f, 0.0f };
     glm::vec3 mScale         = { 1.0f, 1.0f, 1.0f };
-
-    glm::mat4 mPivot;
+    glm::vec3 mPivotPosition = { 0.0f, 0.0f, 0.0f };
 
     /* Мировая матрица объекта */
     glm::mat4 mModelMatrix = glm::mat4(1.0f);
@@ -41,21 +40,19 @@ public:
     void SetScale(const glm::vec3& s);
     void SetScale(const float& x, const float& y, const float& z);
 
-    inline void SetPivot(const glm::mat4& pivot) { mPivot = pivot; }
-
+    inline void SetPivotPosition(const glm::vec3& position) { mPivotPosition = position; }
     void SetRigidBody(btRigidBody* pRigidBody);
 
     const glm::vec3& GetPosition() const;
     const glm::vec3& GetRotation() const;
     const glm::vec3& GetScale() const;
     const glm::mat4& GetModelMatrix();
-    inline const glm::mat4& GetPivot() const { return mPivot; }
+    inline glm::mat4 GetPivot() { return glm::translate(glm::mat4(1.0f), mPivotPosition); }
 
     std::string DebugString() const;
 
     bool IsDirty() const;
 private:
-    void ComputeCenter();
     void UpdateRigidBodyPosition();
     void UpdateRigidBodyRotation();
 };
