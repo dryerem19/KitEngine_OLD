@@ -55,4 +55,5 @@ public:
 private:
     void UpdateRigidBodyPosition();
     void UpdateRigidBodyRotation();
+    void UpdateRigidBodyScale();
 };

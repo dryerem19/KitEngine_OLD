@@ -63,6 +63,8 @@ void Transform::SetScale(const glm::vec3& s)
     mScale.y = s.y;
     mScale.z = s.z;
     mDirty = true;
+
+    UpdateRigidBodyScale();
 }
 
 void Transform::SetScale(const float& x, const float& y, const float& z)
@@ -71,6 +73,8 @@ void Transform::SetScale(const float& x, const float& y, const float& z)
     mScale.y = y;
     mScale.z = z;
     mDirty = true;
+
+    UpdateRigidBodyScale();
 }
 
 void Transform::SetRigidBody(btRigidBody *pRigidBody)
@@ -146,4 +150,13 @@ void Transform::UpdateRigidBodyRotation()
         btQuaternion(q.x, q.y, q.z, q.w),
         rigidBodyTransform.getOrigin()
     ));    
+}
+
+void Transform::UpdateRigidBodyScale()
+{
+    if (!m_pRigidBody) {
+        return;
+    }
+
+    m_pRigidBody->getCollisionShape()->setLocalScaling(btVector3(mScale.x, mScale.y, mScale.z));    
 }

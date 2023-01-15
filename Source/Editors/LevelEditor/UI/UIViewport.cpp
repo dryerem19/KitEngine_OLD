@@ -240,7 +240,11 @@ namespace LevelEditor
                 switch (mOperation)
                 {
                 case GizmoOperation::TRANSLATE:
-                    transform.SetPosition(position);
+                    glm::vec3 deltaPosition(transform.GetPosition());
+                    deltaPosition.x += position.x - deltaPosition.x;
+                    deltaPosition.y += deltaPosition.y - position.y;
+                    deltaPosition.z += position.z - deltaPosition.z;
+                    transform.SetPosition(deltaPosition);
                     transform.SetPivotPosition(position);
                     break;
                 case GizmoOperation::ROTATE:
