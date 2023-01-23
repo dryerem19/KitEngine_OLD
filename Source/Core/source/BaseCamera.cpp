@@ -6,7 +6,7 @@
 
 // Modify dryerem19 30.12.2022
 
-Core::BaseCamera::BaseCamera()
+BaseCamera::BaseCamera()
     : mFov(45),
       mAspect(1.778f), // 1280 / 720
       mNearClip(0.1f),
@@ -20,7 +20,7 @@ Core::BaseCamera::BaseCamera()
     UpdateView();
 }
 
-Core::BaseCamera::BaseCamera(const float &fov, const float &aspect, const float &near, const float &far)
+BaseCamera::BaseCamera(const float &fov, const float &aspect, const float &near, const float &far)
     : mFov(fov),
       mAspect(aspect),
       mNearClip(near),
@@ -34,7 +34,7 @@ Core::BaseCamera::BaseCamera(const float &fov, const float &aspect, const float 
     UpdateView();
 }      
 
-void Core::BaseCamera::ScreenToWorldPoint(const glm::vec2 &position, const glm::vec2& screen, glm::vec3& outOrigin, glm::vec3& outDirection)
+void BaseCamera::ScreenToWorldPoint(const glm::vec2 &position, const glm::vec2& screen, glm::vec3& outOrigin, glm::vec3& outDirection)
 {
     // Преобразование координат мыши из пространства экрана в нормализованное пространство устройства
     // NDC - это пространство OpenGL в диапазоне от -1 (левый край) до 1 (правый край) 
@@ -84,7 +84,7 @@ void Core::BaseCamera::ScreenToWorldPoint(const glm::vec2 &position, const glm::
     outDirection = rayDirWorld;
 }
 
-glm::vec3 Core::BaseCamera::ScreenToWorldToPoint(const glm::vec2 &position, const glm::vec2& screen)
+glm::vec3 BaseCamera::ScreenToWorldToPoint(const glm::vec2 &position, const glm::vec2& screen)
 {
     glm::vec4 viewport = glm::vec4(0, 0, screen.x, screen.y);
     glm::vec3 wincoord = glm::vec3(position.x, screen.y - position.y - 1, mNearClip);
@@ -92,7 +92,7 @@ glm::vec3 Core::BaseCamera::ScreenToWorldToPoint(const glm::vec2 &position, cons
     return objcoord;
 }
 
-glm::vec3 Core::BaseCamera::CreateRay(const glm::vec2 &mousePosition, const glm::vec2 &screenSize)
+glm::vec3 BaseCamera::CreateRay(const glm::vec2 &mousePosition, const glm::vec2 &screenSize)
 {
     // Translation of coordinates from the display range to the normalized OpenGL range [-1; 1]
     float mouseX = mousePosition.x / (screenSize.x * 0.5f) - 1.0f;
@@ -107,46 +107,48 @@ glm::vec3 Core::BaseCamera::CreateRay(const glm::vec2 &mousePosition, const glm:
     return direction;  
 }
 
-void Core::BaseCamera::OnUpdate()
+void BaseCamera::OnUpdate()
 {
     UpdateView();
     mViewProjection = mProjection * mView;
 }
 
-glm::vec3 Core::BaseCamera::GetUp() const
+glm::vec3 BaseCamera::GetUp() const
 {
     return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
-glm::vec3 Core::BaseCamera::GetRight() const
+glm::vec3 BaseCamera::GetRight() const
 {
     return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
 }
 
-glm::vec3 Core::BaseCamera::GetForward() const
+glm::vec3 BaseCamera::GetForward() const
 {
     return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
 }
 
-glm::quat Core::BaseCamera::GetOrientation() const
+glm::quat BaseCamera::GetOrientation() const
 {
     return glm::quat(glm::vec3(-mPitch, -mYaw, 0.0f));
 }
 
-void Core::BaseCamera::SetProjection(const float& fov, const float& aspect, const float& near, const float& far)
+void BaseCamera::SetProjection(const float& fov, const float& aspect, const float& near, const float& far)
 {
     mProjection = glm::perspective(glm::radians(mFov), mAspect, mNearClip, mFarClip);
+    mViewProjection = mProjection * mView;
 }
 
-void Core::BaseCamera::UpdateProjection()
+void BaseCamera::UpdateProjection()
 {
     mAspect = mViewportWidth / mViewportHeight;
     SetProjection(glm::radians(mFov), mAspect, mNearClip, mFarClip);
 }
 
-void Core::BaseCamera::UpdateView()
+void BaseCamera::UpdateView()
 {
     glm::quat orientation = GetOrientation();
     mView = glm::translate(glm::mat4(1.0f), mPosition) * glm::toMat4(orientation);
     mView = glm::inverse(mView);
+    mViewProjection = mProjection * mView;
 }

@@ -47,7 +47,7 @@ void SkyBox::Deserialize(const std::string& filepath)
     mPath = filepath;
 }
 
-void SkyBox::Render(const Core::BaseCamera& camera)
+void SkyBox::Render(const BaseCamera& camera)
 {
     if(!mShader)
     {

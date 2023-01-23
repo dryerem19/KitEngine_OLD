@@ -78,8 +78,14 @@ namespace LevelEditor
         EditorCamera::Instance().OnUpdate();
 
         auto& physics = PhysicSystem::Instance();
+        physics.Update(1/ 60);
 
         auto& level = GameLevel::Get();
+
+        // for (auto& object : level._objects)
+        // {
+        //     object->transform.UpdateRigidBody();
+        // }
 
         //GameLevel::Get().Update();
 

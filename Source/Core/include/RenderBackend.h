@@ -44,7 +44,7 @@ private:
     Render::FrameBuffer mFrameBuffer;
     Cursor3D mCursor3d;
 
-    Core::BaseCamera* m_pRenderCamera;
+    BaseCamera* m_pRenderCamera;
 
 public:
     //RenderDebug mRenderDebug;
@@ -56,7 +56,8 @@ public:
         return instance;
     }
 
-    void SetRenderCamera(Core::BaseCamera* pRenderCamera);
+    inline BaseCamera* GetRenderCamera() { return m_pRenderCamera; }
+    void SetRenderCamera(BaseCamera* pRenderCamera);
 
     void BeginFrame();
     void EndFrame();

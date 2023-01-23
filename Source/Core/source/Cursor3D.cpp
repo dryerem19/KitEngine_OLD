@@ -11,7 +11,7 @@
 #include "pch.h"
 #include "Cursor3D.h"
 
-glm::vec3 Cursor3D::GetPickRay(const Core::BaseCamera& camera, const glm::vec2& viewport)
+glm::vec3 Cursor3D::GetPickRay(const BaseCamera& camera, const glm::vec2& viewport)
 {
     auto& app = Core::Application::Instance();
     
@@ -26,7 +26,7 @@ glm::vec3 Cursor3D::GetPickRay(const Core::BaseCamera& camera, const glm::vec2& 
     return worldRay;
 }
 
-glm::vec3 Cursor3D::ToWorldCoords(const glm::vec4 &eyeCoords, const Core::BaseCamera &camera)
+glm::vec3 Cursor3D::ToWorldCoords(const glm::vec4 &eyeCoords, const BaseCamera &camera)
 {
     glm::mat4 invertedView = glm::inverse(camera.GetView());
     glm::vec4 rayWorld = invertedView * eyeCoords;
@@ -35,7 +35,7 @@ glm::vec3 Cursor3D::ToWorldCoords(const glm::vec4 &eyeCoords, const Core::BaseCa
     return mouseRay;
 }
 
-glm::vec4 Cursor3D::ToEyeCoords(const glm::vec4 &clipCoords, const Core::BaseCamera &camera)
+glm::vec4 Cursor3D::ToEyeCoords(const glm::vec4 &clipCoords, const BaseCamera &camera)
 {
     const glm::mat4& proj = camera.GetProjection();
     glm::mat4 projInv = glm::inverse(proj);

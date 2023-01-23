@@ -32,103 +32,28 @@ namespace LevelEditor
                 mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
                 mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
             );       
-
-                    // glm::vec3 origin, direction;
-                    // EditorCamera::Instance().ScreenToWorldPoint(relative_mouse_position, glm::vec2(mWidth, mHeight), origin, direction);
-                    // //origin = EditorCamera::Instance().GetPosition();        
-
-                    // glm::vec3 end = origin + direction * 1000.0f;    
-                    // RenderBackend::Get().SetDebugDrawLine(origin, end, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));                 
+             
 
             if (ImGui::IsWindowHovered())
             {
                 if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
                 {
-                    //glm::vec3 origin, direction;
-                    //EditorCamera::Instance().ScreenToWorldPoint(relative_mouse_position, glm::vec2(mWidth, mHeight), origin, direction);
-                    //origin = EditorCamera::Instance().GetPosition();     
-                    
-                    //glm::vec3 objcoord = EditorCamera::Instance().ScreenToWorldToPoint(relative_mouse_position, glm::vec2(mWidth, mHeight));     
-                    //glm::vec3 ray = objcoord;        
-                    //DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", ray.x, ray.y, ray.z);           
-
                     glm::vec3 rayDirection = EditorCamera::Instance().CreateRay(relative_mouse_position, glm::vec2(mWidth, mHeight));
                     glm::vec3 rayStartPosition = EditorCamera::Instance().GetPosition();
                     glm::vec3 rayEndPosition = rayStartPosition + rayDirection * 1000.0f;  
 
-                    // glm::vec3 end = origin + direction * 1000.0f;    
-                    // RenderBackend::Get().SetDebugDrawLine(origin, end, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));      
-
                     btRigidBody* pRigidBody = PhysicSystem::Instance().GetPickBody(rayStartPosition, rayEndPosition);
-                    if (pRigidBody != nullptr) {
-                        std::cout << "SELECTED OBJECT\n"; 
-                    }
-                    //DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", end.x, end.y, end.z);                          
+                    if (pRigidBody)
+                    {
+                        PhysicObject* phObject = static_cast<PhysicObject*>(pRigidBody->getUserPointer());
+                        phObject->HasKitObject() ? phObject->GetKitObject()->OnPicked() : (void)0;
+                    }     
+                    else 
+                    {
+                        //GameLevel::Get().SetSelectedObject(nullptr);
+                    }                    
                 }
             }
-
-
-
-            // // Проверяем, что мышка попадает в область вьюпорта
-
-            //     // Получаем координаты курсора относительно вьюпорта
-            //     glm::vec2 relative_mouse_position(
-            //         mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
-            //         mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
-            //     );
-
-            //     // Переводим экранные координаты в мировые координаты
-            //     glm::vec3 origin, direction;
-            //     EditorCamera::Instance().ScreenToWorldPoint(relative_mouse_position, glm::vec2(mWidth, mHeight), origin, direction);
-            //     origin = EditorCamera::Instance().GetPosition();
-                
-            //     glm::vec3 end = origin + direction * 1000.0f;
-
-
-            //     RenderBackend::Get().SetDebugDrawLine(origin, end, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));            
-            
-            // if (mousePosition.x >= vMin.x && mousePosition.x <= vMax.x
-            //     && mousePosition.y >= vMin.y && mousePosition.y <= vMax.y)
-            // {
-            //     // Если была нажата левая кнопка мыши
-            //     if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) 
-            //     {
-            //         // Получаем координаты курсора относительно вьюпорта
-            //         glm::vec2 relative_mouse_position(
-            //             mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
-            //             mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
-            //         );
-
-            //         // Переводим экранные координаты в мировые координаты
-            //         glm::vec3 origin, direction;
-            //         EditorCamera::Instance().ScreenToWorldPoint(relative_mouse_position, glm::vec2(mWidth, mHeight), origin, direction);
-            //         origin = EditorCamera::Instance().GetPosition();
-                    
-            //         glm::vec3 end = origin + direction * 1000.0f;
-
-
-            //         RenderBackend::Get().SetDebugDrawLine(origin, end, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-
-
-            //         //RenderBackend::Get().mRenderDebug.AddLine(origin, end, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-
-            //         btRigidBody* pRigidBody = PhysicSystem::Instance().GetPickBody(origin, end);
-            //         if (pRigidBody != nullptr) {
-            //             std::cout << "SELECTED OBJECT\n"; 
-            //         }
-            //         DEBUG_MSG("PICK POINT - x: %.3f, y: %.3f, z: %.3f", end.x, end.y, end.z); 
-            //     }
-            // }
-
-            // // Проверяем клик
-            // if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-            //     // Получаем координаты курсора относительно вьюпорта
-            //     glm::vec2 relative_mouse_position(
-            //         Core::Input::mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
-            //         Core::Input::mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
-            //     );
-            //     DEBUG_MSG("Pre - x: %.3f, y: %.3f", relative_mouse_position.x, relative_mouse_position.y);                
-            // }
 
             ImGui::Image(RenderBackend::Get().GetFrame(), viewportSize, ImVec2(0, 1), ImVec2(1, 0));
             //if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
@@ -161,37 +86,56 @@ namespace LevelEditor
                     std::string* filepath = (std::string*)payload->Data;
                     if (filepath != nullptr) {
 
-                        glm::vec3 pickRay = RenderBackend::Get().GetCursor3d().GetPickRay(EditorCamera::Instance(), 
-                            glm::vec2(mWidth, mHeight));
-                        glm::vec3 cameraPos = EditorCamera::Instance().GetPosition();
+                        // glm::vec3 pickRay = RenderBackend::Get().GetCursor3d().GetPickRay(EditorCamera::Instance(), 
+                        //     glm::vec2(mWidth, mHeight));
+                        // glm::vec3 cameraPos = EditorCamera::Instance().GetPosition();
 
-                        // if (mIsFirstDelivery) {
-                        //     pDeliveryEntity = GameLevel::Get().CreateEntity();
-                        //     pDeliveryEntity->SetModel(Core::ResourceManager::Instance().GetModel(filepath->c_str()));
-                        //     pDeliveryEntity->SetName(pDeliveryEntity->GetModel()->mName);
+                        // glm::vec3 rayDirection = EditorCamera::Instance().CreateRay(relative_mouse_position, glm::vec2(mWidth, mHeight));
+                        // glm::vec3 rayStartPosition = EditorCamera::Instance().GetPosition();
+                        // glm::vec3 rayEndPosition = rayStartPosition + rayDirection * mCameraMouseDistance;                          
 
-                        //     cameraPos += pickRay * mCameraMouseDistance;
-                        //     pDeliveryEntity->transform.SetPosition(cameraPos);
-                        //     mIsFirstDelivery = false;
-                        // } else {
-                        //     if (pDeliveryEntity != nullptr && mMousePickRay != pickRay) {
-                        //         mMousePickRay = pickRay;
-
-                        //         const glm::vec2& mouseOffset = Core::Input::mouseOffset;
-                        //         glm::vec3 entityPos = pDeliveryEntity->transform.GetPosition();
-                        //         entityPos.x += mouseOffset.x * mMoveSpeed;
-                        //         entityPos.z += mouseOffset.y * mMoveSpeed;
-                        //         pDeliveryEntity->transform.SetPosition(entityPos);
-                        //     }
-                        // }
-
-                        if (payload->IsDelivery()) {
-                            mMousePickRay.x = mMousePickRay.y = mMousePickRay.z = 0;
-                            mIsFirstDelivery = true;
-
+                        if (mIsFirstDelivery) {
                             pDeliveryEntity = GameLevel::Get().CreateEntity();
                             pDeliveryEntity->SetModel(Core::ResourceManager::Instance().GetModel(filepath->c_str()));
-                            pDeliveryEntity->SetName(pDeliveryEntity->GetModel()->mName);                            
+                            pDeliveryEntity->SetName(pDeliveryEntity->GetModel()->mName);
+
+                            //cameraPos += pickRay * mCameraMouseDistance;
+                            //pDeliveryEntity->transform.SetPosition(rayEndPosition);
+
+                            glm::vec3 rayDirection = EditorCamera::Instance().CreateRay(relative_mouse_position, glm::vec2(mWidth, mHeight));
+                            glm::vec3 rayStartPosition = EditorCamera::Instance().GetPosition();
+                            glm::vec3 rayEndPosition = rayStartPosition + rayDirection * mCameraMouseDistance;  
+                            //pDeliveryEntity->transform.SetPosition(rayEndPosition); 
+
+                            mIsFirstDelivery = false;
+                        } else {
+                            if (pDeliveryEntity != nullptr) {
+                                // glm::vec3 rayDirection = EditorCamera::Instance().CreateRay(relative_mouse_position, glm::vec2(mWidth, mHeight));
+                                // glm::vec3 rayStartPosition = EditorCamera::Instance().GetPosition();
+                                // glm::vec3 rayEndPosition = rayStartPosition + rayDirection * mCameraMouseDistance;     
+
+                                // const glm::vec2& mouseOffset = Core::Input::mouseOffset;
+                                // rayEndPosition.x += mouseOffset.x;
+                                // rayEndPosition.z += mouseOffset.y;                                
+
+                                 //pDeliveryEntity->transform.SetPosition(rayEndPosition);                             
+                                //mMousePickRay = rayEndPosition;
+
+                                // const glm::vec2& mouseOffset = Core::Input::mouseOffset;
+                                // glm::vec3 entityPos = pDeliveryEntity->transform.GetPosition();
+                                // entityPos.x += mouseOffset.x * mMoveSpeed;
+                                // entityPos.z += mouseOffset.y * mMoveSpeed;
+                                // pDeliveryEntity->transform.SetPosition(entityPos);
+                            }
+                        }
+
+                        if (payload->IsDelivery()) {
+                            //mMousePickRay.x = mMousePickRay.y = mMousePickRay.z = 0;
+                            mIsFirstDelivery = true;
+
+                            // pDeliveryEntity = GameLevel::Get().CreateEntity();
+                            // pDeliveryEntity->SetModel(Core::ResourceManager::Instance().GetModel(filepath->c_str()));
+                            // pDeliveryEntity->SetName(pDeliveryEntity->GetModel()->mName);                            
                         }
                     }
                 }
@@ -215,49 +159,52 @@ namespace LevelEditor
         auto selected = level.GetSelectedObject();
         if (selected && mOperation != GizmoOperation::NONE)
         {
-            Transform& transform = selected->transform;
+            //Transform& objectTransform = selected->transform;
 
-            glm::vec3 position = transform.GetPosition();
-            glm::vec3 rotation = glm::degrees(transform.GetRotation());
-            glm::vec3 scale = transform.GetScale();
+            Entity* ent = selected->dnm_cast_entity();
 
-            /* Build transform matrix */
-            float transformMatrix[16];
-            ImGuizmo::RecomposeMatrixFromComponents(&position.x, &rotation.x, &scale.x, transformMatrix);
 
-            glm::mat4 view = EditorCamera::Instance().GetView();
-            const glm::mat4& proj = EditorCamera::Instance().GetProjection();
-            glm::mat4 model = transform.GetModelMatrix();
 
-            glm::mat4 pivot = transform.GetPivot();
-            ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, 
-                glm::value_ptr(pivot));
-            
-            /* If we moved the manipulator */
-            if (ImGuizmo::IsUsing())
+            if (ent && ent->mPhysicObject)
             {
-                ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(pivot), &position.x, &rotation.x, &scale.x);
-                switch (mOperation)
+                glm::mat4 transformMatrix = ent->mPhysicObject->GetTransform();
+                ImGuizmo::Manipulate(glm::value_ptr(EditorCamera::Instance().GetView()), glm::value_ptr(EditorCamera::Instance().GetProjection()), 
+                    (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, glm::value_ptr(transformMatrix));
+
+                /* If we moved the manipulator */
+                if (ImGuizmo::IsUsing())
                 {
-                case GizmoOperation::TRANSLATE:
-                    glm::vec3 deltaPosition(transform.GetPosition());
-                    deltaPosition.x += position.x - deltaPosition.x;
-                    deltaPosition.y += deltaPosition.y - position.y;
-                    deltaPosition.z += position.z - deltaPosition.z;
-                    transform.SetPosition(deltaPosition);
-                    transform.SetPivotPosition(position);
-                    break;
-                case GizmoOperation::ROTATE:
+                    glm::vec3 decomposePosition, decomposeRotation, decomposeScale;
+                    ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(transformMatrix), &decomposePosition.x, &decomposeRotation.x, &decomposeScale.x);
+                    switch (mOperation)
                     {
-                        transform.SetRotation(glm::radians(rotation));
+                    case GizmoOperation::TRANSLATE:
+                    {
+                        ent->mPhysicObject->SetPosition(decomposePosition);                
                     }
                     break;
-                case GizmoOperation::SCALE:
-                    transform.SetScale(scale);
-                    break;
-                default:
-                    break;
-                }
+                    case GizmoOperation::ROTATE:
+                        ent->mPhysicObject->SetRotation(glm::quat(glm::radians(decomposeRotation)));
+                        break;
+                    case GizmoOperation::SCALE:
+                        ent->mPhysicObject->SetScale(decomposeScale);
+                        break;
+                    default:
+                        break;
+                    }
+                }                    
+            }
+            else 
+            {
+                glm::mat4 transformMatrix = selected->transform.GetModelMatrix();
+                ImGuizmo::Manipulate(glm::value_ptr(EditorCamera::Instance().GetView()), glm::value_ptr(EditorCamera::Instance().GetProjection()), 
+                    (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, glm::value_ptr(transformMatrix));   
+
+                if (ImGuizmo::IsUsing())
+                {
+                    transformMatrix *= glm::inverse(selected->transform.GetModelMatrix());
+                    ent->transform.SetTransform(transformMatrix);                    
+                }             
             }
         }
     }

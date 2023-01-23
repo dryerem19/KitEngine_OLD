@@ -12,6 +12,11 @@
 #include "KitModelFile.h"
 #include "KitStaticMesh.h"
 
+
+#include "Shader.h"
+#include "Transform.h"
+#include "BaseCamera.h"
+
 class Model
 {
 public:
@@ -20,6 +25,10 @@ public:
     std::string mName;
     KMFAABB mAabb;
     btTriangleMesh* pTempMesh = nullptr;
+
+    Transform mTransform;
 public:
     void Deserialize(const std::string& filepath);
+
+    void Draw(const std::shared_ptr<Shader>& shader, const BaseCamera& camera);
 };

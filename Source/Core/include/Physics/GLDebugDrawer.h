@@ -15,7 +15,20 @@ class GLDebugDrawer final : public btIDebugDraw
 {
 private:
     int mDebugMode;
+
+
+    btVector3 mFromLine;
+    btVector3 mToLine;
+
+    unsigned int mVaoId;
+    unsigned int mVboId;    
+
+    std::shared_ptr<Shader> mShader;    
+
+
 public:
+    GLDebugDrawer();
+
 	virtual void setDebugMode(int debugMode) override final { mDebugMode = debugMode; }
 	virtual int getDebugMode() const override final { return mDebugMode; }
 

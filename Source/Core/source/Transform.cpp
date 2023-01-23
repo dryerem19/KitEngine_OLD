@@ -19,22 +19,32 @@ Transform::Transform()
 
 void Transform::SetPosition(const glm::vec3 &p)
 {
+    // glm::vec3 deltaPosition = p - mTranslation;
+    // mPivotPosition += deltaPosition;   
+
+    // UpdatePivot();
+
     mTranslation.x = p.x;
     mTranslation.y = p.y;
     mTranslation.z = p.z;
     mDirty = true;
 
-    UpdateRigidBodyPosition();
+    // UpdateRigidBody();
 }
 
 void Transform::SetPosition(const float& x, const float& y, const float& z)
 {
+    glm::vec3 deltaPosition = glm::vec3(x, y, z) - mTranslation;
+    mPivotPosition += deltaPosition;  
+
+    // UpdatePivot();
+
     mTranslation.x = x;
     mTranslation.y = y;
     mTranslation.z = z;
     mDirty = true;
 
-    UpdateRigidBodyPosition();
+    // UpdateRigidBody();
 }
 
 void Transform::SetRotation(const glm::vec3& r)
@@ -43,8 +53,8 @@ void Transform::SetRotation(const glm::vec3& r)
     mRotation.y = r.y;
     mRotation.z = r.z;
     mDirty = true;
-
-    UpdateRigidBodyRotation();
+    // UpdatePivot();
+    // UpdateRigidBody();
 }
 
 void Transform::SetRotation(const float& x, const float& y, const float& z)
@@ -53,8 +63,8 @@ void Transform::SetRotation(const float& x, const float& y, const float& z)
     mRotation.y = y;
     mRotation.z = z;
     mDirty = true;
-
-    UpdateRigidBodyRotation();
+    // UpdatePivot();
+    // UpdateRigidBody();
 }
 
 void Transform::SetScale(const glm::vec3& s)
@@ -64,7 +74,7 @@ void Transform::SetScale(const glm::vec3& s)
     mScale.z = s.z;
     mDirty = true;
 
-    UpdateRigidBodyScale();
+    //UpdateRigidBodyScale();
 }
 
 void Transform::SetScale(const float& x, const float& y, const float& z)
@@ -74,7 +84,22 @@ void Transform::SetScale(const float& x, const float& y, const float& z)
     mScale.z = z;
     mDirty = true;
 
-    UpdateRigidBodyScale();
+    //UpdateRigidBodyScale();
+}
+
+void Transform::SetTransform(const glm::mat4 &transform)
+{
+    glm::vec3 scale;
+    glm::quat rotation;
+    glm::vec3 position;
+
+    glm::vec3 skew;
+    glm::vec4 persp;
+    glm::decompose(transform, scale, rotation, position, skew, persp);
+
+    SetPosition(position);
+    SetRotation(glm::degrees(glm::eulerAngles(rotation)));
+    SetScale(scale);
 }
 
 void Transform::SetRigidBody(btRigidBody *pRigidBody)
@@ -100,13 +125,23 @@ const glm::vec3& Transform::GetScale() const
 const glm::mat4& Transform::GetModelMatrix()
 {
     if (mDirty)
-    {        
-        mModelMatrix = glm::translate(glm::mat4(1.0f), mTranslation)
-            * glm::toMat4(glm::quat(mRotation))
-            * glm::scale(glm::mat4(1.0f), mScale);
-    }
+    {   
+        mDirty = false;        
+        glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), mTranslation);
+        glm::mat4 rotationMatrix = glm::toMat4(glm::quat(mRotation));
+        glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), mScale);
+        //mModelMatrix = translationMatrix * scaleMatrix * rotationMatrix;
 
-    mDirty = false;
+        glm::mat4 centerMatrix = glm::translate(glm::mat4(1.0f), mPivotPosition);
+        mModelMatrix = translationMatrix * scaleMatrix * rotationMatrix;
+
+        // glm::mat4 pivotTranslationMatrix = glm::translate(glm::mat4(1.0f), mPivotPosition);
+        // glm::mat4 objectRotationMatrix = pivotTranslationMatrix * glm::toMat4(glm::quat(mRotation)) * glm::inverse(pivotTranslationMatrix);
+        // glm::mat4 objectTranslationMatrix = glm::translate(glm::mat4(1.0f), mTranslation);
+        // glm::mat4 objectScaleMatrix = glm::scale(glm::mat4(1.0f), mScale);
+
+        // mModelMatrix = objectTranslationMatrix * objectScaleMatrix * objectRotationMatrix;
+    }
     return mModelMatrix;
 }
 
@@ -125,38 +160,38 @@ bool Transform::IsDirty() const
     return mDirty;
 }
 
-void Transform::UpdateRigidBodyPosition()
-{
-    if (!m_pRigidBody) {
-        return;
-    }
+// void Transform::UpdateRigidBody()
+// {
+//     if (!m_pRigidBody) {
+//         return;
+//     }
 
-    const btTransform& rigidBodyTransform = m_pRigidBody->getWorldTransform();
-    m_pRigidBody->setWorldTransform(btTransform(
-        rigidBodyTransform.getRotation(),
-        btVector3(mTranslation.x, mTranslation.y, mTranslation.z)
-    ));
-}
+//     const glm::quat rotation = glm::quat(mRotation);
 
-void Transform::UpdateRigidBodyRotation()
-{
-    if (!m_pRigidBody) {
-        return;
-    }
+//     btTransform transform;
+//     transform.setIdentity();
+//     transform.setFromOpenGLMatrix(glm::value_ptr(mPivotMatrix));
 
-    const glm::quat q = glm::quat(mRotation);
-    const btTransform& rigidBodyTransform = m_pRigidBody->getWorldTransform();
-    m_pRigidBody->setWorldTransform(btTransform(
-        btQuaternion(q.x, q.y, q.z, q.w),
-        rigidBodyTransform.getOrigin()
-    ));    
-}
 
-void Transform::UpdateRigidBodyScale()
-{
-    if (!m_pRigidBody) {
-        return;
-    }
+//     // transform.setIdentity();
+//     // transform.setOrigin(btVector3(mPivotPosition.x, mPivotPosition.y, mPivotPosition.z));
+//     // transform.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
+    
+//     m_pRigidBody->setWorldTransform(transform);
+//     m_pRigidBody->getMotionState()->setWorldTransform(transform);
+// }
 
-    m_pRigidBody->getCollisionShape()->setLocalScaling(btVector3(mScale.x, mScale.y, mScale.z));    
-}
+// void Transform::UpdateRigidBodyScale()
+// {
+//     if (!m_pRigidBody) {
+//         return;
+//     }
+//     m_pRigidBody->getCollisionShape()->setLocalScaling(btVector3(mScale.x, mScale.y, mScale.z));    
+// }
+
+// void Transform::UpdatePivot()
+// {
+//     glm::mat4 pivotTranslationMatrix = glm::translate(glm::mat4(1.0f), mPivotPosition);
+//     glm::mat4 pivotRotationMatrix = pivotTranslationMatrix * glm::toMat4(glm::quat(mRotation)) * glm::inverse(pivotTranslationMatrix);
+//     mPivotMatrix = pivotTranslationMatrix * pivotRotationMatrix;
+// }

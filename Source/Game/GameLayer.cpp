@@ -1,10 +1,16 @@
 #include "GameLayer.h"
 
+#include "ResourceManager.h"
+
 void GameLayer::OnStart()
 {
     auto pWindow = Core::Application::Instance().GetWindow().get();
-    camera.SetPerspective(45.0f, pWindow->GetWidth() / pWindow->GetHeight(), 0.1f, 100.0f);
-    GameLevel::Get().Deserialize("test.level");
+    camera.SetViewportSize(pWindow->GetWidth(), pWindow->GetHeight());
+
+    Entity* pGround = GameLevel::Get().CreateEntity();
+    pGround->SetModel(Core::ResourceManager::Instance().GetModel("C:/Users/Denis/CLionProjects/KitEngine/bin/Debug/data/Pivot-Layer_0/Pivot-Layer_0.kmf"));
+
+    //GameLevel::Get().Deserialize("test.level");
 }
 
 void GameLayer::EventHandler(const Core::Event& event)
@@ -13,7 +19,7 @@ void GameLayer::EventHandler(const Core::Event& event)
     if (type == Core::EventType::FrameBufferResizeEvent)
     {
         auto& e = (Core::FrameBufferResizeEvent&)event;
-        camera.SetPerspective(45.0f, (float)e.GetWidth() / e.GetHeight(), 0.1f, 100.0f);
+        camera.SetViewportSize(e.GetWidth(), e.GetHeight());
     }
 
     std::cout << event.ToString() << std::endl;
@@ -21,10 +27,13 @@ void GameLayer::EventHandler(const Core::Event& event)
 
 void GameLayer::OnUpdate()
 {
-    camera.HandleInput();
+    camera.OnUpdate();
 }
 
 void GameLayer::OnRender(double dt)
 {
     RenderSystem::Instance().Render(camera);
+
+    Core::ResourceManager::Instance().GetModel("C:/Users/Denis/CLionProjects/KitEngine/bin/Debug/data/Pivot-Layer_0/Pivot-Layer_0.kmf")->Draw(
+        nullptr, camera);
 }

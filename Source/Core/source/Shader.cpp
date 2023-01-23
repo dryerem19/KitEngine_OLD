@@ -7,7 +7,7 @@
 //-------------------------------------------------------------------------------------------
 // Конструктор
 //-------------------------------------------------------------------------------------------
-Render::Shader::Shader(const std::string &filename)
+Shader::Shader(const std::string &filename)
     : mFilename(filename), mShaderId(0) {
 
     ShaderProgramSource source = this->ParseShader(filename);
@@ -18,7 +18,7 @@ Render::Shader::Shader(const std::string &filename)
 //-------------------------------------------------------------------------------------------
 // Деструктор
 //-------------------------------------------------------------------------------------------
-Render::Shader::~Shader() {
+Shader::~Shader() {
 
     // Cleanup
     GLCall(glDeleteProgram(mShaderId));
@@ -28,7 +28,7 @@ Render::Shader::~Shader() {
 //-------------------------------------------------------------------------------------------
 // Включить шейдер
 //-------------------------------------------------------------------------------------------
-void Render::Shader::Enable() const {
+void Shader::Enable() const {
 
     GLCall(glUseProgram(mShaderId));
 
@@ -37,7 +37,7 @@ void Render::Shader::Enable() const {
 //-------------------------------------------------------------------------------------------
 // Отключить шейдер
 //-------------------------------------------------------------------------------------------
-void Render::Shader::Disable() {
+void Shader::Disable() {
 
     GLCall(glUseProgram(0));
 
@@ -47,7 +47,7 @@ void Render::Shader::Disable() {
 // Установка матрицы 4x4 униформ переменной
 //-------------------------------------------------------------------------------------------
 void
-Render::Shader::SetUniformMatrix4fv(const std::string &uniformName, GLsizei count, GLboolean transpose,
+Shader::SetUniformMatrix4fv(const std::string &uniformName, GLsizei count, GLboolean transpose,
                                                  const GLfloat *value) const {
 
     const GLint location = this->GetUniformLocation(uniformName);
@@ -55,10 +55,22 @@ Render::Shader::SetUniformMatrix4fv(const std::string &uniformName, GLsizei coun
 
 }
 
+void Shader::SetMat(const std::string &name, const glm::mat4 &mat)
+{
+    const GLint location = GetUniformLocation(name);
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+}
+
+void Shader::SetMat(const std::string &name, const glm::mat3 &mat)
+{
+    const GLint location = GetUniformLocation(name);
+    glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+}
+
 //-------------------------------------------------------------------------------------------
 // Установка вектора униформ переменной
 //-------------------------------------------------------------------------------------------
-void Render::Shader::SetUniform4f(const std::string &uniformName, float x, float y, float z,
+void Shader::SetUniform4f(const std::string &uniformName, float x, float y, float z,
                                                float w) const {
 
     const GLint location = this->GetUniformLocation(uniformName);
@@ -69,7 +81,7 @@ void Render::Shader::SetUniform4f(const std::string &uniformName, float x, float
 //-------------------------------------------------------------------------------------------
 // Установка вектора (vec3) униформ переменной
 //-------------------------------------------------------------------------------------------
-void Render::Shader::SetUniform3f(const std::string &uniformName, float x, float y, float z) const {
+void Shader::SetUniform3f(const std::string &uniformName, float x, float y, float z) const {
 
     const GLint location = this->GetUniformLocation(uniformName);
     GLCall(glUniform3f(location, x, y, z));
@@ -79,7 +91,7 @@ void Render::Shader::SetUniform3f(const std::string &uniformName, float x, float
 //-------------------------------------------------------------------------------------------
 // Установка float значения
 //-------------------------------------------------------------------------------------------
-void Render::Shader::SetUniform1f(const std::string &uniformName, float value)
+void Shader::SetUniform1f(const std::string &uniformName, float value)
 {
     GLCall(glUniform1f(this->GetUniformLocation(uniformName), value));
 }
@@ -89,7 +101,7 @@ void Render::Shader::SetUniform1f(const std::string &uniformName, float value)
 // const std::string &uniformName - имя униформ переменной
 // returned: местоположение переменной
 //-------------------------------------------------------------------------------------------
-GLint Render::Shader::GetUniformLocation(const std::string &uniformName) const {
+GLint Shader::GetUniformLocation(const std::string &uniformName) const {
 
     GLint location = glGetUniformLocation(mShaderId, uniformName.c_str());
     if (location == -1) {
@@ -105,7 +117,7 @@ GLint Render::Shader::GetUniformLocation(const std::string &uniformName) const {
 // const ShaderProgramSource& source - структура с текстом шейдера
 // returned: идентификатор шейдера
 //-------------------------------------------------------------------------------------------
-unsigned int Render::Shader::CreateShader(const ShaderProgramSource& source) const {
+unsigned int Shader::CreateShader(const ShaderProgramSource& source) const {
 
     // Compile shaders
     const uint32_t idProgram      = glCreateProgram();
@@ -133,7 +145,7 @@ unsigned int Render::Shader::CreateShader(const ShaderProgramSource& source) con
 // unsigned int type - тип шейдера
 // returned: идентификатор шейдера
 //-------------------------------------------------------------------------------------------
-unsigned int Render::Shader::CompileShader(const std::string& shaderText, uint32_t type) const {
+unsigned int Shader::CompileShader(const std::string& shaderText, uint32_t type) const {
 
     // Create shader
     const uint32_t id = glCreateShader(type);
@@ -174,7 +186,7 @@ unsigned int Render::Shader::CompileShader(const std::string& shaderText, uint32
 // const std::string &shaderPath - путь к файлу шейдера
 // returned: структура с текстом шейдера
 //-------------------------------------------------------------------------------------------
-Render::ShaderProgramSource Render::Shader::ParseShader(const std::string &shaderPath) {
+ShaderProgramSource Shader::ParseShader(const std::string &shaderPath) {
 
     if (shaderPath.empty()) {
         return {"", ""};
@@ -204,7 +216,7 @@ Render::ShaderProgramSource Render::Shader::ParseShader(const std::string &shade
 }
 
 
-void Render::Shader::SetUniform1i(const std::string &uniformName, int value) {
+void Shader::SetUniform1i(const std::string &uniformName, int value) {
 
     GLCall(glUniform1i(this->GetUniformLocation(uniformName), value));
 

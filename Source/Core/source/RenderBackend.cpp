@@ -7,7 +7,7 @@ RenderBackend::RenderBackend()
     mFrameBuffer.Init(100, 100);
 }
 
-void RenderBackend::SetRenderCamera(Core::BaseCamera *pRenderCamera)
+void RenderBackend::SetRenderCamera(BaseCamera *pRenderCamera)
 {
     m_pRenderCamera = pRenderCamera;
 }

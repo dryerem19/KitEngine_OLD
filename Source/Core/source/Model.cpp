@@ -53,3 +53,26 @@ void Model::Deserialize(const std::string& filepath)
     // pTempMesh->setPremadeAabb(btVector3(kmf.mAABB.mMin.x, kmf.mAABB.mMin.y, kmf.mAABB.mMin.z),
     //     btVector3(kmf.mAABB.mMax.x, kmf.mAABB.mMax.y, kmf.mAABB.mMax.z));
 }
+
+void Model::Draw(const std::shared_ptr<Shader>& shader, const BaseCamera& camera)
+{
+    for (auto& mesh : mMeshes)
+    {
+        glBindVertexArray(mesh->geometry.vao.GetId());
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->geometry.ibo.id());
+
+        const glm::mat4& model = mTransform.GetModelMatrix();
+        const glm::mat4 mvp = model * camera.GetViewProjection();
+
+        //shader.SetMat("u_mvp_matrix", mvp);
+        //shader.SetMat("u_model_matrix", model);
+
+        mesh->mMaterial->mShader->SetMat("u_mvp_matrix", mvp);
+        mesh->mMaterial->mShader->SetMat("u_model_matrix", model);        
+        
+        glDrawElements(GL_TRIANGLES, mesh->geometry.ibo.GetCount(), GL_UNSIGNED_INT, nullptr);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+}

@@ -10,6 +10,9 @@
  */
 #pragma once
 #include "Transform.h"
+#include "Physics/PhysicObject.h"
+
+#include "ResourceManager.h"
 
 #define KIT_OBJECT_NONE     0
 #define KIT_OBJECT_ENTITY   1
@@ -22,6 +25,8 @@ class Entity;
 
 class KitObject
 {
+private:
+    PhysicObject* m_pPhysicObject = nullptr;
 public:
     KitObject(uint32_t type) : mID(0), _type(type) {};
     //KitObject(uint32_t type, const std::string& name) : mID(0), _type(type), _name(name) {};
@@ -40,6 +45,18 @@ public:
     {
         _name = name;
     }
+
+
+    void SetPosition(const glm::vec3& position);
+    void SetRotation(const glm::vec3& rotation);
+    void SetScale(const glm::vec3& scale);
+
+    void SetVisualPath(const std::string& path);
+
+    bool IsPhysicObject() const;
+
+    virtual void OnPicked();
+
 private:
     friend class GameLevel;
     uint32_t mID;

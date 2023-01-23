@@ -29,9 +29,6 @@ protected:
     btCollisionShape* m_pShape;
     btRigidBody* m_pRigidBody; 
 
-
-    btTransform mTransform;
-
 public:
     /**
      * @brief Конструктор узла
@@ -42,6 +39,7 @@ public:
 
     Entity(const std::shared_ptr<Model>& model);
 
+    PhysicObject* mPhysicObject = nullptr;
 
     void SetModel(std::shared_ptr<Model> model);
 

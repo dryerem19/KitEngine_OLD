@@ -28,7 +28,7 @@ public:
         return instance;
     }
 
-    void Render(const Core::BaseCamera& camera)
+    void Render(const BaseCamera& camera)
     {
         auto& level = GameLevel::Get();
         auto& backend = RenderBackend::Get();
@@ -69,10 +69,23 @@ public:
                     }
                     material->mShader->SetUniformMatrix4fv("uView", 1, GL_FALSE, glm::value_ptr(camera.GetView()));
                     material->mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, glm::value_ptr(camera.GetProjection())); 
-                    material->mShader->SetUniformMatrix4fv("uTransform", 1, GL_FALSE, glm::value_ptr(entity->transform.GetModelMatrix()));
+
+                    if (entity->mPhysicObject)
+                    {
+                        glm::mat4 modelMatrix = entity->mPhysicObject->GetRenderTransform();
+                        //glm::mat4 modelMatrix = entity->transform.GetModelMatrix();
+
+                        glm::mat4 mvpMatrix = camera.GetProjection() * camera.GetView() * modelMatrix;
+                        material->mShader->SetUniformMatrix4fv("u_mvp_matrix", 1, GL_FALSE, glm::value_ptr(mvpMatrix));
+                        material->mShader->SetUniformMatrix4fv("u_model_matrix", 1, GL_FALSE, glm::value_ptr(modelMatrix));
+                    }
+                    else
+                    {
+                        //material->mShader->SetUniformMatrix4fv("uTransform", 1, GL_FALSE, glm::value_ptr(entity->transform.GetModelMatrix()));
+                    }
 
                     backend.SetGeometry(&mesh->geometry);
-                    backend.Render();
+                    //backend.Render();
                 }
             }
         }
@@ -87,8 +100,11 @@ public:
 
         //backend.DrawLine(glm::vec3(0, 0, 0), glm::vec3(1, 1, 50), glm::vec4(1, 1, 1, 1));
 
-        PhysicSystem::Instance().DebugDrawWorld();
-        backend._DebugDrawLine();
+
+        //PhysicSystem::Instance().DebugDrawWorld();
+
+
+        //backend._DebugDrawLine();
         //backend.mRenderDebug.Render();
     }
 };

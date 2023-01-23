@@ -94,6 +94,7 @@ btDiscreteDynamicsWorld *PhysicSystem::GetDynamicsWorld()
 void PhysicSystem::Update(float deltaTime)
 {
     m_pDynamicsWorld->stepSimulation(deltaTime, 5);
+    m_pDynamicsWorld->updateAabbs();
 }
 
 btBoxShape *PhysicSystem::CreateBoxShape(const btVector3 &halfExtents)

@@ -4,7 +4,6 @@
 
 #ifndef LEVELEDITOR_VERTEX_H
 #define LEVELEDITOR_VERTEX_H
-#include "VertexBufferLayout.h"
 
 namespace Render
 {

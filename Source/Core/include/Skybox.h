@@ -59,12 +59,12 @@ class SkyBox : public ISerialization, IDeserialization
 private:
     Geometry geometry;
     Render::Texture mSkyBox;
-    std::shared_ptr<Render::Shader> mShader;
+    std::shared_ptr<Shader> mShader;
     std::string mPath;
 public:
     SkyBox();
     void Serialize(const std::string& filepath) override final;
     void Deserialize(const std::string& filepath) override final;
-    void Render(const Core::BaseCamera& camera);
+    void Render(const BaseCamera& camera);
     const std::string& GetPath() const { return mPath; }
 };

@@ -40,6 +40,8 @@ public:
      * Вызывайте после того, как был нарисован основной мир
      */
     void DebugDrawWorld() const;
+
+    void AddRigidBody(btRigidBody* rb) { m_pDynamicsWorld->addRigidBody(rb); }
     
     GLDebugDrawer* GetDebugDrawer() const;
 

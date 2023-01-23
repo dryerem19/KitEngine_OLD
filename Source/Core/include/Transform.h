@@ -23,6 +23,8 @@ private:
     /* Мировая матрица объекта */
     glm::mat4 mModelMatrix = glm::mat4(1.0f);
 
+    glm::mat4 mPivotMatrix = glm::mat4(1.0f);
+
     /* Грязный флаг */
     bool mDirty = true;
 
@@ -40,20 +42,23 @@ public:
     void SetScale(const glm::vec3& s);
     void SetScale(const float& x, const float& y, const float& z);
 
+    void SetTransform(const glm::mat4& transform); 
+
     inline void SetPivotPosition(const glm::vec3& position) { mPivotPosition = position; }
+    inline const glm::vec3& GetPivotPosition() const { return mPivotPosition; }
     void SetRigidBody(btRigidBody* pRigidBody);
 
     const glm::vec3& GetPosition() const;
     const glm::vec3& GetRotation() const;
     const glm::vec3& GetScale() const;
     const glm::mat4& GetModelMatrix();
-    inline glm::mat4 GetPivot() { return glm::translate(glm::mat4(1.0f), mPivotPosition); }
+    inline glm::mat4 GetPivotMatrix() { return mPivotMatrix; }
 
     std::string DebugString() const;
 
     bool IsDirty() const;
+    //void UpdateRigidBody();
+    //void UpdateRigidBodyScale();
 private:
-    void UpdateRigidBodyPosition();
-    void UpdateRigidBodyRotation();
-    void UpdateRigidBodyScale();
+    //void UpdatePivot();
 };

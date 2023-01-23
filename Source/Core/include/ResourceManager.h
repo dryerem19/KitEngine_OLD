@@ -15,7 +15,7 @@ namespace Core
         ResourceManager(const ResourceManager&) = delete;
         ResourceManager& operator=(const ResourceManager&) = delete;
     private:
-        std::unordered_map<std::string, std::shared_ptr<Render::Shader>> mShaders;
+        std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
         std::unordered_map<std::string, std::shared_ptr<Render::KitMaterial>> mMaterials;
         std::unordered_map<std::string, std::shared_ptr<Render::KitTexture>> mTextures;
 
@@ -32,7 +32,7 @@ namespace Core
 
         void LoadShader(const std::string& filepath);
 
-        inline std::shared_ptr<Render::Shader> GetShader(const std::string& filepath)
+        inline std::shared_ptr<Shader> GetShader(const std::string& filepath)
         {
             assert(!filepath.empty() && "Filepath must not be empty!");
 

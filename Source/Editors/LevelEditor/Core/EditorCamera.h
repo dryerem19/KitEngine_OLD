@@ -5,7 +5,7 @@
 
 namespace LevelEditor
 {
-    class EditorCamera : public Core::BaseCamera
+    class EditorCamera : public BaseCamera
     {
     private:
         EditorCamera();

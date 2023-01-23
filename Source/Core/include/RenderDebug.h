@@ -22,7 +22,7 @@ private:
         glm::vec4 mColor;
         uint32_t mVaoId;
         uint32_t mVboId;
-        std::shared_ptr<Render::Shader> mShader;
+        std::shared_ptr<Shader> mShader;
 
         DebugLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4 color);
         ~DebugLine();
