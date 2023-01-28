@@ -24,6 +24,11 @@ void Transform::SetPosition(const glm::vec3 &p)
 
     // UpdatePivot();
 
+    glm::vec3 deltaPosition = p - mTranslation;
+    mPivotPosition += deltaPosition;  
+
+    // mCenter += deltaPosition;
+
     mTranslation.x = p.x;
     mTranslation.y = p.y;
     mTranslation.z = p.z;
@@ -36,6 +41,8 @@ void Transform::SetPosition(const float& x, const float& y, const float& z)
 {
     glm::vec3 deltaPosition = glm::vec3(x, y, z) - mTranslation;
     mPivotPosition += deltaPosition;  
+
+    // mCenter += deltaPosition;
 
     // UpdatePivot();
 
@@ -127,13 +134,32 @@ const glm::mat4& Transform::GetModelMatrix()
     if (mDirty)
     {   
         mDirty = false;        
-        glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), mTranslation);
-        glm::mat4 rotationMatrix = glm::toMat4(glm::quat(mRotation));
-        glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), mScale);
-        //mModelMatrix = translationMatrix * scaleMatrix * rotationMatrix;
+        glm::mat4 centerMatrix = glm::translate(glm::mat4(1.0f), mCenter);
 
-        glm::mat4 centerMatrix = glm::translate(glm::mat4(1.0f), mPivotPosition);
-        mModelMatrix = translationMatrix * scaleMatrix * rotationMatrix;
+        glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), mTranslation);
+        glm::mat4 rotationMatrix = glm::toMat4(glm::quat(glm::radians(mRotation)));
+        glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), mScale);
+
+
+        //mModelMatrix =  scaleMatrix * rotationMatrix * translationMatrix;
+
+
+        // glm::mat4 origin   = glm::translate(glm::mat4(1.0f), mCenter);
+        // glm::mat4 rotation = origin * glm::toMat4(glm::quat(glm::radians(mRotation))) * glm::inverse(origin);
+        // glm::mat4 position = glm::translate(glm::mat4(1.0f), mTranslation);
+        // glm::mat4 scale    = glm::scale(glm::mat4(1.0f), mScale);
+
+
+        glm::mat4 position = glm::translate(glm::mat4(1.0f), mTranslation);
+        glm::mat4 rotation = glm::translate(glm::mat4(1.0f), mCenter) * glm::toMat4(glm::quat(glm::radians(mRotation)))
+            * glm::translate(glm::mat4(1.0f), -mCenter);
+        glm::mat4 scale = glm::scale(glm::mat4(1.0f), mScale);
+
+        mModelMatrix = position * rotation * scale;
+
+
+        // glm::mat4 r = centerMatrix * rotationMatrix * glm::inverse(centerMatrix);
+        // mModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)) * scaleMatrix * rotationMatrix;
 
         // glm::mat4 pivotTranslationMatrix = glm::translate(glm::mat4(1.0f), mPivotPosition);
         // glm::mat4 objectRotationMatrix = pivotTranslationMatrix * glm::toMat4(glm::quat(mRotation)) * glm::inverse(pivotTranslationMatrix);

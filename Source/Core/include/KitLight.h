@@ -12,6 +12,8 @@
 #include "KitTransform.h"
 #include "KitObject.h"
 
+#include "PhysicSystem.h"
+
 
 enum class LightType
 {
@@ -25,9 +27,14 @@ class KitLight : public KitObject
 {
 public:
     Render::KitTransform mTransform;
-    KitLight() : KitObject(KIT_OBJECT_LIGHT)
+    KitLight(KitEngine::Physics::Physics& physics) : KitObject(KIT_OBJECT_LIGHT, physics)
     {
         SetName("light");
+
+        mPhysicObject = new PhysicObject(new btBoxShape(btVector3(1.0f, 1.0f, 1.0f)), 0.0f);
+        mPhysicObject->SetKitObject(this);
+        PhysicSystem::Instance().AddRigidBody(mPhysicObject->GetRigidBody());         
+
     }
 
     glm::vec4 mColor = glm::vec4(1.f, 1.f, 1.f, 1.f);

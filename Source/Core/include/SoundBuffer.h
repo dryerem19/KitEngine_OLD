@@ -12,7 +12,7 @@
 #include "Logger.h"
 #include "KitObject.h"
 
-class SoundBuffer final : public KitObject
+class SoundBuffer : public KitObject
 {
 private:
     static const uint32_t BUFFER_SAMPLES = 8192;
@@ -29,7 +29,7 @@ private:
     bool _mute;
     bool _loop;
 public:
-    SoundBuffer();
+    SoundBuffer(KitEngine::Physics::Physics& physics);
     ~SoundBuffer();
     void Init(const char* pFilename);
     void Play();

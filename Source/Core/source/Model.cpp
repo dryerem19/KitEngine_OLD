@@ -10,6 +10,7 @@
  */
 #include "pch.h"
 #include "Model.h"
+#include "ResourceManager.h"
 
 void Model::Deserialize(const std::string& filepath)
 {
@@ -23,7 +24,7 @@ void Model::Deserialize(const std::string& filepath)
     mMeshes.reserve(kmf.meshes.size());
     for (auto& mesh : kmf.meshes)
     {
-        mMeshes.emplace_back(std::make_unique<Render::KitStaticMesh>(mesh->vertices, mesh->indices));
+        mMeshes.emplace_back(std::make_unique<Mesh>(mesh->vertices, mesh->indices));
         mMeshes.back()->name = mesh->name;
         mMeshes.back()->SetMaterial(mesh->material);
     }
@@ -52,6 +53,109 @@ void Model::Deserialize(const std::string& filepath)
     // pTempMesh->setPremadeAabb(aabbMin, aabbMax);
     // pTempMesh->setPremadeAabb(btVector3(kmf.mAABB.mMin.x, kmf.mAABB.mMin.y, kmf.mAABB.mMin.z),
     //     btVector3(kmf.mAABB.mMax.x, kmf.mAABB.mMax.y, kmf.mAABB.mMax.z));
+}
+
+void Model::Load(const std::string &filepath)
+{
+    Assimp::Importer importer;
+    const aiScene* pScene = importer.ReadFile(filepath.c_str(),
+                            aiProcess_GenSmoothNormals           |
+                            aiProcess_ValidateDataStructure      |
+                            aiProcess_CalcTangentSpace           |
+                            aiProcess_FlipUVs                    |
+                            aiProcess_RemoveRedundantMaterials   |
+                            aiProcess_GenUVCoords                |
+                            aiProcess_Triangulate                |
+                            aiProcess_OptimizeMeshes             |
+                            aiProcess_JoinIdenticalVertices      );
+
+    if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode) {
+        std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+        return;
+    }
+
+    mDirectory = filepath.substr(0, filepath.find_last_of('/'));
+}
+
+void Model::ProcessNode(const aiNode *pNode, const aiScene *pScene)
+{
+
+}
+
+std::shared_ptr<Mesh> Model::ProcessMesh(const aiMesh *pMesh, const aiScene *pScene)
+{
+    std::vector<KitVertex> vertices;
+    vertices.reserve(pMesh->mNumVertices);
+
+    std::vector<unsigned int> indices;
+    indices.reserve(pMesh->mNumFaces * 3);
+
+    const aiVector3D zero3D(0.0f, 0.0f, 0.0f);
+    for (unsigned int iVertex = 0; iVertex < pMesh->mNumVertices; iVertex++)
+    {
+        const aiVector3D& position = pMesh->mVertices[iVertex];
+        const aiVector3D& norcoord = pMesh->mNormals[iVertex];
+        const aiVector3D& texcoord = pMesh->HasTextureCoords(0) ? pMesh->mTextureCoords[0][iVertex] : zero3D;
+
+        vertices.emplace_back(glm::vec3(position.x, position.y, position.z), 
+                              glm::vec3(norcoord.x, norcoord.y, norcoord.z), glm::vec2(texcoord.x, texcoord.y));
+    }
+
+    for (unsigned int iFace = 0; iFace < pMesh->mNumFaces; iFace++)
+    {
+        const aiFace& face = pMesh->mFaces[iFace];
+        indices.emplace_back(face.mIndices[0]);
+        indices.emplace_back(face.mIndices[1]);
+        indices.emplace_back(face.mIndices[2]);
+    }
+
+    if (pMesh->mMaterialIndex >= 0)
+    {
+        const aiMaterial* pMaterial = pScene->mMaterials[pMesh->mMaterialIndex];
+    }
+}
+
+void Model::ProcessMaterial(const aiMaterial *pMaterial, const aiScene *pScene)
+{
+    Render::KitMaterial material;
+
+    aiColor4D color(0.0f, 0.0f, 0.0f, 0.0f);
+    float shininess;
+
+    pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+    material.SetDiffuse(glm::vec4(color.r, color.g, color.b, color.a));
+
+    pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, color);
+    material.SetSpecular(glm::vec4(color.r, color.g, color.b, color.a));
+
+    pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, color);
+    material.SetAmbient(glm::vec4(color.r, color.g, color.b, color.a));
+
+    pMaterial->Get(AI_MATKEY_SHININESS, shininess);
+    material.SetShininess(shininess);
+}
+
+std::vector<std::shared_ptr<Render::KitTexture>> Model::LoadTextures(const aiMaterial *pMaterial, aiTextureType type, const aiScene* pScene)
+{
+    std::vector<std::shared_ptr<Render::KitTexture>> textures;
+    for (unsigned int iTexture = 0; iTexture < pMaterial->GetTextureCount(type); iTexture++)
+    {
+        aiString textureFile;
+        if (AI_SUCCESS == pMaterial->GetTexture(type, iTexture, &textureFile))
+        {
+            if (const aiTexture* pTexture = pScene->GetEmbeddedTexture(textureFile.C_Str()))
+            {
+
+            }
+            else
+            {
+                std::string texturePath = mDirectory + '/' + textureFile.C_Str();
+                textures.emplace_back(Core::ResourceManager::Instance().GetTexture(texturePath));
+            }
+        }
+    }
+
+    return textures;
 }
 
 void Model::Draw(const std::shared_ptr<Shader>& shader, const BaseCamera& camera)

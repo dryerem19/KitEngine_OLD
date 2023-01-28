@@ -13,7 +13,7 @@
 
 struct KitMesh
 {
-    std::vector<Render::KitVertex> mVertices;
+    std::vector<KitVertex> mVertices;
     std::vector<unsigned int> mIndices; 
 };
 

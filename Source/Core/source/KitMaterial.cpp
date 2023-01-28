@@ -30,7 +30,7 @@ namespace Render
         YAML::Emitter out;
         out << YAML::BeginMap;
         out << YAML::Key << "Name" << YAML::Value << mName;
-        out << YAML::Key << "Diffuse" << YAML::Value << mMainDiffuseTexture->GetPath();        
+        out << YAML::Key << "Diffuse" << YAML::Value << mMainDiffuseTexture->GetPath();
         out << YAML::EndMap;
 
         std::ofstream fout(filepath);
@@ -40,5 +40,27 @@ namespace Render
     void KitMaterial::Deserialize(const std::string& filepath)
     {
 
+    }
+
+    void KitMaterial::SetTexture(const std::string &blockName, const std::shared_ptr<KitTexture> &texture)
+    {
+
+    }
+
+    void KitMaterial::Bind()
+    {
+        if (!mShader.get()) {
+            return;
+        }
+
+        mShader->Bind();
+        mShader->SetVec("material.diffuse",  mDiffuse);
+        mShader->SetVec("material.ambient",  mAmbient);
+        mShader->SetVec("material.specular", mSpecular);
+        mShader->SetInt("material.diffuseTex", mDiffuseTex->GetId());
+        mShader->SetInt("material.specularTex", mSpecularTex->GetId());
+        
+        mDiffuseTex->Bind();
+        mSpecularTex->Bind();
     }
 }

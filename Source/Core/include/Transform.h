@@ -25,6 +25,8 @@ private:
 
     glm::mat4 mPivotMatrix = glm::mat4(1.0f);
 
+    glm::vec3 mCenter;
+
     /* Грязный флаг */
     bool mDirty = true;
 
@@ -41,6 +43,8 @@ public:
     void SetRotation(const float& x, const float& y, const float& z);
     void SetScale(const glm::vec3& s);
     void SetScale(const float& x, const float& y, const float& z);
+
+    void SetCenter(const glm::vec3& center) { mCenter = center; }
 
     void SetTransform(const glm::mat4& transform); 
 

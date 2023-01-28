@@ -55,16 +55,75 @@ Shader::SetUniformMatrix4fv(const std::string &uniformName, GLsizei count, GLboo
 
 }
 
-void Shader::SetMat(const std::string &name, const glm::mat4 &mat)
+void Shader::Bind()
 {
-    const GLint location = GetUniformLocation(name);
-    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+    glUseProgram(mShaderId);
 }
 
-void Shader::SetMat(const std::string &name, const glm::mat3 &mat)
+bool Shader::SetMat(const std::string &name, const glm::mat4 &mat)
 {
     const GLint location = GetUniformLocation(name);
-    glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+    if (location != -1) {
+        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+        return true;
+    }
+
+    return false;
+}
+
+bool Shader::SetMat(const std::string &name, const glm::mat3 &mat)
+{
+    const GLint location = GetUniformLocation(name);
+    if (location != -1) {
+        glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+        return true;
+    }
+
+    return false;
+}
+
+bool Shader::SetVec(const std::string &name, const glm::vec2 &vec)
+{
+    const GLint location = GetUniformLocation(name);
+    if (location != -1) {
+        glUniform2f(location, vec.x, vec.y);
+        return true;
+    }
+
+    return false;
+}
+
+bool Shader::SetVec(const std::string &name, const glm::vec3 &vec)
+{
+    const GLint location = GetUniformLocation(name);
+    if (location != -1) {
+        glUniform3f(location, vec.x, vec.y, vec.z);
+        return true;
+    }
+
+    return false;
+}
+
+bool Shader::SetVec(const std::string &name, const glm::vec4 &vec)
+{
+    const GLint location = GetUniformLocation(name);
+    if (location != -1) {
+        glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
+        return true;
+    }
+
+    return false;
+}
+
+bool Shader::SetInt(const std::string &name, const int &value)
+{
+    const GLint location = GetUniformLocation(name);
+    if (location != -1) {
+        glUniform1i(location, value);
+        return true;
+    }
+
+    return false;
 }
 
 //-------------------------------------------------------------------------------------------

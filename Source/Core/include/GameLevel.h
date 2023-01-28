@@ -11,6 +11,9 @@
 #include <BulletDynamics/btBulletDynamicsCommon.h>
 
 
+#include "Physics.h"
+
+
 class GameLevel : public ISerialization, public IDeserialization
 {
 private:
@@ -23,6 +26,10 @@ private:
     std::unordered_map<std::string, uint32_t> mRegistryNames;
     KitObject* mSelectedObject = nullptr; 
     SkyBox mSkyBox;
+
+
+    KitEngine::Physics::Physics mPhysics;
+
 public:
     std::vector<std::unique_ptr<KitLight>> _lights;
     //std::vector<std::shared_ptr<Entity>> mEntities;
@@ -38,7 +45,7 @@ public:
     void Deserialize(const std::string& filepath) override final;
 
 
-    void Draw(const float* view_matrix, float* proj_matrix);
+    void Update();
 
     void InitSkybox(const std::string& filepath);
 

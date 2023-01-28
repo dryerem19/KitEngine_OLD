@@ -14,6 +14,8 @@
 
 #include "ResourceManager.h"
 
+#include "Physics.h"
+
 #define KIT_OBJECT_NONE     0
 #define KIT_OBJECT_ENTITY   1
 #define KIT_OBJECT_LIGHT    2
@@ -25,16 +27,20 @@ class Entity;
 
 class KitObject
 {
-private:
-    PhysicObject* m_pPhysicObject = nullptr;
+protected:
+    KitEngine::Physics::Physics& mPhysics;
 public:
-    KitObject(uint32_t type) : mID(0), _type(type) {};
+    KitObject(uint32_t type, KitEngine::Physics::Physics& physics) : mID(0), _type(type), mPhysics(physics) {};
+
+
     //KitObject(uint32_t type, const std::string& name) : mID(0), _type(type), _name(name) {};
     Transform transform;
     virtual Entity* dnm_cast_entity()  { return nullptr;}
     uint32_t GetID() const { return mID; }
 
     uint32_t Type() const { return _type; }
+
+    PhysicObject* mPhysicObject = nullptr;
 
     std::string& GetName()
     {
@@ -46,10 +52,10 @@ public:
         _name = name;
     }
 
-
-    void SetPosition(const glm::vec3& position);
-    void SetRotation(const glm::vec3& rotation);
-    void SetScale(const glm::vec3& scale);
+    void OnUpdate()
+    {
+        
+    }
 
     void SetVisualPath(const std::string& path);
 

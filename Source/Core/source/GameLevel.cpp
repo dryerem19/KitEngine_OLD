@@ -6,7 +6,7 @@
 
 GameLevel::GameLevel()
 {
-
+    mPhysics.Initialize();
 }
 
 void GameLevel::Serialize(const std::string& filepath)
@@ -86,15 +86,26 @@ void GameLevel::Deserialize(const std::string& filepath)
     }
 }
 
+void GameLevel::Update()
+{
 
-void GameLevel::InitSkybox(const std::string& filepath)
+    for (auto obj : _objects)
+    {
+        
+    }
+
+    mPhysics.Update(1 / 60);
+    mPhysics.DebugRender();
+}
+
+void GameLevel::InitSkybox(const std::string &filepath)
 {
     mSkyBox.Deserialize(filepath);
 }
 
 KitLight* GameLevel::CreateLigth()
 {
-    _lights.emplace_back(std::make_unique<KitLight>());
+    _lights.emplace_back(std::make_unique<KitLight>(mPhysics));
     _lights.back()->SetID(_lights.size() - 1);
     return _lights.back().get();
 }
@@ -106,14 +117,14 @@ void GameLevel::DeleteLight()
 
 Entity* GameLevel::CreateEntity()
 {
-    _objects.emplace_back(std::make_unique<Entity>());
+    _objects.emplace_back(std::make_unique<Entity>(mPhysics));
     _objects.back()->SetID(_objects.size() - 1);
     return _objects.back().get()->dnm_cast_entity();
 }
 
 SoundBuffer *GameLevel::CreateSound()
 {
-    _soundsources.emplace_back(std::make_unique<SoundBuffer>());
+    _soundsources.emplace_back(std::make_unique<SoundBuffer>(mPhysics));
     _soundsources.back()->SetID(_objects.size() - 1);
     return _soundsources.back().get();
 }

@@ -136,7 +136,7 @@ void ModelImportTool::ParseMeshes(const aiScene *pScene)
             mKmfFile.mAABB.mMax = glm::max(mKmfFile.mAABB.mMax, glm::vec3(pos.x, pos.y, pos.z));
 
             // Заносим вершину в вектор
-            mKmfFile.meshes[iMesh]->vertices.emplace_back(Render::KitVertex{
+            mKmfFile.meshes[iMesh]->vertices.emplace_back(KitVertex{
                 glm::vec3(pos.x, pos.y, pos.z),
                 glm::vec3(nor.x, nor.y, nor.z),
                 glm::vec2(tex.x, tex.y)

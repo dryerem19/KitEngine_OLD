@@ -43,7 +43,7 @@ struct KMFMesh final
     std::vector<uint32_t> indices;
 
     /* Данные вершин сетки */
-    std::vector<Render::KitVertex> vertices;
+    std::vector<KitVertex> vertices;
 };
 
 class KitModelFile final : private ISerialization, private IDeserialization

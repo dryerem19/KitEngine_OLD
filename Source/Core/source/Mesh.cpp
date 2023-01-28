@@ -1,5 +1,5 @@
 /**
- * @file KitStaticMesh.cpp
+ * @file Mesh.cpp
  * @author Eugeniy Dubasov (dubasov.eugeni@yandex.ru)
  * @author Denis Eremenko (mamayma8@gmail.com)
  * @brief 
@@ -11,25 +11,25 @@
  * 
  */
 #include "pch.h"
-#include "KitStaticMesh.h"
+#include "Mesh.h"
 
 #include "RenderBackend.h"
 
 #include "ResourceManager.h"
 
-Render::KitStaticMesh::KitStaticMesh(const std::vector<KitVertex>& vertices, 
+Mesh::Mesh(const std::vector<KitVertex>& vertices, 
     const std::vector<uint32_t>& indices)
 {
     this->Init(vertices, indices);
 }
 
-Render::KitStaticMesh::KitStaticMesh(const void* vertices, const uint32_t size,
+Mesh::Mesh(const void* vertices, const uint32_t size,
             const uint32_t* indices, const uint32_t count)
 {
-    geometry.vbo.Init(vertices, size * sizeof(Render::KitVertex));
+    geometry.vbo.Init(vertices, size * sizeof(KitVertex));
 
     // Инициализация слоя буфера
-    VertexBufferLayout bufferLayout;
+    Render::VertexBufferLayout bufferLayout;
     bufferLayout.AddFloatElement(3);
     bufferLayout.AddFloatElement(3);
     bufferLayout.AddFloatElement(2);
@@ -40,7 +40,7 @@ Render::KitStaticMesh::KitStaticMesh(const void* vertices, const uint32_t size,
     geometry.ibo.Init(indices, count); 
 }
 
-void Render::KitStaticMesh::Init(const std::vector<KitVertex>& vertices, const std::vector<uint32_t>& indices)
+void Mesh::Init(const std::vector<KitVertex>& vertices, const std::vector<uint32_t>& indices)
 {
     // Инициализация буфера вершин
     //mVertexBuffer.Init(vertices.data(), vertices.size() * sizeof(vertices[0]));
@@ -48,7 +48,7 @@ void Render::KitStaticMesh::Init(const std::vector<KitVertex>& vertices, const s
     geometry.vbo.Init(vertices.data(), vertices.size() * sizeof(vertices[0]));
 
     // Инициализация слоя буфера
-    VertexBufferLayout bufferLayout;
+    Render::VertexBufferLayout bufferLayout;
     bufferLayout.AddFloatElement(3);
     bufferLayout.AddFloatElement(3);
     bufferLayout.AddFloatElement(2);
@@ -64,7 +64,7 @@ void Render::KitStaticMesh::Init(const std::vector<KitVertex>& vertices, const s
     geometry.ibo.Init(indices.data(), indices.size());
 } 
 
-void Render::KitStaticMesh::SetMaterial(const std::string& filepath)
+void Mesh::SetMaterial(const std::string& filepath)
 {
     mMaterial = Core::ResourceManager::Instance().GetMaterial(filepath);
 }

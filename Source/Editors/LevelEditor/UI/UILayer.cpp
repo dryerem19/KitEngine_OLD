@@ -77,14 +77,17 @@ namespace LevelEditor
         // Camera
         EditorCamera::Instance().OnUpdate();
 
-        auto& physics = PhysicSystem::Instance();
-        physics.Update(1/ 60);
+        // auto& physics = PhysicSystem::Instance();
+        // physics.Update(1/ 60);
 
         auto& level = GameLevel::Get();
 
         // for (auto& object : level._objects)
         // {
-        //     object->transform.UpdateRigidBody();
+        //     if (object->mPhysicObject)
+        //     {
+        //         object->transform.SetTransform(object->mPhysicObject->GetRenderTransform());
+        //     }
         // }
 
         //GameLevel::Get().Update();
@@ -104,16 +107,14 @@ namespace LevelEditor
 
     void UILayer::OnRender(double dt) 
     {
-        //frameBuffer.Bind();
-
         RenderBackend::Get().BeginFrame();
         Render::Renderer::Clear();
 
         RenderSystem::Instance().Render(EditorCamera::Instance());
 
-        //GameLevel::Get().Draw(EditorCamera::Instance().GetView(), EditorCamera::Instance().GetPerspective());
-
-        //frameBuffer.Unbind();
+        auto& level = GameLevel::Get();
+        level.Update();
+        
         RenderBackend::Get().EndFrame();
         Render::Renderer::Clear();
     }

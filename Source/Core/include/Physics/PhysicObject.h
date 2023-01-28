@@ -25,6 +25,8 @@ private:
     glm::mat4 mOpenGLRenderTransform;
     KitObject* m_pKitObject;
     bool mDirty;
+
+    btVector3 mCenterOffset;
 public:
     PhysicObject(btCollisionShape* pShape, float mass, const btVector3& initialPosition = btVector3(0, 0, 0), 
         const btQuaternion& initialRotation = btQuaternion(0, 0, 0, 1));
@@ -48,6 +50,10 @@ public:
      */
     const glm::mat4& GetRenderTransform();
 
+    void SetTransformMatrix(const glm::mat4& transformMatrix);
+
+    void SetTransform(const glm::vec3& orientation, const glm::vec3& position);
+
     inline void SetKitObject(KitObject* pKitObject) { m_pKitObject = pKitObject; }
     inline KitObject* GetKitObject() { return m_pKitObject; }
     inline bool HasKitObject() const { return m_pKitObject != nullptr ? true : false; }
@@ -55,8 +61,10 @@ public:
     void Move(const glm::vec3& offset);
     void SetPosition(const btVector3& position);
     void SetPosition(const glm::vec3& position);
-    void SetRotation(const btQuaternion& rotation);
+    void SetRotation(const glm::vec3 &orientation);
+
     void SetRotation(const glm::quat& rotation);
+
     void SetScale(const btVector3& scale);
     void SetScale(const glm::vec3& scale);
     glm::vec3 GetPosition() const;

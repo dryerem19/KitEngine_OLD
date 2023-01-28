@@ -107,7 +107,7 @@ namespace Core
                     ? pMesh->mTextureCoords[0][iVertex] : zero3D;
 
                 // Заносим вершину в вектор
-                kmf.meshes[iMesh]->vertices.emplace_back(Render::KitVertex{
+                kmf.meshes[iMesh]->vertices.emplace_back(KitVertex{
                     glm::vec3(pos.x, pos.y, pos.z),
                     glm::vec3(nor.x, nor.y, nor.z),
                     glm::vec2(tex.x, tex.y)

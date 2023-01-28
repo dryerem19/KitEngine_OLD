@@ -60,7 +60,7 @@ namespace LevelEditor
         
         UIController* mUIController;
 
-        SoundBuffer sound;
+//        SoundBuffer sound;
 
         // UI Window
         UITopMainMenu uiTopMainMenu;

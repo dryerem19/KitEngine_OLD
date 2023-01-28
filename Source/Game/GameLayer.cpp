@@ -7,10 +7,10 @@ void GameLayer::OnStart()
     auto pWindow = Core::Application::Instance().GetWindow().get();
     camera.SetViewportSize(pWindow->GetWidth(), pWindow->GetHeight());
 
-    Entity* pGround = GameLevel::Get().CreateEntity();
-    pGround->SetModel(Core::ResourceManager::Instance().GetModel("C:/Users/Denis/CLionProjects/KitEngine/bin/Debug/data/Pivot-Layer_0/Pivot-Layer_0.kmf"));
+    // Entity* pGround = GameLevel::Get().CreateEntity();
+    // pGround->SetModel(Core::ResourceManager::Instance().GetModel("data/plane/plane.kmf"));
 
-    //GameLevel::Get().Deserialize("test.level");
+    GameLevel::Get().Deserialize("test.level");
 }
 
 void GameLayer::EventHandler(const Core::Event& event)
@@ -28,12 +28,10 @@ void GameLayer::EventHandler(const Core::Event& event)
 void GameLayer::OnUpdate()
 {
     camera.OnUpdate();
+    GameLevel::Get().Update();
 }
 
 void GameLayer::OnRender(double dt)
 {
     RenderSystem::Instance().Render(camera);
-
-    Core::ResourceManager::Instance().GetModel("C:/Users/Denis/CLionProjects/KitEngine/bin/Debug/data/Pivot-Layer_0/Pivot-Layer_0.kmf")->Draw(
-        nullptr, camera);
 }

@@ -26,20 +26,25 @@ protected:
 
     std::shared_ptr<Model> mModel;
 
-    btCollisionShape* m_pShape;
-    btRigidBody* m_pRigidBody; 
+
+    std::unique_ptr<KitEngine::Physics::BoxCollider> mPhysic;
+
+private:
+    glm::vec3 mPosition, mRotation, mScaled;
+    glm::mat4 mTransformMatrix;
+    bool mTransformChanged;
+    std::unique_ptr<btRigidBody> mRigidBody;
 
 public:
-    /**
-     * @brief Конструктор узла
-     * 
-     * @param name имя узла
-     */
-    Entity(const std::string& name = "Root");
+    Entity(KitEngine::Physics::Physics& physics);
 
-    Entity(const std::shared_ptr<Model>& model);
+    void Update();
+    void SetTransform(const glm::mat4& transform, bool updateRigidbody = true);
+    const glm::mat4& GetTransform();
+    void SetPosition(const glm::vec3& position);
+    void SetRotation(const glm::vec3& rotation);
+    void SetScale(const glm::vec3& scale);
 
-    PhysicObject* mPhysicObject = nullptr;
 
     void SetModel(std::shared_ptr<Model> model);
 

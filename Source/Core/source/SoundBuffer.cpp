@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "SoundBuffer.h"
 
-SoundBuffer::SoundBuffer()
-    : KitObject(KIT_OBJECT_SOUND)
+SoundBuffer::SoundBuffer(KitEngine::Physics::Physics& physics)
+    : KitObject(KIT_OBJECT_SOUND, mPhysics)
 {
     _format = AL_NONE;
     _pMembuf = nullptr;

@@ -32,8 +32,13 @@ public:
     void SetUniformMatrix4fv(const std::string& uniformName, GLsizei count, GLboolean transpose,
                                 const GLfloat *value) const;
 
-    void SetMat(const std::string& name, const glm::mat4& mat);
-    void SetMat(const std::string& name, const glm::mat3& mat);
+    void Bind();
+    bool SetMat(const std::string& name, const glm::mat4& mat);
+    bool SetMat(const std::string& name, const glm::mat3& mat);
+    bool SetVec(const std::string& name, const glm::vec2& vec);
+    bool SetVec(const std::string& name, const glm::vec3& vec);
+    bool SetVec(const std::string& name, const glm::vec4& vec);
+    bool SetInt(const std::string& name, const int& value);
     
 private:
     [[nodiscard]] GLint GetUniformLocation(const std::string& uniformName) const;

@@ -70,22 +70,34 @@ public:
                     material->mShader->SetUniformMatrix4fv("uView", 1, GL_FALSE, glm::value_ptr(camera.GetView()));
                     material->mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, glm::value_ptr(camera.GetProjection())); 
 
-                    if (entity->mPhysicObject)
-                    {
-                        glm::mat4 modelMatrix = entity->mPhysicObject->GetRenderTransform();
-                        //glm::mat4 modelMatrix = entity->transform.GetModelMatrix();
+                    // btTransform t;
+                    // entity->mPhysicObject->GetMotionState()->getWorldTransform(t);
 
-                        glm::mat4 mvpMatrix = camera.GetProjection() * camera.GetView() * modelMatrix;
-                        material->mShader->SetUniformMatrix4fv("u_mvp_matrix", 1, GL_FALSE, glm::value_ptr(mvpMatrix));
-                        material->mShader->SetUniformMatrix4fv("u_model_matrix", 1, GL_FALSE, glm::value_ptr(modelMatrix));
-                    }
-                    else
-                    {
-                        //material->mShader->SetUniformMatrix4fv("uTransform", 1, GL_FALSE, glm::value_ptr(entity->transform.GetModelMatrix()));
-                    }
+                    // btScalar m;
+                    // t.getOpenGLMatrix(&m);
+                    // glm::mat4 modelMatrix = glm::make_mat4x4(&m);
+
+                    glm::mat4 modelMatrix = entity->transform.GetModelMatrix();
+                    glm::mat4 mvpMatrix = camera.GetProjection() * camera.GetView() * modelMatrix;
+                    material->mShader->SetMat("u_mvp_matrix", mvpMatrix);
+                    material->mShader->SetMat("u_model_matrix", modelMatrix); 
+
+                    // if (entity->mPhysicObject)
+                    // {
+                    //     glm::mat4 modelMatrix = entity->mPhysicObject->GetRenderTransform();
+                    //     //glm::mat4 modelMatrix = entity->transform.GetModelMatrix();
+
+                    //     glm::mat4 mvpMatrix = camera.GetProjection() * camera.GetView() * modelMatrix;
+                    //     material->mShader->SetUniformMatrix4fv("u_mvp_matrix", 1, GL_FALSE, glm::value_ptr(mvpMatrix));
+                    //     material->mShader->SetUniformMatrix4fv("u_model_matrix", 1, GL_FALSE, glm::value_ptr(modelMatrix));
+                    // }
+                    // else
+                    // {
+                    //     //material->mShader->SetUniformMatrix4fv("uTransform", 1, GL_FALSE, glm::value_ptr(entity->transform.GetModelMatrix()));
+                    // }
 
                     backend.SetGeometry(&mesh->geometry);
-                    //backend.Render();
+                    backend.Render();
                 }
             }
         }

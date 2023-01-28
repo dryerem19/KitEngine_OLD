@@ -161,51 +161,102 @@ namespace LevelEditor
         {
             //Transform& objectTransform = selected->transform;
 
-            Entity* ent = selected->dnm_cast_entity();
 
+            glm::vec3 position = selected->transform.GetPosition();
+            glm::vec3 rotation = selected->transform.GetRotation();
+            glm::vec3 scale    = selected->transform.GetScale();
+            
+            glm::mat4 matrix;
+            ImGuizmo::RecomposeMatrixFromComponents(&position.x, &rotation.x, &scale.x, glm::value_ptr(matrix));
 
+            // glm::vec3 position, rotation, scaled;
+            // glm::mat4 transformMatrix = selected->transform.GetModelMatrix();
+            // ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(transformMatrix), &position.x, &rotation.x, &scaled.x);
 
-            if (ent && ent->mPhysicObject)
+            const glm::mat4& viewMatrix = EditorCamera::Instance().GetView();
+            const glm::mat4& projMatrix = EditorCamera::Instance().GetProjection();
+            ImGuizmo::Manipulate(glm::value_ptr(viewMatrix), glm::value_ptr(projMatrix), 
+                (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, glm::value_ptr(matrix));
+            
+            if (ImGuizmo::IsUsing())
             {
-                glm::mat4 transformMatrix = ent->mPhysicObject->GetTransform();
-                ImGuizmo::Manipulate(glm::value_ptr(EditorCamera::Instance().GetView()), glm::value_ptr(EditorCamera::Instance().GetProjection()), 
-                    (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, glm::value_ptr(transformMatrix));
+                ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(matrix), &position.x, &rotation.x, &scale.x);
 
-                /* If we moved the manipulator */
-                if (ImGuizmo::IsUsing())
-                {
-                    glm::vec3 decomposePosition, decomposeRotation, decomposeScale;
-                    ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(transformMatrix), &decomposePosition.x, &decomposeRotation.x, &decomposeScale.x);
-                    switch (mOperation)
-                    {
-                    case GizmoOperation::TRANSLATE:
-                    {
-                        ent->mPhysicObject->SetPosition(decomposePosition);                
-                    }
-                    break;
-                    case GizmoOperation::ROTATE:
-                        ent->mPhysicObject->SetRotation(glm::quat(glm::radians(decomposeRotation)));
-                        break;
-                    case GizmoOperation::SCALE:
-                        ent->mPhysicObject->SetScale(decomposeScale);
-                        break;
-                    default:
-                        break;
-                    }
-                }                    
-            }
-            else 
-            {
-                glm::mat4 transformMatrix = selected->transform.GetModelMatrix();
-                ImGuizmo::Manipulate(glm::value_ptr(EditorCamera::Instance().GetView()), glm::value_ptr(EditorCamera::Instance().GetProjection()), 
-                    (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, glm::value_ptr(transformMatrix));   
+                selected->transform.SetPosition(position);
+                selected->transform.SetRotation(rotation);
+                
 
-                if (ImGuizmo::IsUsing())
+                //selected->transform.SetTransform(transformMatrix);
+                if (selected->mPhysicObject)
                 {
-                    transformMatrix *= glm::inverse(selected->transform.GetModelMatrix());
-                    ent->transform.SetTransform(transformMatrix);                    
-                }             
+                    glm::vec3 centerOfMass = selected->mPhysicObject->GetPosition();
+                    
+                    glm::vec3 translation, rotationDecompose, scaledDecompose;
+                    ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(matrix), &translation.x, &rotationDecompose.x, &scaledDecompose.x);
+                    translation -= position;
+
+                    selected->mPhysicObject->Move(translation);
+                    selected->mPhysicObject->SetRotation(rotation);
+                    selected->mPhysicObject->SetScale(scaledDecompose);
+                }
             }
+
+            // glm::mat4 transformMatrix = selected->transform.GetModelMatrix();
+            // ImGuizmo::Manipulate(glm::value_ptr(EditorCamera::Instance().GetView()), glm::value_ptr(EditorCamera::Instance().GetProjection()),
+            //     (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, glm::value_ptr(transformMatrix));
+            
+            // if (ImGuizmo::IsUsing())
+            // {
+            //     selected->transform.SetTransform(transformMatrix);
+            //     if (selected->mPhysicObject)
+            //     {
+            //         selected->mPhysicObject->SetTransformMatrix(transformMatrix);
+            //     }
+            // }
+
+
+
+            // if (selected->mPhysicObject)
+            // {
+            //     glm::mat4 transformMatrix = selected->mPhysicObject->GetTransform();
+            //     ImGuizmo::Manipulate(glm::value_ptr(EditorCamera::Instance().GetView()), glm::value_ptr(EditorCamera::Instance().GetProjection()), 
+            //         (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, glm::value_ptr(transformMatrix));
+
+            //     /* If we moved the manipulator */
+            //     if (ImGuizmo::IsUsing())
+            //     {
+            //         glm::vec3 decomposePosition, decomposeRotation, decomposeScale;
+            //         ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(transformMatrix), &decomposePosition.x, &decomposeRotation.x, &decomposeScale.x);
+            //         switch (mOperation)
+            //         {
+            //         case GizmoOperation::TRANSLATE:
+            //         {
+            //             selected->mPhysicObject->SetPosition(decomposePosition);                
+            //         }
+            //         break;
+            //         case GizmoOperation::ROTATE:
+            //             selected->mPhysicObject->SetRotation(glm::quat(glm::radians(decomposeRotation)));
+            //             break;
+            //         case GizmoOperation::SCALE:
+            //             selected->mPhysicObject->SetScale(decomposeScale);
+            //             break;
+            //         default:
+            //             break;
+            //         }
+            //     }                    
+            // }
+            // else 
+            // {
+            //     glm::mat4 transformMatrix = selected->transform.GetModelMatrix();
+            //     ImGuizmo::Manipulate(glm::value_ptr(EditorCamera::Instance().GetView()), glm::value_ptr(EditorCamera::Instance().GetProjection()), 
+            //         (ImGuizmo::OPERATION)mOperation, ImGuizmo::MODE::LOCAL, glm::value_ptr(transformMatrix));   
+
+            //     if (ImGuizmo::IsUsing())
+            //     {
+            //         transformMatrix *= glm::inverse(selected->transform.GetModelMatrix());
+            //         selected->transform.SetTransform(transformMatrix);                    
+            //     }             
+            // }
         }
     }
 }

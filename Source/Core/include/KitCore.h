@@ -17,6 +17,8 @@
     #define DEBUG_ENABLE 0
 #endif
 
+#define UNUSED(x) (void)(x)
+
 #define DEBUG_MSG(fmt, ...)                                                 \
     do {                                                                    \
         if (DEBUG_ENABLE) {                                                 \

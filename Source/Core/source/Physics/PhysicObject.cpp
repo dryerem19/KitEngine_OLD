@@ -34,8 +34,10 @@ PhysicObject::PhysicObject(btCollisionShape *pShape, float mass, const btVector3
     }    
 
 	// create the motion state from the initial transform
-	m_pMotionState = new btDefaultMotionState(mTransform);   
-    m_pMotionState->m_centerOfMassOffset.setOrigin(btVector3(0, (initialPosition.getY() * 0.5f) * -1.0f, 0)); 
+	m_pMotionState = new btDefaultMotionState(mTransform);
+    //m_pMotionState->m_centerOfMassOffset.setOrigin(btVector3(0, (initialPosition.getY() * 0.5f) * -1.0f, 0)); 
+
+    mCenterOffset = btVector3(0, (initialPosition.getY() * 0.5f) * -1.0f, 0);
 
 	// create the rigid body construction
 	// info using the mass, motion state
@@ -80,6 +82,28 @@ const glm::mat4& PhysicObject::GetRenderTransform()
 
 }
 
+void PhysicObject::SetTransformMatrix(const glm::mat4 &transformMatrix)
+{
+    glm::vec3 scale;
+    glm::quat rotation;
+    glm::vec3 position;
+
+    glm::vec3 skew;
+    glm::vec4 persp;
+    glm::decompose(transformMatrix, scale, rotation, position, skew, persp);
+
+    SetPosition(position);
+    //SetRotation(glm::degrees(glm::eulerAngles(rotation)));
+    SetScale(scale);
+}
+
+void PhysicObject::SetTransform(const glm::vec3 &orientation, const glm::vec3 &position)
+{
+    const btVector3& bCenter = m_pRigidBody->getCenterOfMassPosition();
+    glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(bCenter.getX(), bCenter.getY(), bCenter.getZ()));
+    glm::mat4 rotation = translation * glm::toMat4(glm::quat(glm::radians(orientation))) * glm::inverse(translation);
+}
+
 void PhysicObject::Move(const btVector3 &offset)
 {
     m_pRigidBody->translate(offset);
@@ -96,9 +120,12 @@ void PhysicObject::Move(const glm::vec3 &offset)
 void PhysicObject::SetPosition(const btVector3 &position)
 {
     mTransform.setOrigin(position);
+
+
     m_pRigidBody->setWorldTransform(mTransform);
     m_pRigidBody->getMotionState()->setWorldTransform(mTransform);
     mDirty = true;
+
 }
 
 void PhysicObject::SetPosition(const glm::vec3 &position)
@@ -106,17 +133,30 @@ void PhysicObject::SetPosition(const glm::vec3 &position)
     SetPosition(btVector3(position.x, position.y, position.z));
 }
 
-void PhysicObject::SetRotation(const btQuaternion &rotation)
+void PhysicObject::SetRotation(const glm::vec3 &orientation)
 {
-    mTransform.setRotation(rotation);
-    m_pRigidBody->setWorldTransform(mTransform);
-    m_pRigidBody->getMotionState()->setWorldTransform(mTransform);
-    mDirty = true;
+    // mTransform.setRotation(rotation);
+    // m_pRigidBody->setWorldTransform(mTransform);
+    // m_pRigidBody->getMotionState()->setWorldTransform(mTransform);
+    // mDirty = true;
+
+    const btVector3& center = m_pRigidBody->getCenterOfMassPosition();
+    glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(center.getX(), center.getY(), center.getZ()));
+    glm::mat4 rotation = translation * glm::toMat4(glm::quat(glm::radians(orientation))) * glm::inverse(translation);
+
+    glm::quat q = glm::toQuat(rotation);
+    btTransform t = m_pRigidBody->getCenterOfMassTransform();
+    t.setRotation(btQuaternion(q.x, q.y, q.z, q.w));
+    m_pRigidBody->setCenterOfMassTransform(t);
+
+    // btTransform t = m_pRigidBody->getCenterOfMassTransform();
+    // t.setRotation(rotation);
+    // m_pRigidBody->setCenterOfMassTransform(t);
 }
 
 void PhysicObject::SetRotation(const glm::quat &rotation)
 {
-   SetRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w)); 
+   //SetRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w)); 
 }
 
 void PhysicObject::SetScale(const btVector3 &scale)
