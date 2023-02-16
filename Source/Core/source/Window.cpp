@@ -54,13 +54,14 @@ namespace Core
         glfwMakeContextCurrent(m_pWindow);
 
         GLFWimage image[1];
-        sail::image icon("16x16.png");
-        
-        image[0].pixels = reinterpret_cast<unsigned char*>(icon.pixels());
-        image[0].width = icon.width();
-        image[0].height = icon.height();
-
-        glfwSetWindowIcon(m_pWindow, 1, image);
+        std::string icon_filepath = "16x16.png";
+        if (std::filesystem::exists(icon_filepath)) {
+            sail::image icon(icon_filepath);
+            image[0].pixels     = reinterpret_cast<unsigned char*>(icon.pixels());
+            image[0].width      = icon.width();
+            image[0].height     = icon.height();
+            glfwSetWindowIcon(m_pWindow, 1, image);
+        }
 
         glfwSetWindowUserPointer(m_pWindow, this);
         glfwSetWindowSizeCallback(m_pWindow, OnResizeCallback);       
