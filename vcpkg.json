@@ -18,6 +18,8 @@
     "spdlog",
     "yaml-cpp",
     "openal-soft",
-    "libsndfile"
+    "libsndfile",
+    "lua",
+    "luabridge"
   ]
 }

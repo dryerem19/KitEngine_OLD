@@ -92,7 +92,7 @@ namespace Core
             else
             {
                 model = std::make_shared<Model>();
-                model->Deserialize(filepath);
+                model->Load(filepath);
                 mModels.insert({filepath, model});
             }
 

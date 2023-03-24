@@ -15,13 +15,13 @@
 #include "PhysicSystem.h"
 
 
-enum class LightType
-{
-    None = 0,
-    DirectionalLight,
-    PointLight,
-    SpotLight  
-};
+// enum class LightType
+// {
+//     None = 0,
+//     DirectionalLight,
+//     PointLight,
+//     SpotLight  
+// };
 
 class KitLight : public KitObject
 {
@@ -33,7 +33,7 @@ public:
 
         mPhysicObject = new PhysicObject(new btBoxShape(btVector3(1.0f, 1.0f, 1.0f)), 0.0f);
         mPhysicObject->SetKitObject(this);
-        PhysicSystem::Instance().AddRigidBody(mPhysicObject->GetRigidBody());         
+        //PhysicSystem::Instance().AddRigidBody(mPhysicObject->GetRigidBody());         
 
     }
 

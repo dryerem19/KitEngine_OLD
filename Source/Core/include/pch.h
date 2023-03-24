@@ -35,6 +35,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_internal.h>
 
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -51,3 +52,10 @@
 
 #include "Helpers.h"
 #include "KitCore.h"
+
+extern "C" {
+    #include "lua.h"
+    #include "lualib.h"
+    #include "lauxlib.h"
+}
+#include <LuaBridge/LuaBridge.h>

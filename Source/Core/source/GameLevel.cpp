@@ -11,91 +11,88 @@ GameLevel::GameLevel()
 
 void GameLevel::Serialize(const std::string& filepath)
 {
-    YAML::Emitter out;
-    out << YAML::BeginMap;
-    out << YAML::Key << "Entity";
-    out << YAML::Value << YAML::BeginSeq;
+    // YAML::Emitter out;
+    // out << YAML::BeginMap;
+    // out << YAML::Key << "Entity";
+    // out << YAML::Value << YAML::BeginSeq;
 
-    for (auto& object : _objects)
-    {
-        if(object->Type() == KIT_OBJECT_ENTITY)
-        {
-            auto& tr = object->transform;
+    // for (auto& object : _objects)
+    // {
+    //     out << YAML::BeginMap;
+    //     out << YAML::Key << "position";
+    //     out << YAML::Flow;
+    //     out << YAML::BeginSeq;
+    //     out << object->GetPosition().x;
+    //     out << object->GetPosition().y;
+    //     out << object->GetPosition().z;
+    //     out << YAML::EndSeq;
 
-            out << YAML::BeginMap;
-            out << YAML::Key << "position";
-            out << YAML::Flow;
-            out << YAML::BeginSeq;
-            out << tr.GetPosition().x;
-            out << tr.GetPosition().y;
-            out << tr.GetPosition().z;
-            out << YAML::EndSeq;
+    //     out << YAML::Key << "rotation";
+    //     out << YAML::Flow;
+    //     out << YAML::BeginSeq;
+    //     out << object->GetRotation().x;
+    //     out << object->GetRotation().y;
+    //     out << object->GetRotation().z;
+    //     out << YAML::EndSeq;    
 
-            out << YAML::Key << "rotation";
-            out << YAML::Flow;
-            out << YAML::BeginSeq;
-            out << tr.GetRotation().x;
-            out << tr.GetRotation().y;
-            out << tr.GetRotation().z;
-            out << YAML::EndSeq;    
+    //     out << YAML::Key << "scale";
+    //     out << YAML::Flow;
+    //     out << YAML::BeginSeq;
+    //     out << object->GetScale().x;
+    //     out << object->GetScale().y;
+    //     out << object->GetScale().z;
+    //     out << YAML::EndSeq;    
 
-            out << YAML::Key << "scale";
-            out << YAML::Flow;
-            out << YAML::BeginSeq;
-            out << tr.GetScale().x;
-            out << tr.GetScale().y;
-            out << tr.GetScale().z;
-            out << YAML::EndSeq;    
-
-            out << YAML::Key << "library";
-            out << YAML::Value << object->dnm_cast_entity()->GetModel()->mFilepath;
-            out << YAML::EndMap;
-        }
+    //     out << YAML::Key << "library";
+    //     out << YAML::Value << object->GetModel()->mFilepath;
+    //     out << YAML::EndMap;
         
-    }
+    // }
 
-    out << YAML::EndSeq;
-    out << YAML::Key << "Skybox";
-    out << YAML::Value << mSkyBox.GetPath();
-    out << YAML::EndMap;
-    std::ofstream fout(std::filesystem::path(filepath).concat(".level").string());
-    fout << out.c_str();
+    // out << YAML::EndSeq;
+    // out << YAML::Key << "Skybox";
+    // out << YAML::Value << mSkyBox.GetPath();
+    // out << YAML::EndMap;
+    // std::ofstream fout(std::filesystem::path(filepath).concat(".level").string());
+    // fout << out.c_str();
 }
 
 void GameLevel::Deserialize(const std::string& filepath)
 {
-    Clear();
+    // Clear();
 
-    YAML::Node level = YAML::LoadFile(filepath);
-    for (auto&& entity : level["Entity"])
-    {
-        auto ent = CreateEntity();
-        ent->transform.SetPosition(entity["position"][0].as<float>(),
-            entity["position"][1].as<float>(), entity["position"][2].as<float>());
-        ent->transform.SetRotation(entity["rotation"][0].as<float>(),
-            entity["rotation"][1].as<float>(), entity["rotation"][2].as<float>());
-        ent->transform.SetScale(entity["scale"][0].as<float>(),
-            entity["scale"][1].as<float>(), entity["scale"][2].as<float>());
-        ent->SetModel(Core::ResourceManager::Instance().GetModel(entity["library"].as<std::string>()));
-        ent->SetName(ent->GetModel()->mName);
-    }
+    // YAML::Node level = YAML::LoadFile(filepath);
+    // for (auto&& entity : level["Entity"])
+    // {
+    //     auto ent = CreateEntity();
+    //     ent->SetPosition(entity["position"][0].as<float>(),
+    //         entity["position"][1].as<float>(), entity["position"][2].as<float>());
+    //     ent->SetRotation(entity["rotation"][0].as<float>(),
+    //         entity["rotation"][1].as<float>(), entity["rotation"][2].as<float>());
+    //     ent->SetScale(entity["scale"][0].as<float>(),
+    //         entity["scale"][1].as<float>(), entity["scale"][2].as<float>());
+    //     ent->SetModel(Core::ResourceManager::Instance().GetModel(entity["library"].as<std::string>()));
+    //     //ent->SetName(ent->GetModel()->mName);
+    // }
 
-    std::string skybox_path = level["Skybox"].as<std::string>();
-    if (std::filesystem::exists(skybox_path)) {
-        mSkyBox.Deserialize(level["Skybox"].as<std::string>());
-    }
+    // std::string skybox_path = level["Skybox"].as<std::string>();
+    // if (std::filesystem::exists(skybox_path)) {
+    //     mSkyBox.Deserialize(level["Skybox"].as<std::string>());
+    // }
 }
 
 void GameLevel::Update()
 {
+    // mPhysics.Update(1 / 60);
+    // mPhysics.DebugRender();
 
-    for (auto obj : _objects)
-    {
-        
-    }
+    // for (auto& entity : _objects)
+    // {
+    //     entity->Update();
+    // }
 
-    mPhysics.Update(1 / 60);
-    mPhysics.DebugRender();
+    mDynamicsWorld->stepSimulation(1 /60, 10);
+    mDynamicsWorld->debugDrawWorld();
 }
 
 void GameLevel::InitSkybox(const std::string &filepath)
@@ -117,9 +114,8 @@ void GameLevel::DeleteLight()
 
 Entity* GameLevel::CreateEntity()
 {
-    _objects.emplace_back(std::make_unique<Entity>(mPhysics));
-    _objects.back()->SetID(_objects.size() - 1);
-    return _objects.back().get()->dnm_cast_entity();
+    // _objects.emplace_back(std::make_unique<Entity>(*mDynamicsWorld.get()));
+    // return _objects.back().get();
 }
 
 SoundBuffer *GameLevel::CreateSound()
@@ -133,6 +129,27 @@ GameLevel& GameLevel::Get()
 {
     static GameLevel instance;
     return instance;
+}
+
+void GameLevel::Initialize()
+{
+    // Set up the collision configuration and dispatcher
+    mCollisionConfig  = std::make_unique<btDefaultCollisionConfiguration>();
+    mDispathcer       = std::make_unique<btCollisionDispatcher>(mCollisionConfig.get());
+
+    // Build the broadphase
+    mBroadphase       = std::make_unique<btDbvtBroadphase>();
+
+    // The actual physics solver
+    mSolver           = std::make_unique<btSequentialImpulseConstraintSolver>();
+
+    // The world
+    mDynamicsWorld    = std::make_unique<btDiscreteDynamicsWorld>(mDispathcer.get(), mBroadphase.get(), mSolver.get(), mCollisionConfig.get());
+    mDynamicsWorld->setGravity(btVector3(0.f, -10.0f, 0.f));
+
+    mPhysicsDebugRenderer = std::make_unique<GLDebugDrawer>();
+    mDynamicsWorld->setDebugDrawer(mPhysicsDebugRenderer.get());
+    mDynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 }
 
 void GameLevel::Clear()

@@ -40,6 +40,13 @@ find_package(OpenAL CONFIG REQUIRED)
 # For read/write sound files
 find_package(SndFile CONFIG REQUIRED)
 
+# For support lua scripting
+find_package(Lua REQUIRED)
+target_include_directories(${PROJECT_NAME} PRIVATE ${LUA_INCLUDE_DIR})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${LUA_LIBRARIES})
+find_path(LUABRIDGE_INCLUDE_DIRS "LuaBridge/Array.h")
+target_include_directories(${PROJECT_NAME} PRIVATE ${LUABRIDGE_INCLUDE_DIRS})
+
 target_link_libraries(${PROJECT_NAME}
         PUBLIC
         GLEW::GLEW

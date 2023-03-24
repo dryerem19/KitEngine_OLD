@@ -4,21 +4,21 @@
 #include "pch.h"
 #include "VertexArray.h"
 
-Render::VertexArray::VertexArray()
+VertexArray::VertexArray()
     : mVertexArrayId(0) {
 
     GLCall(glGenVertexArrays(1, &mVertexArrayId));
 
 }
 
-Render::VertexArray::VertexArray(VertexBuffer vertexBuffer, VertexBufferLayout layout)
+VertexArray::VertexArray(VertexBuffer vertexBuffer, VertexBufferLayout layout)
     : VertexArray() {
 
         this->AddBuffer(vertexBuffer, layout);
 
 }
 
-Render::VertexArray::~VertexArray() {
+VertexArray::~VertexArray() {
 
     GLCall(glDeleteVertexArrays(1, &mVertexArrayId));
 
@@ -26,7 +26,7 @@ Render::VertexArray::~VertexArray() {
 
 }
 
-void Render::VertexArray::AddBuffer(const VertexBuffer &vertexBuffer,
+void VertexArray::AddBuffer(const VertexBuffer &vertexBuffer,
                                                  const VertexBufferLayout &layout) const {
 
     this->Bind();
@@ -44,13 +44,13 @@ void Render::VertexArray::AddBuffer(const VertexBuffer &vertexBuffer,
 
 }
 
-void Render::VertexArray::Bind() const {
+void VertexArray::Bind() const {
 
     GLCall(glBindVertexArray(mVertexArrayId));
 
 }
 
-void Render::VertexArray::Unbind() {
+void VertexArray::Unbind() {
 
     
 

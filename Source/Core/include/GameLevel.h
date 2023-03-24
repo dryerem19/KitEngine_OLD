@@ -30,6 +30,22 @@ private:
 
     KitEngine::Physics::Physics mPhysics;
 
+
+
+    entt::registry mRegistry;
+
+
+
+    std::unique_ptr<btBroadphaseInterface> mBroadphase;
+    std::unique_ptr<btCollisionDispatcher> mDispathcer;
+    std::unique_ptr<btConstraintSolver> mSolver;
+    std::unique_ptr<btCollisionConfiguration> mCollisionConfig;
+    std::unique_ptr<btDiscreteDynamicsWorld> mDynamicsWorld;
+    std::unique_ptr<GLDebugDrawer> mPhysicsDebugRenderer;
+
+
+
+
 public:
     std::vector<std::unique_ptr<KitLight>> _lights;
     //std::vector<std::shared_ptr<Entity>> mEntities;
@@ -38,6 +54,8 @@ public:
     std::vector<std::unique_ptr<SoundBuffer>> _soundsources; 
 
     static GameLevel& Get();
+
+    void Initialize();
 
     void Clear();
 
@@ -68,43 +86,4 @@ public:
     {
         return mSelectedObject;
     }
-
-    /**
-     * @brief Поиск объекта по его имени
-     * 
-     * @param name имя объекта
-     * @return Entity* 
-     */
-    inline Entity* FindObjectByName(const std::string& name)
-    {
-        Entity* pEntity = nullptr;
-        for (auto& entity : _objects) {
-            if (entity->GetName() == name) {
-                pEntity = entity.get();
-                break;
-            }
-        }
-
-        return pEntity;
-    }        
-    
-    // inline std::unordered_map<std::string, std::unique_ptr<Entity>>::iterator begin() noexcept
-    // {
-    //     return mObjects.begin();
-    // }
-
-    // inline std::unordered_map<std::string, std::unique_ptr<Entity>>::iterator end() noexcept
-    // {
-    //     return mObjects.end();
-    // }  
-
-    // inline std::unordered_map<std::string, std::unique_ptr<Entity>>::const_iterator cbegin() const noexcept
-    // {
-    //     return mObjects.cbegin();
-    // }
-
-    // inline std::unordered_map<std::string, std::unique_ptr<Entity>>::const_iterator cend() const noexcept
-    // {
-    //     return mObjects.cend();
-    // }                
 };

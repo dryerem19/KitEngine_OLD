@@ -42,22 +42,51 @@ uniform float uSpecularStrength;
 uniform vec3 uLigthPos;
 uniform vec3 uViewPos;
 
+struct Material
+{
+    sampler2D specular;
+    sampler2D diffuse;
+    float shininess;
+};
+
+struct DirectionalLight
+{
+    vec3 direction;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float range;
+};
+
+uniform Material u_material;
+uniform DirectionalLight u_directionalLight;
+
 in vec2 vTexcoord;
 in vec3 Normal;
 in vec3 FragPos;
 
+vec3 ComputeDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)
+{
+    vec3 lightDir   = normalize(-light.direction);
+    float diff      = max(dot(normal, lightDir), 0.0);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec      = pow(max(dot(viewDir, reflectDir), 0.0), u_material.shininess);
+
+    // Combine results
+    vec3 ambient  = light.ambient  * vec3(texture(u_material.diffuse, vTexcoord));
+    vec3 diffuse  = light.diffuse  * diff * vec3(texture(u_material.diffuse, vTexcoord));
+    vec3 specular = light.specular * spec * vec3(texture(u_material.specular, vTexcoord));
+
+    return (ambient + diffuse) * light.range;
+
+}
+
 void main()
 {
-    vec3 normal = normalize(Normal);
-    vec3 lightDir = normalize(uLigthPos - FragPos);
-    float diff = max(dot(normal, lightDir), 0.0);
-    vec4 diffuse = diff * uLightColor;
-    vec4 ambient = uAmbientStrength * uLightColor;
+    // Properties 
+    vec3 norm       = normalize(Normal);
+    vec3 viewDir    = normalize(uViewPos - FragPos);
 
-    vec3 viewDir = normalize(uViewPos - FragPos);
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-    vec4 specular = uSpecularStrength * spec * uLightColor;
-    
-    OutColor = (ambient + diffuse + specular) * texture(uTextureDiffuse, vTexcoord);
+    vec3 result = ComputeDirectionalLight(u_directionalLight, norm, viewDir); 
+    OutColor = vec4(result, 1.0);
 }

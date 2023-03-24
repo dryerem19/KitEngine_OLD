@@ -4,13 +4,13 @@
 #include "pch.h"
 #include "VertexBufferLayout.h"
 
-Render::VertexBufferLayout::VertexBufferLayout(
+VertexBufferLayout::VertexBufferLayout(
         std::vector<VertexBufferAttribute> attributes)
         : mAttributes(std::move(attributes)){
 
 }
 
-void Render::VertexBufferLayout::AddFloatElement(const uint32_t count,
+void VertexBufferLayout::AddFloatElement(const uint32_t count,
                                                               const bool normalized /* = false */) {
 
     mAttributes.push_back({

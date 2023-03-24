@@ -7,10 +7,13 @@
 
 #include "FPSCamera.h"
 
+#include "Scene.h"
+
 class GameLayer final : public Core::BaseLayer
 {
 private:
-    FPSCamera camera;
+    //FPSCamera camera;
+    Scene mScene;
 public:
     GameLayer() = default;
     void OnStart() override final;

@@ -4,6 +4,11 @@
 
 namespace Render
 {
+    KitMaterial::KitMaterial()
+    {
+        mShader = Core::ResourceManager::Instance().GetShader("../../Resources/shaders/glsl/default.shader");
+    }
+
     KitMaterial::KitMaterial(const std::string& filepath)
     {
         KitMaterialFile file;
@@ -49,18 +54,33 @@ namespace Render
 
     void KitMaterial::Bind()
     {
-        if (!mShader.get()) {
+        if (!mShader) {
             return;
         }
 
         mShader->Bind();
-        mShader->SetVec("material.diffuse",  mDiffuse);
-        mShader->SetVec("material.ambient",  mAmbient);
-        mShader->SetVec("material.specular", mSpecular);
-        mShader->SetInt("material.diffuseTex", mDiffuseTex->GetId());
-        mShader->SetInt("material.specularTex", mSpecularTex->GetId());
+        mShader->SetFloat("u_material.shininess", mShininess);
+
+        if (mDiffuseTex) {
+            mShader->SetInt("u_material.diffuse", 0);
+            mDiffuseTex->Bind(0);
+        }
+        if (mSpecularTex) {
+            mShader->SetInt("u_material.specular", 1);
+            mSpecularTex->Bind(1);
+        }
+    }
+
+    void KitMaterial::Unbind()
+    {
+        if (!mShader) {
+            return;
+        }
+
+        mShader->UnBind();
         
-        mDiffuseTex->Bind();
-        mSpecularTex->Bind();
+        if (mDiffuseTex) {
+            mDiffuseTex->Unbind();
+        }
     }
 }

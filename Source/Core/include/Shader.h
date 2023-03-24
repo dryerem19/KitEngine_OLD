@@ -33,11 +33,13 @@ public:
                                 const GLfloat *value) const;
 
     void Bind();
+    void UnBind();
     bool SetMat(const std::string& name, const glm::mat4& mat);
     bool SetMat(const std::string& name, const glm::mat3& mat);
     bool SetVec(const std::string& name, const glm::vec2& vec);
     bool SetVec(const std::string& name, const glm::vec3& vec);
     bool SetVec(const std::string& name, const glm::vec4& vec);
+    bool SetFloat(const std::string& name, const float& value);
     bool SetInt(const std::string& name, const int& value);
     
 private:

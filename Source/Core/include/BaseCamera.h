@@ -9,7 +9,7 @@ class BaseCamera
 {
 public:
     BaseCamera();
-    BaseCamera(const float& fov, const float& aspect, const float& near, const float& far);        
+    BaseCamera(const float& fov, const float& aspect, const float& near, const float& far);
     /**
      * @brief Преобразует точку из экранного пространства в мировое
      * 
@@ -32,6 +32,7 @@ public:
     inline float GetAspect() const { return mAspect; }
     inline float GetNear() const { return mNearClip; }
     inline float GetFar() const { return mFarClip; }
+    inline bool IsMainCamera() const { return mMainCamera; }
     inline void SetViewportSize(const float& width, const float& height) { mViewportWidth = width; mViewportHeight = height; UpdateProjection(); }
     glm::vec3 GetUp() const;
     glm::vec3 GetRight() const;
@@ -48,14 +49,15 @@ protected:
     glm::mat4 mViewProjection;
     glm::mat4 mView;
 
+    bool mMainCamera = true;
     float mYaw;
     float mPitch;
     float mFov;
     float mAspect;
     float mNearClip;
-    float mFarClip;    
+    float mFarClip;
     float mViewportWidth;
-    float mViewportHeight;    
+    float mViewportHeight;
 };
 
 

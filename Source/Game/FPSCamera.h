@@ -12,9 +12,9 @@ public:
 
     void OnUpdate() override final
     {
-        Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorDisabled);
+        //Input::SetInputMode(CursorMode::Cursor, CursorState::CursorDisabled);
 
-        const glm::vec2 mousePosition = Core::Input::mousePosition;
+        const glm::vec2 mousePosition = Input::mousePosition;
         glm::vec2 delta = (mousePosition - mOldMousePosition) * 0.003f;
         mOldMousePosition = mousePosition;
 
@@ -26,22 +26,23 @@ public:
 
     void Move()
     {
-        if (Core::Input::GetKey(Core::KeyCode::W))
+        if (Input::GetKey(KeyCode::W))
         {
             mPosition += mMouseMoveSpeed * GetForward();
+            std::cout << "W: \n";
         }
         
-        if (Core::Input::GetKey(Core::KeyCode::S))
+        if (Input::GetKey(KeyCode::S))
         {
             mPosition -= mMouseMoveSpeed * GetForward();
         }
         
-        if (Core::Input::GetKey(Core::KeyCode::A))
+        if (Input::GetKey(KeyCode::A))
         {
             mPosition -= GetRight() * mMouseMoveSpeed;
         }
         
-        if (Core::Input::GetKey(Core::KeyCode::D))
+        if (Input::GetKey(KeyCode::D))
         {
             mPosition += GetRight() * mMouseMoveSpeed;
         }

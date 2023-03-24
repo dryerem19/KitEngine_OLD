@@ -1,59 +1,84 @@
 /**
  * @file Entity.h
- * @author dryerem19 (mamayma@dgmail.com)
+ * @author Denis Eremenko (mamayma@dgmail.com)
  * @brief Базовая логика игровой сущности
  * @version 0.1
  * @date 2022-11-30
  * 
- * @copyright Copyright dryerem19 (c) 2022
+ * @copyright Copyright Denis Eremenko(c) 2022
  * 
  */
 #pragma once
-#include "Model.h"
-#include "KitObject.h"
+#include "Scene.h"
 
-#include "PhysicSystem.h"
-
-/**
- * @brief Базовая игровая сущность
- */
-class Entity : public std::enable_shared_from_this<Entity>, public KitObject
+class Entity
 {
-protected:
-    
-    /* Грязный флаг, отвечает за то, была ли изменена сущность */
-    bool mIsDirty = true;    
-
-    std::shared_ptr<Model> mModel;
-
-
-    std::unique_ptr<KitEngine::Physics::BoxCollider> mPhysic;
-
 private:
-    glm::vec3 mPosition, mRotation, mScaled;
-    glm::mat4 mTransformMatrix;
-    bool mTransformChanged;
-    std::unique_ptr<btRigidBody> mRigidBody;
-
+    entt::entity mEntityId { entt::null };
+    Scene* m_pScene { nullptr };
 public:
-    Entity(KitEngine::Physics::Physics& physics);
+    Entity() = default;
+    Entity(entt::entity entityId, Scene* pScene);
+    Entity(const Entity& right) = default;
 
-    void Update();
-    void SetTransform(const glm::mat4& transform, bool updateRigidbody = true);
-    const glm::mat4& GetTransform();
-    void SetPosition(const glm::vec3& position);
-    void SetRotation(const glm::vec3& rotation);
-    void SetScale(const glm::vec3& scale);
-
-
-    void SetModel(std::shared_ptr<Model> model);
-
-    std::shared_ptr<Model> GetModel() const { return mModel; }
-
-    Entity* dnm_cast_entity() override
+    template<typename T, typename... Args>
+    T& AddComponent(Args&&... args)
     {
-        return dynamic_cast<Entity*>(this);
+        assert(m_pScene != nullptr && "The scene does not exist");
+        assert(mEntityId != entt::null && "Null entity");
+        assert(!HasComponent<T>() && "Entity already have component");
+        return m_pScene->mRegistry.emplace<T>(mEntityId, std::forward<Args>(args)...);
     }
 
-    void Spawn();
+    template<typename T, typename... Args>
+    T& ReplaceComponent(Args&&... args)
+    {
+        assert(m_pScene != nullptr && "The scene does not exist");
+        assert(mEntityId != entt::null && "Null entity");
+        return m_pScene->mRegistry.emplace_or_replace<T>(mEntityId, std::forward<Args>(args)...);
+    }
+
+    template<typename T>
+    T& GetComponent()
+    {
+        assert(m_pScene != nullptr && "The scene does not exist");
+        assert(mEntityId != entt::null && "Null entity");
+        assert(HasComponent<T>() && "Entity does not have component");
+        return m_pScene->mRegistry.get<T>(mEntityId);
+    }
+
+    template<typename T>
+    bool HasComponent()
+    {
+        assert(m_pScene != nullptr && "The scene does not exist");
+        assert(mEntityId != entt::null && "Null entity");
+        return m_pScene->mRegistry.any_of<T>(mEntityId);
+    }
+
+    template<typename T>
+    void RemoveComponent()
+    {
+        assert(m_pScene != nullptr && "The scene does not exist");
+        assert(mEntityId != entt::null && "Null entity");
+        assert(HasComponent<T>() && "Entity does not have component");
+        return m_pScene->mRegistry.remove<T>(mEntityId);
+    }
+
+    Scene* GetScene() const { return m_pScene; }
+
+    TransformComponent& GetTransform() { return GetComponent<TransformComponent>(); }
+
+    operator bool() const { return mEntityId != entt::null; }
+    operator entt::entity() const { return mEntityId; }
+    operator unsigned int() const { return (unsigned int)mEntityId; }
+
+    bool operator==(const Entity& right) const 
+    {
+        return mEntityId == right.mEntityId && m_pScene == right.m_pScene;
+    }
+
+    bool operator!=(const Entity& right) const 
+    {
+        return !(*this == right);
+    }
 };

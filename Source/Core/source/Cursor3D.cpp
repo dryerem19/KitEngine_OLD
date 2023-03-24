@@ -15,8 +15,8 @@ glm::vec3 Cursor3D::GetPickRay(const BaseCamera& camera, const glm::vec2& viewpo
 {
     auto& app = Core::Application::Instance();
     
-    float mouseX = Core::Input::mousePosition.x;
-    float mouseY = Core::Input::mousePosition.y;
+    float mouseX = Input::mousePosition.x;
+    float mouseY = Input::mousePosition.y;
 
     glm::vec2 normalizedCoords = GetNormalizedDeviceCoords(mouseX, mouseY);
     glm::vec4 clipCoords = glm::vec4(normalizedCoords.x, normalizedCoords.y, -1.0f, 1.0f);

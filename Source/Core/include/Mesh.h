@@ -27,7 +27,8 @@ public:
     Geometry geometry;
     
     // Материал сетки
-    std::shared_ptr<Render::KitMaterial> mMaterial;
+    //std::shared_ptr<Render::KitMaterial> mMaterial;
+    Render::KitMaterial mMaterial;
 
     Mesh(const std::vector<KitVertex>& vertices, 
             const std::vector<uint32_t>&  indices);
@@ -43,18 +44,4 @@ public:
     */
     void Init(const std::vector<KitVertex>& vertices, 
             const std::vector<uint32_t>&  indices);
-
-    std::shared_ptr<Render::KitMaterial> GetMaterial() const
-    {
-        return mMaterial;
-    }
-
-    inline void SetMaterial(std::shared_ptr<Render::KitMaterial> material)
-    {
-        //assert(pMaterial && "Material can't be nullptr!");
-
-        mMaterial = material;
-    }
-
-    void SetMaterial(const std::string& filepath);
 };

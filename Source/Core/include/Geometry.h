@@ -15,9 +15,9 @@
 
 struct Geometry
 {
-    Render::VertexArray  vao;
-    Render::VertexBuffer vbo;
-    Render::IndexBuffer  ibo;
+    VertexArray  vao;
+    VertexBuffer vbo;
+    IndexBuffer  ibo;
 
     Geometry() = default;
     ~Geometry() = default;

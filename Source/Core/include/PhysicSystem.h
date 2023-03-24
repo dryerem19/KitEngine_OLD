@@ -9,44 +9,35 @@
  * 
  */
 #pragma once
+#include "Components.h"
+#include "System.h"
 #include "Physics/GLDebugDrawer.h"
 
-btVector3 TobtVector3(const glm::vec3& vec);
 
-class PhysicSystem
+#include "PlayerControllerSystem.h"
+
+
+
+class PhysicSystem : public System
 {
 private:
-    PhysicSystem();
-    PhysicSystem(const PhysicSystem&) = delete;
-    PhysicSystem& operator=(const PhysicSystem&) = delete;
-    ~PhysicSystem();
-private:
-    btBroadphaseInterface* m_pBroadphase;
-    btCollisionDispatcher* m_pDispathcer;
-    btConstraintSolver* m_pSolver;
-    btCollisionConfiguration* m_pCollisionConfig;
-    btDiscreteDynamicsWorld* m_pDynamicsWorld;
-    GLDebugDrawer* m_pDebugDrawer;
+    std::unique_ptr<btBroadphaseInterface> mBroadphase;
+    std::unique_ptr<btCollisionDispatcher> mDispathcer;
+    std::unique_ptr<btConstraintSolver> mSolver;
+    std::unique_ptr<btCollisionConfiguration> mCollisionConfig;
+    std::unique_ptr<btDiscreteDynamicsWorld> mDynamicsWorld;
+    std::unique_ptr<GLDebugDrawer> mDebugRenderer;
+
+
+    //PlayerControllerSystem* mCharacterSystem;
+
 public:
-    static PhysicSystem& Instance();
-    btDiscreteDynamicsWorld* GetDynamicsWorld();
-    void Update(float deltaTime);
-    btBoxShape* CreateBoxShape(const btVector3& halfExtents);
-    btRigidBody* CreateRigidBody(const float& mass, const btTransform& transform, btCollisionShape* pShape);
-    btRigidBody* GetPickBody(const glm::vec3& origin, const glm::vec3& end);
+    PhysicSystem(entt::registry& registry) :
+        System(registry) { }
 
-    /**
-     * @brief Нарисовать физический мир в режиме отладки
-     * Вызывайте после того, как был нарисован основной мир
-     */
-    void DebugDrawWorld() const;
+    inline btDiscreteDynamicsWorld& GetDynamicsWorld() { return *mDynamicsWorld; }
 
-    void AddRigidBody(btRigidBody* rb) { m_pDynamicsWorld->addRigidBody(rb); }
-    
-    GLDebugDrawer* GetDebugDrawer() const;
-
-    /**
-     * @brief Изменить режим отладки
-     */
-    void SetDebugMode(int mode);
+    void OnStart()  final override;
+    void OnUpdate() final override;
+    void OnFinish() final override;
 };

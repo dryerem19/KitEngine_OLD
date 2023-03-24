@@ -25,6 +25,8 @@ namespace LevelEditor
         auto& app = Core::Application::Instance();
         //frameBuffer.Init(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
 
+
+        GameLevel::Get().Initialize();
         EditorCamera::Instance().SetViewportSize(app.GetWindow()->GetWidth(), app.GetWindow()->GetHeight());
 
 

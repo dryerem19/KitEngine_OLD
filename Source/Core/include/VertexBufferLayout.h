@@ -5,24 +5,21 @@
 #pragma once
 #include "VertexBuffer.h"
 
-namespace Render
+class VertexBufferLayout
 {
-    class VertexBufferLayout
-    {
-    private:
-        std::vector<VertexBufferAttribute> mAttributes;
-        uint32_t mStride{};
+private:
+    std::vector<VertexBufferAttribute> mAttributes;
+    uint32_t mStride{};
 
-    public:
-        explicit VertexBufferLayout() = default;
-        VertexBufferLayout(const VertexBufferLayout&) = default;
-        explicit VertexBufferLayout(std::vector<VertexBufferAttribute>  attributes);
-        ~VertexBufferLayout() = default;
+public:
+    explicit VertexBufferLayout() = default;
+    VertexBufferLayout(const VertexBufferLayout&) = default;
+    explicit VertexBufferLayout(std::vector<VertexBufferAttribute>  attributes);
+    ~VertexBufferLayout() = default;
 
-        void AddFloatElement(uint32_t count, bool normalized = false);
+    void AddFloatElement(uint32_t count, bool normalized = false);
 
-        [[nodiscard]] inline uint32_t GetStride() const { return mStride; }
-        [[nodiscard]] inline const std::vector<VertexBufferAttribute>& GetAttributes() const { return mAttributes; }
+    [[nodiscard]] inline uint32_t GetStride() const { return mStride; }
+    [[nodiscard]] inline const std::vector<VertexBufferAttribute>& GetAttributes() const { return mAttributes; }
 
-    };
-}
+};

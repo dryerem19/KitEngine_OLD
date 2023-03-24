@@ -5,8 +5,6 @@
 #ifndef KITENGINE_INPUT_H
 #define KITENGINE_INPUT_H
 
-namespace Core
-{
     #pragma region enums
     enum class KeyCode
     {
@@ -159,17 +157,33 @@ namespace Core
     public:
         inline static glm::vec2 mousePosition       = glm::vec2(0.0f, 0.0f);
         inline static glm::vec2 mouseScrollDelta    = glm::vec2(0.0f, 0.0f);
-        inline static glm::vec2 mouseOffset         = glm::vec2(0.0f, 0.0f);
+        inline static glm::vec2 mouseDelta         = glm::vec2(0.0f, 0.0f);
 
         static void Initialize(GLFWwindow* pWindow);
         static bool GetKey(KeyCode keyCode);
-        static bool GetKeyDown(KeyCode keyCode);
+        static bool IsKeyDown(KeyCode keyCode);
         static bool GetKeyUp(KeyCode keyCode);
         static bool GetMouseButton(MouseButton mouseButton);
         static bool GetMouseDown(MouseButton mouseButton);
         static bool GetMouseUp(MouseButton mouseButton);
         static void SetInputMode(CursorMode mode, CursorState state);
         static void SetCursorPos(double x, double y);
+
+        /**
+         * @brief Возвращает изменение
+         * положения мыши между двумя кадрами
+         * ввода по оси X
+         * @return float
+         */
+        static float GetMouseDeltaX();
+
+                /**
+         * @brief Возвращает изменение
+         * положения мыши между двумя кадрами
+         * ввода по оси Y
+         * @return float
+         */
+        static float GetMouseDeltaY();
 
 
     private:
@@ -194,8 +208,6 @@ namespace Core
         static void OnCursorPositionCallback(GLFWwindow* window, double xpos, double ypos);
         static void OnScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
     };
-}
-
 
 
 

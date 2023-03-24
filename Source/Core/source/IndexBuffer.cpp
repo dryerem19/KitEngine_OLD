@@ -7,14 +7,14 @@
 //-------------------------------------------------------------------------------------------
 // Деструктор индексного буфера, уничтожает буфер
 //-------------------------------------------------------------------------------------------
-Render::IndexBuffer::~IndexBuffer() {
+IndexBuffer::~IndexBuffer() {
 
     // Cleanup
     GLCall(glDeleteBuffers(1, &mIndicesBufferId));
 
 }
 
-void Render::IndexBuffer::Init(const uint32_t* src, const uint32_t count)
+void IndexBuffer::Init(const uint32_t* src, const uint32_t count)
 {
     // TODO: Добавить проверку на то, что sizeof(unsigned int) == sizeof(GLuint)
 
@@ -33,7 +33,7 @@ void Render::IndexBuffer::Init(const uint32_t* src, const uint32_t count)
 //-------------------------------------------------------------------------------------------
 // Использовать буфер
 //-------------------------------------------------------------------------------------------
-void Render::IndexBuffer::Bind() const {
+void IndexBuffer::Bind() const {
 
     GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndicesBufferId));
 
@@ -42,7 +42,7 @@ void Render::IndexBuffer::Bind() const {
 //-------------------------------------------------------------------------------------------
 // Не использовать буфер
 //-------------------------------------------------------------------------------------------
-void Render::IndexBuffer::Unbind() const {
+void IndexBuffer::Unbind() const {
 
     GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 

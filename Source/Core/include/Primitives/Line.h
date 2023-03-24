@@ -20,7 +20,7 @@ private:
     glm::vec3 mColor;
     glm::mat4 mMvp;
     std::shared_ptr<Shader> mShader;
-    Render::VertexArray mVertexArray;
+    VertexArray mVertexArray;
 public:
     explicit Line(const glm::vec3& start, const glm::vec3& end, const glm::vec3& color = glm::vec3(1.f, 0.f, 0.f));
     void SetColor(const glm::vec3& color);

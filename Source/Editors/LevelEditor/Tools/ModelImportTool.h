@@ -13,6 +13,8 @@
 #include "KitModelFile.h"
 #include "../Core/KitUI.h"
 
+#include "Scene.h"
+
 namespace fs = std::filesystem;
 
 class ModelImportTool final
@@ -41,6 +43,13 @@ public:
 
     explicit ModelImportTool() = default;
     bool Import();
+    
+    
+    
+    bool Load(const std::string& filepath, Scene* pScene);
+
+
+
     void Save();
 private:
     void CreateDirectory(const fs::path& path);

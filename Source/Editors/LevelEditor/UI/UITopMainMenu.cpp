@@ -77,7 +77,7 @@ namespace LevelEditor
 
         auto entity = GameLevel::Get().CreateEntity();
         entity->SetModel(Core::ResourceManager::Instance().GetModel("data/nanosuit/nanosuit.kmf"));
-        entity->SetName(entity->GetModel()->mName);
+        //entity->SetName(entity->GetModel()->mName);
         //entity->Spawn();
 
         uiSceneTree->isModelLoaded = true;

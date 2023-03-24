@@ -17,6 +17,8 @@
 #include "Transform.h"
 #include "BaseCamera.h"
 
+#include "KitMaterial.h"
+
 namespace Core
 {
     class ResourceManager;
@@ -24,26 +26,27 @@ namespace Core
 
 class Model
 {
+private:
+    
 public:
-    std::vector<std::unique_ptr<Mesh>> mMeshes;
+    //std::vector<std::unique_ptr<Mesh>> mMeshes;
+    std::vector<std::shared_ptr<Mesh>> mMeshes;
     std::string mFilepath;
     std::string mName;
     KMFAABB mAabb;
-    btTriangleMesh* pTempMesh = nullptr;
 
     Transform mTransform;
 
     std::string mDirectory;
 public:
-    void Deserialize(const std::string& filepath);
-
-
     void Load(const std::string& filepath);
     void ProcessNode(const aiNode* pNode, const aiScene* pScene);
+
     std::shared_ptr<Mesh> ProcessMesh(const aiMesh* pMesh, const aiScene* pScene);
-    void ProcessMaterial(const aiMaterial* pMaterial, const aiScene* pScene);
-    std::vector<std::shared_ptr<Render::KitTexture>> LoadTextures(const aiMaterial* pMaterial, aiTextureType type, const aiScene* pScene);
 
 
-    void Draw(const std::shared_ptr<Shader>& shader, const BaseCamera& camera);
+
+    void ProcessMaterial(const aiMesh* p_aiMesh, const aiScene* p_aiScene, Mesh& kitMesh);
+    void LoadTextures(const aiMaterial* pMaterial, aiTextureType type, const aiScene* pScene, Mesh& kitMesh);
+    bool IsPathExist(const std::string& path) const;
 };

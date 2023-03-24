@@ -10,19 +10,19 @@ namespace LevelEditor
 
     void EditorCamera::OnUpdate()
     {
-        if (Core::Input::GetMouseButton(Core::MouseButton::MouseButtonRight)) 
+        if (Input::GetMouseButton(MouseButton::MouseButtonRight)) 
         {
-            Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorDisabled);
+            Input::SetInputMode(CursorMode::Cursor, CursorState::CursorDisabled);
 
-            const glm::vec2 mousePosition = Core::Input::mousePosition;
+            const glm::vec2 mousePosition = Input::mousePosition;
             glm::vec2 delta = (mousePosition - mOldMousePosition) * 0.003f;
             mOldMousePosition = mousePosition;
             CameraMove();
             CameraRotate(delta);
         }
 
-        if(Core::Input::GetMouseUp(Core::MouseButton::MouseButtonRight)) {
-            Core::Input::SetInputMode(Core::CursorMode::Cursor, Core::CursorState::CursorNormal);
+        if(Input::GetMouseUp(MouseButton::MouseButtonRight)) {
+            Input::SetInputMode(CursorMode::Cursor, CursorState::CursorNormal);
         }         
 
         BaseCamera::OnUpdate();
@@ -30,22 +30,22 @@ namespace LevelEditor
 
     void EditorCamera::CameraMove()
     {
-        if (Core::Input::GetKey(Core::KeyCode::W))
+        if (Input::GetKey(KeyCode::W))
         {
             mPosition += cameraSpeed * GetForward();
         }
         
-        if (Core::Input::GetKey(Core::KeyCode::S))
+        if (Input::GetKey(KeyCode::S))
         {
             mPosition -= cameraSpeed * GetForward();
         }
         
-        if (Core::Input::GetKey(Core::KeyCode::A))
+        if (Input::GetKey(KeyCode::A))
         {
             mPosition -= GetRight() * cameraSpeed;
         }
         
-        if (Core::Input::GetKey(Core::KeyCode::D))
+        if (Input::GetKey(KeyCode::D))
         {
             mPosition += GetRight() * cameraSpeed;
         } 

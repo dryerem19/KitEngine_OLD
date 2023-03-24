@@ -4,14 +4,14 @@
 #include "pch.h"
 #include "Input.h"
 
-GLFWwindow* Core::Input::m_pWindow = nullptr;
+GLFWwindow* Input::m_pWindow = nullptr;
 
-bool Core::Input::mIsInit = false;
+bool Input::mIsInit = false;
 
-int Core::Input::mKey = -1;
-int Core::Input::mMouseButton = -1;
+int Input::mKey = -1;
+int Input::mMouseButton = -1;
 
-void Core::Input::Initialize(GLFWwindow *pWindow) {
+void Input::Initialize(GLFWwindow *pWindow) {
 
     if(!mIsInit)
     {
@@ -25,7 +25,7 @@ void Core::Input::Initialize(GLFWwindow *pWindow) {
 
 }
 
-void Core::Input::OnKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+void Input::OnKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
 
     memcpy(mPreviousStateKeyboard, mCurrentStateKeyboard, 1024);
 
@@ -40,7 +40,7 @@ void Core::Input::OnKeyCallback(GLFWwindow *window, int key, int scancode, int a
 
 }
 
-void Core::Input::OnMouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
+void Input::OnMouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
 
     memcpy(mPreviousStateMouse, mCurrentStateMouse, 8);
 
@@ -55,75 +55,97 @@ void Core::Input::OnMouseButtonCallback(GLFWwindow *window, int button, int acti
 
 }
 
-void Core::Input::OnCursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {
+void Input::OnCursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {
     
-    mouseOffset.x = mousePosition.x - xpos;
-    mouseOffset.y = mousePosition.y - ypos;
+    mouseDelta.x = mousePosition.x - xpos;
+    mouseDelta.y = mousePosition.y - ypos;
 
     mousePosition.x = (float)xpos;
     mousePosition.y = (float)ypos;
 
 }
 
-void Core::Input::OnScrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
+void Input::OnScrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
 
     mouseScrollDelta.x = (float)xoffset;
     mouseScrollDelta.y = (float)yoffset;
 
 }
 
-bool Core::Input::GetKey(Core::KeyCode keyCode) {
+bool Input::GetKey(KeyCode keyCode) {
 
     int key = static_cast<int>(keyCode);
     return mCurrentStateKeyboard[key];
 
 }
 
-bool Core::Input::GetKeyDown(Core::KeyCode keyCode) {
+bool Input::IsKeyDown(KeyCode keyCode) {
 
     int key = static_cast<int>(keyCode);
     return mCurrentStateKeyboard[key] && !mPreviousStateKeyboard[key];
 
 }
 
-bool Core::Input::GetKeyUp(Core::KeyCode keyCode) {
+bool Input::GetKeyUp(KeyCode keyCode) {
 
     int key = static_cast<int>(keyCode);
     return mPreviousStateKeyboard[key] && !mCurrentStateKeyboard[key];
 
 }
 
-bool Core::Input::GetMouseButton(Core::MouseButton mouseButton) {
+bool Input::GetMouseButton(MouseButton mouseButton) {
 
     int mouse = static_cast<int>(mouseButton);
     return mCurrentStateMouse[mouse];
 
 }
 
-bool Core::Input::GetMouseDown(Core::MouseButton mouseButton) {
+bool Input::GetMouseDown(MouseButton mouseButton) {
 
     int mouse = static_cast<int>(mouseButton);
     return mCurrentStateMouse[mouse] && !mPreviousStateMouse[mouse];
 
 }
 
-bool Core::Input::GetMouseUp(Core::MouseButton mouseButton) {
+bool Input::GetMouseUp(MouseButton mouseButton) {
 
     int mouse = static_cast<int>(mouseButton);
     return mPreviousStateMouse[mouse] && !mCurrentStateMouse[mouse];
 
 }
 
-void Core::Input::SetInputMode(Core::CursorMode mode, Core::CursorState state) {
+void Input::SetInputMode(CursorMode mode, CursorState state) {
 
     glfwSetInputMode(m_pWindow, static_cast<int>(mode), static_cast<int>(state));
 
 }
 
-void Core::Input::SetCursorPos(double x, double y) {
+void Input::SetCursorPos(double x, double y) {
 
     glfwSetCursorPos(m_pWindow, x, y);
 
 }
 
+float Input::GetMouseDeltaX()
+{
+    static double lastMousePosX = 0.0;
 
+    double currentMousePosX, deltaX;
+    glfwGetCursorPos(m_pWindow, &currentMousePosX, nullptr);
+    deltaX = currentMousePosX - lastMousePosX;
+    lastMousePosX = currentMousePosX;
+
+    return static_cast<float>(deltaX);
+}
+
+float Input::GetMouseDeltaY()
+{
+    static double lastMousePosY = 0.0;
+
+    double currentMousePosY, deltaY;
+    glfwGetCursorPos(m_pWindow, nullptr, &currentMousePosY);
+    deltaY = currentMousePosY - lastMousePosY;
+    lastMousePosY = currentMousePosY;
+
+    return static_cast<float>(deltaY);
+}

@@ -29,7 +29,7 @@ Mesh::Mesh(const void* vertices, const uint32_t size,
     geometry.vbo.Init(vertices, size * sizeof(KitVertex));
 
     // Инициализация слоя буфера
-    Render::VertexBufferLayout bufferLayout;
+    VertexBufferLayout bufferLayout;
     bufferLayout.AddFloatElement(3);
     bufferLayout.AddFloatElement(3);
     bufferLayout.AddFloatElement(2);
@@ -48,7 +48,7 @@ void Mesh::Init(const std::vector<KitVertex>& vertices, const std::vector<uint32
     geometry.vbo.Init(vertices.data(), vertices.size() * sizeof(vertices[0]));
 
     // Инициализация слоя буфера
-    Render::VertexBufferLayout bufferLayout;
+    VertexBufferLayout bufferLayout;
     bufferLayout.AddFloatElement(3);
     bufferLayout.AddFloatElement(3);
     bufferLayout.AddFloatElement(2);
@@ -63,8 +63,3 @@ void Mesh::Init(const std::vector<KitVertex>& vertices, const std::vector<uint32
 
     geometry.ibo.Init(indices.data(), indices.size());
 } 
-
-void Mesh::SetMaterial(const std::string& filepath)
-{
-    mMaterial = Core::ResourceManager::Instance().GetMaterial(filepath);
-}

@@ -20,9 +20,9 @@ Line::Line(const glm::vec3 &start, const glm::vec3 &end, const glm::vec3& color 
 
     mShader = Core::ResourceManager::Instance().GetShader("../../Resources/shaders/line.glsl");
 
-    auto layout = Render::VertexBufferLayout();
+    auto layout = VertexBufferLayout();
     layout.AddFloatElement(3);
-    mVertexArray.AddBuffer(Render::VertexBuffer(vertices.data(), vertices.size() * sizeof(vertices[0])), layout);
+    mVertexArray.AddBuffer(VertexBuffer(vertices.data(), vertices.size() * sizeof(vertices[0])), layout);
 }
 
 void Line::SetColor(const glm::vec3 &color)

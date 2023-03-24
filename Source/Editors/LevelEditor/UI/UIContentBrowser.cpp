@@ -92,7 +92,7 @@ namespace LevelEditor
                         // TO FIX <----------TO FIX
                         auto entity = GameLevel::Get().CreateEntity();
                         entity->SetModel(Core::ResourceManager::Instance().GetModel(importTool.mSaveDirectory.append(importTool.mKmfFile.name + ".kmf").string()));
-                        entity->SetName(entity->GetModel()->mName);
+                        //entity->SetName(entity->GetModel()->mName);
                         std::cout << importTool.mLogList.str() << std::endl;
                     }
                 }

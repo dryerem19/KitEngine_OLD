@@ -26,8 +26,12 @@ private:
     std::shared_ptr<Shader> mShader;    
 
 
+    glm::mat4 mMvp;
+
 public:
     GLDebugDrawer();
+
+    inline void SetMVP(const glm::mat4& mvp) { mMvp = mvp; };
 
 	virtual void setDebugMode(int debugMode) override final { mDebugMode = debugMode; }
 	virtual int getDebugMode() const override final { return mDebugMode; }

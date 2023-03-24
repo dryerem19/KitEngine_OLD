@@ -20,24 +20,24 @@ namespace LevelEditor
         template<typename T>
         void SceneTree(const char* pNodeName, const std::vector<T>& objects)
         {
-            auto& level = GameLevel::Get();
-            if (ImGui::TreeNodeEx(pNodeName, ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow)) 
-            {
-                for (auto& object : objects)
-                {
-                    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
-                    flags |= level.GetSelectedObject() == object.get() ? ImGuiTreeNodeFlags_Selected : 0;
+            // auto& level = GameLevel::Get();
+            // if (ImGui::TreeNodeEx(pNodeName, ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow)) 
+            // {
+            //     for (auto& object : objects)
+            //     {
+            //         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
+            //         flags |= level.GetSelectedObject() == object.get() ? ImGuiTreeNodeFlags_Selected : 0;
 
-                    if (ImGui::TreeNodeEx(object->GetName().c_str(), flags))
-                    {
-                        if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
-                            level.SetSelectedObject(object.get());
-                        }
-                        ImGui::TreePop();
-                    }
-                }
-                ImGui::TreePop();
-            }
+            //         if (ImGui::TreeNodeEx(object->GetName().c_str(), flags))
+            //         {
+            //             if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+            //                 level.SetSelectedObject(object.get());
+            //             }
+            //             ImGui::TreePop();
+            //         }
+            //     }
+            //     ImGui::TreePop();
+            // }
         }
     };
 }

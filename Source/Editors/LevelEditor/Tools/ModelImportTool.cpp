@@ -72,6 +72,31 @@ bool ModelImportTool::Import()
     return true;
 }
 
+bool ModelImportTool::Load(const std::string &filepath, Scene* pScene)
+{
+    if (!pScene) {
+        return false;
+    }
+
+    Assimp::Importer importer;
+    const aiScene* p_aiScene = importer.ReadFile(filepath.c_str(),
+                            aiProcess_GenSmoothNormals           |
+                            aiProcess_ValidateDataStructure      |
+                            aiProcess_CalcTangentSpace           |
+                            aiProcess_FlipUVs                    |
+                            aiProcess_RemoveRedundantMaterials   |
+                            aiProcess_GenUVCoords                |
+                            aiProcess_Triangulate                |
+                            aiProcess_OptimizeMeshes             |
+                            aiProcess_JoinIdenticalVertices      |
+                            aiProcess_GenBoundingBoxes           );
+
+    if (!p_aiScene || p_aiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !p_aiScene->mRootNode) {
+        mLogList << importer.GetErrorString() << "\n";
+        return false;
+    }
+}
+
 void ModelImportTool::Save()
 {
     fs::path saved_path = mSaveDirectory;

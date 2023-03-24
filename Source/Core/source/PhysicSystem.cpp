@@ -11,159 +11,86 @@
 #include "pch.h"
 #include "PhysicSystem.h"
 
-btVector3 TobtVector3(const glm::vec3 &vec)
-{
-    return btVector3(vec.x, vec.y, vec.z);
-}
-
-PhysicSystem::PhysicSystem()
-    : m_pBroadphase(nullptr),
-      m_pDispathcer(nullptr),
-      m_pSolver(nullptr),
-      m_pCollisionConfig(nullptr),
-      m_pDynamicsWorld(nullptr),
-      m_pDebugDrawer(nullptr)
+void PhysicSystem::OnStart()
 {
     // Set up the collision configuration and dispatcher
-    m_pCollisionConfig  = new btDefaultCollisionConfiguration();
-    m_pDispathcer       = new btCollisionDispatcher(m_pCollisionConfig);
+    mCollisionConfig  = std::make_unique<btDefaultCollisionConfiguration>();
+    mDispathcer       = std::make_unique<btCollisionDispatcher>(mCollisionConfig.get());
 
     // Build the broadphase
-    m_pBroadphase       = new btDbvtBroadphase();
+    mBroadphase       = std::make_unique<btDbvtBroadphase>();
 
-    // The actual physics solver
-    m_pSolver           = new btSequentialImpulseConstraintSolver();
+    // Create physic solver
+    mSolver           = std::make_unique<btSequentialImpulseConstraintSolver>();
 
-    // The world
-    m_pDynamicsWorld    = new btDiscreteDynamicsWorld(m_pDispathcer, m_pBroadphase, m_pSolver, m_pCollisionConfig);
-    m_pDynamicsWorld->setGravity(btVector3(0.f, -10.0f, 0.f));
+    // Create the physic world
+    mDynamicsWorld    = std::make_unique<btDiscreteDynamicsWorld>(mDispathcer.get(), mBroadphase.get(), mSolver.get(), mCollisionConfig.get());
+    mDynamicsWorld->setGravity(btVector3(0.f, -10.0f, 0.f));
 
-    // Create the debug drawer
-    m_pDebugDrawer      = new GLDebugDrawer();
+    // Create physic objects
+    auto view = mRegistry.view<RigidbodyComponent, TransformComponent>();
+    for (auto entity : view)
+    {
+        auto &transform = view.get<TransformComponent>(entity);
+        auto &rigidbody = view.get<RigidbodyComponent>(entity);
 
-    // Set the initial debug level
-    m_pDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+        const auto& pos = transform.GetPosition();
+        const auto& rot = glm::quat(transform.GetRotation());
 
-    // Add the debug drawer to the world
-    m_pDynamicsWorld->setDebugDrawer(m_pDebugDrawer);
-}
+        // Setup initial transformation
+        btTransform rbTransform;
+        rbTransform.setIdentity();
+        rbTransform.setOrigin({ pos.x, pos.y, pos.z });
+        rbTransform.setRotation({ rot.x, rot.y, rot.z, rot.w });
 
-PhysicSystem::~PhysicSystem()
-{
-    if (m_pDynamicsWorld) {
-        int i = 0;
-        for (i = m_pDynamicsWorld->getNumConstraints() - 1; i >= 0; i--) {
-            m_pDynamicsWorld->removeConstraint(m_pDynamicsWorld->getConstraint(i));
+        btCollisionShape *pShape = new btEmptyShape();
+
+        // Create the box shape
+        if (mRegistry.any_of<BoxColliderComponent>(entity)) {
+            const auto& collider = mRegistry.get<BoxColliderComponent>(entity);
+            pShape = new btBoxShape(btVector3(collider.mSize.x, collider.mSize.y, collider.mSize.z));
+        } 
+
+        // Calculate inertia
+        btVector3 localInertia(0.0f, 0.0f, 0.0f);
+        if (rigidbody.mMass != 0.0f) {
+            pShape->calculateLocalInertia(rigidbody.mMass, localInertia); 
         }
 
-        for (i = m_pDynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--) {
-            btCollisionObject* pCollisionObject = m_pDynamicsWorld->getCollisionObjectArray()[i];
-            btRigidBody* pRigidBody = btRigidBody::upcast(pCollisionObject);
-            if (pRigidBody && pRigidBody->getMotionState()) {
-                delete pRigidBody->getMotionState();
-            }
-            m_pDynamicsWorld->removeCollisionObject(pCollisionObject);
-            delete pCollisionObject;
-        }
+        // Build rigidbody information
+        btDefaultMotionState* pMotionState = new btDefaultMotionState(rbTransform);
+        btRigidBody::btRigidBodyConstructionInfo cInfo(rigidbody.mMass, pMotionState, pShape, localInertia);
+        
+        // Create bullet rigidbody object
+        rigidbody.mRigidBody = std::make_unique<btRigidBody>(cInfo);
+
+        // Add rigidbody to physic world
+        mDynamicsWorld->addRigidBody(rigidbody.mRigidBody.get());
+
+        //mCharacterSystem = new PlayerControllerSystem(*(mDynamicsWorld.get()));
     }
-
-    delete m_pDynamicsWorld;
-    m_pDynamicsWorld = nullptr;
-
-    delete m_pSolver;
-    m_pSolver = nullptr;
-
-    delete m_pBroadphase;
-    m_pBroadphase = nullptr;
-
-    delete m_pCollisionConfig;
-    m_pCollisionConfig = nullptr;
 }
 
-PhysicSystem &PhysicSystem::Instance()
+void PhysicSystem::OnUpdate()
 {
-    static PhysicSystem instance;
-    return instance;
-}
-
-btDiscreteDynamicsWorld *PhysicSystem::GetDynamicsWorld()
-{
-    return m_pDynamicsWorld;
-}
-
-void PhysicSystem::Update(float deltaTime)
-{
-    m_pDynamicsWorld->stepSimulation(deltaTime, 5);
-    m_pDynamicsWorld->updateAabbs();
-}
-
-btBoxShape *PhysicSystem::CreateBoxShape(const btVector3 &halfExtents)
-{
-    btBoxShape* pBox = new btBoxShape(halfExtents);
-    return pBox;
-}
-
-btRigidBody* PhysicSystem::CreateRigidBody(const float& mass, const btTransform& transform, 
-                         btCollisionShape* pShape)
-{
-    btAssert((!pShape || pShape->getShapeType() != INVALID_SHAPE_PROXYTYPE));
-
-    bool isDynamic = (mass != 0.0f);
-    btVector3 localInertia(0, 0, 0);
-    if (isDynamic) {
-        pShape->calculateLocalInertia(mass, localInertia);
-    }
-
-    btDefaultMotionState* pMotionState = new btDefaultMotionState(transform);
-    btRigidBody::btRigidBodyConstructionInfo cInfo(mass, pMotionState, pShape, localInertia);
-    btRigidBody* pRigidBody = new btRigidBody(cInfo);
-    m_pDynamicsWorld->addRigidBody(pRigidBody);
-    return pRigidBody;
-}
-
-btRigidBody* PhysicSystem::GetPickBody(const glm::vec3 &origin, const glm::vec3 &end)
-{
-    if (!m_pDynamicsWorld) {
-        return nullptr;
-    }
-
-    btCollisionWorld::ClosestRayResultCallback rayCallback(btVector3(origin.x, origin.y, origin.z), 
-        btVector3(end.x, end.y, end.z)
-    );
+    mDynamicsWorld->stepSimulation(1.0f / 60.0f, 10);
+    //mCharacterSystem->update(mRegistry, 1 / 60);
     
-    m_pDynamicsWorld->rayTest(
-        btVector3(origin.x, origin.y, origin.z),
-        btVector3(end.x, end.y, end.z),
-        rayCallback);
+    auto view = mRegistry.view<RigidbodyComponent, TransformComponent>();
+    for (auto entity : view)
+    {
+        auto &transform = view.get<TransformComponent>(entity);
+        auto &rigidbody = view.get<RigidbodyComponent>(entity);
 
-    if (rayCallback.hasHit()) {
-        btVector3 pickPos = rayCallback.m_hitPointWorld;
-        btRigidBody* pRigidBody = (btRigidBody*)btRigidBody::upcast(rayCallback.m_collisionObject);
-        return pRigidBody;
+        btTransform trans;
+        rigidbody.mRigidBody->getMotionState()->getWorldTransform(trans);
+
+        glm::mat4 matrix;
+        trans.getOpenGLMatrix(glm::value_ptr(matrix));
+        transform.SetMatrix(matrix);
     }
-
-    return nullptr;
 }
 
-void PhysicSystem::DebugDrawWorld() const
+void PhysicSystem::OnFinish()
 {
-    if (!m_pDebugDrawer) {
-        return;
-    }
-
-    m_pDynamicsWorld->debugDrawWorld();
-}
-
-GLDebugDrawer* PhysicSystem::GetDebugDrawer() const
-{
-    return m_pDebugDrawer;
-}
-
-void PhysicSystem::SetDebugMode(int mode)
-{
-    if (!m_pDebugDrawer) {
-        return;
-    }
-
-    m_pDebugDrawer->setDebugMode(mode);
 }

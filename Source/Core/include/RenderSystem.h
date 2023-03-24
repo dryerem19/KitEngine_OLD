@@ -1,122 +1,23 @@
 /**
  * @file RenderSystem.h
- * @author your name (you@domain.com)
- * @brief 
+ * @author Denis Eremenko (mamayma8@gmail.com)
+ * @brief Render system interface
  * @version 0.1
- * @date 2022-12-09
+ * @date 2023-01-31
  * 
- * @copyright Copyright (c) 2022
+ * @copyright Copyright Denis Eremenko (c) 2023
  * 
  */
 #pragma once
-#include "RenderBackend.h"
-#include "BaseCamera.h"
-#include "GameLevel.h"
-#include "PhysicSystem.h"
+#include "System.h"
+#include "Renderer.h"
+#include "Components.h"
 
-class RenderSystem
+class RenderSystem final: public System
 {
-private:
-    RenderSystem() = default;
-    RenderSystem(const RenderSystem&) = delete;
-    RenderSystem& operator=(const RenderSystem&) = delete;
 public:
-
-    static RenderSystem& Instance()
-    {
-        static RenderSystem instance;
-        return instance;
-    }
-
-    void Render(const BaseCamera& camera)
-    {
-        auto& level = GameLevel::Get();
-        auto& backend = RenderBackend::Get();
-        backend.Clear();
-
-        KitLight* light = level._lights.empty() ? nullptr : level._lights[0].get();
-
-        for (auto& entity : level._objects)
-        {
-            if(entity->Type() != KIT_OBJECT_ENTITY)
-                continue;
-            auto model = entity->dnm_cast_entity()->GetModel();
-            if (model)
-            {
-                for (auto& mesh : model->mMeshes)
-                {
-                    auto material = mesh->GetMaterial();
-                    if (!material)
-                    {
-                        return;
-                    }
-
-                    if (!material->mShader)
-                    {
-                        return;
-                    }
-
-                    material->Use();
-                    if(light)
-                    {
-                        material->mShader->SetUniform3f("uLigthPos", light->transform.GetPosition().x,light->transform.GetPosition().y,
-                                                                     light->transform.GetPosition().z);
-                        material->mShader->SetUniform4f("uLightColor", light->mColor[0], light->mColor[1], 
-                                                                         light->mColor[2], light->mColor[3]);
-                        material->mShader->SetUniform1f("uAmbientStrength", light->mAmbientStrength);
-                        material->mShader->SetUniform1f("uSpecularStrength", light->mSpecularStrength);
-                        material->mShader->SetUniform3f("uViewPos", camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
-                    }
-                    material->mShader->SetUniformMatrix4fv("uView", 1, GL_FALSE, glm::value_ptr(camera.GetView()));
-                    material->mShader->SetUniformMatrix4fv("uProjection", 1, GL_FALSE, glm::value_ptr(camera.GetProjection())); 
-
-                    // btTransform t;
-                    // entity->mPhysicObject->GetMotionState()->getWorldTransform(t);
-
-                    // btScalar m;
-                    // t.getOpenGLMatrix(&m);
-                    // glm::mat4 modelMatrix = glm::make_mat4x4(&m);
-
-                    glm::mat4 modelMatrix = entity->transform.GetModelMatrix();
-                    glm::mat4 mvpMatrix = camera.GetProjection() * camera.GetView() * modelMatrix;
-                    material->mShader->SetMat("u_mvp_matrix", mvpMatrix);
-                    material->mShader->SetMat("u_model_matrix", modelMatrix); 
-
-                    // if (entity->mPhysicObject)
-                    // {
-                    //     glm::mat4 modelMatrix = entity->mPhysicObject->GetRenderTransform();
-                    //     //glm::mat4 modelMatrix = entity->transform.GetModelMatrix();
-
-                    //     glm::mat4 mvpMatrix = camera.GetProjection() * camera.GetView() * modelMatrix;
-                    //     material->mShader->SetUniformMatrix4fv("u_mvp_matrix", 1, GL_FALSE, glm::value_ptr(mvpMatrix));
-                    //     material->mShader->SetUniformMatrix4fv("u_model_matrix", 1, GL_FALSE, glm::value_ptr(modelMatrix));
-                    // }
-                    // else
-                    // {
-                    //     //material->mShader->SetUniformMatrix4fv("uTransform", 1, GL_FALSE, glm::value_ptr(entity->transform.GetModelMatrix()));
-                    // }
-
-                    backend.SetGeometry(&mesh->geometry);
-                    backend.Render();
-                }
-            }
-        }
-        //level.GetSkybox().Render(camera);
-
-        //glm::mat4 mvp = camera.GetProj() * camera.GetGlmView();
-
-        // static Line line(glm::vec3(0, 0, 0), glm::vec3(1, 1, 50));
-        // line.SetMVP(mvp);
-        // line.SetColor(glm::vec3(1, 1, 1));
-        // line.Draw();
-
-        //backend.DrawLine(glm::vec3(0, 0, 0), glm::vec3(1, 1, 50), glm::vec4(1, 1, 1, 1));
-
-
-        //PhysicSystem::Instance().DebugDrawWorld();
-
-
-        //backend._DebugDrawLine();
-        //backend.mRenderDebug.Render();
-    }
+    RenderSystem(entt::registry& registry);
+    void OnStart() override final;
+    void OnUpdate() override final;
+    void OnFinish() override final;
 };

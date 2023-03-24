@@ -41,8 +41,8 @@ namespace Render
                 glEnable(GL_DEBUG_OUTPUT);
                 glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); 
                 glDebugMessageCallback(OnDebugOutput, nullptr);  
-                glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);         
-            }            
+                glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+            }
         }
 
         static void OnDebugOutput(GLenum source, GLenum type, unsigned int id, 
@@ -99,8 +99,6 @@ namespace Render
 
         static void Draw(const VertexArray& varray, const IndexBuffer& ibuffer)
         {
-            GLCall(glBindVertexArray(0));
-
             varray.Bind();
             ibuffer.Bind();
             GLCall(glDrawElements(GL_TRIANGLES, ibuffer.GetCount(), GL_UNSIGNED_INT, nullptr));

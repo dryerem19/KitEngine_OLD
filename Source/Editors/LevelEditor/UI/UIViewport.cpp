@@ -27,7 +27,7 @@ namespace LevelEditor
                 EditorCamera::Instance().SetViewportSize(mWidth, mHeight);
             }            
 
-            const glm::vec2& mousePosition = Core::Input::mousePosition;
+            const glm::vec2& mousePosition = Input::mousePosition;
             glm::vec2 relative_mouse_position(
                 mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
                 mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
@@ -60,8 +60,8 @@ namespace LevelEditor
                 
                 // // Получаем координаты курсора относительно вьюпорта
                 // glm::vec2 relative_mouse_position(
-                //     Core::Input::mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
-                //     Core::Input::mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
+                //     Input::mousePosition.x - ImGui::GetCursorScreenPos().x - ImGui::GetScrollX(),
+                //     Input::mousePosition.y - ImGui::GetCursorScreenPos().y - ImGui::GetScrollY()
                 // );
                 // DEBUG_MSG("Pre - x: %.3f, y: %.3f", relative_mouse_position.x, relative_mouse_position.y);
 
@@ -97,7 +97,7 @@ namespace LevelEditor
                         if (mIsFirstDelivery) {
                             pDeliveryEntity = GameLevel::Get().CreateEntity();
                             pDeliveryEntity->SetModel(Core::ResourceManager::Instance().GetModel(filepath->c_str()));
-                            pDeliveryEntity->SetName(pDeliveryEntity->GetModel()->mName);
+                            //pDeliveryEntity->SetName(pDeliveryEntity->GetModel()->mName);
 
                             //cameraPos += pickRay * mCameraMouseDistance;
                             //pDeliveryEntity->transform.SetPosition(rayEndPosition);
@@ -114,14 +114,14 @@ namespace LevelEditor
                                 // glm::vec3 rayStartPosition = EditorCamera::Instance().GetPosition();
                                 // glm::vec3 rayEndPosition = rayStartPosition + rayDirection * mCameraMouseDistance;     
 
-                                // const glm::vec2& mouseOffset = Core::Input::mouseOffset;
+                                // const glm::vec2& mouseOffset = Input::mouseOffset;
                                 // rayEndPosition.x += mouseOffset.x;
                                 // rayEndPosition.z += mouseOffset.y;                                
 
                                  //pDeliveryEntity->transform.SetPosition(rayEndPosition);                             
                                 //mMousePickRay = rayEndPosition;
 
-                                // const glm::vec2& mouseOffset = Core::Input::mouseOffset;
+                                // const glm::vec2& mouseOffset = Input::mouseOffset;
                                 // glm::vec3 entityPos = pDeliveryEntity->transform.GetPosition();
                                 // entityPos.x += mouseOffset.x * mMoveSpeed;
                                 // entityPos.z += mouseOffset.y * mMoveSpeed;

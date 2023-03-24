@@ -4,27 +4,24 @@
 
 #pragma once
 
-namespace Render
+struct VertexBufferAttribute
 {
-    struct VertexBufferAttribute
-    {
-        GLsizei      Count;
-        GLsizei      Type;
-        GLboolean    Normalized;
-        GLTypeSize   TypeSize;
-    };
+    GLsizei      Count;
+    GLsizei      Type;
+    GLboolean    Normalized;
+    GLTypeSize   TypeSize;
+};
 
-    class VertexBuffer
-    {
-    private:
-        uint32_t mVertexBufferId;
-    public:
-        VertexBuffer(const void* src, const uint32_t size);
-        VertexBuffer() = default;
-        ~VertexBuffer();
+class VertexBuffer
+{
+private:
+    uint32_t mVertexBufferId;
+public:
+    VertexBuffer(const void* src, const uint32_t size);
+    VertexBuffer() = default;
+    ~VertexBuffer();
 
-        void Init(const void* src, const uint32_t size);
-        void Bind() const;
-        void Unbind() const;
-    };
-}
+    void Init(const void* src, const uint32_t size);
+    void Bind() const;
+    void Unbind() const;
+};

@@ -14,7 +14,7 @@ SkyBox::SkyBox()
 {
     geometry.vbo.Init(mSkyboxVertices, sizeof(mSkyboxVertices));
 
-    Render::VertexBufferLayout vertexLayout;
+    VertexBufferLayout vertexLayout;
     vertexLayout.AddFloatElement(3);
 
     geometry.vao.AddBuffer(geometry.vbo, vertexLayout);

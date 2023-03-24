@@ -60,6 +60,11 @@ void Shader::Bind()
     glUseProgram(mShaderId);
 }
 
+void Shader::UnBind()
+{
+    glUseProgram(0);
+}
+
 bool Shader::SetMat(const std::string &name, const glm::mat4 &mat)
 {
     const GLint location = GetUniformLocation(name);
@@ -109,6 +114,17 @@ bool Shader::SetVec(const std::string &name, const glm::vec4 &vec)
     const GLint location = GetUniformLocation(name);
     if (location != -1) {
         glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
+        return true;
+    }
+
+    return false;
+}
+
+bool Shader::SetFloat(const std::string &name, const float &value)
+{
+    const GLint location = GetUniformLocation(name);
+    if (location != -1) {
+        glUniform1f(location, value);
         return true;
     }
 

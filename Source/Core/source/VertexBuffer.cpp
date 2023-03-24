@@ -4,7 +4,7 @@
 #include "pch.h"
 #include "VertexBuffer.h"
 
-Render::VertexBuffer::VertexBuffer(const void *src, const uint32_t size)
+VertexBuffer::VertexBuffer(const void *src, const uint32_t size)
 {
     Init(src, size);
 }
@@ -12,14 +12,14 @@ Render::VertexBuffer::VertexBuffer(const void *src, const uint32_t size)
 //-------------------------------------------------------------------------------------------
 // Деструктор вершинного буфера, уничтожает буфер
 //-------------------------------------------------------------------------------------------
-Render::VertexBuffer::~VertexBuffer() {
+VertexBuffer::~VertexBuffer() {
 
     // Cleanup
     GLCall(glDeleteBuffers(1, &mVertexBufferId));
 
 }
 
-void Render::VertexBuffer::Init(const void* src, const uint32_t size)
+void VertexBuffer::Init(const void* src, const uint32_t size)
 {
     /* Создаём объект вершинного буфера, который будет хранить вершины в видеопамяти */
     GLCall(glGenBuffers(1, &mVertexBufferId));
@@ -32,7 +32,7 @@ void Render::VertexBuffer::Init(const void* src, const uint32_t size)
 //-------------------------------------------------------------------------------------------
 // Использовать буфер
 //-------------------------------------------------------------------------------------------
-void Render::VertexBuffer::Bind() const {
+void VertexBuffer::Bind() const {
 
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId));
 
@@ -41,7 +41,7 @@ void Render::VertexBuffer::Bind() const {
 //-------------------------------------------------------------------------------------------
 // Не использовать буфер
 //-------------------------------------------------------------------------------------------
-void Render::VertexBuffer::Unbind() const {
+void VertexBuffer::Unbind() const {
 
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 
