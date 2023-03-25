@@ -20,4 +20,6 @@ public:
     void OnStart() override final;
     void OnUpdate() override final;
     void OnFinish() override final;
+private:
+    //void DrawModel(const )
 };

@@ -4,13 +4,14 @@
 
 void GameLayer::OnStart()
 {
-    // Entity mainCamera = mScene.CreateEntity();
-    // auto& cameraComponent = mainCamera.AddComponent<CameraComponent>();
+    Entity mainCamera = mScene.CreateEntity();
+    auto& cameraComponent = mainCamera.AddComponent<CameraComponent>();
+    cameraComponent.pCamera = new FPSCamera();
 
     // Создаём главного игрока 
-    Entity player = mScene.CreateEntity();
-    auto& camera = player.AddComponent<CameraComponent>();
-    camera.pCamera = new FPSCamera();
+    // Entity player = mScene.CreateEntity();
+    // auto& camera = player.AddComponent<CameraComponent>();
+    // camera.pCamera = new FPSCamera();
     //player.AddComponent<PlayerComponent>();
 
     // Регистриуем систему управления игроком
@@ -21,19 +22,17 @@ void GameLayer::OnStart()
 
     Entity entity = mScene.CreateEntity();
     entity.AddComponent<ModelComponent>(Core::ResourceManager::Instance().GetModel("../../Resources/models/nanosuit/nanosuit.obj"));
-    // auto& controller = entity.AddComponent<CharacterControllerComponent>();
-    // controller.movementSpeed = 2;
     
-    // auto& rigidbody = entity.AddComponent<RigidbodyComponent>();
-    // rigidbody.mMass = 200;
-    // entity.AddComponent<BoxColliderComponent>(glm::vec3(1, 1, 1));
+    auto& rigidbody = entity.AddComponent<RigidbodyComponent>();
+    rigidbody.mMass = 200;
+    entity.AddComponent<BoxColliderComponent>(glm::vec3(1, 1, 1));
     
     Entity ground = mScene.CreateEntity();
     ground.AddComponent<ModelComponent>(Core::ResourceManager::Instance().GetModel("../../Resources/models/plane.obj"));
-    // ground.AddComponent<RigidbodyComponent>();
-    // ground.AddComponent<BoxColliderComponent>(glm::vec3(10, 1, 10));
-    // ground.GetTransform().SetPosition({ 0, -50, 0 });
-    // ground.GetTransform().SetScale({ 1, 1, 1 });
+    ground.AddComponent<RigidbodyComponent>();
+    ground.AddComponent<BoxColliderComponent>(glm::vec3(10, 1, 10));
+    ground.GetTransform().SetPosition({ 0, -50, 0 });
+    ground.GetTransform().SetScale({ 1, 1, 1 });
 
     mScene.OnStart();
     

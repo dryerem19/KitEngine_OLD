@@ -142,6 +142,9 @@ void BaseCamera::SetProjection(const float& fov, const float& aspect, const floa
 void BaseCamera::UpdateProjection()
 {
     mAspect = mViewportWidth / mViewportHeight;
+    std::cout << "Viewport width: " << mViewportWidth << "\n"
+        << "Viewport height: " << mViewportHeight << "\n";
+        
     SetProjection(glm::radians(mFov), mAspect, mNearClip, mFarClip);
 }
 

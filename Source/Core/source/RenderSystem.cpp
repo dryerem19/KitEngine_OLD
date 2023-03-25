@@ -46,13 +46,24 @@ void RenderSystem::OnUpdate()
 
                 for (auto& light : lights)
                 {
-                    glm::vec3 position = lights.get<TransformComponent>(light).GetPosition();
+                    glm::vec3 position = lights.get<TransformComponent>(light).mPosition;
                     lights.get<LightComponent>(light).SendToShader(shader, position);
                 }
 
                 glm::mat4 modelTransformMatrix = modelTransform.GetMatrix();
-                glm::mat4 modelViewProjectionMatrix = modelTransformMatrix * cameraComponent.pCamera->GetView() * cameraComponent.pCamera->GetProjection();
-                shader->SetMat("u_mvp_matrix", modelViewProjectionMatrix);
+                glm::mat4 cameraView = cameraComponent.pCamera->GetView();
+                glm::mat4 cameraProj = cameraComponent.pCamera->GetProjection();
+
+
+                glm::mat4 mvp = cameraProj * cameraView * modelTransformMatrix;
+                
+                
+                // Debugging output
+                // std::cout << "Model transform matrix: " << glm::to_string(modelTransformMatrix) << std::endl;
+                // std::cout << "View matrix: " << glm::to_string(cameraView) << std::endl;
+                // std::cout << "Projection matrix: " << glm::to_string(cameraProj) << std::endl;
+                
+                shader->SetMat("u_mvp_matrix", mvp);
                 shader->SetMat("u_model_matrix", modelTransformMatrix);
 
                 Render::Renderer::Draw(mesh->geometry.vao, mesh->geometry.ibo);

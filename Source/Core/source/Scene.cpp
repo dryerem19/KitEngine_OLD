@@ -40,7 +40,6 @@ void Scene::OnViewportResize(float width, float height)
         auto& camera = view.get<CameraComponent>(entity);
        // camera.mAspect = width / height;
         camera.pCamera->SetViewportSize(width, height);
-        camera.pCamera->SetViewportSize(width, height);
     }
 }
 
@@ -56,10 +55,10 @@ void Scene::OnUpdate()
 {
     //mPhysicSystem.OnUpdate();
 
-    for (auto& system : mSystems)
-    {
-        system->update(mRegistry, 1 / 60);
-    }
+    // for (auto& system : mSystems)
+    // {
+    //     system->update(mRegistry, 1 / 60);
+    // }
 
     auto view = mRegistry.view<CameraComponent>();
     for (auto entity : view)
