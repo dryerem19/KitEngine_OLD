@@ -17,57 +17,72 @@ PlayerControllerSystem::PlayerControllerSystem() { }
 
 void PlayerControllerSystem::update(entt::registry &registry, float deltaTime)
 {
-    auto view = registry.view<PlayerComponent, TransformComponent, CameraComponent>();
-    for (const auto entity : view)
+    for (auto [entity, player, transform, camera] :
+        registry.view<PlayerComponent, TransformComponent, CameraComponent>().each())
     {
-        // auto& player    = view.get<PlayerComponent>(entity);
-        // auto& transform = view.get<TransformComponent>(entity);
-        // auto& camera    = view.get<CameraComponent>(entity);
-
-        // static glm::vec2 mOldMousePosition = Input::mousePosition;
-        // glm::vec2 delta = (Input::mousePosition - mOldMousePosition) * 0.003f;
-        // mOldMousePosition = Input::mousePosition;
-
-        // updatePosition(transform, camera, player);
-        // updateOrientation(transform, camera, player, delta);
-
-        // camera.mView = glm::translate(glm::mat4(1.0f), transform.mPosition) * glm::toMat4(camera.orientation());
-        // camera.mView = glm::inverse(camera.mView);
-
-        // // Обновляем матрицу проекции
-        // camera.mProj = glm::perspective(glm::radians(camera.mFov), camera.mAspect, camera.mNear, camera.mFar);
-
-        // // Обновляем матрицу вида и проекции
-        // camera.mViewProj = camera.mView * camera.mProj;
-
-        //std::cout << transform.GetDebugInfo();
-
-        //updateCameraPosition
+        processKeyboardMovement(player, transform, camera);
+        processMouseMovement(player, transform, camera, deltaTime);
+        updateCamera(camera, transform);
     }
 }
 
-void PlayerControllerSystem::updatePosition(TransformComponent &transform, CameraComponent& camera, PlayerComponent &player)
+void PlayerControllerSystem::processKeyboardMovement(const PlayerComponent& player,
+    TransformComponent& transform, const CameraComponent& camera)
 {
-    // if (Input::GetKey(KeyCode::W)) {
-    //     camera.mPosition += player.mMovementSpeed * camera.getForward();
-    // }
-    // if (Input::GetKey(KeyCode::S)) {
-    //     glm::vec3 forward = camera.getForward();
-    //     camera.mPosition -= player.mMovementSpeed * forward;
-    // }
-    // if (Input::GetKey(KeyCode::A)) {
-    //     camera.mPosition -= camera.getRight() * player.mMovementSpeed;
-    // }
-    // if (Input::GetKey(KeyCode::D)) {
-    //     camera.mPosition += camera.getRight() * player.mMovementSpeed;
-    // }
+    glm::vec3 forward = camera.getForward();
+    glm::vec3 right   = camera.getRight();
+
+    // Перемещение вперед
+    if (Input::GetKey(KeyCode::W)) {
+        transform.mPosition += player.mMovementSpeed * forward;
+    }
+    
+    // Перемещение назад
+    if (Input::GetKey(KeyCode::S)) {
+        transform.mPosition -= player.mMovementSpeed * forward;
+    }
+
+    // Перемещение влево
+    if (Input::GetKey(KeyCode::A)) {
+        transform.mPosition -= player.mMovementSpeed * right;
+    }
+
+    // Перемещение вправо
+    if (Input::GetKey(KeyCode::D)) {
+        transform.mPosition += player.mMovementSpeed * right;
+    }
 }
 
-void PlayerControllerSystem::updateOrientation(TransformComponent &transform, CameraComponent& camera, PlayerComponent& player, glm::vec2 &delta)
+void PlayerControllerSystem::processMouseMovement(const PlayerComponent &player,
+    TransformComponent &transform, CameraComponent &camera, const float& deltaTime)
 {
-    // float yawSign = camera.getUp().y < 0 ? -1.0f : 1.0f;
-    // camera.mYaw += yawSign * delta.x * player.mMouseSensitivity;
-    // camera.mPitch += delta.y * player.mMouseSensitivity;
+    // Определяем в какую сторону нужно повернуть камеру
+    float sign    = glm::sign(camera.getUp().y);
+
+    // Вычисляем углы поворота в зависимости от ввода мыши и чувствительности
+    glm::vec2 delta = Input::GetMouseDelta() * deltaTime * player.mMouseSensitivity;
+    camera.mYaw   += sign * delta.x;
+    camera.mPitch += delta.y;
+
+    // Ограничение угла поворота вокруг горизонтальной оси в диапазоне от -90 до 90 градусов
+    camera.mPitch = glm::clamp(camera.mPitch, -90.0f, 90.0f);
+}
+
+void PlayerControllerSystem::updateCamera(CameraComponent &camera, TransformComponent& transform)
+{
+    // Обновляем матрицу вида
+    camera.mViewMatrix = glm::translate(glm::mat4(1.0f), transform.mPosition) * glm::toMat4(camera.getOrientation());
+    camera.mViewMatrix = glm::inverse(camera.mViewMatrix);
+
+    // Обновляем матрицу проекции
+    float aspect = 1.0f;
+    if (camera.mViewportWidth > 0 && camera.mViewportHeight > 0) {
+        aspect = camera.mViewportWidth / camera.mViewportHeight;
+    }
+    camera.mProjMatrix = glm::perspective(glm::radians(camera.mFov), aspect, camera.mNearPlane, camera.mFarPlane);
+
+    // Обновляем матрицу вида-проекции
+    camera.mViewProjMatrix = camera.mProjMatrix * camera.mViewMatrix;
 }
 
 // bool PlayerControllerSystem::checkIfGroundedRay(const RigidbodyComponent &rigidbodyComponent)

@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "pch.h"
+#include "Types.h"
 #include "BaseCamera.h"
 #include "Model.h"
 #include "TransformComponent.h"
@@ -112,93 +113,47 @@ struct ScriptComponent
 };
 
 
-/**
- * @brief Представляет компонент
- * камеры от первого лица (FPS Camera)
- */
-struct CameraComponent 
+struct CameraComponent
 {
+    float mFov              = 45;      // Угол обзора в градусах
+    int   mViewportX        = 0;       // Позиция левого верхнего угла вьюпорта по оси X
+    int   mViewportY        = 0;       // Позиция левого верхнего угла вьюпорта по оси Y
+    float mViewportWidth    = 1280;    // Ширина вьюпорта
+    float mViewportHeight   = 720;     // Высота вьюпорта
+    float mNearPlane        = 0.1f;    // Ближняя плоскость отсечения
+    float mFarPlane         = 1000.0f; // Дальняя плоскость отсечения
+    float mYaw              = -90.0f;  // Отвечает за поворот камеры вокруг вертикальной оси
+    float mPitch            = 0.0f;    // Отвечает за поворот камеры вокруг горизонтальной оси
 
-    BaseCamera* pCamera = nullptr;
+    glm::mat4 mViewMatrix     = glm::mat4(1.0f); // Матрица вида
+    glm::mat4 mProjMatrix     = glm::mat4(1.0f); // Матрица проекции
+    glm::mat4 mViewProjMatrix = glm::mat4(1.0f); // Матрица вида-проекции
 
-    // float mFov          = 0.785398;              // Угол обзора
-    // float mAspect       = 1.778f;                // Соотношение сторон
-    // float mNear         = 0.1f;                  // Ближняя плоскость отсечения
-    // float mFar          = 1000.0f;               // Дальняя плоскость отсечения
-    // float mYaw          = -90.0f;                // Угол поворота вокруг оси Y
-    // float mPitch        = 0.0f;                  // Угол поворота вокруг оси X
-    // glm::vec3 mPosition = { 0.0f, 0.0f, 0.0f };  // Позиция камеры
+    glm::vec3 getUp() const
+    {
+        return glm::rotate(getOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
+    }
 
-    // /**
-    //  * @brief Возвращает матрицу вида
-    //  * @return glm::mat4
-    //  */
-    // glm::mat4 getView() const
-    // {
-    //     glm::quat orientation = getOrientation();
-    //     glm::mat4 view = glm::translate(glm::mat4(1.0f), mPosition) * glm::toMat4(orientation);
-    //     return glm::inverse(view);
-    // };
+    glm::vec3 getRight() const
+    {
+        return glm::rotate(getOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
+    }
 
-    // /**
-    //  * @brief Возвращает матрицу перспективной проекции
-    //  * @return glm::mat4
-    //  */
-    // glm::mat4 getProjection() const
-    // {
-    //     return glm::perspective(glm::radians(mFov), mAspect, mNear, mFar);
-    // }
+    glm::vec3 getForward() const
+    {
+        return glm::rotate(getOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
+    }
 
-    // /**
-    //  * @brief Возвращает матрицу вида-проекции
-    //  * 
-    //  * @return glm::mat4
-    //  */
-    // glm::mat4 getViewProjection() const 
-    // {
-    //     return getView() * getProjection();
-    // }
-
-    // /**
-    //  * @brief Возвращает вектор, направленный вверх, относительно ориентации объекта.
-    //  * @return glm::vec3
-    //  */
-    // glm::vec3 getUp() const
-    // {
-    //     return glm::normalize(glm::rotate(getOrientation(), glm::vec3(0.0f, 1.0f, 0.0f)));
-    // }
-
-    // /**
-    //  * @brief Возвращает вектор, направленный вправо, относительно ориентации объекта.
-    //  * @return glm::vec3
-    //  */
-    // glm::vec3 getRight() const
-    // {
-    //     return glm::normalize(glm::rotate(getOrientation(), glm::vec3(1.0f, 0.0f, 0.0f)));
-    // }
-
-    // /**
-    //  * @brief Возвращает вектор, направленный вперед, относительно ориентации объекта.
-    //  * @return glm::vec3
-    //  */
-    // glm::vec3 getForward() const
-    // {
-    //     return glm::normalize(glm::rotate(getOrientation(), glm::vec3(0.0f, 0.0f, -1.0f)));
-    // }
-
-    // /**
-    //  * @brief Возвращает кватернион, представляющий ориентацию объекта.
-    //  * @return glm::vec3
-    //  */
-    // glm::quat getOrientation() const
-    // {
-    //     // Отрицательные углы поворота означают вращение против часовой стрелки
-    //     return glm::quat(glm::vec3(-mPitch, -mYaw, 0.0f));
-    // }
+    glm::quat getOrientation() const
+    {
+        return glm::quat(glm::vec3(-mPitch, -mYaw, 0.0f));
+    }
 };
+
+
 
 struct PlayerComponent
 {
-    float mMovementSpeed        = 2.5f;   // Скорость передвижения игрока.
-    float mMouseSensitivity     = 0.7f;   // Чувствительность мыши.
+    float mMovementSpeed        = 2.5f;   // Скорость передвижения игрока
+    float mMouseSensitivity     = 0.3f;   // Чувствительность мыши
 };

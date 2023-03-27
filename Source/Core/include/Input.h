@@ -154,6 +154,8 @@
 
     class Input
     {
+    private:
+       inline static glm::vec2 mOldMousePosition = glm::vec2(0.0f, 0.0f);
     public:
         inline static glm::vec2 mousePosition       = glm::vec2(0.0f, 0.0f);
         inline static glm::vec2 mouseScrollDelta    = glm::vec2(0.0f, 0.0f);
@@ -184,6 +186,8 @@
          * @return float
          */
         static float GetMouseDeltaY();
+
+        static glm::vec2 GetMouseDelta();
 
 
     private:

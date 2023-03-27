@@ -11,19 +11,31 @@
 #pragma once
 #include "ISystem.h"
 #include "Components.h"
-#include "FPSCameraSystem.h"
 
 class PlayerControllerSystem final : public ISystem
 {
-private:
-    FPSCameraSystem mCameraSystem;
 public:
     PlayerControllerSystem();
     void update(entt::registry& registry, float deltaTime) final override;
 private:
 
-    void updatePosition(TransformComponent& transform, CameraComponent& camera, PlayerComponent& player);
-    void updateOrientation(TransformComponent& transform, CameraComponent& camera, PlayerComponent& player, glm::vec2& delta);
+    /**
+     * @brief Обрабатывает ввод с клавиатуры для движения камеры
+     */
+    void processKeyboardMovement(const PlayerComponent& player,
+        TransformComponent& transform, const CameraComponent& camera);
+    
+    /**
+     * @brief Обрабатывает ввод с мыши для вращения камеры
+     */
+    void processMouseMovement(const PlayerComponent& player,
+        TransformComponent& transform, CameraComponent& camera, const float&);
+
+    /**
+     * @brief Обновляет матрицу вида и проекции камеры
+     * @param camera 
+     */
+    void updateCamera(CameraComponent&, TransformComponent&);
 
     /**
      * @brief Проверка того, находится ли персонаж на земле методом луча

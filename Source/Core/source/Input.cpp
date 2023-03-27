@@ -57,8 +57,8 @@ void Input::OnMouseButtonCallback(GLFWwindow *window, int button, int action, in
 
 void Input::OnCursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {
     
-    mouseDelta.x = mousePosition.x - xpos;
-    mouseDelta.y = mousePosition.y - ypos;
+    mouseDelta.x = xpos - mousePosition.x;
+    mouseDelta.y = ypos - mousePosition.y;
 
     mousePosition.x = (float)xpos;
     mousePosition.y = (float)ypos;
@@ -148,4 +148,13 @@ float Input::GetMouseDeltaY()
     lastMousePosY = currentMousePosY;
 
     return static_cast<float>(deltaY);
+}
+
+glm::vec2 Input::GetMouseDelta()
+{
+    const glm::vec2 mousePosition = Input::mousePosition;
+    glm::vec2 delta = (mousePosition - mOldMousePosition);
+    mOldMousePosition = mousePosition;
+
+    return delta;
 }

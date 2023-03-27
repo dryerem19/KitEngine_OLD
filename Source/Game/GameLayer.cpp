@@ -4,18 +4,16 @@
 
 void GameLayer::OnStart()
 {
-    Entity mainCamera = mScene.CreateEntity();
-    auto& cameraComponent = mainCamera.AddComponent<CameraComponent>();
-    cameraComponent.pCamera = new FPSCamera();
+    // Entity mainCamera = mScene.CreateEntity();
+    // auto& cameraComponent = mainCamera.AddComponent<CameraComponent>();
 
     // Создаём главного игрока 
-    // Entity player = mScene.CreateEntity();
-    // auto& camera = player.AddComponent<CameraComponent>();
-    // camera.pCamera = new FPSCamera();
-    //player.AddComponent<PlayerComponent>();
+    Entity player = mScene.CreateEntity();
+    player.AddComponent<CameraComponent>();
+    player.AddComponent<PlayerComponent>();
 
     // Регистриуем систему управления игроком
-    //mScene.RegistrySystem<PlayerControllerSystem>();
+    mScene.RegistrySystem<PlayerControllerSystem>();
 
     Entity dirLigth = mScene.CreateEntity();
     dirLigth.AddComponent<LightComponent>();
